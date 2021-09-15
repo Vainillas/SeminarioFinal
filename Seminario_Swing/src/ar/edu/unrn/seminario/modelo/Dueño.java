@@ -1,0 +1,38 @@
+package ar.edu.unrn.seminario.modelo;
+
+import ar.edu.unrn.seminario.Helper.ConditionHelper;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+
+public class Dueño extends Persona {
+	private String correoElectronico;
+	
+	public Dueño(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException, NotNullException, IncorrectEmailException {
+		super(nombre, apellido, dni);
+		validarDatos(correoElectronico);
+		this.correoElectronico = correoElectronico;
+	}
+	
+	
+	public void validarDatos (String correoElectronico) throws IncorrectEmailException, DataEmptyException, NotNullException {
+		if(ConditionHelper.IsIncorrectEmail(correoElectronico)) {throw new IncorrectEmailException ("Formato de email incorrecto.");}
+		
+		if(ConditionHelper.stringIsEmpty(correoElectronico)) {throw new DataEmptyException("Campo de Email vacío.");}
+		
+		if(ConditionHelper.stringIsNull(correoElectronico)) {throw new NotNullException("Email nulo.");}
+	}
+
+
+	@Override
+	public String toString() {
+		return nombre+" "+apellido+" || "+dni;
+	}
+	public String getCorreo() {
+		return correoElectronico;
+	}
+	public void setCorreo(String correoElectronico) {
+		this.correoElectronico=correoElectronico;
+	}
+	
+}

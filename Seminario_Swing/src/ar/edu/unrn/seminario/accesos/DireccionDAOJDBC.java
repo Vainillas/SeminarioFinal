@@ -1,0 +1,142 @@
+package ar.edu.unrn.seminario.accesos;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.modelo.Direccion;
+import ar.edu.unrn.seminario.modelo.Dueño;
+
+public class DireccionDAOJDBC implements DireccionDao {
+
+	@Override
+	public void create(Direccion d) {
+		try {
+
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn
+					.prepareStatement("INSERT INTO dirección(calle,altura,barrio,codigo_postal,latitud,longitud) "
+							+ "VALUES (?, ?, ?, ?, ?, ?)");
+
+			statement.setString(1, d.getCalle());
+			statement.setInt(2, Integer.parseInt(d.getAltura()));
+			statement.setString(3, d.getBarrio());
+			statement.setInt(4, Integer.parseInt(d.getCodPostal()));
+			statement.setString(5, d.getLatitud());
+			statement.setString(6, d.getLongitud());
+			int cantidad = statement.executeUpdate();
+			if (cantidad > 0) {
+				System.out.println("Modificando " + cantidad + " registros");
+			} else {
+				System.out.println("Error al actualizar");
+				// TODO: disparar Exception propia
+			}
+
+		} catch (SQLException e) {
+			System.out.println("Error al procesar consulta" + e.getMessage());
+			// TODO: disparar Exception propia
+		} catch (Exception e) {
+			System.out.println("Error al insertar una dirección");
+			// TODO: disparar Exception propia
+		} finally {
+			ConnectionManager.disconnect();
+		}
+
+	}
+
+	@Override
+	public void update(Direccion direccion) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void remove(String calle, Integer altura) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void remove(Direccion direccion) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Direccion find(String calle, Integer altura) {
+		Direccion direccion = null;
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM dirección d"+"WHERE d.calle = ? AND d.altura = ?");
+			statement.setString(1,calle);
+			statement.setInt(2, altura);
+			ResultSet resultSetDireccion = statement.executeQuery();
+			if(resultSetDireccion.next()) {
+				direccion= new Direccion(resultSetDireccion.getString("calle"),
+						resultSetDireccion.getString("longitud"),
+						resultSetDireccion.getString("latitud"),
+						Integer.toString(resultSetDireccion.getInt("altura")),
+						Integer.toString(resultSetDireccion.getInt("codigo postal")),
+						resultSetDireccion.getString("barrio"));
+			}
+		} catch (SQLException e) {
+			System.out.println("Error al procesar consulta");
+		// TODO: disparar Exception propia
+		// throw new AppException(e, e.getSQLState(), e.getMessage());
+		} catch (Exception e) {
+		// TODO: disparar Exception propia
+		// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return direccion;
+	}
+
+	@Override
+	public List<Direccion> findAll() {
+		List<Direccion> direcciones = new ArrayList<Direccion>();
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			Statement statement = conn.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT * from dirección");
+
+			while (rs.next()) {
+				Direccion direccion = new Direccion(rs.getString("calle"),
+						rs.getString("longitud"),
+						rs.getString("latitud"),
+						Integer.toString(rs.getInt("altura")),
+						Integer.toString(rs.getInt("codigo postal")),
+						rs.getString("barrio"));
+				direcciones.add(direccion);
+			}
+		} catch (SQLException e) {
+			System.out.println("Error de mySql\n" + e.toString());
+			// TODO: disparar Exception propia
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			// TODO: disparar Exception propia
+		} catch (DataEmptyException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotNullException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NotNumberException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			ConnectionManager.disconnect();
+		}
+		return direcciones;
+	}
+
+}

@@ -1,0 +1,30 @@
+package ar.edu.unrn.seminario.dto;
+
+import ar.edu.unrn.seminario.modelo.Direccion;
+import ar.edu.unrn.seminario.modelo.Dueño;
+
+public class ViviendaDTO {
+	private Dueño dueño;
+	private Direccion direccion;
+	
+	public ViviendaDTO(Direccion direccion2, Dueño dueño2){
+		this.dueño=dueño2;
+		this.direccion=direccion2;
+	}
+	
+	public Direccion getDireccion() {
+		return direccion;
+	}
+
+	public void setDireccion(Direccion direccion) {
+		this.direccion = direccion;
+	}
+
+	public Dueño getDueño() {
+		return dueño;
+	}
+
+	public void setDueño(Dueño dueño) {
+		this.dueño = dueño;
+	}
+}
