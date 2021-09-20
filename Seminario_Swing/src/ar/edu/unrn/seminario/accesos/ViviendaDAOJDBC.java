@@ -18,13 +18,12 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("INSERT INTO viviendas(calle,altura,dni,propietario) "
-							+ "VALUES (?, ?, ?, ?)");
+					.prepareStatement("INSERT INTO viviendas(calle,altura,dni) "
+							+ "VALUES (?, ?, ?)");
 			
 			statement.setString(1, v.getDireccion().getCalle());
 			statement.setString(2, v.getDireccion().getAltura());
 			statement.setString(3, v.getDueño().getDni());
-			statement.setString(4, v.getDueño().getNombre() +" "+ v.getDueño().getApellido());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
@@ -90,7 +89,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 							resultSetConstructor.getString("latitud"),
 							resultSetConstructor.getString("barrio"));
 				}
-				vivienda= new Vivienda(direccion, dueño);
+				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 			}
 		} catch (SQLException e) {
 			System.out.println("Error al procesar consulta");
@@ -140,7 +139,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 							resultSetConstructor.getString("latitud"),
 							resultSetConstructor.getString("barrio"));
 				}
-				vivienda= new Vivienda(direccion, dueño);
+				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 				viviendas.add(vivienda);
 				
 			}

@@ -152,7 +152,6 @@ public class PersistenceApi implements IApi {
         Dueño dueño = null;
 		try {
 			dueño = new Dueño(nombre, apellido, dni, correo);
-			System.out.println("DueñoAPI OK");
 		} catch (DataEmptyException | NotNullException | IncorrectEmailException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -179,7 +178,6 @@ public class PersistenceApi implements IApi {
         Direccion direccion = null;
 		try {
 			direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
-			System.out.println("DirecciónAPI OK");
 		} catch (DataEmptyException | NotNullException | NotNumberException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
