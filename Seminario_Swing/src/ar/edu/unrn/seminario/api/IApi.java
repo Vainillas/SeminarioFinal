@@ -51,4 +51,6 @@ public interface IApi {
 
 	void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio);
+
+	List<ViviendaDTO> obtenerViviendasOrdenadas();
 }

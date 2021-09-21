@@ -42,16 +42,17 @@ public class ListadoVivienda extends JFrame {
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
 		table = new JTable();
-		String[] titulos = { "DIRECCION", "DUEÑO" };
+		String[] titulos = { "DIRECCION", "DUEÑO","CÓDIGO" };
 		
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
 		// Obtiene la lista de usuarios a mostrar
-		List<ViviendaDTO> viviendas = api.obtenerViviendas();
+		//List<ViviendaDTO> viviendas = api.obtenerViviendas();
+		List<ViviendaDTO> viviendas = api.obtenerViviendasOrdenadas();
 		// Agrega los usuarios en el model
 		for (ViviendaDTO v : viviendas) {
-			modelo.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString() });
+			modelo.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
 		}
 		table.setModel(modelo);
 		

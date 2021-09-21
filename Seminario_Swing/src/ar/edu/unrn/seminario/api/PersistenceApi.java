@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
@@ -143,10 +144,21 @@ public class PersistenceApi implements IApi {
 		List<ViviendaDTO> dtos = new ArrayList<>();
 		List<Vivienda> viviendas = viviendaDao.findAll();
 		for (Vivienda v : viviendas) {
-			dtos.add(new ViviendaDTO(v.getDireccion(),v.getDueño()));
+			dtos.add(new ViviendaDTO(v.getDireccion(),v.getDueño(),v.getID()));
 		}
 		return dtos;
 	}
+	public List<ViviendaDTO> obtenerViviendasOrdenadas(){
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream().sorted((v1,v2)->{
+				if(v1.getID()>v2.getID())
+					return 1;
+				else
+					return -1;
+			}).collect(Collectors.toList());
+		return vDTO;
+	}
+		
 	@Override
     public void agregarDueño(String nombre, String apellido, String dni, String correo) {
         Dueño dueño = null;

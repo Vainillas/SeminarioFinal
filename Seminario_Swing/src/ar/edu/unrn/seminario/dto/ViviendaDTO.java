@@ -6,10 +6,15 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 public class ViviendaDTO {
 	private Dueño dueño;
 	private Direccion direccion;
+	private int id;
 	
 	public ViviendaDTO(Direccion direccion2, Dueño dueño2){
 		this.dueño=dueño2;
 		this.direccion=direccion2;
+	}
+	public ViviendaDTO(Direccion unaDireccion, Dueño unDueño, int unaID){
+		this(unaDireccion,unDueño);
+		this.id=unaID;
 	}
 	
 	public Direccion getDireccion() {
@@ -27,4 +32,11 @@ public class ViviendaDTO {
 	public void setDueño(Dueño dueño) {
 		this.dueño = dueño;
 	}
+	public int getID() {
+		return id;
+	}
+	public void setID(int unaID) {
+		this.id=unaID;
+	}
+	
 }
