@@ -150,12 +150,9 @@ public class PersistenceApi implements IApi {
 	}
 	public List<ViviendaDTO> obtenerViviendasOrdenadas(){
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream().sorted((v1,v2)->{
-				if(v1.getID()>v2.getID())
-					return 1;
-				else
-					return -1;
-			}).collect(Collectors.toList());
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->v1.getID()-v2.getID())
+				.collect(Collectors.toList());
 		return vDTO;
 	}
 		
