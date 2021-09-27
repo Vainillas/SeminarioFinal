@@ -20,7 +20,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class DueñoDAOJDBC implements DueñoDao {
 
 	@Override
-	public void create(Dueño d) {
+	public void create(Dueño d) throws Exception {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
@@ -39,11 +39,9 @@ public class DueñoDAOJDBC implements DueñoDao {
 				// TODO: disparar Exception propia
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta"+e.getMessage());
-			// TODO: disparar Exception propia
+			throw new SQLException("Error al procesar consulta: "+e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Error al insertar un dueño");
-			// TODO: disparar Exception propia
+			throw new Exception("Error al insertar un dueño: "+e.getMessage());
 		} finally {
 			ConnectionManager.disconnect();
 		}
@@ -81,10 +79,10 @@ public class DueñoDAOJDBC implements DueñoDao {
 				dueño= new Dueño(resultSetDueño.getString("nombre"),
 						resultSetDueño.getString("apellido"),
 						resultSetDueño.getString("dni"),
-						resultSetDueño.getString("correo electronico"));
+						resultSetDueño.getString("correo_electronico"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
+			System.out.println("Error al procesar consultaXDDDD");
 		// TODO: disparar Exception propia
 		// throw new AppException(e, e.getSQLState(), e.getMessage());
 		} catch (Exception e) {

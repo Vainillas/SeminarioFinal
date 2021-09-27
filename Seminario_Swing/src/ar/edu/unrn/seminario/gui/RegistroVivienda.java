@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -116,8 +117,23 @@ public class RegistroVivienda extends JFrame {
         
         JButton botonAceptar = new JButton("Aceptar");
         botonAceptar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent e) { //Pueden haber dos personas con la misma vivienda registrada?
+            											//Creo que no.
             	try {
+            		if(api.obtenerDueño(dniIngresado.getText())==null) {// MALA PRÁCTICA (ESTO NO VA EN LA PARTE GRÁFICA)
+            			api.agregarDueño(nombreIngresado.getText(),
+                				apellidoIngresado.getText(),
+                				dniIngresado.getText(),
+                				correoIngresado.getText());
+            		}
+            		if(api.obtenerDireccion(calleIngresada.getText(),Integer.parseInt(alturaIngresada.getText()))==null) {
+            			api.agregarDireccion(calleIngresada.getText(),
+            					alturaIngresada.getText(),
+            					codPostIngresado.getText(),
+            					latitudIngresada.getText(),
+            					longIngresada.getText(),
+            					barrioIngresado.getText());
+            		}
             		api.agregarVivienda(nombreIngresado.getText(),
             				apellidoIngresado.getText(),
             				dniIngresado.getText(),
@@ -128,24 +144,16 @@ public class RegistroVivienda extends JFrame {
             				longIngresada.getText(), 
             				latitudIngresada.getText(),
             				barrioIngresado.getText());
-            		api.agregarDireccion(calleIngresada.getText(),
-            				alturaIngresada.getText(),
-            				codPostIngresado.getText(),
-            				latitudIngresada.getText(),
-            				longIngresada.getText(),
-            				barrioIngresado.getText());
-            		api.agregarDueño(nombreIngresado.getText(),
-            				apellidoIngresado.getText(),
-            				dniIngresado.getText(),
-            				correoIngresado.getText());
             		JOptionPane.showMessageDialog(null , "La carga finalizó correctamente.");
-		            setVisible (false);
-		            dispose();
-				} catch (DataEmptyException | NotNullException | IncorrectEmailException | NotNumberException e1) {
+                    setVisible (false);
+                    dispose();
+            	} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error: ", JOptionPane.ERROR_MESSAGE);
-				}
+					
+            	}
             }
-        });
+        }
+        		);
         
         
         botonAceptar.setBounds(87, 229, 89, 23);

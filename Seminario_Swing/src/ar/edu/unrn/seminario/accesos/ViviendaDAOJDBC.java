@@ -14,7 +14,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class ViviendaDAOJDBC implements ViviendaDao {
 
 	@Override
-	public void create(Vivienda v) {
+	public void create(Vivienda v) throws Exception {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
@@ -32,11 +32,9 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				// TODO: disparar Exception propia
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
+			throw new SQLException("Error al insertar una vivienda: "+e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Error al insertar una vivienda");
-			// TODO: disparar Exception propia
+			throw new Exception("Error al insertar una vivienda: "+e.getMessage());
 		} finally {
 			ConnectionManager.disconnect();
 		}

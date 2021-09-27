@@ -26,7 +26,8 @@ public class ListadoVivienda extends JFrame {
 	DefaultTableModel modelo;
 	
 	private JPanel contentPane;
-	private JButton btnNewButton;
+	private JButton botonAtras;
+	private JButton botonOrdenar;
 
 
 	public ListadoVivienda(IApi api) {
@@ -35,7 +36,8 @@ public class ListadoVivienda extends JFrame {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
+		//contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(new BorderLayout(5, 5));
 		setContentPane(contentPane);
 		
 		JScrollPane scrollPane = new JScrollPane();
@@ -49,7 +51,7 @@ public class ListadoVivienda extends JFrame {
 
 		// Obtiene la lista de usuarios a mostrar
 		//List<ViviendaDTO> viviendas = api.obtenerViviendas();
-		List<ViviendaDTO> viviendas = api.obtenerViviendasOrdenadas();
+		List<ViviendaDTO> viviendas = api.obtenerViviendas();
 		// Agrega los usuarios en el model
 		for (ViviendaDTO v : viviendas) {
 			modelo.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
@@ -59,12 +61,25 @@ public class ListadoVivienda extends JFrame {
 		
 		scrollPane.setViewportView(table);
 		
-		btnNewButton = new JButton("Atras");
-		btnNewButton.addActionListener(new ActionListener() {
+		botonAtras = new JButton("Atras");
+		botonAtras.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
 			}
 		});
-		contentPane.add(btnNewButton, BorderLayout.SOUTH);
+		contentPane.add(botonAtras, BorderLayout.SOUTH);
+		
+		botonOrdenar = new JButton("Ordenar");
+		botonOrdenar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				DefaultTableModel modelo1 = new DefaultTableModel(new Object[][] {}, titulos);
+				List<ViviendaDTO> viviendasOrdenadas = api.obtenerViviendasOrdenadas();
+				for (ViviendaDTO v : viviendasOrdenadas) {
+					modelo1.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
+				}
+				table.setModel(modelo1);
+			}
+		});
+		contentPane.add(botonOrdenar, BorderLayout.NORTH);
 	}
 }

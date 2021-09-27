@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.api;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -131,7 +132,7 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
-			throws DataEmptyException, NotNullException, IncorrectEmailException, NotNumberException {
+			throws Exception {
 		Dueño dueño = new Dueño(nombre,apellido,dni,correo);
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
@@ -157,16 +158,26 @@ public class PersistenceApi implements IApi {
 	}
 		
 	@Override
-    public void agregarDueño(String nombre, String apellido, String dni, String correo) {
+    public void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception {
         Dueño dueño = null;
-		try {
-			dueño = new Dueño(nombre, apellido, dni, correo);
-		} catch (DataEmptyException | NotNullException | IncorrectEmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		dueño = new Dueño(nombre, apellido, dni, correo);
         this.dueñoDao.create(dueño);
     }
+	public DueñoDTO obtenerDueño(String dni) {
+		Dueño dueño = dueñoDao.find(dni);
+		DueñoDTO dueñodto = null;
+		if(dueño!=null) {
+			try {
+				dueñodto = new DueñoDTO(dueño.getNombre(),
+						dueño.getApellido(),
+						dueño.getDni(),
+						dueño.getCorreo());
+			} catch (DataEmptyException | NotNullException | IncorrectEmailException e) {
+				e.printStackTrace();
+			}
+		}
+		return dueñodto;
+	}
 
 
     public List<DueñoDTO> obtenerDueños() {
@@ -182,20 +193,26 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
-    public void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) {
+    public void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
         //Rol rol = rolDao.find(codigoRol);
         Direccion direccion = null;
-		try {
-			direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
-		} catch (DataEmptyException | NotNullException | NotNumberException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
         this.direccionDao.create(direccion);
     }
-
-
-    public List<DireccionDTO> obtenerDireccion() {
+    public DireccionDTO obtenerDireccion(String calle, int altura) {
+    	DireccionDTO d = null;
+    	Direccion direccion = direccionDao.find(calle, altura);
+    	if(direccion!=null) {
+    		d=new DireccionDTO(direccion.getCalle(),
+    				direccion.getAltura(),
+    				direccion.getCodPostal(),
+    				direccion.getLongitud(),
+    				direccion.getLatitud(),
+    				direccion.getBarrio());
+    		}
+    	return d;
+    	}
+    public List<DireccionDTO> obtenerDirecciones() {
         List<DireccionDTO> dtos = new ArrayList<>();
         List<Direccion> direcciones = direccionDao.findAll();
         for (Direccion d : direcciones) {

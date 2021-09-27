@@ -5,7 +5,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.modelo.Direccion;
 
 public interface DireccionDao {
-	void create(Direccion direccion);
+	void create(Direccion direccion) throws Exception;
 
 	void update(Direccion direccion);
 

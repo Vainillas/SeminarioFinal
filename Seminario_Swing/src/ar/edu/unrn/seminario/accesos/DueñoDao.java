@@ -6,7 +6,7 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 
 public interface DueñoDao {
-	void create(Dueño dueño);
+	void create(Dueño dueño) throws Exception;
 
 	void update(Dueño dueño);
 

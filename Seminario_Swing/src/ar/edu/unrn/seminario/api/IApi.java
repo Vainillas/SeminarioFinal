@@ -1,9 +1,11 @@
 package ar.edu.unrn.seminario.api;
 
+import java.sql.SQLException;
 import java.util.List;
 
 
 import ar.edu.unrn.seminario.dto.DireccionDTO;
+import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -21,7 +23,7 @@ public interface IApi {
 	
 	//void registrarVivienda(Direccion unaDireccion, String unDueño);
 	
-	void agregarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, NotNullException, IncorrectEmailException, NotNumberException;
+	void agregarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, NotNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
@@ -47,10 +49,14 @@ public interface IApi {
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
-	void agregarDueño(String nombre, String apellido, String dni, String correo);
+	void agregarDueño(String nombre, String apellido, String dni, String correo) throws DataEmptyException, NotNullException, IncorrectEmailException, Exception;
 
 	void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
-			String barrio);
+			String barrio) throws Exception;
 
 	List<ViviendaDTO> obtenerViviendasOrdenadas();
+
+	DueñoDTO obtenerDueño(String text);
+
+	DireccionDTO obtenerDireccion(String text, int num);
 }

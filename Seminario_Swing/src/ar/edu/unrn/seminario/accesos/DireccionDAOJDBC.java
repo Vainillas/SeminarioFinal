@@ -18,7 +18,7 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 public class DireccionDAOJDBC implements DireccionDao {
 
 	@Override
-	public void create(Direccion d) {
+	public void create(Direccion d) throws Exception {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -41,11 +41,9 @@ public class DireccionDAOJDBC implements DireccionDao {
 			}
 
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta" + e.getMessage());
-			// TODO: disparar Exception propia
+			throw new SQLException("Error al procesar consulta: "+e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Error al insertar una dirección");
-			// TODO: disparar Exception propia
+			throw new Exception("Error al insertar una dirección: "+e.getMessage());
 		} finally {
 			ConnectionManager.disconnect();
 		}
@@ -75,20 +73,20 @@ public class DireccionDAOJDBC implements DireccionDao {
 		Direccion direccion = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM dirección d"+"WHERE d.calle = ? AND d.altura = ?");
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle = ? and d.altura = ? ");
 			statement.setString(1,calle);
 			statement.setInt(2, altura);
 			ResultSet resultSetDireccion = statement.executeQuery();
 			if(resultSetDireccion.next()) {
 				direccion= new Direccion(resultSetDireccion.getString("calle"),
+						Integer.toString(resultSetDireccion.getInt("altura")),
+						Integer.toString(resultSetDireccion.getInt("codigo_postal")),
 						resultSetDireccion.getString("longitud"),
 						resultSetDireccion.getString("latitud"),
-						Integer.toString(resultSetDireccion.getInt("altura")),
-						Integer.toString(resultSetDireccion.getInt("codigo postal")),
 						resultSetDireccion.getString("barrio"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
+			System.out.println("Error al procesar consulta" + e.getMessage());
 		// TODO: disparar Exception propia
 		// throw new AppException(e, e.getSQLState(), e.getMessage());
 		} catch (Exception e) {
