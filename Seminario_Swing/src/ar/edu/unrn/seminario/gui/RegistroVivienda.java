@@ -133,18 +133,20 @@ public class RegistroVivienda extends JFrame {
             					latitudIngresada.getText(),
             					longIngresada.getText(),
             					barrioIngresado.getText());
+            			api.agregarVivienda(nombreIngresado.getText(),
+                				apellidoIngresado.getText(),
+                				dniIngresado.getText(),
+                				correoIngresado.getText(),
+                				calleIngresada.getText(),
+                				alturaIngresada.getText(),
+                				codPostIngresado.getText(),
+                				longIngresada.getText(), 
+                				latitudIngresada.getText(),
+                				barrioIngresado.getText());
+            			JOptionPane.showMessageDialog(null , "La carga finalizó correctamente.");
             		}
-            		api.agregarVivienda(nombreIngresado.getText(),
-            				apellidoIngresado.getText(),
-            				dniIngresado.getText(),
-            				correoIngresado.getText(),
-            				calleIngresada.getText(),
-            				alturaIngresada.getText(),
-            				codPostIngresado.getText(),
-            				longIngresada.getText(), 
-            				latitudIngresada.getText(),
-            				barrioIngresado.getText());
-            		JOptionPane.showMessageDialog(null , "La carga finalizó correctamente.");
+            		else
+            			JOptionPane.showMessageDialog(null, "Esta dirección ya está en el sistema." , "Error: ", JOptionPane.ERROR_MESSAGE);
                     setVisible (false);
                     dispose();
             	} catch (Exception e1) {
