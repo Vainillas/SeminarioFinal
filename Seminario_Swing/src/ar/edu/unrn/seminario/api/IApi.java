@@ -1,6 +1,8 @@
 package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -59,4 +61,7 @@ public interface IApi {
 	DueñoDTO obtenerDueño(String text);
 
 	DireccionDTO obtenerDireccion(String text, int num);
+
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
+			Date fechaActual);
 }

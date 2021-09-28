@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -220,5 +221,12 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
+    
+    @Override
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
+			Date fechaActual) {
+		// TODO Esbozo de método generado automáticamente
+		
+	}
 
 }

@@ -126,6 +126,17 @@ public class VentanaPrincipal extends JFrame {
 		
 		mnNewMenu_2.add(mntmNewMenuItem_4);
 		
+		JMenu menuPedidos = new JMenu("Pedidos");
+		menuBar.add(menuPedidos);
+		
+		JMenuItem menuItemPedidoDeRetiro = new JMenuItem("pedido de retiro ");
+		menuItemPedidoDeRetiro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PedidoDeRetiro p = new PedidoDeRetiro(api);
+				p.setVisible(true);
+			}
+		});
+		menuPedidos.add(menuItemPedidoDeRetiro);
 		
 		
 
