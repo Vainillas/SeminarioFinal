@@ -13,6 +13,9 @@ import javax.swing.JOptionPane;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -32,7 +35,8 @@ import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 public class VentanaPrincipal extends JFrame {
-
+	
+	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 	private JPanel contentPane;
 
 	/**
@@ -91,8 +95,8 @@ public class VentanaPrincipal extends JFrame {
 		});
 		mnNewMenu.add(mntmNewMenuItem_1);
 		
-		JMenu mnNewMenu_1 = new JMenu("Configuracion");
-		menuBar.add(mnNewMenu_1);
+		JMenu menuConfiguracion = new JMenu("Configuracion");
+		menuBar.add(menuConfiguracion);
 		
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Salir");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
@@ -100,7 +104,37 @@ public class VentanaPrincipal extends JFrame {
 				System.exit(ABORT);
 			}
 		});
-		mnNewMenu_1.add(mntmNewMenuItem_2);
+		menuConfiguracion.add(mntmNewMenuItem_2);
+		
+		JMenu menuIdiomas = new JMenu(labels.getString("ventana.principal.menu.idiomas"));
+		menuConfiguracion.add(menuIdiomas);
+		
+		
+		JMenuItem menuItemEspañol = new JMenuItem(labels.getString("ventana.principal.menu.item.español"));
+
+		menuItemEspañol.addActionListener(new ActionListener() {
+			//labels = ResourceBundle.getBundle("labels");
+			public void actionPerformed(ActionEvent e) {
+				ResourceBundle labels = ResourceBundle.getBundle("labels");
+				setVisible(false);
+				dispose();
+				setVisible(true);
+			}
+		});
+		menuIdiomas.add(menuItemEspañol);
+		
+		
+		JMenuItem menuItemEnglish = new JMenuItem(labels.getString("ventana.principal.menu.item.ingles")); 
+		menuItemEnglish.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//labels = ResourceBundle.getBundle("labels",new Locale("en"));
+				//ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+				setVisible(false);
+				dispose();
+				setVisible(true);
+			}
+		});
+		menuIdiomas.add(menuItemEnglish);
 		
 		JMenu mnNewMenu_2 = new JMenu("Viviendas");
 		menuBar.add(mnNewMenu_2);
