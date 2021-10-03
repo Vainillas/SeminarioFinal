@@ -7,6 +7,7 @@ import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 
 public class Direccion {
+	private String EJEMplo;
 	private String calle;
 	private String longitud;
 	private String latitud;
