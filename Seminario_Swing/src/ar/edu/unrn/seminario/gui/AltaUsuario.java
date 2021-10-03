@@ -118,6 +118,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -139,7 +140,7 @@ public class AltaUsuario extends JFrame {
 	private JTextField nombreTextField;
 	private JTextField emailTextField;
 	private JComboBox rolComboBox;
-
+	private ResourceBundle labels ;
 	private List<RolDTO> roles = new ArrayList<>();
 
 	/**
@@ -158,12 +159,12 @@ public class AltaUsuario extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-
-		JLabel usuarioLabel = new JLabel("User:");
+		labels = ResourceBundle.getBundle("labels");
+		JLabel usuarioLabel = new JLabel(labels.getString("alta.usuario.label.nombre"));
 		usuarioLabel.setBounds(43, 16, 76, 16);
 		contentPane.add(usuarioLabel);
 
-		JLabel contrasenaLabel = new JLabel("Contrase\u00F1a:");
+		JLabel contrasenaLabel = new JLabel(labels.getString("alta.usuario.label.password"));
 		contrasenaLabel.setBounds(43, 56, 93, 16);
 		contentPane.add(contrasenaLabel);
 
@@ -177,14 +178,14 @@ public class AltaUsuario extends JFrame {
 		contentPane.add(contrasenaTextField);
 		contrasenaTextField.setColumns(10);
 
-		JButton aceptarButton = new JButton("Aceptar");
+		JButton aceptarButton = new JButton(labels.getString("alta.usuario.button.aceptar") );
 		aceptarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
 
 					api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),
 							nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
-					JOptionPane.showMessageDialog(null, "Usuario registrado con exito!", "Info", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
 					dispose();
 			}
@@ -192,7 +193,7 @@ public class AltaUsuario extends JFrame {
 		aceptarButton.setBounds(218, 215, 97, 25);
 		contentPane.add(aceptarButton);
 
-		JButton cancelarButton = new JButton("Cancelar");
+		JButton cancelarButton = new JButton(labels.getString("alta.usuario.button.cancelar"));
 		cancelarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -202,15 +203,15 @@ public class AltaUsuario extends JFrame {
 		cancelarButton.setBounds(323, 215, 97, 25);
 		contentPane.add(cancelarButton);
 
-		JLabel nombreLabel = new JLabel("Nombre:");
+		JLabel nombreLabel = new JLabel("alta.usuario.label.nombre");
 		nombreLabel.setBounds(43, 88, 56, 16);
 		contentPane.add(nombreLabel);
 
-		JLabel emailLabel = new JLabel("Email:");
+		JLabel emailLabel = new JLabel("alta.usuario.label.email:");
 		emailLabel.setBounds(43, 125, 56, 16);
 		contentPane.add(emailLabel);
 
-		JLabel rolLabel = new JLabel("Rol:");
+		JLabel rolLabel = new JLabel("alta.usuario.label.rol");
 		rolLabel.setBounds(43, 154, 56, 16);
 		contentPane.add(rolLabel);
 
