@@ -159,7 +159,7 @@ public class AltaUsuario extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 
-		JLabel usuarioLabel = new JLabel("Usuario:");
+		JLabel usuarioLabel = new JLabel("User:");
 		usuarioLabel.setBounds(43, 16, 76, 16);
 		contentPane.add(usuarioLabel);
 
