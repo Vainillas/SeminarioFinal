@@ -36,7 +36,7 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 public class VentanaPrincipal extends JFrame {
 	
-	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
 	private JPanel contentPane;
 
 	/**
@@ -69,10 +69,10 @@ public class VentanaPrincipal extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu mnNewMenu = new JMenu("Usuarios");
-		menuBar.add(mnNewMenu);
+		JMenu menuUsuarios = new JMenu("Usuarios");
+		menuBar.add(menuUsuarios);
 		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Alta/Modificacion");
+		JMenuItem mntmNewMenuItem = new JMenuItem(labels.getString("ventana.principal.menu.configuracion"));
 		mntmNewMenuItem.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					AltaUsuario alta = new AltaUsuario(api);
@@ -83,7 +83,7 @@ public class VentanaPrincipal extends JFrame {
 		});
 
 
-		mnNewMenu.add(mntmNewMenuItem);
+		menuUsuarios.add(mntmNewMenuItem);
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Listado");
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
@@ -93,22 +93,21 @@ public class VentanaPrincipal extends JFrame {
 				listado.setVisible(true);
 			}
 		});
-		mnNewMenu.add(mntmNewMenuItem_1);
+		menuUsuarios.add(mntmNewMenuItem_1);
 		
 		JMenu menuConfiguracion = new JMenu("Configuracion");
 		menuBar.add(menuConfiguracion);
 		
-		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Salir");
-		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+		JMenuItem misalir = new JMenuItem("Salir");
+		misalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(ABORT);
 			}
 		});
-		menuConfiguracion.add(mntmNewMenuItem_2);
+		menuConfiguracion.add(misalir);
 		
 		JMenu menuIdiomas = new JMenu(labels.getString("ventana.principal.menu.idiomas"));
 		menuConfiguracion.add(menuIdiomas);
-		
 		
 		JMenuItem menuItemEspañol = new JMenuItem(labels.getString("ventana.principal.menu.item.español"));
 
@@ -147,7 +146,6 @@ public class VentanaPrincipal extends JFrame {
 				listado.setVisible(true);
 			}
 		});
-		
 		mnNewMenu_2.add(mntmNewMenuItem_3);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Registrar Vivienda");
