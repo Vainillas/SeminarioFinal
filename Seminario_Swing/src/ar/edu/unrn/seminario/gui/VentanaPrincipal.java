@@ -36,7 +36,7 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 public class VentanaPrincipal extends JFrame {
 	
-	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 	private JPanel contentPane;
 
 	/**
@@ -112,9 +112,8 @@ public class VentanaPrincipal extends JFrame {
 		JMenuItem menuItemEspañol = new JMenuItem(labels.getString("ventana.principal.menu.item.español"));
 
 		menuItemEspañol.addActionListener(new ActionListener() {
-			//labels = ResourceBundle.getBundle("labels");
 			public void actionPerformed(ActionEvent e) {
-				ResourceBundle labels = ResourceBundle.getBundle("labels");
+				//ResourceBundle labels = ResourceBundle.getBundle("labels");
 				setVisible(false);
 				dispose();
 				setVisible(true);
@@ -126,8 +125,7 @@ public class VentanaPrincipal extends JFrame {
 		JMenuItem menuItemEnglish = new JMenuItem(labels.getString("ventana.principal.menu.item.ingles")); 
 		menuItemEnglish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//labels = ResourceBundle.getBundle("labels",new Locale("en"));
-				//ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+				
 				setVisible(false);
 				dispose();
 				setVisible(true);
@@ -169,9 +167,6 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		menuPedidos.add(menuItemPedidoDeRetiro);
-		
-		
-
 	}
 
 }

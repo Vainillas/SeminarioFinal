@@ -55,7 +55,7 @@ public class PedidoDeRetiro extends JFrame {
 
 	public PedidoDeRetiro(IApi api) {
 		this.api = api;
-		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
+		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
