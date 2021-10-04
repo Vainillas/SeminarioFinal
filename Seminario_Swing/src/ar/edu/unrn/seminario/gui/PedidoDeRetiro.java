@@ -156,25 +156,25 @@ public class PedidoDeRetiro extends JFrame {
 		panelResiduos.add(LabelResiduos);
 		
 		textField_Vidrio = new JTextField();
-		//textField.setText(); //$NON-NLS-1$
+		textField_Vidrio.setText("0"); //$NON-NLS-1$
 		textField_Vidrio.setBounds(114, 51, 86, 20);
 		panelResiduos.add(textField_Vidrio);
 		textField_Vidrio.setColumns(10);
 		
 		textField_Plastico = new JTextField();
-		textField_Plastico.setText((String) null);
+		textField_Plastico.setText("0");
 		textField_Plastico.setColumns(10);
 		textField_Plastico.setBounds(114, 81, 86, 20);
 		panelResiduos.add(textField_Plastico);
 		
 		textField_Metal = new JTextField();
-		textField_Metal.setText((String) null);
+		textField_Metal.setText("0");
 		textField_Metal.setColumns(10);
 		textField_Metal.setBounds(121, 111, 86, 20);
 		panelResiduos.add(textField_Metal);
 		
 		textField_Carton = new JTextField();
-		textField_Carton.setText((String) null);
+		textField_Carton.setText("0");
 		textField_Carton.setColumns(10);
 		textField_Carton.setBounds(114, 140, 86, 20);
 		panelResiduos.add(textField_Carton);
