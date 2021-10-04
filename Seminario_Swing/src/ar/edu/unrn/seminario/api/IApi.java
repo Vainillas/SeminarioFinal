@@ -62,6 +62,5 @@ public interface IApi {
 
 	DireccionDTO obtenerDireccion(String text, int num);
 
-	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
-			Date fechaActual);
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion, Date fechaActual);
 }

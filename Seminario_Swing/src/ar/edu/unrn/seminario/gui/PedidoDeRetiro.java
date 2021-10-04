@@ -178,8 +178,8 @@ public class PedidoDeRetiro extends JFrame {
 		textField_Carton.setColumns(10);
 		textField_Carton.setBounds(114, 140, 86, 20);
 		panelResiduos.add(textField_Carton);
-		JRadioButton [] residuos = {radioButtonPlastico,radioButtonMetal,radioButtonCarton,radioButtonVidrio};
-		
+		JRadioButton [] residuos = {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
+		JTextField [] residuosKg = {textField_Vidrio,textField_Plastico,textField_Metal,textField_Carton};
 		
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
 		buttonFinalizar.setBounds(120, 11, 89, 23);
@@ -188,17 +188,20 @@ public class PedidoDeRetiro extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(boxCargaPesada.isSelected());
 				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
+				ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
+				int i = 0;
 				for(JRadioButton r : residuos) {
 					if(r.isSelected()) {
 						residuosSeleccionados.add(r.getText());
+						residuosSeleccionadosKg.add((residuosKg[i]).getText());
 					}
+					i++;
 				}
 				
 				//para probar que funciona utilizar este for
-				for(int i = 0;i<residuosSeleccionados.size();i++) {
-					System.out.println(residuosSeleccionados.get(i));
+				for(int j = 0;j<residuosSeleccionados.size();j++) {
+					System.out.println(residuosSeleccionados.get(j) + " " + residuosSeleccionadosKg.get(j));
 				}
-
 				api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados, textObservacion.getText(),fechaActual);
 				JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);

@@ -27,6 +27,8 @@ import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.modelo.Residuo;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
@@ -225,6 +227,13 @@ public class PersistenceApi implements IApi {
     @Override
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
 			Date fechaActual) {
+    	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
+    	for(String s: residuosSeleccionados){
+    		if(s == "Vidrio"){
+    			//Residuo_Vidrio newVidrio = 
+    		}
+    	}
+    	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos);
 		// TODO Esbozo de método generado automáticamente
 		
 	}
