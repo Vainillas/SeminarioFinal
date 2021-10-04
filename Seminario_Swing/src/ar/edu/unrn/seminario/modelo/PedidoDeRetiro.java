@@ -18,6 +18,13 @@ public class PedidoDeRetiro {
 		//this.vivienda = unaVivienda;
 	}
 	
+	public PedidoDeRetiro(Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos){
+		this.observacion = null;
+		this.maquinaPesada = requiereMaquinaPesada;
+		this.listResiduos = unaListaDeResiduos;
+		//this.vivienda = unaVivienda;
+	}
+	
 	public String getObservacion() {
 		return observacion;
 	}
