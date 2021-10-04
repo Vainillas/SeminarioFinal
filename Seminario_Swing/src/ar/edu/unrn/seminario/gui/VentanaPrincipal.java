@@ -41,12 +41,10 @@ public class VentanaPrincipal extends JFrame {
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
-					System.out.println("f");
 				}
 			}
 		});
 	}
-
 	public VentanaPrincipal(IApi api) {
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -156,9 +154,11 @@ public class VentanaPrincipal extends JFrame {
 				p.setVisible(true);
 			}
 		});
+		
 		menuPedidos.add(menuItemPedidoDeRetiro);
 		
 		JMenuItem menuItemOrdenDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.generar.orden.de.retiro"));
+		
 		menuItemOrdenDeRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				GenerarOrdenDeRetiro o = new GenerarOrdenDeRetiro(api);
