@@ -34,9 +34,10 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+
 public class VentanaPrincipal extends JFrame {
 	
-	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 	private JPanel contentPane;
 
 	/**
@@ -79,7 +80,6 @@ public class VentanaPrincipal extends JFrame {
 					alta.setLocationRelativeTo(null);
 					alta.setVisible(true);
 				}
-			
 		});
 
 
@@ -161,7 +161,7 @@ public class VentanaPrincipal extends JFrame {
 		JMenu menuPedidos = new JMenu("Pedidos");
 		menuBar.add(menuPedidos);
 		
-		JMenuItem menuItemPedidoDeRetiro = new JMenuItem("pedido de retiro ");
+		JMenuItem menuItemPedidoDeRetiro = new JMenuItem("Realizar Pedido");
 		menuItemPedidoDeRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PedidoDeRetiro p = new PedidoDeRetiro(api);
