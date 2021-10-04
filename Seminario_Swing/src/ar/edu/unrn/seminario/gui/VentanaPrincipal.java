@@ -1,43 +1,32 @@
 package ar.edu.unrn.seminario.gui;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+
+import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.TextField;
-import javax.swing.JTextField;
-import javax.swing.JTextPane;
 
-import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
+
+
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.api.MemoryApi;
-import ar.edu.unrn.seminario.api.PersistenceApi;
-import ar.edu.unrn.seminario.exceptions.DataEmptyException;
-import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
-import ar.edu.unrn.seminario.exceptions.NotNumberException;
-import ar.edu.unrn.seminario.modelo.Direccion;
-import ar.edu.unrn.seminario.modelo.Dueño;
-import ar.edu.unrn.seminario.modelo.Vivienda;
 
+import ar.edu.unrn.seminario.api.PersistenceApi;
+
+@SuppressWarnings("serial")
 public class VentanaPrincipal extends JFrame {
 	
 	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+
 	private JPanel contentPane;
 
 	/**
@@ -59,75 +48,77 @@ public class VentanaPrincipal extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaPrincipal(IApi api) {
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
+		//i18n
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 		
-		JMenu menuUsuarios = new JMenu("Usuarios");
+		JMenu menuUsuarios = new JMenu(labels.getString("ventana.principal.menu.usuarios"));
 		menuBar.add(menuUsuarios);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem(labels.getString("ventana.principal.menu.configuracion"));
-		mntmNewMenuItem.addActionListener(new ActionListener() {
+
+		JMenuItem menuItemAltaModificacion = new JMenuItem(labels.getString("ventana.principal.menu.alta.modificacion"));
+		menuItemAltaModificacion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					AltaUsuario alta = new AltaUsuario(api);
 					alta.setLocationRelativeTo(null);
 					alta.setVisible(true);
 				}
+			
 		});
 
 
-		menuUsuarios.add(mntmNewMenuItem);
+		menuUsuarios.add(menuItemAltaModificacion);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Listado");
-		mntmNewMenuItem_1.addActionListener(new ActionListener() {
+		JMenuItem menuItemListadoUsuarios = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
+		menuItemListadoUsuarios.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListadoUsuario listado= new ListadoUsuario(api);
 				listado.setLocationRelativeTo(null);
 				listado.setVisible(true);
 			}
 		});
-		menuUsuarios.add(mntmNewMenuItem_1);
+		menuUsuarios.add(menuItemListadoUsuarios);
 		
-		JMenu menuConfiguracion = new JMenu("Configuracion");
+		JMenu menuConfiguracion = new JMenu(labels.getString("ventana.principal.menu.configuracion"));
+		
 		menuBar.add(menuConfiguracion);
 		
-		JMenuItem misalir = new JMenuItem("Salir");
-		misalir.addActionListener(new ActionListener() {
+		JMenuItem menuItemSalir = new JMenuItem(labels.getString("ventana.principal.menu.item.salir"));
+		menuItemSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.exit(ABORT);
+				dispose();
 			}
 		});
-		menuConfiguracion.add(misalir);
+		menuConfiguracion.add(menuItemSalir);
 		
 		JMenu menuIdiomas = new JMenu(labels.getString("ventana.principal.menu.idiomas"));
 		menuConfiguracion.add(menuIdiomas);
 		
 		JMenuItem menuItemEspañol = new JMenuItem(labels.getString("ventana.principal.menu.item.español"));
-
 		menuItemEspañol.addActionListener(new ActionListener() {
-			//labels = ResourceBundle.getBundle("labels");
 			public void actionPerformed(ActionEvent e) {
-				ResourceBundle labels = ResourceBundle.getBundle("labels");
+				//ResourceBundle labels = ResourceBundle.getBundle("labels");
 				setVisible(false);
 				dispose();
 				setVisible(true);
+				ResourceBundle labels = ResourceBundle.getBundle("labels");
 			}
 		});
+		
 		menuIdiomas.add(menuItemEspañol);
 		
 		
 		JMenuItem menuItemEnglish = new JMenuItem(labels.getString("ventana.principal.menu.item.ingles")); 
 		menuItemEnglish.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//labels = ResourceBundle.getBundle("labels",new Locale("en"));
-				//ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+				ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
 				setVisible(false);
 				dispose();
 				setVisible(true);
@@ -135,33 +126,34 @@ public class VentanaPrincipal extends JFrame {
 		});
 		menuIdiomas.add(menuItemEnglish);
 		
-		JMenu mnNewMenu_2 = new JMenu("Viviendas");
-		menuBar.add(mnNewMenu_2);
+		JMenu menuViviendas = new JMenu(labels.getString("ventana.principal.menu.viviendas"));
+		menuBar.add(menuViviendas);
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Listado");
-		mntmNewMenuItem_3.addActionListener(new ActionListener() {
+		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
+		menuItemListadoViviendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListadoVivienda listado= new ListadoVivienda(api);
 				listado.setLocationRelativeTo(null);
 				listado.setVisible(true);
 			}
 		});
-		mnNewMenu_2.add(mntmNewMenuItem_3);
 		
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Registrar Vivienda");
-		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+		menuViviendas.add(menuItemListadoViviendas);
+		
+		JMenuItem menuItemRegistrarViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.registrar.vivienda"));
+		menuItemRegistrarViviendas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e){
 				RegistroVivienda casa = new RegistroVivienda(api);
 				casa.setVisible(true);
 			}
 		});
 		
-		mnNewMenu_2.add(mntmNewMenuItem_4);
+		menuViviendas.add(menuItemRegistrarViviendas);
 		
-		JMenu menuPedidos = new JMenu("Pedidos");
+		JMenu menuPedidos = new JMenu(labels.getString("ventana.principal.menu.item.pedidos"));
 		menuBar.add(menuPedidos);
 		
-		JMenuItem menuItemPedidoDeRetiro = new JMenuItem("Realizar Pedido");
+		JMenuItem menuItemPedidoDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.pedido.de.retiro"));
 		menuItemPedidoDeRetiro.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PedidoDeRetiro p = new PedidoDeRetiro(api);
@@ -170,8 +162,15 @@ public class VentanaPrincipal extends JFrame {
 		});
 		menuPedidos.add(menuItemPedidoDeRetiro);
 		
+		JMenuItem menuItemOrdenDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.generar.orden.de.retiro"));
+		menuItemOrdenDeRetiro.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GenerarOrdenDeRetiro o = new GenerarOrdenDeRetiro(api);
+				o.setVisible(false);
+			}
+		});
+		menuPedidos.add(menuItemOrdenDeRetiro);
 		
-
 	}
 
 }
