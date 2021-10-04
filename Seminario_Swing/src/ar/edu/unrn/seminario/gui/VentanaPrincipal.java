@@ -41,6 +41,7 @@ public class VentanaPrincipal extends JFrame {
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
+					System.out.println("f");
 				}
 			}
 		});
