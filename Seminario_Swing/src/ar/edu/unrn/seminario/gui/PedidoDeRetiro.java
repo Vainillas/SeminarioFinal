@@ -46,7 +46,6 @@ public class PedidoDeRetiro extends JFrame {
 	private static final long serialVersionUID = 7736390012295310754L;
 	private JPanel contentPane;
 	private Date fechaActual = DateHelper.getDate();
-	private IApi api = null;
 	private JPanel panelBotones;
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
@@ -54,7 +53,6 @@ public class PedidoDeRetiro extends JFrame {
 
 
 	public PedidoDeRetiro(IApi api) {
-		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		
 		setTitle(labels.getString("pedido.retiro.titulo"));
