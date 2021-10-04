@@ -24,6 +24,8 @@ import ar.edu.unrn.seminario.api.PersistenceApi;
 
 @SuppressWarnings("serial")
 public class VentanaPrincipal extends JFrame {
+	
+	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 
 	private JPanel contentPane;
 
@@ -49,7 +51,6 @@ public class VentanaPrincipal extends JFrame {
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
-		System.out.println("si ven esto significa que la porqueria se envio");
 		//i18n
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
@@ -102,6 +103,10 @@ public class VentanaPrincipal extends JFrame {
 		JMenuItem menuItemEspañol = new JMenuItem(labels.getString("ventana.principal.menu.item.español"));
 		menuItemEspañol.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//ResourceBundle labels = ResourceBundle.getBundle("labels");
+				setVisible(false);
+				dispose();
+				setVisible(true);
 				ResourceBundle labels = ResourceBundle.getBundle("labels");
 			}
 		});
@@ -166,7 +171,6 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 		menuPedidos.add(menuItemOrdenDeRetiro);
-		
 		
 	}
 
