@@ -10,7 +10,7 @@ import javax.swing.border.EmptyBorder;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 
 import javax.swing.JLabel;
@@ -18,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
@@ -28,11 +30,11 @@ public class RegistroVivienda extends JFrame {
     private JPanel contentPane;
     private JTextField dniIngresado;
     private JTextField calleIngresada;
-    private JLabel lblCodpostal;
+    private JLabel labelCodPostal;
     //private JFormattedTextField codPostIngresado;
     private JTextField latitudIngresada;
     private JTextField barrioIngresado;
-    private JTextField longIngresada;
+    private JTextField longitudIngresada;
     private JTextField nombreIngresado;
     private JTextField correoIngresado;
     private JTextField apellidoIngresado;
@@ -45,7 +47,8 @@ public class RegistroVivienda extends JFrame {
      * Create the frame.
      */
     public RegistroVivienda(IApi api){
-    	setTitle("Registro Vivienda");
+    	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+    	setTitle(labels.getString("registro.viviendas.titulo"));
     	this.api=api;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 403, 300);
@@ -54,13 +57,13 @@ public class RegistroVivienda extends JFrame {
         contentPane.setLayout(null);
         setContentPane(contentPane);
         
-        JLabel labelDueno = new JLabel("Due\u00F1o");
+        JLabel labelDueno = new JLabel(labels.getString("registro.viviendas.label.dueño"));
         labelDueno.setFont(new Font("Tahoma", Font.PLAIN, 20));
         labelDueno.setBounds(75, 0, 112, 25);
         contentPane.add(labelDueno);
         
-        JLabel labelDireccion = new JLabel("Calle");
-        labelDireccion.setBounds(242, 39, 49, 14);
+        JLabel labelDireccion = new JLabel(labels.getString("registro.viviendas.label.direccion"));
+        labelDireccion.setBounds(216, 39, 49, 14);
         contentPane.add(labelDireccion);
         
         dniIngresado = new JTextField();
@@ -82,43 +85,42 @@ public class RegistroVivienda extends JFrame {
         codPostIngresado.setBounds(276, 95, 77, 20);
         contentPane.add(codPostIngresado);
         
-        JLabel lblNewLabel = new JLabel("Barrio");
-        lblNewLabel.setBounds(233, 187, 58, 23);
-        contentPane.add(lblNewLabel);
+        JLabel labelBarrio = new JLabel(labels.getString("registro.viviendas.label.barrio"));
+        labelBarrio.setBounds(216, 195, 58, 23);
+        contentPane.add(labelBarrio);
         
-        JLabel lblNewLabel_1 = new JLabel("Longitud");
-        lblNewLabel_1.setBounds(216, 156, 49, 20);
-        contentPane.add(lblNewLabel_1);
+        JLabel labellongitud = new JLabel(labels.getString("registro.viviendas.label.longitud"));
+        labellongitud.setBounds(216, 156, 49, 20);
+        contentPane.add(labellongitud);
         
-        JLabel lblNewLabel_2 = new JLabel("Latitud");
-        lblNewLabel_2.setBounds(226, 126, 46, 20);
-        contentPane.add(lblNewLabel_2);
+        JLabel labelLatitud = new JLabel(labels.getString("registro.viviendas.label.latitud"));
+        labelLatitud.setBounds(216, 124, 46, 20);
+        contentPane.add(labelLatitud);
         
-        JLabel lblNewLabel_3 = new JLabel("Nombre");
-        lblNewLabel_3.setBounds(24, 36, 46, 17);
-        contentPane.add(lblNewLabel_3);
+        JLabel labelNombre = new JLabel(labels.getString("registro.viviendas.label.nombre"));
+        labelNombre.setBounds(24, 36, 46, 17);
+        contentPane.add(labelNombre);
         
-        JLabel lblNewLabel_4 = new JLabel("Apellido");
-        lblNewLabel_4.setBounds(24, 64, 46, 17);
-        contentPane.add(lblNewLabel_4);
+        JLabel labelApellido = new JLabel(labels.getString("registro.viviendas.label.apellido"));
+        labelApellido.setBounds(24, 64, 46, 17);
+        contentPane.add(labelApellido);
         
-        JLabel lblNewLabel_5 = new JLabel("DNI");
-        lblNewLabel_5.setBounds(32, 95, 46, 20);
-        contentPane.add(lblNewLabel_5);
+        JLabel labelDni = new JLabel(labels.getString("registro.viviendas.label.dni"));
+        labelDni.setBounds(32, 95, 46, 20);
+        contentPane.add(labelDni);
         
-        JLabel lblNewLabel_6 = new JLabel("Correo");
-        lblNewLabel_6.setBounds(24, 126, 46, 17);
-        contentPane.add(lblNewLabel_6);
+        JLabel labelCorreo = new JLabel(labels.getString("registro.viviendas.label.correo"));
+        labelCorreo.setBounds(24, 126, 46, 17);
+        contentPane.add(labelCorreo);
         
-        JLabel lblDireccion = new JLabel("Direccion");
-        lblDireccion.setFont(new Font("Tahoma", Font.PLAIN, 20));
-        lblDireccion.setBounds(242, 0, 112, 25);
-        contentPane.add(lblDireccion);
+        JLabel labeldireccion = new JLabel(labels.getString("registro.viviendas.label.direccion"));
+        labeldireccion.setFont(new Font("Tahoma", Font.PLAIN, 20));
+        labeldireccion.setBounds(242, 0, 112, 25);
+        contentPane.add(labeldireccion);
         
-        JButton botonAceptar = new JButton("Aceptar");
+        JButton botonAceptar = new JButton(labels.getString("registro.viviendas.button.aceptar"));
         botonAceptar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) { //Pueden haber dos personas con la misma vivienda registrada?
-            											//Creo que no.
+            public void actionPerformed(ActionEvent e) {
             	try {
             		if(api.obtenerDueño(dniIngresado.getText())==null) {// MALA PRÁCTICA (ESTO NO VA EN LA PARTE GRÁFICA)
             			api.agregarDueño(nombreIngresado.getText(),
@@ -126,33 +128,30 @@ public class RegistroVivienda extends JFrame {
                 				dniIngresado.getText(),
                 				correoIngresado.getText());
             		}
-            		if(api.obtenerDireccion(calleIngresada.getText(),Integer.parseInt(alturaIngresada.getText()))==null) {
-            			api.agregarDireccion(calleIngresada.getText(),
-            					alturaIngresada.getText(),
-            					codPostIngresado.getText(),
-            					latitudIngresada.getText(),
-            					longIngresada.getText(),
-            					barrioIngresado.getText());
-            			api.agregarVivienda(nombreIngresado.getText(),
-                				apellidoIngresado.getText(),
-                				dniIngresado.getText(),
-                				correoIngresado.getText(),
-                				calleIngresada.getText(),
-                				alturaIngresada.getText(),
-                				codPostIngresado.getText(),
-                				longIngresada.getText(), 
-                				latitudIngresada.getText(),
-                				barrioIngresado.getText());
-            			JOptionPane.showMessageDialog(null , "La carga finalizó correctamente.");
-            		}
-            		else
-            			JOptionPane.showMessageDialog(null, "Esta dirección ya está en el sistema." , "Error: ", JOptionPane.ERROR_MESSAGE);
+            		api.agregarDireccion(calleIngresada.getText(),
+            				alturaIngresada.getText(),
+            				codPostIngresado.getText(),
+            				latitudIngresada.getText(),
+            				longitudIngresada.getText(),
+            				barrioIngresado.getText());
+            		api.agregarVivienda(nombreIngresado.getText(),
+            				apellidoIngresado.getText(),
+            				dniIngresado.getText(),
+            				correoIngresado.getText(),
+            				calleIngresada.getText(),
+            				alturaIngresada.getText(),
+            				codPostIngresado.getText(),
+            				longitudIngresada.getText(), 
+            				latitudIngresada.getText(),
+            				barrioIngresado.getText());
+            		JOptionPane.showMessageDialog(null ,
+            				labels.getString("registro.viviendas.mensaje.carga.correcta"));
                     setVisible (false);
                     dispose();
-            	} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(), "Error: ", JOptionPane.ERROR_MESSAGE);
-					
-            	}
+            	} 
+				 catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("registro.viviendas.mensaje.error"), JOptionPane.ERROR_MESSAGE);
+				}
             }
         }
         		);
@@ -161,7 +160,7 @@ public class RegistroVivienda extends JFrame {
         botonAceptar.setBounds(87, 229, 89, 23);
         contentPane.add(botonAceptar);
         
-        JButton botonCancelar = new JButton("Cancelar");
+        JButton botonCancelar = new JButton(labels.getString("registro.viviendas.button.cancelar"));
         botonCancelar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible (false);
@@ -171,14 +170,13 @@ public class RegistroVivienda extends JFrame {
         botonCancelar.setBounds(250, 229, 89, 23);
         contentPane.add(botonCancelar);
         
-        JLabel lblNro = new JLabel("Altura");
-        lblNro.setBounds(233, 64, 49, 20);
-        contentPane.add(lblNro);
+        JLabel label = new JLabel(labels.getString("registro.viviendas.label.altura"));
+        label.setBounds(216, 64, 49, 20);
+        contentPane.add(label);
         
-        lblCodpostal = new JLabel("CodPostal");
-        lblCodpostal.setBounds(216, 98, 63, 14);
-        contentPane.add(lblCodpostal);
-        
+        labelCodPostal = new JLabel(labels.getString("registro.viviendas.label.codigo.postal"));
+        labelCodPostal.setBounds(216, 98, 63, 14);
+        contentPane.add(labelCodPostal);
         latitudIngresada = new JTextField();
         latitudIngresada.setBounds(276, 126, 77, 20);
         contentPane.add(latitudIngresada);
@@ -189,10 +187,10 @@ public class RegistroVivienda extends JFrame {
         contentPane.add(barrioIngresado);
         barrioIngresado.setColumns(10);
         
-        longIngresada = new JTextField();
-        longIngresada.setBounds(276, 157, 77, 20);
-        contentPane.add(longIngresada);
-        longIngresada.setColumns(10);
+        longitudIngresada = new JTextField();
+        longitudIngresada.setBounds(276, 157, 77, 20);
+        contentPane.add(longitudIngresada);
+        longitudIngresada.setColumns(10);
         
         
         

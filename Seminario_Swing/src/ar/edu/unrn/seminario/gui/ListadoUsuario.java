@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -45,9 +47,14 @@ public class ListadoUsuario extends JFrame {
 
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
-
+		//ResourceBundle labels = ResourceBundle.getBundle("labels");
+		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
 		table = new JTable();
-		String[] titulos = { "USUARIO", "NOMBRE", "EMAIL", "ESTADO", "ROL" };
+		String[] titulosUsuario = { 
+				labels.getString("listado.usuario.titulos.usuario.USUARIO"),  
+				labels.getString("listado.usuario.titulos.usuario.EMAIL"), 
+				labels.getString("listado.usuario.titulos.usuario.ESTADO"), 
+				labels.getString("listado.usuario.titulos.usuario.ROL") };
 		
 		table.addMouseListener(new MouseAdapter() {
 			@Override
@@ -57,24 +64,25 @@ public class ListadoUsuario extends JFrame {
 
 			}
 		});
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);
+		modelo = new DefaultTableModel(new Object[][] {}, titulosUsuario);
 
 		// Obtiene la lista de usuarios a mostrar
 		List<UsuarioDTO> usuarios = api.obtenerUsuarios();
 		// Agrega los usuarios en el model
 		for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+			modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
 		}
 
 		table.setModel(modelo);
 
 		scrollPane.setViewportView(table);
 
-		activarButton = new JButton("Activar");
+		activarButton = new JButton(labels.getString("listado.usuario.button.activar"));
 		activarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int reply = JOptionPane.showConfirmDialog(null,
-						"Estas seguro que queres cambiar el estado del Usuario?", "Confirmar cambio de estado.",
+						labels.getString("listado.usuario.mensaje.cambiar.estado"),
+						labels.getString("listado.usuario.mensaje.confirmar.cambio.estado"),
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
 					String username = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
@@ -83,7 +91,8 @@ public class ListadoUsuario extends JFrame {
 						reloadGrid();
 					}
 					catch(StateException e1){
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), 
+								labels.getString("listado.usuario.mensaje.error"), JOptionPane.ERROR_MESSAGE);
 					}
 
 				}
@@ -92,11 +101,12 @@ public class ListadoUsuario extends JFrame {
 
 		});
 
-		desactivarButton = new JButton("Desactivar");
+		desactivarButton = new JButton(labels.getString("listado.usuario.button.desactivar"));
 		desactivarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int reply = JOptionPane.showConfirmDialog(null,
-						"Estas seguro que queres cambiar el estado del Usuario?", "Confirmar cambio de estado.",
+						labels.getString("listado.usuario.mensaje.cambiar.estado"), 
+						labels.getString("listado.usuario.mensaje.confirmar.cambio.estado"),
 						JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
 					String username = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
@@ -104,13 +114,15 @@ public class ListadoUsuario extends JFrame {
 						api.desactivarUsuario(username);
 						reloadGrid();
 					} catch (StateException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(), 
+								labels.getString("listado.usuario.mensaje.error"), 
+								JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			}
 		});
 
-		JButton cerrarButton = new JButton("Cerrar");
+		JButton cerrarButton = new JButton(labels.getString("listado.usuario.button.cerrar"));
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
