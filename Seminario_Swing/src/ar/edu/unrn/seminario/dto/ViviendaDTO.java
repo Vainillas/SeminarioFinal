@@ -21,22 +21,12 @@ public class ViviendaDTO {
 		return direccion;
 	}
 
-	public void setDireccion(Direccion direccion) {
-		this.direccion = direccion;
-	}
 
 	public Dueño getDueño() {
 		return dueño;
 	}
-
-	public void setDueño(Dueño dueño) {
-		this.dueño = dueño;
-	}
 	public int getID() {
 		return id;
-	}
-	public void setID(int unaID) {
-		this.id=unaID;
 	}
 	
 }
