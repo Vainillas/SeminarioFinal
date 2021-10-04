@@ -90,15 +90,15 @@ public class AltaUsuario extends JFrame {
 		cancelarButton.setBounds(323, 215, 97, 25);
 		contentPane.add(cancelarButton);
 
-		JLabel nombreLabel = new JLabel("alta.usuario.label.nombre");
+		JLabel nombreLabel = new JLabel(labels.getString("alta.usuario.label.nombre"));
 		nombreLabel.setBounds(43, 88, 56, 16);
 		contentPane.add(nombreLabel);
 
-		JLabel emailLabel = new JLabel("alta.usuario.label.email:");
+		JLabel emailLabel = new JLabel(labels.getString("alta.usuario.label.email"));
 		emailLabel.setBounds(43, 125, 56, 16);
 		contentPane.add(emailLabel);
 
-		JLabel rolLabel = new JLabel("alta.usuario.label.rol");
+		JLabel rolLabel = new JLabel(labels.getString("alta.usuario.label.rol"));
 		rolLabel.setBounds(43, 154, 56, 16);
 		contentPane.add(rolLabel);
 

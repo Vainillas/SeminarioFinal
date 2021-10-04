@@ -29,6 +29,9 @@ public class VentanaPrincipal extends JFrame {
 
 	private JPanel contentPane;
 
+	/**
+	 * Launch the application.
+	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -49,7 +52,7 @@ public class VentanaPrincipal extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
 		//i18n
-		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -59,25 +62,21 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(menuUsuarios);
 
 		JMenuItem menuItemAltaModificacion = new JMenuItem(labels.getString("ventana.principal.menu.alta.modificacion"));
-		menuItemAltaModificacion.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					AltaUsuario alta = new AltaUsuario(api);
-					alta.setLocationRelativeTo(null);
-					alta.setVisible(true);
-				}
-			
+		menuItemAltaModificacion.addActionListener((e)->{
+				AltaUsuario alta = new AltaUsuario(api);
+				alta.setLocationRelativeTo(null);
+				alta.setVisible(true);
+
 		});
 
 
 		menuUsuarios.add(menuItemAltaModificacion);
 		
 		JMenuItem menuItemListadoUsuarios = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
-		menuItemListadoUsuarios.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		menuItemListadoUsuarios.addActionListener((e)->{
 				ListadoUsuario listado= new ListadoUsuario(api);
 				listado.setLocationRelativeTo(null);
 				listado.setVisible(true);
-			}
 		});
 		menuUsuarios.add(menuItemListadoUsuarios);
 		
@@ -86,39 +85,28 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(menuConfiguracion);
 		
 		JMenuItem menuItemSalir = new JMenuItem(labels.getString("ventana.principal.menu.item.salir"));
-		menuItemSalir.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(ABORT);
-				dispose();
-			}
-		});
+		menuItemSalir.addActionListener( e->{System.exit(ABORT);dispose();});
+			
+			
 		menuConfiguracion.add(menuItemSalir);
 		
 		JMenu menuIdiomas = new JMenu(labels.getString("ventana.principal.menu.idiomas"));
 		menuConfiguracion.add(menuIdiomas);
 		
 		JMenuItem menuItemEspañol = new JMenuItem(labels.getString("ventana.principal.menu.item.español"));
-		menuItemEspañol.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//ResourceBundle labels = ResourceBundle.getBundle("labels");
-				setVisible(false);
-				dispose();
-				setVisible(true);
-				ResourceBundle labels = ResourceBundle.getBundle("labels");
-			}
-		});
 		
 		menuIdiomas.add(menuItemEspañol);
 		
+		/*ActionListener a = (e->System.out.println("v"));
+		a.actionPerformed(null);*/
 		
 		JMenuItem menuItemEnglish = new JMenuItem(labels.getString("ventana.principal.menu.item.ingles")); 
-		menuItemEnglish.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
-				setVisible(false);
+		menuItemEnglish.addActionListener((e)->{
+				 
+				this.setVisible(false);
 				dispose();
 				setVisible(true);
-			}
+			
 		});
 		menuIdiomas.add(menuItemEnglish);
 		
@@ -126,47 +114,66 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(menuViviendas);
 		
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
-		menuItemListadoViviendas.addActionListener(new ActionListener() {
+		menuItemListadoViviendas.addActionListener((e)->{
+			ListadoVivienda v =  new ListadoVivienda(api);
+			v.setVisible(true);
+			v.setLocationRelativeTo(null);
+		});
+		
+				/*new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ListadoVivienda listado= new ListadoVivienda(api);
-				listado.setLocationRelativeTo(null);
+				listado.;
 				listado.setVisible(true);
 			}
 		});
-		
+		*/
 		menuViviendas.add(menuItemListadoViviendas);
 		
 		JMenuItem menuItemRegistrarViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.registrar.vivienda"));
-		menuItemRegistrarViviendas.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e){
-				RegistroVivienda casa = new RegistroVivienda(api);
-				casa.setVisible(true);
-			}
+		
+		menuItemRegistrarViviendas.addActionListener((e)->{
+			RegistroVivienda v =new RegistroVivienda(api);
+			v.setVisible(true);
+			v.setLocationRelativeTo(null);
 		});
 		
+
 		menuViviendas.add(menuItemRegistrarViviendas);
 		
 		JMenu menuPedidos = new JMenu(labels.getString("ventana.principal.menu.item.pedidos"));
 		menuBar.add(menuPedidos);
 		
 		JMenuItem menuItemPedidoDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.pedido.de.retiro"));
-		menuItemPedidoDeRetiro.addActionListener(new ActionListener() {
+		menuItemPedidoDeRetiro.addActionListener((e)->{
+			PedidoDeRetiro p  = new PedidoDeRetiro(api);
+			p.setVisible(true);
+			p.setLocationRelativeTo(null);
+			});
+				/*new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PedidoDeRetiro p = new PedidoDeRetiro(api);
 				p.setVisible(true);
+				p.setLocationRelativoTo(null);
 			}
-		});
+		});*/
 		
 		menuPedidos.add(menuItemPedidoDeRetiro);
 		
 		JMenuItem menuItemOrdenDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.generar.orden.de.retiro"));
 		
-		menuItemOrdenDeRetiro.addActionListener(new ActionListener() {
+		menuItemOrdenDeRetiro.addActionListener( (e)->{ 
+			GenerarOrdenDeRetiro o = new GenerarOrdenDeRetiro(api);
+			o.setVisible(true);
+			o.setLocationRelativeTo(null); 
+			
+		});
+				/*new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				GenerarOrdenDeRetiro o = new GenerarOrdenDeRetiro(api);
 				o.setVisible(false);
 			}
-		});
+		});*/
 		menuPedidos.add(menuItemOrdenDeRetiro);
 		
 	}
