@@ -46,13 +46,19 @@ public class PedidoDeRetiro extends JFrame {
 	private static final long serialVersionUID = 7736390012295310754L;
 	private JPanel contentPane;
 	private Date fechaActual = DateHelper.getDate();
+	private IApi api = null;
 	private JPanel panelBotones;
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
 	private JPanel panelResiduos;
+	private JTextField textField_Vidrio;
+	private JTextField textField_Plastico;
+	private JTextField textField_Metal;
+	private JTextField textField_Carton;
 
 
 	public PedidoDeRetiro(IApi api) {
+		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		
 		setTitle(labels.getString("pedido.retiro.titulo"));
@@ -148,6 +154,30 @@ public class PedidoDeRetiro extends JFrame {
 		JLabel LabelResiduos = new JLabel(labels.getString("pedido.retiro.label.residuos"));
 		LabelResiduos.setBounds(46, 0, 133, 14);
 		panelResiduos.add(LabelResiduos);
+		
+		textField_Vidrio = new JTextField();
+		textField_Vidrio.setText("0"); //$NON-NLS-1$
+		textField_Vidrio.setBounds(114, 51, 86, 20);
+		panelResiduos.add(textField_Vidrio);
+		textField_Vidrio.setColumns(10);
+		
+		textField_Plastico = new JTextField();
+		textField_Plastico.setText("0");
+		textField_Plastico.setColumns(10);
+		textField_Plastico.setBounds(114, 81, 86, 20);
+		panelResiduos.add(textField_Plastico);
+		
+		textField_Metal = new JTextField();
+		textField_Metal.setText("0");
+		textField_Metal.setColumns(10);
+		textField_Metal.setBounds(121, 111, 86, 20);
+		panelResiduos.add(textField_Metal);
+		
+		textField_Carton = new JTextField();
+		textField_Carton.setText("0");
+		textField_Carton.setColumns(10);
+		textField_Carton.setBounds(114, 140, 86, 20);
+		panelResiduos.add(textField_Carton);
 		JRadioButton [] residuos = {radioButtonPlastico,radioButtonMetal,radioButtonCarton,radioButtonVidrio};
 		
 		
