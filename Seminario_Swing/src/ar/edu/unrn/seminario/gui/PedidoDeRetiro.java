@@ -196,6 +196,7 @@ public class PedidoDeRetiro extends JFrame {
 		
 		
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
+
 		buttonFinalizar.setBounds(120, 11, 89, 23);
 		panelBotones.add(buttonFinalizar);
 		buttonFinalizar.addActionListener((e)->{

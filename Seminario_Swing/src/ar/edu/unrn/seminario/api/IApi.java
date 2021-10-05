@@ -71,7 +71,7 @@ public interface IApi {
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
 
-	boolean validarDueño(String dni) throws AppException;
+	boolean existeDueño(String dni) throws AppException;
 		
 
 

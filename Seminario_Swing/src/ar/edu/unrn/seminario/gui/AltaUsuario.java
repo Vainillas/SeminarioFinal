@@ -88,7 +88,6 @@ public class AltaUsuario extends JFrame {
 		JButton aceptarButton = new JButton(labels.getString("alta.usuario.button.aceptar") );
 		aceptarButton.addActionListener((e)->{//utilizando metodos lambda
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
-				
 					try {
 						this.roles = api.obtenerRoles();
 						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),emailTextField.getText(),rol.getCodigo());

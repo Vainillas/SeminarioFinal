@@ -223,7 +223,7 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
 			Date fechaActual) {
-		// TODO Esbozo de método generado automáticamente
+			
 		
 	}
 
@@ -237,7 +237,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public boolean validarDueño(String dni) throws AppException {
+	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
 		
 	}
