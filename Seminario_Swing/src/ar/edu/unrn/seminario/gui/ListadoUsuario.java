@@ -37,12 +37,6 @@ public class ListadoUsuario extends JFrame {
 	JButton activarButton;
 	JButton desactivarButton;
 
-	/**
-	 * Create the frame.
-	 * @throws NotNullException 
-	 * @throws IncorrectEmailException 
-	 * @throws DataEmptyException 
-	 */
 	public ListadoUsuario(IApi api){
 		this.api = api;
 		
@@ -65,7 +59,7 @@ public class ListadoUsuario extends JFrame {
 				labels.getString("listado.usuario.titulos.usuario.ROL") };
 		
 		table.addMouseListener(new MouseAdapter() {
-			@Override
+			
 			public void mouseClicked(MouseEvent arg0) {
 				// Habilitar botones
 				habilitarBotones(true);
@@ -170,12 +164,11 @@ public class ListadoUsuario extends JFrame {
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 		// Obtiene la lista de usuarios a mostrar
 		List<UsuarioDTO> usuarios;
-		try {
-			
+		try {	
 			usuarios = api.obtenerUsuarios();
 			// Resetea el model
 			modelo.setRowCount(0);
-
+			
 			// Agrega los usuarios en el model
 			for (UsuarioDTO u : usuarios) {
 				modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });

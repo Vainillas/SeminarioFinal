@@ -40,7 +40,11 @@ public class AltaUsuario extends JFrame {
 	public AltaUsuario(IApi api) {
 
 		// Obtengo los roles
-		
+		try {
+			this.roles = api.obtenerRoles();
+		} catch (AppException e3) {
+			JOptionPane.showMessageDialog(null,e3.getMessage(),"error",2);
+		}
 
 		setTitle("Alta Usuario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,20 +85,22 @@ public class AltaUsuario extends JFrame {
 		contentPane.add(emailTextField);
 		emailTextField.setColumns(10);
 		
-		rolComboBox = new JComboBox();
-		rolComboBox.setBounds(148, 131, 160, 22);
-		contentPane.add(rolComboBox);
+		
+		
+		
 		
 		JButton aceptarButton = new JButton(labels.getString("alta.usuario.button.aceptar") );
 		aceptarButton.addActionListener((e)->{//utilizando metodos lambda
-				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
+			RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
+				
 					try {
-						this.roles = api.obtenerRoles();
+						
+						
 						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),emailTextField.getText(),rol.getCodigo());
 						JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
-					} catch (NotNullException | IncorrectEmailException | DataEmptyException | StringNullException | AppException  e1) {
+					} catch ( NotNullException | IncorrectEmailException | DataEmptyException | StringNullException | AppException  e1) {
 						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
 					}
 					
@@ -112,11 +118,10 @@ public class AltaUsuario extends JFrame {
 		
 		cancelarButton.setBounds(323, 215, 97, 25);
 		contentPane.add(cancelarButton);
-
-
-
-
-
+		rolComboBox = new JComboBox();
+		rolComboBox.setBounds(148, 131, 160, 22);
+		contentPane.add(rolComboBox);
+		
 		for (RolDTO rol : this.roles) {
 			rolComboBox.addItem(rol.getNombre());
 		}
