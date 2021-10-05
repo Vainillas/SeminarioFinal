@@ -7,16 +7,16 @@ public class Persona {
 	protected String nombre;
 	protected String apellido;
 	protected String dni;
-	public Persona (String nombre, String apellido, String dni)throws DataEmptyException, NotNullException, IncorrectEmailException {
+	public Persona (String nombre, String apellido, String dni)throws DataEmptyException, StringNullException, IncorrectEmailException {
 		validarDatos(nombre,apellido,dni);
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 	}
-	public void validarDatos(String nombre,String apellido, String dni) throws NotNullException, IncorrectEmailException, DataEmptyException {
-		if(ConditionHelper.stringIsNull(nombre)) {throw new NotNullException("nombre nulo");}
-		if(ConditionHelper.stringIsNull(apellido)) {throw new NotNullException("apellido nulo");}
-		if(ConditionHelper.stringIsNull(dni)) {throw new NotNullException("dni nulo");}
+	public void validarDatos(String nombre,String apellido, String dni) throws StringNullException, IncorrectEmailException, DataEmptyException {
+		if(ConditionHelper.stringIsNull(nombre)) {throw new StringNullException("nombre nulo");}
+		if(ConditionHelper.stringIsNull(apellido)) {throw new StringNullException("apellido nulo");}
+		if(ConditionHelper.stringIsNull(dni)) {throw new StringNullException("dni nulo");}
 
 		
 		if(ConditionHelper.stringIsEmpty(nombre)) {throw new DataEmptyException("El campo de nombre está vacío");}
@@ -43,5 +43,8 @@ public class Persona {
 	public void setApellido(String apellido) {
 		this.apellido=apellido;
 	}
-
+	public String toString() {
+		return "nombre: "+ this.nombre + "apellido: "+ this.apellido+
+				"dni: "+ this.dni;
+	}
 }

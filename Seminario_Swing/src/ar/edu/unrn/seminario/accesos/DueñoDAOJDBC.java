@@ -10,7 +10,7 @@ import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
@@ -119,7 +119,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 		} catch (DataEmptyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NotNullException e) {
+		} catch (StringNullException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IncorrectEmailException e) {

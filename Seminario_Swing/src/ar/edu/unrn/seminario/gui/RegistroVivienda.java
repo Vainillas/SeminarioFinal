@@ -119,8 +119,7 @@ public class RegistroVivienda extends JFrame {
         contentPane.add(labeldireccion);
         
         JButton botonAceptar = new JButton(labels.getString("registro.viviendas.button.aceptar"));
-        botonAceptar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        botonAceptar.addActionListener((e)->{
             	try {
             		if(api.obtenerDueño(dniIngresado.getText())==null) {// MALA PRÁCTICA (ESTO NO VA EN LA PARTE GRÁFICA)
             			api.agregarDueño(nombreIngresado.getText(),
@@ -152,9 +151,7 @@ public class RegistroVivienda extends JFrame {
 				 catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("registro.viviendas.mensaje.error"), JOptionPane.ERROR_MESSAGE);
 				}
-            }
-        }
-        		);
+        });
         
         
         botonAceptar.setBounds(87, 229, 89, 23);

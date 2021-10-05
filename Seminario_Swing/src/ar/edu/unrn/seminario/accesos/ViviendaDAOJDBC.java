@@ -61,12 +61,12 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		Direccion direccion = null;
 		Dueño dueño = null;
 		try {
-			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.codigo = ?");
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.codigo = ?");
 			statement.setInt(1,codigo);
 			ResultSet resultSetViviendas = statement.executeQuery();
 			if(resultSetViviendas.next()) {
-				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
+				PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
 				statement2.setString(1, resultSetViviendas.getString("dni"));
 				ResultSet resultSetConstructor = statement2.executeQuery();
 				if(resultSetConstructor.next()) {
@@ -75,7 +75,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 							resultSetConstructor.getString("dni"),
 							resultSetConstructor.getString("correo_electronico"));
 				}
-				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
+				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
 				statement2.setString(1,resultSetViviendas.getString("calle"));
 				statement2.setInt(2, resultSetViviendas.getInt("altura"));
 				resultSetConstructor=statement.executeQuery();
@@ -117,9 +117,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				statement2.setString(1, resultSetViviendas.getString("dni"));
 				ResultSet resultSetConstructor = statement2.executeQuery();
 				if(resultSetConstructor.next()) {
-					/*System.out.println(resultSetConstructor.getString("nombre")
-							+" "+
-							resultSetConstructor.getString("apellido"));*/
+
 					dueño = new Dueño(resultSetConstructor.getString("nombre"),
 							resultSetConstructor.getString("apellido"),
 							resultSetConstructor.getString("dni"),

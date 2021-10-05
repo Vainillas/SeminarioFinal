@@ -21,14 +21,19 @@ import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class PersistenceApi implements IApi {
@@ -47,24 +52,22 @@ public class PersistenceApi implements IApi {
 		direccionDao = new DireccionDAOJDBC();
 	}
 
-	@Override
-	public void registrarUsuario(String username, String password, String email, String nombre, Integer codigoRol) {
+	public void registrarUsuario(String username, String password, String email, Integer codigoRol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException {
 		Rol rol = rolDao.find(codigoRol);
-		Usuario usuario = new Usuario(username, password, nombre, email, rol);
+		Usuario usuario = new Usuario(username, password, email, rol);
 		this.usuarioDao.create(usuario);
 	}
 
 	@Override
-	public List<UsuarioDTO> obtenerUsuarios() {
+	public List<UsuarioDTO> obtenerUsuarios() throws AppException {
 		List<UsuarioDTO> dtos = new ArrayList<>();
 		List<Usuario> usuarios = usuarioDao.findAll();
 		for (Usuario u : usuarios) {
-			dtos.add(new UsuarioDTO(u.getUsuario(), u.getContrasena(), u.getNombre(), u.getEmail(),
+			dtos.add(new UsuarioDTO(u.getUsuario(), u.getContrasena(), u.getEmail(),
 					u.getRol().getNombre(), u.isActivo(), u.obtenerEstado()));
 		}
 		return dtos;
 	}
-
 	@Override
 	public UsuarioDTO obtenerUsuario(String username) {
 		// TODO Auto-generated method stub
@@ -118,19 +121,16 @@ public class PersistenceApi implements IApi {
 
 	}
 
-	@Override
 	public void activarUsuario(String username) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void desactivarUsuario(String username) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
 			throws Exception {
@@ -151,15 +151,13 @@ public class PersistenceApi implements IApi {
 		return dtos;
 	}
 	public List<ViviendaDTO> obtenerViviendasOrdenadas(){
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
-				.sorted((v1,v2)->v1.getID()-v2.getID())
-				.collect(Collectors.toList());
+		List<ViviendaDTO> vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream().sorted((v1,v2)->v1.getID()-v2.getID()).collect(Collectors.toList());
 		return vDTO;
 	}
 		
 	@Override
-    public void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception {
+    public void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception   {
         Dueño dueño = null;
 		dueño = new Dueño(nombre, apellido, dni, correo);
         this.dueñoDao.create(dueño);
@@ -168,29 +166,20 @@ public class PersistenceApi implements IApi {
 		Dueño dueño = dueñoDao.find(dni);
 		DueñoDTO dueñodto = null;
 		if(dueño!=null) {
-			try {
-				dueñodto = new DueñoDTO(dueño.getNombre(),
-						dueño.getApellido(),
-						dueño.getDni(),
-						dueño.getCorreo());
-			} catch (DataEmptyException | NotNullException | IncorrectEmailException e) {
-				e.printStackTrace();
-			}
+			dueñodto = new DueñoDTO(dueño.getNombre(),
+					dueño.getApellido(),
+					dueño.getDni(),
+					dueño.getCorreo());
 		}
 		return dueñodto;
 	}
 
 
     public List<DueñoDTO> obtenerDueños() {
-        List<DueñoDTO> dtos = new ArrayList<>();
+        List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
-            try {
-				dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo()));
-			} catch (DataEmptyException | NotNullException | IncorrectEmailException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo()));
         }
         return dtos;
     }
@@ -221,12 +210,52 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
-    
-    @Override
+
+	@Override
+	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico)
+			throws DataEmptyException, StringNullException, IncorrectEmailException {
+		
+		
+		
+	}
+
+	@Override
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
 			Date fechaActual) {
 		// TODO Esbozo de método generado automáticamente
 		
 	}
+
+	public boolean existeUsuario(String usuario) throws NotRegisterException, AppException {
+		return usuarioDao.exists(usuario);
+	}
+	public boolean validarUsuario(String usuario, String password) throws NotRegisterException,AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException {
+		UsuarioIngreso user = new UsuarioIngreso(usuario,password);
+		return usuarioDao.validateData(user);
+		
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+		
+	
+
+
+
+
+
+
+
+
+
 
 }

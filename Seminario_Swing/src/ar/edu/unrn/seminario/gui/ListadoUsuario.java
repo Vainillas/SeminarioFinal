@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -21,6 +22,10 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StateException;
 
 public class ListadoUsuario extends JFrame {
@@ -34,8 +39,11 @@ public class ListadoUsuario extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws NotNullException 
+	 * @throws IncorrectEmailException 
+	 * @throws DataEmptyException 
 	 */
-	public ListadoUsuario(IApi api) {
+	public ListadoUsuario(IApi api){
 		this.api = api;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,12 +75,20 @@ public class ListadoUsuario extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulosUsuario);
 
 		// Obtiene la lista de usuarios a mostrar
-		List<UsuarioDTO> usuarios = api.obtenerUsuarios();
-		// Agrega los usuarios en el model
-		for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-		}
+		List<UsuarioDTO> usuarios = new ArrayList<UsuarioDTO>();
+		
+			try {
+				usuarios = api.obtenerUsuarios();
+				// Agrega los usuarios en el model
+				for (UsuarioDTO u : usuarios) {
+					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+				}
 
+			} catch (AppException e2) {
+				JOptionPane.showInputDialog(null, "error",e2.getMessage(),1);
+			}
+		
+		
 		table.setModel(modelo);
 
 		scrollPane.setViewportView(table);
@@ -148,18 +164,25 @@ public class ListadoUsuario extends JFrame {
 
 	}
 
-	private void reloadGrid() {
+	private void reloadGrid(){
 		// Obtiene el model del table
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 		// Obtiene la lista de usuarios a mostrar
-		List<UsuarioDTO> usuarios = api.obtenerUsuarios();
-		// Resetea el model
-		modelo.setRowCount(0);
+		List<UsuarioDTO> usuarios;
+		try {
+			
+			usuarios = api.obtenerUsuarios();
+			// Resetea el model
+			modelo.setRowCount(0);
 
-		// Agrega los usuarios en el model
-		for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getNombre(), u.getEmail(), u.getEstado(), u.getRol() });
+			// Agrega los usuarios en el model
+			for (UsuarioDTO u : usuarios) {
+				modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+			}
+		} catch (AppException e) {
+			JOptionPane.showInputDialog(null, "error",e.getMessage(),1);
 		}
+
 
 	}
 

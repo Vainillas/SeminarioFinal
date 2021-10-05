@@ -18,13 +18,16 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RolDTO;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class AltaUsuario extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField usuarioTextField;
 	private JTextField contrasenaTextField;
-	private JTextField nombreTextField;
 	private JTextField emailTextField;
 	private JComboBox rolComboBox;
 	private ResourceBundle labels ;
@@ -47,7 +50,7 @@ public class AltaUsuario extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		labels = ResourceBundle.getBundle("labels");
-		JLabel usuarioLabel = new JLabel(labels.getString("alta.usuario.label.nombre"));
+		JLabel usuarioLabel = new JLabel(labels.getString("alta.usuario.label.nombre.usuario"));
 		usuarioLabel.setBounds(43, 16, 76, 16);
 		contentPane.add(usuarioLabel);
 
@@ -64,57 +67,54 @@ public class AltaUsuario extends JFrame {
 		contrasenaTextField.setBounds(148, 53, 160, 22);
 		contentPane.add(contrasenaTextField);
 		contrasenaTextField.setColumns(10);
+		JLabel emailLabel = new JLabel(labels.getString("alta.usuario.label.email"));
+		emailLabel.setBounds(43, 96, 56, 16);
+		contentPane.add(emailLabel);
 
+		JLabel rolLabel = new JLabel(labels.getString("alta.usuario.label.rol"));
+		rolLabel.setBounds(43, 134, 56, 16);
+		contentPane.add(rolLabel);
+
+		emailTextField = new JTextField();
+		emailTextField.setBounds(148, 93, 160, 22);
+		contentPane.add(emailTextField);
+		emailTextField.setColumns(10);
+		
+		rolComboBox = new JComboBox();
+		rolComboBox.setBounds(148, 131, 160, 22);
+		contentPane.add(rolComboBox);
+		
 		JButton aceptarButton = new JButton(labels.getString("alta.usuario.button.aceptar") );
-		aceptarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		aceptarButton.addActionListener((e)->{//utilizando metodos lambda
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
-
-					api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),
-							nombreTextField.getText(), emailTextField.getText(), rol.getCodigo());
-					JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
-					setVisible(false);
-					dispose();
-			}
+				
+					try {
+						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),emailTextField.getText(),rol.getCodigo());
+						JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
+						setVisible(false);
+						dispose();
+					} catch (NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e1) {
+						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
+					}
+					
+					
 		});
+		
 		aceptarButton.setBounds(218, 215, 97, 25);
 		contentPane.add(aceptarButton);
 
 		JButton cancelarButton = new JButton(labels.getString("alta.usuario.button.cancelar"));
-		cancelarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		cancelarButton.addActionListener((e)->{
 				setVisible(false);
 				dispose();
-			}
 		});
+		
 		cancelarButton.setBounds(323, 215, 97, 25);
 		contentPane.add(cancelarButton);
 
-		JLabel nombreLabel = new JLabel(labels.getString("alta.usuario.label.nombre"));
-		nombreLabel.setBounds(43, 88, 56, 16);
-		contentPane.add(nombreLabel);
 
-		JLabel emailLabel = new JLabel(labels.getString("alta.usuario.label.email"));
-		emailLabel.setBounds(43, 125, 56, 16);
-		contentPane.add(emailLabel);
 
-		JLabel rolLabel = new JLabel(labels.getString("alta.usuario.label.rol"));
-		rolLabel.setBounds(43, 154, 56, 16);
-		contentPane.add(rolLabel);
 
-		nombreTextField = new JTextField();
-		nombreTextField.setBounds(148, 85, 160, 22);
-		contentPane.add(nombreTextField);
-		nombreTextField.setColumns(10);
-
-		emailTextField = new JTextField();
-		emailTextField.setBounds(148, 122, 160, 22);
-		contentPane.add(emailTextField);
-		emailTextField.setColumns(10);
-
-		rolComboBox = new JComboBox();
-		rolComboBox.setBounds(148, 151, 160, 22);
-		contentPane.add(rolComboBox);
 
 		for (RolDTO rol : this.roles) {
 			rolComboBox.addItem(rol.getNombre());

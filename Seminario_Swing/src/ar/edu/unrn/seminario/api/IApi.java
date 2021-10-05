@@ -12,25 +12,28 @@ import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.StateException;
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
-import ar.edu.unrn.seminario.modelo.Direccion;
-import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
 public interface IApi {
 
-	void registrarUsuario(String username, String password, String email, String nombre, Integer rol);
 	
 	//void registrarVivienda(Direccion unaDireccion, String unDueño);
 	
-	void agregarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, NotNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
+	void agregarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
 	void eliminarUsuario(String username);
-
+	void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException,StringNullException,IncorrectEmailException;
+	void registrarUsuario(String usuario, String password, String email, Integer rol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException;
 	List<RolDTO> obtenerRoles();
 
 	List<RolDTO> obtenerRolesActivos();
@@ -43,7 +46,7 @@ public interface IApi {
 
 	void desactivarRol(Integer codigo); // recuperar el objeto Rol, imp
 
-	List<UsuarioDTO> obtenerUsuarios(); // recuperar todos los usuarios
+	List<UsuarioDTO> obtenerUsuarios() throws AppException; // recuperar todos los usuarios
 	
 	List<ViviendaDTO> obtenerViviendas();
 	
@@ -51,7 +54,7 @@ public interface IApi {
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
-	void agregarDueño(String nombre, String apellido, String dni, String correo) throws DataEmptyException, NotNullException, IncorrectEmailException, Exception;
+	void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception;
 
 	void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio) throws Exception;
@@ -64,4 +67,10 @@ public interface IApi {
 
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
 			Date fechaActual);
+
+	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
+	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
+		
+
+
 }
