@@ -11,6 +11,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
@@ -130,6 +131,31 @@ public class DueñoDAOJDBC implements DueñoDao {
 			ConnectionManager.disconnect();
 		}
 		return dueños;
+	}
+
+	@Override
+	public boolean exists(String dni) throws AppException {
+boolean exists = false;
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT u.dni " + " FROM propietarios as u" + " WHERE u.dni = ?");
+			statement.setString(1, dni);
+			ResultSet rs = statement.executeQuery();
+			
+			if (rs.next()) {
+				if(rs.getString("dni").equals(dni)) {
+					exists = true;
+				}		
+			}
+		} catch (SQLException | AppException e ) {
+			throw new AppException("error al procesar la consulta");
+		}finally {
+			ConnectionManager.disconnect();
+		}
+		return exists;
+		
 	}
 
 }

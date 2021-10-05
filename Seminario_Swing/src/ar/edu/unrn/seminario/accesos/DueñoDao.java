@@ -18,4 +18,6 @@ public interface DueñoDao {
 	Dueño find(String dni);
 
 	List<Dueño> findAll() throws AppException;
+
+	boolean exists(String dni) throws AppException;
 }

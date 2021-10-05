@@ -121,7 +121,7 @@ public class RegistroVivienda extends JFrame {
         JButton botonAceptar = new JButton(labels.getString("registro.viviendas.button.aceptar"));
         botonAceptar.addActionListener((e)->{
             	try {
-            		if(api.obtenerDueño(dniIngresado.getText())==null) {// MALA PRÁCTICA (ESTO NO VA EN LA PARTE GRÁFICA)
+            		if(api.validarDueño(dniIngresado.getText())) {// MALA PRÁCTICA (ESTO NO VA EN LA PARTE GRÁFICA)
             			api.agregarDueño(nombreIngresado.getText(),
                 				apellidoIngresado.getText(),
                 				dniIngresado.getText(),

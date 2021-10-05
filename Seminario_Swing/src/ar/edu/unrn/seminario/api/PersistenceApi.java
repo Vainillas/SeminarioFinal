@@ -236,6 +236,12 @@ public class PersistenceApi implements IApi {
 		
 	}
 
+	@Override
+	public boolean validarDueño(String dni) throws AppException {
+		return dueñoDao.exists(dni);
+		
+	}
+
 
 
 
