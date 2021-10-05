@@ -95,21 +95,18 @@ public class IniciarSesion extends JFrame {
 		panelBotones.setLayout(null);
 		
 		JButton buttonCancelar = new JButton(labels.getString("iniciar.sesion.button.cancelar"));
-		buttonCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonCancelar.addActionListener((e)->{
+			
 				setVisible(false);
 				dispose();
-			}
+			
 		});
 		buttonCancelar.setBounds(216, 18, 89, 23);
 		panelBotones.add(buttonCancelar);
 		
 		
 		JButton buttonAceptar = new JButton(labels.getString("iniciar.sesion.button.aceptar"));
-		buttonAceptar.addActionListener(new ActionListener() {
-			
-			
-			public void actionPerformed(ActionEvent e) {
+		buttonAceptar.addActionListener((e)->{
 				//System.out.println(textUsuario.getText());
 				try {
 						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword())) ;
@@ -120,7 +117,7 @@ public class IniciarSesion extends JFrame {
 					
 					JOptionPane.showMessageDialog(null,e1.getMessage() ,"error" ,1);
 				}
-			}
+			
 		});
 		buttonAceptar.setBounds(81, 18, 89, 23);
 		panelBotones.add(buttonAceptar);
@@ -135,11 +132,10 @@ public class IniciarSesion extends JFrame {
 		panelNoRegistrado.add(labelNoRegistrado);
 		
 		JButton buttonRegistrarse = new JButton(labels.getString("iniciar.sesion.label.registrarse"));
-		buttonRegistrarse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonRegistrarse.addActionListener((e)->{
 				AltaUsuario usuario = new AltaUsuario(api);
 				usuario.setVisible(true);
-			}
+			
 		});
 		
 		buttonRegistrarse.setBounds(54, 36, 107, 23);

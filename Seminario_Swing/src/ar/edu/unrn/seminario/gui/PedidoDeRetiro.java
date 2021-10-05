@@ -107,8 +107,7 @@ public class PedidoDeRetiro extends JFrame {
 		panelBotones.setLayout(null);
 		
 		buttonCancelar = new JButton(labels.getString("pedido.retiro.button.cancelar"));
-		buttonCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonCancelar.addActionListener((e)->{
 				
 				int res = JOptionPane.showConfirmDialog(null, labels.getString("pedido.retiro.confirmar"),labels.getString("pedido.retiro.mensaje.informativo") , JOptionPane.YES_NO_OPTION);
 				if(res == JOptionPane.YES_OPTION) {
@@ -117,7 +116,7 @@ public class PedidoDeRetiro extends JFrame {
 					dispose();
 				}
 				
-			}
+			
 		});
 		buttonCancelar.setBounds(259, 11, 89, 23);
 		panelBotones.add(buttonCancelar);
@@ -199,8 +198,7 @@ public class PedidoDeRetiro extends JFrame {
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
 		buttonFinalizar.setBounds(120, 11, 89, 23);
 		panelBotones.add(buttonFinalizar);
-		buttonFinalizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonFinalizar.addActionListener((e)->{
 				System.out.println(boxCargaPesada.isSelected());
 				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
 				for(JRadioButton r : residuos) {
@@ -219,7 +217,7 @@ public class PedidoDeRetiro extends JFrame {
 				setVisible(false);
 				dispose();
 				
-			}
+			
 		});
 	}
 }

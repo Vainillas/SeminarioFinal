@@ -67,16 +67,14 @@ public class ListadoVivienda extends JFrame {
 		scrollPane.setViewportView(table);
 
 		botonAtras = new JButton("Atras");
-		botonAtras.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		botonAtras.addActionListener((e)->{
 				setVisible(false);
-			}
+			
 		});
 		contentPane.add(botonAtras, BorderLayout.SOUTH);
 
 		botonOrdenar = new JButton("Ordenar");
-		botonOrdenar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		botonOrdenar.addActionListener((e)->{
 				DefaultTableModel modelo1 = new DefaultTableModel(new Object[][] {}, titulos);
 				List<ViviendaDTO> viviendasOrdenadas = null ;
 				for (ViviendaDTO v : viviendasOrdenadas) {
@@ -89,7 +87,7 @@ public class ListadoVivienda extends JFrame {
 				}
 				
 				table.setModel(modelo1);
-			}
+			
 		});
 		contentPane.add(botonOrdenar, BorderLayout.NORTH);
 	}

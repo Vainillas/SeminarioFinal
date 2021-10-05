@@ -158,10 +158,9 @@ public class RegistroVivienda extends JFrame {
         contentPane.add(botonAceptar);
         
         JButton botonCancelar = new JButton(labels.getString("registro.viviendas.button.cancelar"));
-        botonCancelar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        botonCancelar.addActionListener((e)->{
                 setVisible (false);
-            }
+            
         });
         
         botonCancelar.setBounds(250, 229, 89, 23);

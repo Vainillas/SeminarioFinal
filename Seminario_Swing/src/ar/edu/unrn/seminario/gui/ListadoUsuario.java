@@ -97,8 +97,7 @@ public class ListadoUsuario extends JFrame {
 		scrollPane.setViewportView(table);
 
 		activarButton = new JButton(labels.getString("listado.usuario.button.activar"));
-		activarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		activarButton.addActionListener((e)->{
 				int reply = JOptionPane.showConfirmDialog(null,
 						labels.getString("listado.usuario.mensaje.cambiar.estado"),
 						labels.getString("listado.usuario.mensaje.confirmar.cambio.estado"),
@@ -116,13 +115,12 @@ public class ListadoUsuario extends JFrame {
 
 				}
 
-			}
+			
 
 		});
 
 		desactivarButton = new JButton(labels.getString("listado.usuario.button.desactivar"));
-		desactivarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		desactivarButton.addActionListener((e)->{
 				int reply = JOptionPane.showConfirmDialog(null,
 						labels.getString("listado.usuario.mensaje.cambiar.estado"), 
 						labels.getString("listado.usuario.mensaje.confirmar.cambio.estado"),
@@ -138,15 +136,14 @@ public class ListadoUsuario extends JFrame {
 								JOptionPane.ERROR_MESSAGE);
 					}
 				}
-			}
+			
 		});
 
 		JButton cerrarButton = new JButton(labels.getString("listado.usuario.button.cerrar"));
-		cerrarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		cerrarButton.addActionListener((e)->{
 				setVisible(false);
 				dispose();
-			}
+			
 		});
 //		contentPane.add(cerrarButton, BorderLayout.SOUTH);
 
