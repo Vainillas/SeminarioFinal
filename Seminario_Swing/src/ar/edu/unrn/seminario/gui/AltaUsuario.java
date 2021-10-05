@@ -18,6 +18,7 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.RolDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
@@ -39,7 +40,7 @@ public class AltaUsuario extends JFrame {
 	public AltaUsuario(IApi api) {
 
 		// Obtengo los roles
-		this.roles = api.obtenerRoles();
+		
 
 		setTitle("Alta Usuario");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,11 +90,12 @@ public class AltaUsuario extends JFrame {
 				RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
 				
 					try {
+						this.roles = api.obtenerRoles();
 						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),emailTextField.getText(),rol.getCodigo());
 						JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
-					} catch (NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e1) {
+					} catch (NotNullException | IncorrectEmailException | DataEmptyException | StringNullException | AppException  e1) {
 						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
 					}
 					

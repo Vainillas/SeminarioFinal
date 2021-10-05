@@ -33,8 +33,8 @@ public interface IApi {
 
 	void eliminarUsuario(String username);
 	void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException,StringNullException,IncorrectEmailException;
-	void registrarUsuario(String usuario, String password, String email, Integer rol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException;
-	List<RolDTO> obtenerRoles();
+	void registrarUsuario(String usuario, String password, String email, Integer rol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException;
+	List<RolDTO> obtenerRoles() throws AppException;
 
 	List<RolDTO> obtenerRolesActivos();
 
@@ -48,7 +48,7 @@ public interface IApi {
 
 	List<UsuarioDTO> obtenerUsuarios() throws AppException; // recuperar todos los usuarios
 	
-	List<ViviendaDTO> obtenerViviendas();
+	List<ViviendaDTO> obtenerViviendas() throws Exception;
 	
 	void activarUsuario(String username) throws StateException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
@@ -59,11 +59,11 @@ public interface IApi {
 	void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio) throws Exception;
 
-	List<ViviendaDTO> obtenerViviendasOrdenadas();
+	List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception;
 
 	DueñoDTO obtenerDueño(String text);
 
-	DireccionDTO obtenerDireccion(String text, int num);
+	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
 			Date fechaActual);

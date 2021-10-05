@@ -52,7 +52,7 @@ public class ListadoUsuario extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-
+		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
@@ -85,7 +85,10 @@ public class ListadoUsuario extends JFrame {
 				}
 
 			} catch (AppException e2) {
-				JOptionPane.showInputDialog(null, "error",e2.getMessage(),1);
+				JOptionPane.showMessageDialog(null, e2.getMessage(), "error: ",JOptionPane.ERROR_MESSAGE);
+				setVisible(false);
+				dispose();
+				
 			}
 		
 		
@@ -156,6 +159,7 @@ public class ListadoUsuario extends JFrame {
 
 		// Deshabilitar botones que requieren tener una fila seleccionada
 		habilitarBotones(false);
+		
 	}
 
 	private void habilitarBotones(boolean b) {
@@ -163,7 +167,7 @@ public class ListadoUsuario extends JFrame {
 		desactivarButton.setEnabled(b);
 
 	}
-
+	
 	private void reloadGrid(){
 		// Obtiene el model del table
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
@@ -180,7 +184,8 @@ public class ListadoUsuario extends JFrame {
 				modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
 			}
 		} catch (AppException e) {
-			JOptionPane.showInputDialog(null, "error",e.getMessage(),1);
+			setVisible(false);
+			JOptionPane.showMessageDialog(null,e.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
 		}
 
 

@@ -22,7 +22,7 @@ import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 public class UsuarioDAOJDBC implements UsuarioDao {
 
 	@Override
-	public void create(Usuario usuario) {
+	public void create(Usuario usuario) throws AppException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
@@ -34,21 +34,11 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			statement.setString(3, usuario.getEmail());
 			statement.setBoolean(4, usuario.isActivo());
 			statement.setInt(5, usuario.getRol().getCodigo());
-			int cantidad = statement.executeUpdate();
-			if (cantidad > 0) {
-				// System.out.println("Modificando " + cantidad + " registros");
-			} else {
-				System.out.println("Error al actualizar");
-				// TODO: disparar Exception propia
-			}
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-			System.out.println(e.getMessage());
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al insertar un usuario");
-			// TODO: disparar Exception propia
-		} finally {
+			
+	
+		} catch (SQLException e  ) {
+			throw new AppException("error al procesar consulta");
+		}  finally {
 			ConnectionManager.disconnect();
 		}
 	}
@@ -104,7 +94,6 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 							}
 				}
 			} catch (SQLException e ) {
-				System.out.println(e.getMessage());
 				throw new AppException("error al procesar la consulta");
 			}finally {
 				ConnectionManager.disconnect();
@@ -138,7 +127,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 	}
 
 	@Override
-	public Usuario find(String username) {
+	public Usuario find(String username) throws AppException {
 		Usuario usuario = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -154,23 +143,18 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 						rs.getString("email"), rol);
 			}
 
-		} catch (SQLException e) {
-			
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-		} finally {
+		} catch (SQLException | NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e) {
+			 throw new AppException("error al procesa consulta");
+		}finally {
 			ConnectionManager.disconnect();
 		}
-
 		return usuario;
 	}
 	
 	
-	@Override
+	
 	public List<Usuario> findAll() throws AppException {
+		
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -180,7 +164,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 							+ "FROM usuarios u JOIN roles r ON (u.rol = r.codigo) ");
 
 			while (rs.next()) {
-
+				
 				Rol rol = new Rol(rs.getInt("codigo_rol"), rs.getString("nombre_rol"));
 				Usuario usuario = new Usuario(rs.getString("usuario"), rs.getString("password"),
 					rs.getString("email"), rol);
@@ -188,13 +172,13 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 				usuarios.add(usuario);
 			}
 		} catch (SQLException   | NotNullException   | DataEmptyException  | StringNullException | IncorrectEmailException e1) {
-			System.out.println(e1.getMessage());
 			throw new AppException("error de aplicacion");
 		
 		}finally {
 			ConnectionManager.disconnect();
 		}
-
+		
+		
 		return usuarios;
 	}
 

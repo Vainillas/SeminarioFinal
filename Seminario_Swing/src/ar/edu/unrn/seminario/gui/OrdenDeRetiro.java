@@ -16,6 +16,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import javax.swing.JTable;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 public class OrdenDeRetiro extends JFrame {
 
@@ -54,14 +55,20 @@ public class OrdenDeRetiro extends JFrame {
 		};
 				
 		
-		List<ViviendaDTO> viviendas = api.obtenerViviendas();
+		List<ViviendaDTO> viviendas;
+		try {
+			viviendas = api.obtenerViviendas();
+			for (ViviendaDTO v : viviendas) {
+				modeloVivienda.addRow(new Object[] { v.getDireccion().getBarrio(),v.getDireccion().getCalle(),v.getDireccion().getAltura(),v.getDireccion().getLatitud(), v.getDireccion().getLongitud()});
+			}
+		} catch (Exception e) {
+			JOptionPane.showInputDialog(null,e.getMessage(),"error",2);
+		}
 		modeloVivienda = new DefaultTableModel(new Object[][] {}, titulosVivienda);
 		
 		// Agrega los usuarios en el model
 		
-		for (ViviendaDTO v : viviendas) {
-			modeloVivienda.addRow(new Object[] { v.getDireccion().getBarrio(),v.getDireccion().getCalle(),v.getDireccion().getAltura(),v.getDireccion().getLatitud(), v.getDireccion().getLongitud()});
-		}
+		
 		tableVivienda.setModel(modeloVivienda);
 		
 		scrollPaneVivienda.setViewportView(tableVivienda);

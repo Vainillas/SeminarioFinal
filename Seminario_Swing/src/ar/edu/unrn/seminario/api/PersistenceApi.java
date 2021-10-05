@@ -52,7 +52,7 @@ public class PersistenceApi implements IApi {
 		direccionDao = new DireccionDAOJDBC();
 	}
 
-	public void registrarUsuario(String username, String password, String email, Integer codigoRol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException {
+	public void registrarUsuario(String username, String password, String email, Integer codigoRol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
 		Rol rol = rolDao.find(codigoRol);
 		Usuario usuario = new Usuario(username, password, email, rol);
 		this.usuarioDao.create(usuario);
@@ -62,6 +62,7 @@ public class PersistenceApi implements IApi {
 	public List<UsuarioDTO> obtenerUsuarios() throws AppException {
 		List<UsuarioDTO> dtos = new ArrayList<>();
 		List<Usuario> usuarios = usuarioDao.findAll();
+		
 		for (Usuario u : usuarios) {
 			dtos.add(new UsuarioDTO(u.getUsuario(), u.getContrasena(), u.getEmail(),
 					u.getRol().getNombre(), u.isActivo(), u.obtenerEstado()));
@@ -81,7 +82,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public List<RolDTO> obtenerRoles() {
+	public List<RolDTO> obtenerRoles() throws AppException {
 		List<Rol> roles = rolDao.findAll();
 		List<RolDTO> rolesDTO = new ArrayList<>(0);
 		for (Rol rol : roles) {
@@ -142,7 +143,7 @@ public class PersistenceApi implements IApi {
 	
 
 	@Override
-	public List<ViviendaDTO> obtenerViviendas() {
+	public List<ViviendaDTO> obtenerViviendas() throws Exception {
 		List<ViviendaDTO> dtos = new ArrayList<>();
 		List<Vivienda> viviendas = viviendaDao.findAll();
 		for (Vivienda v : viviendas) {
@@ -150,7 +151,7 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
-	public List<ViviendaDTO> obtenerViviendasOrdenadas(){
+	public List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception{
 		List<ViviendaDTO> vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream().sorted((v1,v2)->v1.getID()-v2.getID()).collect(Collectors.toList());
 		return vDTO;
@@ -175,7 +176,7 @@ public class PersistenceApi implements IApi {
 	}
 
 
-    public List<DueñoDTO> obtenerDueños() {
+    public List<DueñoDTO> obtenerDueños() throws AppException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
@@ -189,7 +190,7 @@ public class PersistenceApi implements IApi {
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
         this.direccionDao.create(direccion);
     }
-    public DireccionDTO obtenerDireccion(String calle, int altura) {
+    public DireccionDTO obtenerDireccion(String calle, int altura) throws AppException {
     	DireccionDTO d = null;
     	Direccion direccion = direccionDao.find(calle, altura);
     	if(direccion!=null) {
@@ -202,7 +203,7 @@ public class PersistenceApi implements IApi {
     		}
     	return d;
     	}
-    public List<DireccionDTO> obtenerDirecciones() {
+    public List<DireccionDTO> obtenerDirecciones() throws AppException {
         List<DireccionDTO> dtos = new ArrayList<>();
         List<Direccion> direcciones = direccionDao.findAll();
         for (Direccion d : direcciones) {

@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -45,11 +46,21 @@ public class ListadoVivienda extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
 		// Obtiene la lista de usuarios a mostrar
-		List<ViviendaDTO> viviendas = api.obtenerViviendas();
-		// Agrega los usuarios en el model
-		for (ViviendaDTO v : viviendas) {
-			modelo.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
+		List<ViviendaDTO> viviendas;
+		try {
+			viviendas = api.obtenerViviendas();
+			for (ViviendaDTO v : viviendas) {
+				modelo.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
+			}
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
+			
+			setVisible(false);
+			dispose();
 		}
+		
+		// Agrega los usuarios en el model
+		
 		table.setModel(modelo);
 		
 
@@ -67,10 +78,16 @@ public class ListadoVivienda extends JFrame {
 		botonOrdenar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				DefaultTableModel modelo1 = new DefaultTableModel(new Object[][] {}, titulos);
-				List<ViviendaDTO> viviendasOrdenadas = api.obtenerViviendasOrdenadas();
+				List<ViviendaDTO> viviendasOrdenadas = null ;
 				for (ViviendaDTO v : viviendasOrdenadas) {
 					modelo1.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
 				}
+				try {
+					viviendasOrdenadas = api.obtenerViviendasOrdenadas();
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
+				}
+				
 				table.setModel(modelo1);
 			}
 		});

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
@@ -31,11 +32,9 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				System.out.println("Error al actualizar");
 				// TODO: disparar Exception propia
 			}
-		} catch (SQLException e) {
-			throw new SQLException("Error al insertar una vivienda: "+e.getMessage());
-		} catch (Exception e) {
-			throw new Exception("Error al insertar una vivienda: "+e.getMessage());
-		} finally {
+		} catch (SQLException  e) {
+			throw new AppException("error en la consulta");
+		}finally {
 			ConnectionManager.disconnect();
 		}
 
@@ -56,7 +55,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 
 	@Override
-	public Vivienda find(Integer codigo) {
+	public Vivienda find(Integer codigo) throws Exception {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
@@ -90,12 +89,10 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
+	
+
+		 throw new AppException("error al procesar consulta");
+		 
 		} finally {
 		ConnectionManager.disconnect();
 		}
@@ -103,7 +100,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 
 	@Override
-	public List<Vivienda> findAll() {
+	public List<Vivienda> findAll() throws Exception {
 		List<Vivienda>viviendas = new ArrayList<>();
 		Vivienda vivienda=null;
 		Direccion direccion = null;
@@ -139,14 +136,10 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				viviendas.add(vivienda);
 				
 			}
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta "+ e.getMessage());
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-		} finally {
+		} catch (Exception  e) {
+			throw new AppException("error al procesar la consulta");
+			
+		}finally {
 		ConnectionManager.disconnect();
 		}
 		return viviendas;

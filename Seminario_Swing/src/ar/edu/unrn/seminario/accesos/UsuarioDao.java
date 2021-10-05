@@ -9,7 +9,7 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 
 public interface UsuarioDao {
-	void create(Usuario Usuario);
+	void create(Usuario Usuario) throws AppException;
 
 	void update(Usuario Usuario);
 
@@ -17,7 +17,7 @@ public interface UsuarioDao {
 
 	void remove(Usuario Usuario);
 
-	Usuario find(String username);
+	Usuario find(String username) throws AppException;
 
 	List<Usuario> findAll() throws AppException;
 

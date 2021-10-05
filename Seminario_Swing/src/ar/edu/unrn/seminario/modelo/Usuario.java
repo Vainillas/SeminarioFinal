@@ -23,7 +23,7 @@ public class Usuario {
 		this.rol = rol;
 	}
 	public void validarDatos(String usuario, String contrasena, String email, Rol rol) throws DataEmptyException, StringNullException, NotNullException, IncorrectEmailException {
-		System.out.println(email.equals(""));
+
 		if(ConditionHelper.stringIsNull(usuario)) {
 			
 			throw new StringNullException("usuario nulo");

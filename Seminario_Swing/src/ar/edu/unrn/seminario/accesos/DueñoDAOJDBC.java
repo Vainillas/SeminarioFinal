@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
@@ -95,7 +96,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 	}
 
 	@Override
-	public List<Dueño> findAll() {
+	public List<Dueño> findAll() throws AppException {
 		List<Dueño> dueños = new ArrayList<Dueño>();
 		try {
 			Connection conn = ConnectionManager.getConnection();
