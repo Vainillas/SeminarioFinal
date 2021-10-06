@@ -56,7 +56,7 @@ public class IniciarSesion extends JFrame {
 	 * Create the frame.
 	 */
 	public IniciarSesion(IApi api) {
-		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		setTitle(labels.getString("iniciar.sesion.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

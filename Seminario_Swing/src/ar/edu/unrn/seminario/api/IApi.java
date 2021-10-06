@@ -2,7 +2,7 @@ package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 
 
@@ -65,12 +65,15 @@ public interface IApi {
 
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
-	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> cantidadResiduosSeleccionados, String observacion,
-			Date fechaActual);
+
+	
+
+
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion) throws Exception;
+
 
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
-
 	boolean existeDueño(String dni) throws AppException;
 		
 

@@ -55,7 +55,8 @@ public class AltaUsuario extends JFrame {
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		labels = ResourceBundle.getBundle("labels");
-		JLabel usuarioLabel = new JLabel(labels.getString("alta.usuario.label.nombre.usuario"));
+		//JLabel usuarioLabel = new JLabel(labels.getString("alta.usuario.label.nombre.usuario"));
+		JLabel usuarioLabel = new JLabel("Usuario");
 		usuarioLabel.setBounds(43, 16, 76, 16);
 		contentPane.add(usuarioLabel);
 

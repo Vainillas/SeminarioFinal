@@ -2,14 +2,18 @@ package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
+import java.sql.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DueñoDao;
+import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDao;
+import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDao;
 import ar.edu.unrn.seminario.accesos.UsuarioDAOJDBC;
@@ -31,6 +35,12 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.Residuo_Carton;
+import ar.edu.unrn.seminario.modelo.Residuo_Metal;
+import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
+import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
@@ -43,6 +53,7 @@ public class PersistenceApi implements IApi {
 	private ViviendaDao viviendaDao;
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
+	private PedidoDeRetiroDao pedidoDeRetiroDao;
 
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
@@ -50,6 +61,7 @@ public class PersistenceApi implements IApi {
 		viviendaDao = new ViviendaDAOJDBC();
 		dueñoDao = new DueñoDAOJDBC();
 		direccionDao = new DireccionDAOJDBC();
+		pedidoDeRetiroDao = new PedidoDeRetiroDAOJDBC();
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
@@ -184,12 +196,14 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
+    
     public void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
         //Rol rol = rolDao.find(codigoRol);
         Direccion direccion = null;
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
         this.direccionDao.create(direccion);
     }
+    
     public DireccionDTO obtenerDireccion(String calle, int altura) throws AppException {
     	DireccionDTO d = null;
     	Direccion direccion = direccionDao.find(calle, altura);
@@ -212,24 +226,56 @@ public class PersistenceApi implements IApi {
         return dtos;
     }
 
+    @Override
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion) throws Exception {
+    	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
+    	int i=0;
+    	for(String s: residuosSeleccionados){
+    		if(s == "Vidrio"){
+    			Residuo_Vidrio newVidrio = new Residuo_Vidrio(Integer.parseInt(residuosSeleccionadosKg.get(i)));
+    			listResiduos.add(newVidrio);
+    		}
+    		if(s == "Plastico"){
+    			Residuo_Plastico newPlastico = new Residuo_Plastico(Integer.parseInt(residuosSeleccionadosKg.get(i)));
+    			listResiduos.add(newPlastico);
+    		}
+    		if(s == "Metal"){
+    			Residuo_Metal newMetal = new Residuo_Metal(Integer.parseInt(residuosSeleccionadosKg.get(i)));
+    			listResiduos.add(newMetal);
+    		}
+    		if(s == "Carton"){
+    			Residuo_Carton newCarton = new Residuo_Carton(Integer.parseInt(residuosSeleccionadosKg.get(i)));
+    			listResiduos.add(newCarton);
+    		}
+    		i++;
+    	}
+    	java.util.Date fechaActualUtil = DateHelper.getDate();
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+    	Vivienda unaVivienda = viviendaDao.find(24);
+    	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
+    	try {
+			this.pedidoDeRetiroDao.create(nuevoPedido);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+		// TODO Esbozo de método generado automáticamente
+
 	@Override
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico)
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
 		
+
 		
 		
 	}
 
-	@Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> pesoDeResiduosSeleccionados,String observacion,
-			Date fechaActual) {
-			
-		
-	}
 
 	public boolean existeUsuario(String usuario) throws NotRegisterException, AppException {
 		return usuarioDao.exists(usuario);
 	}
+	
 	public boolean validarUsuario(String usuario, String password) throws NotRegisterException,AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException {
 		UsuarioIngreso user = new UsuarioIngreso(usuario,password);
 		return usuarioDao.validateData(user);

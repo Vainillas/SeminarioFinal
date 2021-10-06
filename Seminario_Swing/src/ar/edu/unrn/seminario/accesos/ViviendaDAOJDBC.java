@@ -76,11 +76,11 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
 				statement2.setString(1,resultSetViviendas.getString("calle"));
 				statement2.setInt(2, resultSetViviendas.getInt("altura"));
-				resultSetConstructor=statement.executeQuery();
+				resultSetConstructor=statement2.executeQuery();
 				if(resultSetConstructor.next()) {
 					direccion = new Direccion(resultSetConstructor.getString("calle"), 
 							Integer.toString(resultSetConstructor.getInt("altura")), 
-							Integer.toString(resultSetConstructor.getInt("codigo_ostal")), 
+							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
 							resultSetConstructor.getString("longitud"),
 							resultSetConstructor.getString("latitud"),
 							resultSetConstructor.getString("barrio"));
@@ -90,7 +90,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		} catch (SQLException e) {
 	
 
-		 throw new AppException("error al procesar consulta");
+			throw new Exception("Error al registrar una vivienda: "+e.getMessage());
 		 
 		} finally {
 		ConnectionManager.disconnect();
