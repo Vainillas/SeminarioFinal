@@ -51,10 +51,10 @@ public class PedidoDeRetiro extends JFrame {
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
 	private JPanel panelResiduos;
-	private JTextField textField_Vidrio;
-	private JTextField textField_Plastico;
-	private JTextField textField_Metal;
-	private JTextField textField_Carton;
+	private JTextField textField_Vidrio = new JTextField("0");
+	private JTextField textField_Plastico = new JTextField("0");
+	private JTextField textField_Metal = new JTextField("0");
+	private JTextField textField_Carton = new JTextField("0");
 
 
 
@@ -130,8 +130,8 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
 		radioButtonVidrio.addActionListener((e)->{
-				textField_Vidrio = new JTextField("0");
-
+				
+			textField_Vidrio = new JTextField("0");
 				textField_Vidrio.setBounds(120, 50, 86, 20);
 				panelResiduos.add(textField_Vidrio);
 				textField_Vidrio.setColumns(10);
@@ -162,14 +162,12 @@ public class PedidoDeRetiro extends JFrame {
 		radioButtonMetal.setBounds(6, 110, 81, 23);
 		panelResiduos.add(radioButtonMetal);
 		radioButtonMetal.addActionListener((e)->{
+			
 			textField_Metal = new JTextField("0");
-
 			textField_Metal.setColumns(10);
 			textField_Metal.setBounds(121, 110, 86, 20);
 			panelResiduos.add(textField_Metal);
 		});
-		
-		
 		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
 		radioButtonCarton.addActionListener((e)->{
 			textField_Carton = new JTextField("0");
@@ -185,15 +183,8 @@ public class PedidoDeRetiro extends JFrame {
 		LabelResiduos.setBounds(46, 0, 133, 14);
 		panelResiduos.add(LabelResiduos);
 		
-
-		
-	
-		
-		
-		
-		
 		JRadioButton [] residuos = {radioButtonPlastico,radioButtonMetal,radioButtonCarton,radioButtonVidrio};
-		
+		JTextField [] cantidadResiduos = {textField_Plastico,textField_Metal, textField_Carton, textField_Vidrio}; 
 		
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
 
@@ -202,18 +193,25 @@ public class PedidoDeRetiro extends JFrame {
 		buttonFinalizar.addActionListener((e)->{
 				System.out.println(boxCargaPesada.isSelected());
 				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
+				ArrayList <String> pesoResiduosSeleccionados= new ArrayList<String>();
+				
 				for(JRadioButton r : residuos) {
 					if(r.isSelected()) {
 						residuosSeleccionados.add(r.getText());
 					}
 				}
 				
-				//para probar que funciona utilizar este for
-				for(int i = 0;i<residuosSeleccionados.size();i++) {
-					System.out.println(residuosSeleccionados.get(i));
+				//cargando el peso de los residuos seleccionados
+				for(JTextField j : cantidadResiduos) {
+					if(!j.getText().equals("0")) {
+						String var = j.getText();
+						System.out.println(var);
+						pesoResiduosSeleccionados.add(j.getText());
+					}
+					
+					
 				}
-
-				api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados, textObservacion.getText(),fechaActual);
+				api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,pesoResiduosSeleccionados, textObservacion.getText(),fechaActual);
 				JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);
 				dispose();

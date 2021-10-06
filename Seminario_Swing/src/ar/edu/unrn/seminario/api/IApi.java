@@ -65,7 +65,7 @@ public interface IApi {
 
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
-	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> cantidadResiduosSeleccionados, String observacion,
 			Date fechaActual);
 
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;

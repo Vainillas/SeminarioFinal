@@ -221,7 +221,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> pesoDeResiduosSeleccionados,String observacion,
 			Date fechaActual) {
 			
 		
