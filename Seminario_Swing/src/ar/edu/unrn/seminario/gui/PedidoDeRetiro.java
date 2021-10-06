@@ -37,6 +37,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import java.awt.Canvas;
 import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class PedidoDeRetiro extends JFrame {
 
@@ -55,7 +57,8 @@ public class PedidoDeRetiro extends JFrame {
 	private JTextField textField_Plastico;
 	private JTextField textField_Metal;
 	private JTextField textField_Carton;
-
+	private JLabel lbKg;
+	private JLabel lbResiduos;
 
 
 
@@ -65,7 +68,7 @@ public class PedidoDeRetiro extends JFrame {
 	public PedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
-		
+		setTitle("generar pedido de retiro");
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 704, 300);
@@ -130,13 +133,14 @@ public class PedidoDeRetiro extends JFrame {
 		
 		panelResiduos = new JPanel();
 		panelResiduos.setBackground(SystemColor.info);
-		panelResiduos.setBounds(426, 11, 210, 196);
+		panelResiduos.setBounds(426, 11, 252, 196);
 		contentPane.add(panelResiduos);
 		panelResiduos.setLayout(null);
 		
 		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
 		radioButtonVidrio.addActionListener((e)-> {
 					textField_Vidrio.setVisible(true);
+					lbKg.setVisible(true);
 			
 		});
 			
@@ -148,7 +152,7 @@ public class PedidoDeRetiro extends JFrame {
 		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
 		radioButtonPlastico.addActionListener((e)-> {
 				textField_Plastico.setVisible(true);
-			
+				lbKg.setVisible(true);
 		});
 	
 		radioButtonPlastico.setBackground(UIManager.getColor("window"));
@@ -159,7 +163,7 @@ public class PedidoDeRetiro extends JFrame {
 		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
 		radioButtonMetal.addActionListener((e)-> {
 			textField_Metal.setVisible(true);
-			
+			lbKg.setVisible(true);
 		});
 		radioButtonMetal.setBackground(UIManager.getColor("window"));
 		radioButtonMetal.setBounds(6, 110, 81, 23);
@@ -167,10 +171,10 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
 		radioButtonCarton.addActionListener((e)-> {
+			lbKg.setVisible(true);
 			textField_Carton.setVisible(true);
-			
-		});
 		
+		});
 		
 		radioButtonCarton.setBackground(UIManager.getColor("window"));
 		radioButtonCarton.setBounds(6, 140, 81, 23);
@@ -214,27 +218,36 @@ public class PedidoDeRetiro extends JFrame {
 		});
 		textField_Vidrio = new JTextField("0");
 		textField_Vidrio.setVisible(false);
-		textField_Vidrio.setBounds(103, 51, 86, 20);
+		textField_Vidrio.setBounds(130, 51, 86, 20);
 		panelResiduos.add(textField_Vidrio);
 		textField_Vidrio.setColumns(10);
 		
 		textField_Plastico = new JTextField("0");
-		textField_Plastico.setBounds(103, 81, 86, 20);
+		textField_Plastico.setBounds(130, 81, 86, 20);
 		textField_Plastico.setVisible(false);
 		panelResiduos.add(textField_Plastico);
 		textField_Plastico.setColumns(10);
 		
 		textField_Metal = new JTextField("0");
 	
-		textField_Metal.setBounds(103, 111, 86, 20);
+		textField_Metal.setBounds(130, 111, 86, 20);
 		textField_Metal.setVisible(false);
 		panelResiduos.add(textField_Metal);
 		textField_Metal.setColumns(10);
 		
 		textField_Carton = new JTextField("0");
 		textField_Carton.setVisible(false);
-		textField_Carton.setBounds(103, 141, 86, 20);
+		textField_Carton.setBounds(130, 141, 86, 20);
 		panelResiduos.add(textField_Carton);
 		textField_Carton.setColumns(10);
+		
+		 lbResiduos = new JLabel(labels.getString("PedidoDeRetiro.label.residuos")); 
+		lbResiduos.setBounds(6, 11, 95, 14);
+		panelResiduos.add(lbResiduos);
+		
+		 lbKg = new JLabel(labels.getString("PedidoDeRetiro.label.residuos.kg"));
+		lbKg.setVisible(false);
+		lbKg.setBounds(128, 11, 124, 14);
+		panelResiduos.add(lbKg);
 }
 }
