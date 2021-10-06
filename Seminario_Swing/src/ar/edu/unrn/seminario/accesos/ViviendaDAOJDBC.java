@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
@@ -28,14 +29,11 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
 			} else {
-				System.out.println("Error al actualizar");
-				// TODO: disparar Exception propia
+				throw new AppException("error al procesar consulta");
 			}
-		} catch (SQLException e) {
-			throw new SQLException("Error al insertar una vivienda: "+e.getMessage());
-		} catch (Exception e) {
-			throw new Exception("Error al insertar una vivienda: "+e.getMessage());
-		} finally {
+		} catch (SQLException  e) {
+			throw new AppException("error en la consulta");
+		}finally {
 			ConnectionManager.disconnect();
 		}
 
@@ -56,17 +54,17 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 
 	@Override
-	public Vivienda find(Integer codigo) {
+	public Vivienda find(Integer codigo) throws Exception {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
 		try {
-			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.codigo = ?");
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.codigo = ?");
 			statement.setInt(1,codigo);
 			ResultSet resultSetViviendas = statement.executeQuery();
 			if(resultSetViviendas.next()) {
-				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
+				PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
 				statement2.setString(1, resultSetViviendas.getString("dni"));
 				ResultSet resultSetConstructor = statement2.executeQuery();
 				if(resultSetConstructor.next()) {
@@ -75,7 +73,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 							resultSetConstructor.getString("dni"),
 							resultSetConstructor.getString("correo_electronico"));
 				}
-				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
+				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
 				statement2.setString(1,resultSetViviendas.getString("calle"));
 				statement2.setInt(2, resultSetViviendas.getInt("altura"));
 				resultSetConstructor=statement2.executeQuery();
@@ -90,12 +88,9 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta" + e.getMessage());
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
+
+			throw new Exception("Error al registrar una vivienda: "+e.getMessage());
+		 
 		} finally {
 		ConnectionManager.disconnect();
 		}
@@ -103,7 +98,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 
 	@Override
-	public List<Vivienda> findAll() {
+	public List<Vivienda> findAll() throws Exception {
 		List<Vivienda>viviendas = new ArrayList<>();
 		Vivienda vivienda=null;
 		Direccion direccion = null;
@@ -117,9 +112,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				statement2.setString(1, resultSetViviendas.getString("dni"));
 				ResultSet resultSetConstructor = statement2.executeQuery();
 				if(resultSetConstructor.next()) {
-					/*System.out.println(resultSetConstructor.getString("nombre")
-							+" "+
-							resultSetConstructor.getString("apellido"));*/
+
 					dueño = new Dueño(resultSetConstructor.getString("nombre"),
 							resultSetConstructor.getString("apellido"),
 							resultSetConstructor.getString("dni"),
@@ -141,14 +134,10 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				viviendas.add(vivienda);
 				
 			}
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta "+ e.getMessage());
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-		} finally {
+		} catch (Exception  e) {
+			throw new AppException("error al procesar la consulta");
+			
+		}finally {
 		ConnectionManager.disconnect();
 		}
 		return viviendas;
