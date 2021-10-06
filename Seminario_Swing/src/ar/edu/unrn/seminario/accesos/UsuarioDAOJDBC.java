@@ -8,46 +8,100 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.NotRegisterException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 
 public class UsuarioDAOJDBC implements UsuarioDao {
 
 	@Override
-	public void create(Usuario usuario) {
+	public void create(Usuario usuario) throws AppException {
 		try {
 
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("INSERT INTO usuarios(usuario, contrasena, nombre, email, activo,rol) "
-							+ "VALUES (?, ?, ?, ?, ?, ?)");
-
+					.prepareStatement("INSERT INTO usuarios(usuario, password, email, activo,rol) "
+							+ "VALUES (?, ?, ?, ?, ?)");
 			statement.setString(1, usuario.getUsuario());
 			statement.setString(2, usuario.getContrasena());
-			statement.setString(3, usuario.getNombre());
-			statement.setString(4, usuario.getEmail());
-			statement.setBoolean(5, usuario.isActivo());
-			statement.setInt(6, usuario.getRol().getCodigo());
-			int cantidad = statement.executeUpdate();
-			if (cantidad > 0) {
-				// System.out.println("Modificando " + cantidad + " registros");
-			} else {
-				System.out.println("Error al actualizar");
-				// TODO: disparar Exception propia
-			}
-
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-		} catch (Exception e) {
-			System.out.println("Error al insertar un usuario");
-			// TODO: disparar Exception propia
-		} finally {
+			statement.setString(3, usuario.getEmail());
+			statement.setBoolean(4, usuario.isActivo());
+			statement.setInt(5, usuario.getRol().getCodigo());
+			
+	
+		} catch (SQLException e  ) {
+			throw new AppException("error al procesar consulta");
+		}  finally {
 			ConnectionManager.disconnect();
 		}
-
 	}
+	public boolean exists(String username) throws NotRegisterException,AppException {//Exists
 
+		boolean exists = false;
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT u.usuario " + " FROM usuarios as u" + " WHERE u.usuario = ?");
+			statement.setString(1, username);
+			ResultSet rs = statement.executeQuery();
+			
+			if (rs.next()) {
+				if(rs.getString("usuario").equals(username)) {
+					exists = true;
+				}		
+			}
+			if(!exists) {//si no existe el usuario se genera una excepcion
+				throw new NotRegisterException("usuario no registrado");//como hacerlo una excepcion sin if?esta bien igual?
+			}
+		
+		} catch (SQLException e ) {
+			throw new AppException("error al procesar la consulta");
+		}finally {
+			ConnectionManager.disconnect();
+		}
+		return exists;
+		
+	}
+	
+	public boolean validateData(UsuarioIngreso user) throws NotRegisterException,AppException,NotCorrectPasswordException {//Exists
+		boolean exists = false;
+		if(this.exists(user.getUser())) {
+			try {
+				Connection conn = ConnectionManager.getConnection();
+				PreparedStatement statement = conn.prepareStatement("SELECT u.usuario, u.password " + " FROM usuarios as u" + " WHERE u.usuario = ?");
+				statement.setString(1,user.getUser());
+				/*problema: la linea de arriba nose porque pero creo que genera algo y ese algo
+				 *  no me deja tirar la excepcion NotRegisterException que esta abajo.
+				 no comprendo el porque */
+				
+				//lo pude resolver con el if(exists) de arriba
+				
+				ResultSet rs = statement.executeQuery();
+				if (rs.next()) {
+						if(rs.getString("password").equals(user.getPassword())) {
+							exists = true;
+							}
+							else {
+								throw new NotCorrectPasswordException("contraseña incorrecta");
+							}
+				}
+			} catch (SQLException e ) {
+				throw new AppException("error al procesar la consulta");
+			}finally {
+				ConnectionManager.disconnect();
+			}
+		}
+	return exists;
+		
+	}
 	@Override
 	public void update(Usuario usuario) {
 		// TODO Auto-generated method stub
@@ -73,64 +127,58 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 	}
 
 	@Override
-	public Usuario find(String username) {
+	public Usuario find(String username) throws AppException {
 		Usuario usuario = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
-					"SELECT u.usuario,  u.contrasena, u.nombre, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol "
+					"SELECT u.usuario,  u.contrasena, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol "
 							+ " FROM usuarios u JOIN roles r ON (u.rol = r.codigo) " + " WHERE u.usuario = ?");
 
 			statement.setString(1, username);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				Rol rol = new Rol(rs.getInt("codigo_rol"), rs.getString("nombre_rol"));
-				usuario = new Usuario(rs.getString("usuario"), rs.getString("contrasena"), rs.getString("nombre"),
+				usuario = new Usuario(rs.getString("usuario"), rs.getString("contrasena"),
 						rs.getString("email"), rol);
 			}
 
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-		} finally {
+		} catch (SQLException | NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e) {
+			 throw new AppException("error al procesa consulta");
+		}finally {
 			ConnectionManager.disconnect();
 		}
-
 		return usuario;
 	}
-
-	@Override
-	public List<Usuario> findAll() {
+	
+	
+	
+	public List<Usuario> findAll() throws AppException {
+		
 		List<Usuario> usuarios = new ArrayList<Usuario>();
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			Statement statement = conn.createStatement();
 			ResultSet rs = statement.executeQuery(
-					"SELECT u.usuario,  u.contrasena, u.nombre, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol  "
+					"SELECT u.usuario,  u.password, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol  "
 							+ "FROM usuarios u JOIN roles r ON (u.rol = r.codigo) ");
 
 			while (rs.next()) {
-
+				
 				Rol rol = new Rol(rs.getInt("codigo_rol"), rs.getString("nombre_rol"));
-				Usuario usuario = new Usuario(rs.getString("usuario"), rs.getString("contrasena"),
-						rs.getString("nombre"), rs.getString("email"), rol);
+				Usuario usuario = new Usuario(rs.getString("usuario"), rs.getString("password"),
+					rs.getString("email"), rol);
 
 				usuarios.add(usuario);
 			}
-		} catch (SQLException e) {
-			System.out.println("Error de mySql\n" + e.toString());
-			// TODO: disparar Exception propia
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			// TODO: disparar Exception propia
-		} finally {
+		} catch (SQLException   | NotNullException   | DataEmptyException  | StringNullException | IncorrectEmailException e1) {
+			throw new AppException("error de aplicacion");
+		
+		}finally {
 			ConnectionManager.disconnect();
 		}
-
+		
+		
 		return usuarios;
 	}
 

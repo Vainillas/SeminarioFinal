@@ -3,18 +3,17 @@ package ar.edu.unrn.seminario.dto;
 public class UsuarioDTO {
 	private String username;
 	private String password;
-	private String nombre;
+
 	private String email;
 	private String rol;
 	private boolean activo;
 	private String estado;
 
-	public UsuarioDTO(String username, String password, String nombre, String email, String rol, boolean activo,
+	public UsuarioDTO(String username, String password, String email, String rol, boolean activo,
 			String estado) {
 		super();
 		this.username = username;
 		this.password = password;
-		this.nombre = nombre;
 		this.email = email;
 		this.rol = rol;
 		this.activo = activo;
@@ -35,14 +34,6 @@ public class UsuarioDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
 	}
 
 	public String getEmail() {

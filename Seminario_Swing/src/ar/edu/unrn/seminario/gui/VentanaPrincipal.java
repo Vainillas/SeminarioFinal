@@ -163,7 +163,7 @@ public class VentanaPrincipal extends JFrame {
 		JMenuItem menuItemOrdenDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.generar.orden.de.retiro"));
 		
 		menuItemOrdenDeRetiro.addActionListener( (e)->{ 
-			GenerarOrdenDeRetiro o = new GenerarOrdenDeRetiro(api);
+			OrdenDeRetiro o = new OrdenDeRetiro(api);
 			o.setVisible(true);
 			o.setLocationRelativeTo(null); 
 			

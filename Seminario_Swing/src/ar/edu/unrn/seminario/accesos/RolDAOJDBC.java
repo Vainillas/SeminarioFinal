@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
@@ -73,7 +74,7 @@ public class RolDAOJDBC implements RolDao {
 	}
 
 	@Override
-	public List<Rol> findAll() {
+	public List<Rol> findAll() throws AppException {
 		List<Rol> listado = new ArrayList<Rol>();
 		Statement sentencia = null;
 		ResultSet resultado = null;

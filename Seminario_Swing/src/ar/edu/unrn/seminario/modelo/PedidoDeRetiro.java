@@ -1,7 +1,7 @@
 package ar.edu.unrn.seminario.modelo;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 public class PedidoDeRetiro {
 	
@@ -9,21 +9,34 @@ public class PedidoDeRetiro {
 	private Boolean maquinaPesada;
 	private ArrayList<Residuo> listResiduos;
 	private Vivienda vivienda;
-	private Date fechaDelPedido;
+	private  Date fechaDelPedido;
 	
-	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos){
+	
+	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda){
 		this.observacion = unaObservacion;
 		this.maquinaPesada = requiereMaquinaPesada;
 		this.listResiduos = unaListaDeResiduos;
-		//this.vivienda = unaVivienda;
+		this.vivienda = unaVivienda;
+		this.fechaDelPedido = unaFecha;
 	}
 	
-	public PedidoDeRetiro(Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos){
+	public PedidoDeRetiro(Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos,  Date unaFecha, Vivienda unaVivienda){
 		this.observacion = null;
 		this.maquinaPesada = requiereMaquinaPesada;
 		this.listResiduos = unaListaDeResiduos;
-		//this.vivienda = unaVivienda;
+		this.fechaDelPedido = unaFecha;
+		this.vivienda = unaVivienda;
 	}
+	
+	public Date getFechaDelPedido() {
+		return fechaDelPedido;
+	}
+
+	public void setFechaDelPedido(Date fechaDelPedido) {
+		this.fechaDelPedido = fechaDelPedido;
+	}
+	
+	
 	
 	public String getObservacion() {
 		return observacion;
@@ -56,5 +69,24 @@ public class PedidoDeRetiro {
 	public void setVivienda(Vivienda vivienda) {
 		this.vivienda = vivienda;
 	}
-	
+
+	public int getPlastico() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getVidrio() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getMetal() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getCarton() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

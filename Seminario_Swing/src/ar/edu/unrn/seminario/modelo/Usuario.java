@@ -1,6 +1,11 @@
 package ar.edu.unrn.seminario.modelo;
 
+import ar.edu.unrn.seminario.Helper.ConditionHelper;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StateException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class Usuario {
 	private String usuario;
@@ -10,15 +15,32 @@ public class Usuario {
 	private Rol rol;
 	private boolean activo;
 
-	public Usuario(String usuario, String contrasena, String nombre, String email, Rol rol) {
-
+	public Usuario(String usuario, String contrasena, String email, Rol rol) throws NotNullException,IncorrectEmailException, DataEmptyException, StringNullException{
+		validarDatos(usuario, contrasena, email, rol);
 		this.usuario = usuario;
 		this.contrasena = contrasena;
-		this.nombre = nombre;
 		this.email = email;
 		this.rol = rol;
 	}
+	public void validarDatos(String usuario, String contrasena, String email, Rol rol) throws DataEmptyException, StringNullException, NotNullException, IncorrectEmailException {
 
+		if(ConditionHelper.stringIsNull(usuario)) {
+			
+			throw new StringNullException("usuario nulo");
+			}
+		if(ConditionHelper.stringIsNull(contrasena)) {
+			throw new StringNullException("contrasena");}
+		if(ConditionHelper.IsNull(rol)) {
+			throw new NotNullException("rol nula");}
+		
+
+		
+		
+		
+		if(ConditionHelper.stringIsEmpty(usuario)) {throw new DataEmptyException("campo de usuario vacio.");}
+		if(ConditionHelper.stringIsEmpty(contrasena)) {throw new DataEmptyException("Campo de password vacío.");}
+		if(ConditionHelper.IsIncorrectEmail(email)) {throw new IncorrectEmailException("email incorrecto.");}
+	}
 	public String getUsuario() {
 		return usuario;
 	}

@@ -8,9 +8,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.NotRegisterException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
@@ -95,7 +97,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 	}
 
 	@Override
-	public List<Dueño> findAll() {
+	public List<Dueño> findAll() throws AppException {
 		List<Dueño> dueños = new ArrayList<Dueño>();
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -119,7 +121,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 		} catch (DataEmptyException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (NotNullException e) {
+		} catch (StringNullException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IncorrectEmailException e) {
@@ -129,6 +131,31 @@ public class DueñoDAOJDBC implements DueñoDao {
 			ConnectionManager.disconnect();
 		}
 		return dueños;
+	}
+
+	@Override
+	public boolean exists(String dni) throws AppException {
+boolean exists = false;
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT u.dni " + " FROM propietarios as u" + " WHERE u.dni = ?");
+			statement.setString(1, dni);
+			ResultSet rs = statement.executeQuery();
+			
+			if (rs.next()) {
+				if(rs.getString("dni").equals(dni)) {
+					exists = true;
+				}		
+			}
+		} catch (SQLException | AppException e ) {
+			throw new AppException("error al procesar la consulta");
+		}finally {
+			ConnectionManager.disconnect();
+		}
+		return exists;
+		
 	}
 
 }
