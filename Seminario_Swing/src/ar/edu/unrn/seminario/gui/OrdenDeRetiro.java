@@ -62,13 +62,10 @@ public class OrdenDeRetiro extends JFrame {
 				modeloVivienda.addRow(new Object[] { v.getDireccion().getBarrio(),v.getDireccion().getCalle(),v.getDireccion().getAltura(),v.getDireccion().getLatitud(), v.getDireccion().getLongitud()});
 			}
 		} catch (Exception e) {
-			JOptionPane.showInputDialog(null,e.getMessage(),"error",2);
+			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
 		modeloVivienda = new DefaultTableModel(new Object[][] {}, titulosVivienda);
-		
-		// Agrega los usuarios en el model
-		
-		
+			
 		tableVivienda.setModel(modeloVivienda);
 		
 		scrollPaneVivienda.setViewportView(tableVivienda);

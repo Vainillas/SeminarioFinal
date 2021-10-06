@@ -48,6 +48,7 @@ public class VentanaPrincipal extends JFrame {
 		});
 	}
 	public VentanaPrincipal(IApi api) {
+		
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
