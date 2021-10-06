@@ -78,11 +78,11 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
 				statement2.setString(1,resultSetViviendas.getString("calle"));
 				statement2.setInt(2, resultSetViviendas.getInt("altura"));
-				resultSetConstructor=statement.executeQuery();
+				resultSetConstructor=statement2.executeQuery();
 				if(resultSetConstructor.next()) {
 					direccion = new Direccion(resultSetConstructor.getString("calle"), 
 							Integer.toString(resultSetConstructor.getInt("altura")), 
-							Integer.toString(resultSetConstructor.getInt("codigo_ostal")), 
+							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
 							resultSetConstructor.getString("longitud"),
 							resultSetConstructor.getString("latitud"),
 							resultSetConstructor.getString("barrio"));
@@ -90,7 +90,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
+			System.out.println("Error al procesar consulta" + e.getMessage());
 		// TODO: disparar Exception propia
 		// throw new AppException(e, e.getSQLState(), e.getMessage());
 		} catch (Exception e) {

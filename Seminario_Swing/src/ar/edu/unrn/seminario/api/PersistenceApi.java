@@ -30,6 +30,7 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import jdk.internal.misc.FileSystemOption;
 
 public class PersistenceApi implements IApi {
 
@@ -149,6 +150,10 @@ public class PersistenceApi implements IApi {
 			dtos.add(new ViviendaDTO(v.getDireccion(),v.getDueño(),v.getID()));
 		}
 		return dtos;
+	}
+	public void obtenerVivienda(int codigo) {
+		Vivienda v = viviendaDao.find(codigo);
+		System.out.println(v.getDueño().toString() + v.getDireccion().toString() + v.getID());
 	}
 	public List<ViviendaDTO> obtenerViviendasOrdenadas(){
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();

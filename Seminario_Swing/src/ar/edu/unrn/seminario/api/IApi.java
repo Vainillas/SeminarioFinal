@@ -64,4 +64,6 @@ public interface IApi {
 
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, String observacion,
 			Date fechaActual);
+
+	void obtenerVivienda(int i);
 }
