@@ -59,6 +59,7 @@ public class PedidoDeRetiro extends JFrame {
 	private JTextField textField_Carton;
 	private JLabel lbKg;
 	private JLabel lbResiduos;
+	private int mostrarKG = 0;
 
 
 
@@ -68,7 +69,7 @@ public class PedidoDeRetiro extends JFrame {
 	public PedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
-		setTitle("generar pedido de retiro");
+		
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 704, 300);
@@ -139,8 +140,19 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
 		radioButtonVidrio.addActionListener((e)-> {
+			if(radioButtonVidrio.isSelected()) {
 					textField_Vidrio.setVisible(true);
+					mostrarKG++;
 					lbKg.setVisible(true);
+			}
+			else {
+				mostrarKG--;
+				textField_Vidrio.setVisible(false);
+				if(this.mostrarKG == 0) {
+					lbKg.setVisible(false);
+				}
+				
+			}
 			
 		});
 			
@@ -151,8 +163,21 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
 		radioButtonPlastico.addActionListener((e)-> {
-				textField_Plastico.setVisible(true);
-				lbKg.setVisible(true);
+				if(radioButtonPlastico.isSelected()) {
+					textField_Plastico.setVisible(true);
+					lbKg.setVisible(true);
+					this.mostrarKG++;
+				}
+				else {
+					mostrarKG--;
+					textField_Plastico.setVisible(false);
+					if(this.mostrarKG == 0) {
+						lbKg.setVisible(false);
+					}
+					
+					//lbKg.setVisible(false);
+				}
+				
 		});
 	
 		radioButtonPlastico.setBackground(UIManager.getColor("window"));
@@ -162,8 +187,19 @@ public class PedidoDeRetiro extends JFrame {
 
 		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
 		radioButtonMetal.addActionListener((e)-> {
+			if(radioButtonMetal.isSelected()) {
 			textField_Metal.setVisible(true);
 			lbKg.setVisible(true);
+			mostrarKG++;
+			}
+			else {
+				textField_Metal.setVisible(false);
+				this.mostrarKG--;
+				if(this.mostrarKG == 0) {
+					lbKg.setVisible(false);
+				}
+			}
+
 		});
 		radioButtonMetal.setBackground(UIManager.getColor("window"));
 		radioButtonMetal.setBounds(6, 110, 81, 23);
@@ -171,9 +207,18 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
 		radioButtonCarton.addActionListener((e)-> {
-			lbKg.setVisible(true);
-			textField_Carton.setVisible(true);
-		
+			if(radioButtonCarton.isSelected()) {
+				textField_Carton.setVisible(true);
+				lbKg.setVisible(true);
+				this.mostrarKG++;
+				}
+				else {
+					textField_Carton.setVisible(false);
+					mostrarKG--;
+					if(this.mostrarKG == 0) {
+						lbKg.setVisible(false);
+					}
+				}		
 		});
 		
 		radioButtonCarton.setBackground(UIManager.getColor("window"));
