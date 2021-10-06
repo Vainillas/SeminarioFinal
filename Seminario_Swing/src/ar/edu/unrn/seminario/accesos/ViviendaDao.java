@@ -3,6 +3,11 @@ package ar.edu.unrn.seminario.accesos;
 import java.sql.SQLException;
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public interface ViviendaDao {
@@ -12,8 +17,8 @@ public interface ViviendaDao {
 
 	void remove(Vivienda v);
 
-	Vivienda find(Integer codigo);
+	Vivienda find(Integer codigo) throws Exception;
 
-	List<Vivienda> findAll();
+	List<Vivienda> findAll() throws Exception;
 
 }

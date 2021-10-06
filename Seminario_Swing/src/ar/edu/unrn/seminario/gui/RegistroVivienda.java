@@ -119,10 +119,10 @@ public class RegistroVivienda extends JFrame {
         contentPane.add(labeldireccion);
         
         JButton botonAceptar = new JButton(labels.getString("registro.viviendas.button.aceptar"));
-        botonAceptar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        botonAceptar.addActionListener((e)->{
             	try {
-            		if(api.obtenerDueño(dniIngresado.getText())==null) {// MALA PRÁCTICA (ESTO NO VA EN LA PARTE GRÁFICA)
+            		if(!api.existeDueño(dniIngresado.getText())) {//si el dueño no existe se procede a crear uno
+
             			api.agregarDueño(nombreIngresado.getText(),
                 				apellidoIngresado.getText(),
                 				dniIngresado.getText(),
@@ -152,19 +152,16 @@ public class RegistroVivienda extends JFrame {
 				 catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("registro.viviendas.mensaje.error"), JOptionPane.ERROR_MESSAGE);
 				}
-            }
-        }
-        		);
+        });
         
         
         botonAceptar.setBounds(87, 229, 89, 23);
         contentPane.add(botonAceptar);
         
         JButton botonCancelar = new JButton(labels.getString("registro.viviendas.button.cancelar"));
-        botonCancelar.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        botonCancelar.addActionListener((e)->{
                 setVisible (false);
-            }
+            
         });
         
         botonCancelar.setBounds(250, 229, 89, 23);

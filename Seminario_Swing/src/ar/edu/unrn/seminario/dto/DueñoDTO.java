@@ -8,24 +8,13 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Persona;
 
 
-public class DueñoDTO extends Persona {
-
+public class DueñoDTO  {
+	
 private String correoElectronico;
-public DueñoDTO (String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException, NotNullException, IncorrectEmailException {
+public DueñoDTO (String nombre, String apellido, String dni, String correoElectronico) {
 	
-	super(nombre, apellido, dni);
-	validarDatos(correoElectronico);
+
 	this.correoElectronico = correoElectronico;
-	
-}
-
-
-public void validarDatos (String correoElectronico) throws NotNullException, DataEmptyException, IncorrectEmailException {
-	if(ConditionHelper.stringIsNull(correoElectronico)) {throw new NotNullException ("correo electronico NULL");}
-	if(ConditionHelper.stringIsEmpty(correoElectronico)) {throw new DataEmptyException("correo electronico vacio");}
-	
-	if(ConditionHelper.IsIncorrectEmail(correoElectronico)) {throw new IncorrectEmailException("correo electronico incorrecto");}
-	
 	
 }
 public String obtenerCorreo() {

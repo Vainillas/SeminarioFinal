@@ -57,6 +57,11 @@ public class PedidoDeRetiro extends JFrame {
 	private JTextField textField_Carton;
 
 
+
+
+
+
+
 	public PedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
@@ -68,8 +73,12 @@ public class PedidoDeRetiro extends JFrame {
 		contentPane.setBackground(SystemColor.info);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
-		
 		setContentPane(contentPane);
+		
+		
+		
+		
+		
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(SystemColor.info);
@@ -95,7 +104,7 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JCheckBox boxCargaPesada = new JCheckBox(labels.getString("pedido.retiro.check.box.si.no"));
 		boxCargaPesada.setBackground(UIManager.getColor("window"));
-		boxCargaPesada.setBounds(224, 10, 97, 23);
+		boxCargaPesada.setBounds(224, 10, 81, 23);
 		panelDatos.add(boxCargaPesada);
 		
 
@@ -106,8 +115,7 @@ public class PedidoDeRetiro extends JFrame {
 		panelBotones.setLayout(null);
 		
 		buttonCancelar = new JButton(labels.getString("pedido.retiro.button.cancelar"));
-		buttonCancelar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		buttonCancelar.addActionListener((e)->{
 				
 				int res = JOptionPane.showConfirmDialog(null, labels.getString("pedido.retiro.confirmar"),labels.getString("pedido.retiro.mensaje.informativo") , JOptionPane.YES_NO_OPTION);
 				if(res == JOptionPane.YES_OPTION) {
@@ -115,15 +123,10 @@ public class PedidoDeRetiro extends JFrame {
 					setVisible(false);
 					dispose();
 				}
-				
-			}
 		});
 		buttonCancelar.setBounds(259, 11, 89, 23);
 		panelBotones.add(buttonCancelar);
-		
 
-		
-		
 		
 		panelResiduos = new JPanel();
 		panelResiduos.setBackground(SystemColor.info);
@@ -132,79 +135,106 @@ public class PedidoDeRetiro extends JFrame {
 		panelResiduos.setLayout(null);
 		
 		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
+		radioButtonVidrio.addActionListener((e)-> {
+					textField_Vidrio.setVisible(true);
+			
+		});
+			
 		radioButtonVidrio.setBackground(UIManager.getColor("window"));
-		radioButtonVidrio.setBounds(6, 50, 109, 23);
+		radioButtonVidrio.setBounds(6, 50, 81, 23);
 		panelResiduos.add(radioButtonVidrio);
+
 		
 		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
+		radioButtonPlastico.addActionListener((e)-> {
+				textField_Plastico.setVisible(true);
+			
+		});
+	
 		radioButtonPlastico.setBackground(UIManager.getColor("window"));
-		radioButtonPlastico.setBounds(6, 80, 109, 23);
+		radioButtonPlastico.setBounds(6, 80, 81, 23);
 		panelResiduos.add(radioButtonPlastico);
 
+
 		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
+		radioButtonMetal.addActionListener((e)-> {
+			textField_Metal.setVisible(true);
+			
+		});
 		radioButtonMetal.setBackground(UIManager.getColor("window"));
-		radioButtonMetal.setBounds(6, 110, 109, 23);
+		radioButtonMetal.setBounds(6, 110, 81, 23);
 		panelResiduos.add(radioButtonMetal);
 		
 		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
+		radioButtonCarton.addActionListener((e)-> {
+			textField_Carton.setVisible(true);
+			
+		});
+		
+		
 		radioButtonCarton.setBackground(UIManager.getColor("window"));
-		radioButtonCarton.setBounds(6, 140, 109, 23);
+		radioButtonCarton.setBounds(6, 140, 81, 23);
 		panelResiduos.add(radioButtonCarton);
 		
-		JLabel LabelResiduos = new JLabel(labels.getString("pedido.retiro.label.residuos"));
-		LabelResiduos.setBounds(46, 0, 133, 14);
-		panelResiduos.add(LabelResiduos);
+
 		
-		textField_Vidrio = new JTextField();
-		textField_Vidrio.setText("0"); //$NON-NLS-1$
-		textField_Vidrio.setBounds(114, 51, 86, 20);
-		panelResiduos.add(textField_Vidrio);
-		textField_Vidrio.setColumns(10);
-		
-		textField_Plastico = new JTextField();
-		textField_Plastico.setText("0");
-		textField_Plastico.setColumns(10);
-		textField_Plastico.setBounds(114, 81, 86, 20);
-		panelResiduos.add(textField_Plastico);
-		
-		textField_Metal = new JTextField();
-		textField_Metal.setText("0");
-		textField_Metal.setColumns(10);
-		textField_Metal.setBounds(121, 111, 86, 20);
-		panelResiduos.add(textField_Metal);
-		
-		textField_Carton = new JTextField();
-		textField_Carton.setText("0");
-		textField_Carton.setColumns(10);
-		textField_Carton.setBounds(114, 140, 86, 20);
-		panelResiduos.add(textField_Carton);
-		JRadioButton [] residuos = {radioButtonPlastico,radioButtonMetal,radioButtonCarton,radioButtonVidrio};
-		
-		
+		JRadioButton [] residuos= {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
+		JTextField [] residuosKg = {textField_Vidrio,textField_Plastico,textField_Metal,textField_Carton};
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
+
 		buttonFinalizar.setBounds(120, 11, 89, 23);
 		panelBotones.add(buttonFinalizar);
-		buttonFinalizar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println(boxCargaPesada.isSelected());
+		buttonFinalizar.addActionListener((e)->{
+			
 				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
 				for(JRadioButton r : residuos) {
 					if(r.isSelected()) {
 						residuosSeleccionados.add(r.getText());
+				}
+				ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
+				for(JTextField kg : residuosKg) {
+					if(!kg.getText().equals("0")) {
+						residuosSeleccionadosKg.add(kg.getText());
 					}
 				}
-				
-				//para probar que funciona utilizar este for
-				for(int i = 0;i<residuosSeleccionados.size();i++) {
-					System.out.println(residuosSeleccionados.get(i));
+				try {
+					//api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),fechaActual);
+					api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText());
+					JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
+					setVisible(false);
+					dispose();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					System.out.println("crear la exception");
 				}
 
-				api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados, textObservacion.getText(),fechaActual);
-				JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
-				setVisible(false);
-				dispose();
-				
-			}
+
+
+				}
 		});
-	}
+		textField_Vidrio = new JTextField("0");
+		textField_Vidrio.setVisible(false);
+		textField_Vidrio.setBounds(103, 51, 86, 20);
+		panelResiduos.add(textField_Vidrio);
+		textField_Vidrio.setColumns(10);
+		
+		textField_Plastico = new JTextField("0");
+		textField_Plastico.setBounds(103, 81, 86, 20);
+		textField_Plastico.setVisible(false);
+		panelResiduos.add(textField_Plastico);
+		textField_Plastico.setColumns(10);
+		
+		textField_Metal = new JTextField("0");
+	
+		textField_Metal.setBounds(103, 111, 86, 20);
+		textField_Metal.setVisible(false);
+		panelResiduos.add(textField_Metal);
+		textField_Metal.setColumns(10);
+		
+		textField_Carton = new JTextField("0");
+		textField_Carton.setVisible(false);
+		textField_Carton.setBounds(103, 141, 86, 20);
+		panelResiduos.add(textField_Carton);
+		textField_Carton.setColumns(10);
+}
 }

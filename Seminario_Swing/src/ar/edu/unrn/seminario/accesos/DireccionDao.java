@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.accesos;
 
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 
 public interface DireccionDao {
@@ -13,7 +14,7 @@ public interface DireccionDao {
 
 	void remove(Direccion direccion);
 
-	Direccion find(String calle, Integer altura);
+	Direccion find(String calle, Integer altura) throws AppException;
 
-	List<Direccion> findAll();
+	List<Direccion> findAll() throws AppException;
 }

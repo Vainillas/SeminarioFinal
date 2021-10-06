@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.accesos;
 
 import java.util.List;
 
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 
@@ -16,5 +17,7 @@ public interface DueñoDao {
 
 	Dueño find(String dni);
 
-	List<Dueño> findAll();
+	List<Dueño> findAll() throws AppException;
+
+	boolean exists(String dni) throws AppException;
 }

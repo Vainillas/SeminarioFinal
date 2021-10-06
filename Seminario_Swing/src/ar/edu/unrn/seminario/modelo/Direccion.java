@@ -3,11 +3,10 @@ package ar.edu.unrn.seminario.modelo;
 import ar.edu.unrn.seminario.Helper.ConditionHelper;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 
-import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 
 public class Direccion {
-	private String EJEMplo;
 	private String calle;
 	private String longitud;
 	private String latitud;
@@ -16,7 +15,7 @@ public class Direccion {
 	private String barrio;
 	
 	
-	public Direccion(String calle, String altura, String codPostal, String longitud, String latitud, String barrio) throws DataEmptyException, NotNullException, NotNumberException {
+	public Direccion(String calle, String altura, String codPostal, String longitud, String latitud, String barrio) throws DataEmptyException, StringNullException, NotNumberException {
 		super();
 		validarDatos(calle, altura, codPostal,longitud,latitud,barrio);
 		this.calle = calle;
@@ -27,14 +26,14 @@ public class Direccion {
 		this.barrio = barrio;
 	}
 	
-	public void validarDatos(String calle, String altura, String codigoPostal, String longitud, String latitud, String barrio) throws NotNullException, DataEmptyException, NotNumberException {
+	public void validarDatos(String calle, String altura, String codigoPostal, String longitud, String latitud, String barrio) throws StringNullException, DataEmptyException, NotNumberException {
 		//if(ExceptionsHelper.IsNull(calle)) {throw new NotNullException("Calle nula");}
 		
-		if(ConditionHelper.stringIsNull(altura)) {throw new NotNullException("Altura nula");}
-		if(ConditionHelper.stringIsNull(codigoPostal)) {throw new NotNullException("Codigo Postal nulo");}
-		if(ConditionHelper.stringIsNull(latitud)) {throw new NotNullException("Latitud nula");}
-		if(ConditionHelper.stringIsNull(longitud)) {throw new NotNullException("Longitud nula");}
-		if(ConditionHelper.stringIsNull(barrio)) {throw new NotNullException("Barrio nulo");}
+		if(ConditionHelper.stringIsNull(altura)) {throw new StringNullException("Altura nula");}
+		if(ConditionHelper.stringIsNull(codigoPostal)) {throw new StringNullException("Codigo Postal nulo");}
+		if(ConditionHelper.stringIsNull(latitud)) {throw new StringNullException("Latitud nula");}
+		if(ConditionHelper.stringIsNull(longitud)) {throw new StringNullException("Longitud nula");}
+		if(ConditionHelper.stringIsNull(barrio)) {throw new StringNullException("Barrio nulo");}
 
 		
 		
