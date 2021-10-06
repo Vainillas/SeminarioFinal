@@ -51,10 +51,11 @@ public class PedidoDeRetiro extends JFrame {
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
 	private JPanel panelResiduos;
-	private JTextField textField_Vidrio = new JTextField("0");
-	private JTextField textField_Plastico = new JTextField("0");
-	private JTextField textField_Metal = new JTextField("0");
-	private JTextField textField_Carton = new JTextField("0");
+	private JTextField textField_Vidrio;
+	private JTextField textField_Plastico;
+	private JTextField textField_Metal;
+	private JTextField textField_Carton;
+
 
 
 
@@ -72,8 +73,12 @@ public class PedidoDeRetiro extends JFrame {
 		contentPane.setBackground(SystemColor.info);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
-		
 		setContentPane(contentPane);
+		
+		
+		
+		
+		
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(SystemColor.info);
@@ -131,27 +136,18 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
 		radioButtonVidrio.addActionListener((e)-> {
-				textField_Vidrio = new JTextField("0");
-				//textField_Vidrio.setText(labels.getString("PedidoDeRetiro.textField.text")); //$NON-NLS-1$
-				textField_Vidrio.setBounds(103, 51, 86, 20);
-				panelResiduos.add(textField_Vidrio);
-				textField_Vidrio.setColumns(10);
+					textField_Vidrio.setVisible(true);
 			
 		});
 			
 		radioButtonVidrio.setBackground(UIManager.getColor("window"));
 		radioButtonVidrio.setBounds(6, 50, 81, 23);
 		panelResiduos.add(radioButtonVidrio);
-		
 
 		
 		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
 		radioButtonPlastico.addActionListener((e)-> {
-				textField_Plastico = new JTextField("0");
-				//textField_Plastico.setText(labels.getString("PedidoDeRetiro.textField_1.text")); //$NON-NLS-1$
-				textField_Plastico.setBounds(103, 81, 86, 20);
-				panelResiduos.add(textField_Plastico);
-				textField_Plastico.setColumns(10);
+				textField_Plastico.setVisible(true);
 			
 		});
 	
@@ -162,10 +158,7 @@ public class PedidoDeRetiro extends JFrame {
 
 		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
 		radioButtonMetal.addActionListener((e)-> {
-				textField_Metal = new JTextField("0");
-				textField_Metal.setBounds(103, 111, 86, 20);
-				panelResiduos.add(textField_Metal);
-				textField_Metal.setColumns(10);
+			textField_Metal.setVisible(true);
 			
 		});
 		radioButtonMetal.setBackground(UIManager.getColor("window"));
@@ -174,10 +167,7 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
 		radioButtonCarton.addActionListener((e)-> {
-				textField_Carton = new JTextField("0");
-				textField_Carton.setBounds(103, 141, 86, 20);
-				panelResiduos.add(textField_Carton);
-				textField_Carton.setColumns(10);
+			textField_Carton.setVisible(true);
 			
 		});
 		
@@ -186,16 +176,7 @@ public class PedidoDeRetiro extends JFrame {
 		radioButtonCarton.setBounds(6, 140, 81, 23);
 		panelResiduos.add(radioButtonCarton);
 		
-		
-		
-		
-		
-		
-		
-		
-		
 
-		JTextField [] cantidadResiduos = {textField_Plastico,textField_Metal, textField_Carton, textField_Vidrio};
 		
 		JRadioButton [] residuos= {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
 		JTextField [] residuosKg = {textField_Vidrio,textField_Plastico,textField_Metal,textField_Carton};
@@ -231,6 +212,29 @@ public class PedidoDeRetiro extends JFrame {
 				
 		}
 		});
+		textField_Vidrio = new JTextField("0");
+		textField_Vidrio.setVisible(false);
+		textField_Vidrio.setBounds(103, 51, 86, 20);
+		panelResiduos.add(textField_Vidrio);
+		textField_Vidrio.setColumns(10);
+		
+		textField_Plastico = new JTextField("0");
+		textField_Plastico.setBounds(103, 81, 86, 20);
+		textField_Plastico.setVisible(false);
+		panelResiduos.add(textField_Plastico);
+		textField_Plastico.setColumns(10);
+		
+		textField_Metal = new JTextField("0");
 	
+		textField_Metal.setBounds(103, 111, 86, 20);
+		textField_Metal.setVisible(false);
+		panelResiduos.add(textField_Metal);
+		textField_Metal.setColumns(10);
+		
+		textField_Carton = new JTextField("0");
+		textField_Carton.setVisible(false);
+		textField_Carton.setBounds(103, 141, 86, 20);
+		panelResiduos.add(textField_Carton);
+		textField_Carton.setColumns(10);
 }
 }
