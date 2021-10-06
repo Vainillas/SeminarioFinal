@@ -231,19 +231,19 @@ public class PersistenceApi implements IApi {
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	int i=0;
     	for(String s: residuosSeleccionados){
-    		if(s == "Vidrio"){
+    		if(s.compareTo("Vidrio") == 0){
     			Residuo_Vidrio newVidrio = new Residuo_Vidrio(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newVidrio);
     		}
-    		if(s == "Plastico"){
+    		if(s.compareTo("Plastico") == 0){
     			Residuo_Plastico newPlastico = new Residuo_Plastico(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newPlastico);
     		}
-    		if(s == "Metal"){
+    		if(s.compareTo("Metal") == 0){
     			Residuo_Metal newMetal = new Residuo_Metal(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newMetal);
     		}
-    		if(s == "Carton"){
+    		if(s.compareTo("Carton") == 0){
     			Residuo_Carton newCarton = new Residuo_Carton(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newCarton);
     		}

@@ -1,6 +1,9 @@
 package ar.edu.unrn.seminario.modelo;
 
 import java.util.ArrayList;
+
+
+
 import java.sql.Date;
 
 public class PedidoDeRetiro {
@@ -23,6 +26,7 @@ public class PedidoDeRetiro {
 	public PedidoDeRetiro(Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos,  Date unaFecha, Vivienda unaVivienda){
 		this.observacion = null;
 		this.maquinaPesada = requiereMaquinaPesada;
+		System.out.println("Tamaño list residuos parametor: " + unaListaDeResiduos.size());
 		this.listResiduos = unaListaDeResiduos;
 		this.fechaDelPedido = unaFecha;
 		this.vivienda = unaVivienda;
@@ -71,22 +75,47 @@ public class PedidoDeRetiro {
 	}
 
 	public int getPlastico() {
-		// TODO Auto-generated method stub
-		return 0;
+		System.out.println("Llega al getPlastico");
+		int cantidad = 0;
+		System.out.println("la cantidad de residuos es: "+ listResiduos.size());
+		for(Residuo residuo: listResiduos){
+			System.out.println("Estoy en el for plastico");
+			if(residuo instanceof Residuo_Plastico) {
+				System.out.println("Entre al if Plastico");
+				System.out.println("Cantidad de Plastico" + residuo.getCantidad());
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 
 	public int getVidrio() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cantidad = 0;
+		for(Residuo residuo: listResiduos){
+			if(residuo instanceof Residuo_Vidrio) {
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 
 	public int getMetal() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cantidad=0;
+		for(Residuo residuo: listResiduos){
+			if(residuo instanceof Residuo_Metal) {
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 
 	public int getCarton() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cantidad=0;
+		for(Residuo residuo: listResiduos){
+			if(residuo instanceof Residuo_Carton) {
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 }

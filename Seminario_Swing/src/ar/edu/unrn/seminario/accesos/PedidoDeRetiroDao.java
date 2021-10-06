@@ -15,7 +15,7 @@ public interface PedidoDeRetiroDao {
 
 		void remove(PedidoDeRetiro pedido);
 
-		PedidoDeRetiro find(String id);
+		PedidoDeRetiro find(int id);
 
 		List<PedidoDeRetiro> findAll() throws AppException;
 
