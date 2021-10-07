@@ -66,7 +66,11 @@ public interface IApi {
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
 
-	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion) throws Exception;
+	
+
+
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws Exception;
+
 
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;

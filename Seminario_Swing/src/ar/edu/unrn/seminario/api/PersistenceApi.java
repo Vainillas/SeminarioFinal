@@ -227,7 +227,8 @@ public class PersistenceApi implements IApi {
     }
 
     @Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion) throws Exception {
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws Exception {
+    	
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	int i=0;
     	for(String s: residuosSeleccionados){
@@ -251,7 +252,7 @@ public class PersistenceApi implements IApi {
     	}
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
-    	Vivienda unaVivienda = viviendaDao.find(24);
+    	Vivienda unaVivienda = viviendaDao.find(Integer.parseInt(codViv));
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
     	try {
 			this.pedidoDeRetiroDao.create(nuevoPedido);
@@ -266,7 +267,11 @@ public class PersistenceApi implements IApi {
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico)
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
 		
+
+		
+		
 	}
+
 
 	public boolean existeUsuario(String usuario) throws NotRegisterException, AppException {
 		return usuarioDao.exists(usuario);

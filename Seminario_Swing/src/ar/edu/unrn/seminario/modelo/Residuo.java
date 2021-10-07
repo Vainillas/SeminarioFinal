@@ -7,7 +7,7 @@ public class Residuo {
 	public Residuo(int kg) {
 		this.cantidad=kg;
 	}
-	
+
 	public int getCantidad() {
 		return cantidad;
 	}
@@ -23,5 +23,8 @@ public class Residuo {
 	public void setValor(int valor) {
 		this.valor = valor;
 	}
+
+	
+	
 
 }

@@ -75,14 +75,9 @@ public class PedidoDeRetiro {
 	}
 
 	public int getPlastico() {
-		System.out.println("Llega al getPlastico");
 		int cantidad = 0;
-		System.out.println("la cantidad de residuos es: "+ listResiduos.size());
 		for(Residuo residuo: listResiduos){
-			System.out.println("Estoy en el for plastico");
 			if(residuo instanceof Residuo_Plastico) {
-				System.out.println("Entre al if Plastico");
-				System.out.println("Cantidad de Plastico" + residuo.getCantidad());
 				cantidad = residuo.getCantidad();
 			}
 		}
