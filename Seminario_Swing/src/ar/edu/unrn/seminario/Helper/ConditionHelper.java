@@ -1,4 +1,7 @@
 package ar.edu.unrn.seminario.Helper;
+
+import java.sql.Date;
+
 //Hello there
 public  class ConditionHelper {
 	public static boolean stringIsEmpty(String s) {
@@ -12,7 +15,9 @@ public  class ConditionHelper {
 	public static boolean stringIsNull(String s){
 		return  s == null;
 	}
-	
+	public static boolean IsDateNull(Date d) {
+		return d.equals(null);
+	}
 	public static boolean IsActive(boolean state) {
 		return state;
 	}

@@ -37,7 +37,12 @@ import javax.swing.JProgressBar;
 import javax.swing.JSeparator;
 import java.awt.Canvas;
 import javax.swing.JScrollPane;
+
 import java.awt.Font;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 
 public class PedidoDeRetiro extends JFrame {
 
@@ -56,7 +61,13 @@ public class PedidoDeRetiro extends JFrame {
 	private JTextField textField_Plastico;
 	private JTextField textField_Metal;
 	private JTextField textField_Carton;
+
 	private JTextField textFieldCodViv;
+
+
+	private JLabel lbKg;
+	private JLabel lbResiduos;
+	private int mostrarKG = 0;
 
 
 
@@ -132,35 +143,185 @@ public class PedidoDeRetiro extends JFrame {
 		
 		panelResiduos = new JPanel();
 		panelResiduos.setBackground(SystemColor.info);
+
 		panelResiduos.setBounds(425, 11, 210, 196);
+
+		panelResiduos.setBounds(426, 11, 252, 196);
+
 		contentPane.add(panelResiduos);
 		panelResiduos.setLayout(null);
 		
+
+		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
+		radioButtonVidrio.addActionListener((e)-> {
+			if(radioButtonVidrio.isSelected()) {
+					textField_Vidrio.setVisible(true);
+					mostrarKG++;
+					lbKg.setVisible(true);
+			}
+			else {
+				mostrarKG--;
+				textField_Vidrio.setVisible(false);
+				if(this.mostrarKG == 0) {
+					lbKg.setVisible(false);
+				}
+				
+			}
+			
+		});
+			
+		radioButtonVidrio.setBackground(UIManager.getColor("window"));
+		radioButtonVidrio.setBounds(6, 50, 81, 23);
+		panelResiduos.add(radioButtonVidrio);
+
+		
+		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
+		radioButtonPlastico.addActionListener((e)-> {
+				if(radioButtonPlastico.isSelected()) {
+					textField_Plastico.setVisible(true);
+					lbKg.setVisible(true);
+					this.mostrarKG++;
+				}
+				else {
+					mostrarKG--;
+					textField_Plastico.setVisible(false);
+					if(this.mostrarKG == 0) {
+						lbKg.setVisible(false);
+					}
+					
+					//lbKg.setVisible(false);
+				}
+				
+		});
+	
+		radioButtonPlastico.setBackground(UIManager.getColor("window"));
+		radioButtonPlastico.setBounds(6, 80, 81, 23);
+		panelResiduos.add(radioButtonPlastico);
+
+
+		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
+		radioButtonMetal.addActionListener((e)-> {
+			if(radioButtonMetal.isSelected()) {
+			textField_Metal.setVisible(true);
+			lbKg.setVisible(true);
+			mostrarKG++;
+			}
+			else {
+				textField_Metal.setVisible(false);
+				this.mostrarKG--;
+				if(this.mostrarKG == 0) {
+					lbKg.setVisible(false);
+				}
+			}
+
+		});
+		radioButtonMetal.setBackground(UIManager.getColor("window"));
+		radioButtonMetal.setBounds(6, 110, 81, 23);
+		panelResiduos.add(radioButtonMetal);
+		
+		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
+		radioButtonCarton.addActionListener((e)-> {
+			if(radioButtonCarton.isSelected()) {
+				textField_Carton.setVisible(true);
+				lbKg.setVisible(true);
+				this.mostrarKG++;
+				}
+				else {
+					textField_Carton.setVisible(false);
+					mostrarKG--;
+					if(this.mostrarKG == 0) {
+						lbKg.setVisible(false);
+					}
+				}		
+		});
+		
+		radioButtonCarton.setBackground(UIManager.getColor("window"));
+		radioButtonCarton.setBounds(6, 140, 81, 23);
+		panelResiduos.add(radioButtonCarton);
+		
+
+		
+		
+		
 		textField_Vidrio = new JTextField("0");
 		textField_Vidrio.setVisible(false);
-		textField_Vidrio.setBounds(103, 51, 86, 20);
+		textField_Vidrio.setBounds(130, 51, 86, 20);
 		panelResiduos.add(textField_Vidrio);
 		textField_Vidrio.setColumns(10);
 		
 		textField_Plastico = new JTextField("0");
-		textField_Plastico.setBounds(103, 81, 86, 20);
+		textField_Plastico.setBounds(130, 81, 86, 20);
 		textField_Plastico.setVisible(false);
 		panelResiduos.add(textField_Plastico);
 		textField_Plastico.setColumns(10);
 		
 		textField_Metal = new JTextField("0");
 	
-		textField_Metal.setBounds(103, 111, 86, 20);
+		textField_Metal.setBounds(130, 111, 86, 20);
 		textField_Metal.setVisible(false);
 		panelResiduos.add(textField_Metal);
 		textField_Metal.setColumns(10);
 		
 		textField_Carton = new JTextField("0");
 		textField_Carton.setVisible(false);
-		textField_Carton.setBounds(103, 141, 86, 20);
+		textField_Carton.setBounds(130, 141, 86, 20);
 		panelResiduos.add(textField_Carton);
 		textField_Carton.setColumns(10);
 		
+		JTextPane textPane = new JTextPane();
+		textPane.setFont(new Font("Tahoma", Font.PLAIN, 9));
+		textPane.setEditable(false);
+		textPane.setText("Codigo Vivienda"); //$NON-NLS-1$
+		textPane.setBounds(6, 176, 91, 20);
+		panelResiduos.add(textPane);
+		
+		textFieldCodViv = new JTextField();
+		textFieldCodViv.setBounds(103, 176, 86, 20);
+		panelResiduos.add(textFieldCodViv);
+		textFieldCodViv.setColumns(10);
+		
+		JRadioButton [] residuos= {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
+		JTextField [] residuosKg = {textField_Vidrio,textField_Plastico,textField_Metal,textField_Carton};
+		
+		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
+
+		buttonFinalizar.setBounds(120, 11, 89, 23);
+		panelBotones.add(buttonFinalizar);
+		buttonFinalizar.addActionListener((e)->{
+			
+				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
+				//ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
+				
+				 for(JRadioButton r : residuos) {
+	                    if(r.isSelected()) {
+	                        residuosSeleccionados.add(r.getText());
+	                }
+				 }
+	                ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
+	                for(JTextField kg : residuosKg) {
+	                    if(!kg.getText().equals("0")) {
+	                        residuosSeleccionadosKg.add(kg.getText());
+	                    }
+	                }
+				try {
+					api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(), textFieldCodViv.getText());
+					//api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText());
+					JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
+					setVisible(false);
+					dispose();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					System.out.println("crear la exception");
+				}
+
+				
+				 
+		
+		});
+
+		
+		
+/*
 		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
 		radioButtonVidrio.addActionListener((e)-> {
 			if(radioButtonVidrio.isSelected()){
@@ -217,54 +378,23 @@ public class PedidoDeRetiro extends JFrame {
 		radioButtonCarton.setBackground(UIManager.getColor("window"));
 		radioButtonCarton.setBounds(6, 140, 81, 23);
 		panelResiduos.add(radioButtonCarton);
+		*/
 		
-		JTextPane textPane = new JTextPane();
-		textPane.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		textPane.setEditable(false);
-		textPane.setText("Codigo Vivienda"); //$NON-NLS-1$
-		textPane.setBounds(6, 176, 91, 20);
-		panelResiduos.add(textPane);
 		
-		textFieldCodViv = new JTextField();
-		textFieldCodViv.setBounds(103, 176, 86, 20);
-		panelResiduos.add(textFieldCodViv);
-		textFieldCodViv.setColumns(10);
 		
-
-		
-		JRadioButton [] residuos= {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
-		JTextField [] residuosKg = {textField_Vidrio,textField_Plastico,textField_Metal,textField_Carton};
-		
-		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
-
-        buttonFinalizar.setBounds(120, 11, 89, 23);
-        panelBotones.add(buttonFinalizar);
-        buttonFinalizar.addActionListener((e)->{
-            ArrayList <String> residuosSeleccionados = new ArrayList<String>();
-            ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
-            int i = 0;
-            for(JRadioButton r : residuos) {
-                if(r.isSelected()) {
-                    residuosSeleccionados.add(r.getText());
-                    residuosSeleccionadosKg.add((residuosKg[i]).getText());
-                }
-                i++;
-            }
-                
-                try {
-                    //api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),fechaActual);
-                    api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),textFieldCodViv.getText());
-                    JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
-                    setVisible(false);
-                    dispose();
-                } catch (Exception e1) {
-                    // TODO Auto-generated catch block
-                    System.out.println("crear la exception");
-                }
-            
         
 		
-		});
 		
+		
+
+		 lbResiduos = new JLabel(labels.getString("PedidoDeRetiro.label.residuos")); 
+		lbResiduos.setBounds(6, 11, 95, 14);
+		panelResiduos.add(lbResiduos);
+		
+		 lbKg = new JLabel(labels.getString("PedidoDeRetiro.label.residuos.kg"));
+		lbKg.setVisible(false);
+		lbKg.setBounds(128, 11, 124, 14);
+		panelResiduos.add(lbKg);
+
 }
 }

@@ -85,18 +85,13 @@ public class AltaUsuario extends JFrame {
 		emailTextField.setBounds(148, 93, 160, 22);
 		contentPane.add(emailTextField);
 		emailTextField.setColumns(10);
-		
-		
-		
-		
-		
+
 		JButton aceptarButton = new JButton(labels.getString("alta.usuario.button.aceptar") );
 		aceptarButton.addActionListener((e)->{//utilizando metodos lambda
 			RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
 				
 					try {
-						
-						
+	
 						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),emailTextField.getText(),rol.getCodigo());
 						JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
