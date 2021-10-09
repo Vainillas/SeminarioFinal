@@ -34,6 +34,7 @@ public class IniciarSesion extends JFrame {
 	private JTextField textUsuario;
 	private JPasswordField textPassword;	
 	private IApi api;
+	private JPanel panelNoRegistrado;
 	/**
 	 * Launch the application.
 	 */
@@ -56,10 +57,11 @@ public class IniciarSesion extends JFrame {
 	 * Create the frame.
 	 */
 	public IniciarSesion(IApi api) {
+		
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		setTitle(labels.getString("iniciar.sesion.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 450, 316);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -67,7 +69,7 @@ public class IniciarSesion extends JFrame {
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelDatos = new JPanel();
 		panelDatos.setLayout(null);
-		panelDatos.setBounds(20, 94, 404, 118);
+		panelDatos.setBounds(20, 11, 404, 118);
 		contentPane.add(panelDatos);
 		
 		textUsuario = new JTextField("");
@@ -90,7 +92,7 @@ public class IniciarSesion extends JFrame {
 		panelDatos.add(labelPassword);
 		
 		JPanel panelBotones = new JPanel();
-		panelBotones.setBounds(20, 198, 404, 52);
+		panelBotones.setBounds(20, 128, 404, 52);
 		contentPane.add(panelBotones);
 		panelBotones.setLayout(null);
 		
@@ -113,18 +115,24 @@ public class IniciarSesion extends JFrame {
 							VentanaPrincipal ventana = new VentanaPrincipal(api);
 							ventana.setVisible(true);
 							dispose();
-				}catch (DataEmptyException | IncorrectEmailException | NotRegisterException | AppException | NotCorrectPasswordException | StringNullException  e1) {
+				}catch (DataEmptyException | IncorrectEmailException | AppException | NotCorrectPasswordException | StringNullException  e1) {
 					
-					JOptionPane.showMessageDialog(null,e1.getMessage() ,"error" ,1);
+					JOptionPane.showMessageDialog(null,e1.getMessage() ,"Error" ,0);
+				}
+				catch(NotRegisterException e1) {
+					panelNoRegistrado.setVisible(true);
+					JOptionPane.showMessageDialog(null,e1.getMessage() ,"Error" ,0);
 				}
 			
 		});
+		
 		buttonAceptar.setBounds(81, 18, 89, 23);
 		panelBotones.add(buttonAceptar);
 		
-		JPanel panelNoRegistrado = new JPanel();
-		panelNoRegistrado.setBounds(211, 11, 213, 84);
+		 panelNoRegistrado = new JPanel();
+		panelNoRegistrado.setBounds(211, 191, 213, 84);
 		panelNoRegistrado.setLayout(null);
+		panelNoRegistrado.setVisible(false);
 		contentPane.add(panelNoRegistrado);
 		
 		JLabel labelNoRegistrado = new JLabel(labels.getString("iniciar.sesion.label.no.registrado"));

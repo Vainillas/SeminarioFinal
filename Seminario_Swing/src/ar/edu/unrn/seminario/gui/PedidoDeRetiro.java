@@ -4,15 +4,21 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.DireccionDTO;
+import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
+
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -42,6 +48,7 @@ import java.awt.Font;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import javax.swing.JTable;
 
 
 public class PedidoDeRetiro extends JFrame {
@@ -53,6 +60,7 @@ public class PedidoDeRetiro extends JFrame {
 	private JPanel contentPane;
 	private Date fechaActual = DateHelper.getDate();
 	private IApi api = null;
+	DefaultTableModel modelo;
 	private JPanel panelBotones;
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
@@ -68,6 +76,8 @@ public class PedidoDeRetiro extends JFrame {
 	private JLabel lbKg;
 	private JLabel lbResiduos;
 	private int mostrarKG = 0;
+	private JPanel panelViviendas;
+	private JTable table;
 
 
 
@@ -75,13 +85,13 @@ public class PedidoDeRetiro extends JFrame {
 
 
 
-	public PedidoDeRetiro(IApi api) {
+	public PedidoDeRetiro(IApi api, String username) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 704, 300);
+		setBounds(100, 100, 960, 368);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.info);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -96,7 +106,7 @@ public class PedidoDeRetiro extends JFrame {
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(SystemColor.info);
 		panelDatos.setLayout(null);
-		panelDatos.setBounds(10, 11, 414, 196);
+		panelDatos.setBounds(10, 11, 337, 196);
 		contentPane.add(panelDatos);
 		
 		JLabel labelVehiculo = new JLabel(labels.getString("pedido.retiro.label.vehiculo"));
@@ -112,7 +122,7 @@ public class PedidoDeRetiro extends JFrame {
 		JTextPane textObservacion = new JTextPane();
 		textObservacion.setForeground(Color.BLACK);
 		textObservacion.setBackground(SystemColor.textHighlightText);
-		textObservacion.setBounds(88, 90, 326, 106);
+		textObservacion.setBounds(88, 90, 249, 106);
 		panelDatos.add(textObservacion);
 		
 		JCheckBox boxCargaPesada = new JCheckBox(labels.getString("pedido.retiro.check.box.si.no"));
@@ -144,9 +154,9 @@ public class PedidoDeRetiro extends JFrame {
 		panelResiduos = new JPanel();
 		panelResiduos.setBackground(SystemColor.info);
 
-		panelResiduos.setBounds(425, 11, 210, 196);
+		panelResiduos.setBounds(357, 11, 252, 175);
 
-		panelResiduos.setBounds(426, 11, 252, 196);
+	
 
 		contentPane.add(panelResiduos);
 		panelResiduos.setLayout(null);
@@ -154,19 +164,8 @@ public class PedidoDeRetiro extends JFrame {
 
 		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
 		radioButtonVidrio.addActionListener((e)-> {
-			if(radioButtonVidrio.isSelected()) {
-					textField_Vidrio.setVisible(true);
-					mostrarKG++;
-					lbKg.setVisible(true);
-			}
-			else {
-				mostrarKG--;
-				textField_Vidrio.setVisible(false);
-				if(this.mostrarKG == 0) {
-					lbKg.setVisible(false);
-				}
-				
-			}
+			
+			cambiarVisibilidad(radioButtonVidrio);
 			
 		});
 			
@@ -177,20 +176,8 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
 		radioButtonPlastico.addActionListener((e)-> {
-				if(radioButtonPlastico.isSelected()) {
-					textField_Plastico.setVisible(true);
-					lbKg.setVisible(true);
-					this.mostrarKG++;
-				}
-				else {
-					mostrarKG--;
-					textField_Plastico.setVisible(false);
-					if(this.mostrarKG == 0) {
-						lbKg.setVisible(false);
-					}
-					
-					//lbKg.setVisible(false);
-				}
+			
+			cambiarVisibilidad(radioButtonPlastico);
 				
 		});
 	
@@ -201,19 +188,9 @@ public class PedidoDeRetiro extends JFrame {
 
 		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
 		radioButtonMetal.addActionListener((e)-> {
-			if(radioButtonMetal.isSelected()) {
-			textField_Metal.setVisible(true);
-			lbKg.setVisible(true);
-			mostrarKG++;
-			}
-			else {
-				textField_Metal.setVisible(false);
-				this.mostrarKG--;
-				if(this.mostrarKG == 0) {
-					lbKg.setVisible(false);
-				}
-			}
-
+			
+			cambiarVisibilidad(radioButtonMetal);
+	
 		});
 		radioButtonMetal.setBackground(UIManager.getColor("window"));
 		radioButtonMetal.setBounds(6, 110, 81, 23);
@@ -221,18 +198,9 @@ public class PedidoDeRetiro extends JFrame {
 		
 		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
 		radioButtonCarton.addActionListener((e)-> {
-			if(radioButtonCarton.isSelected()) {
-				textField_Carton.setVisible(true);
-				lbKg.setVisible(true);
-				this.mostrarKG++;
-				}
-				else {
-					textField_Carton.setVisible(false);
-					mostrarKG--;
-					if(this.mostrarKG == 0) {
-						lbKg.setVisible(false);
-					}
-				}		
+			
+			cambiarVisibilidad(radioButtonCarton);
+			
 		});
 		
 		radioButtonCarton.setBackground(UIManager.getColor("window"));
@@ -319,82 +287,97 @@ public class PedidoDeRetiro extends JFrame {
 		
 		});
 
-		
-		
-/*
-		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
-		radioButtonVidrio.addActionListener((e)-> {
-			if(radioButtonVidrio.isSelected()){
-				textField_Vidrio.setVisible(true);
-			}else {
-				textField_Vidrio.setVisible(false);
-			}
-			
-		});
-			
-		radioButtonVidrio.setBackground(UIManager.getColor("window"));
-		radioButtonVidrio.setBounds(6, 50, 81, 23);
-		panelResiduos.add(radioButtonVidrio);
-
-		
-		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
-		radioButtonPlastico.addActionListener((e)-> {
-			if(radioButtonPlastico.isSelected()){
-				textField_Plastico.setVisible(true);
-			}else {
-				textField_Plastico.setVisible(false);
-			}
-			
-		});
-	
-		radioButtonPlastico.setBackground(UIManager.getColor("window"));
-		radioButtonPlastico.setBounds(6, 80, 81, 23);
-		panelResiduos.add(radioButtonPlastico);
-
-
-		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
-		radioButtonMetal.addActionListener((e)-> {
-			if(radioButtonMetal.isSelected()){
-				textField_Metal.setVisible(true);
-			}else {
-				textField_Metal.setVisible(false);
-			}
-			
-		});
-		radioButtonMetal.setBackground(UIManager.getColor("window"));
-		radioButtonMetal.setBounds(6, 110, 81, 23);
-		panelResiduos.add(radioButtonMetal);
-		
-		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
-		radioButtonCarton.addActionListener((e)-> {
-			if(radioButtonCarton.isSelected()){
-				textField_Carton.setVisible(true);
-			}else {
-				textField_Carton.setVisible(false);
-			}
-		});
-		
-		
-		radioButtonCarton.setBackground(UIManager.getColor("window"));
-		radioButtonCarton.setBounds(6, 140, 81, 23);
-		panelResiduos.add(radioButtonCarton);
-		*/
-		
-		
-		
-        
-		
-		
-		
-
-		 lbResiduos = new JLabel(labels.getString("PedidoDeRetiro.label.residuos")); 
+		 lbResiduos = new JLabel(labels.getString("pedido.retiro.label.residuos")); 
 		lbResiduos.setBounds(6, 11, 95, 14);
 		panelResiduos.add(lbResiduos);
 		
-		 lbKg = new JLabel(labels.getString("PedidoDeRetiro.label.residuos.kg"));
+		 lbKg = new JLabel(labels.getString("pedido.retiro.label.residuos.kg"));
 		lbKg.setVisible(false);
 		lbKg.setBounds(128, 11, 124, 14);
 		panelResiduos.add(lbKg);
+		
+		panelViviendas = new JPanel();
+		panelViviendas.setBounds(619, 11, 315, 307);
+		contentPane.add(panelViviendas);
+		String[] titulosDireccion = { 
+				labels.getString("pedido.retiro.titulos.direccion.calle"),  
+				labels.getString("pedido.retiro.titulos.direccion.altura"), 
+				labels.getString("pedido.retiro.titulos.direccion.codigo.postal"), 
+				labels.getString("pedido.retiro.titulos.direccion.latitud"), 
+				labels.getString("pedido.retiro.titulos.direccion.longitud"), 
+				labels.getString("pedido.retiro.titulos.direccion.barrio") };
+		
+		table = new JTable();
+		panelViviendas.add(table);
+		table.addMouseListener(new MouseAdapter() {
 
+			public void mouseClicked(MouseEvent arg0) {
+				habilitarBotones(true);
+			}
+		});
+		
+		modelo = new DefaultTableModel(new Object[][] {}, titulosDireccion);
+		
+		// Obtiene la lista de direcciones a mostrar
+				List<DireccionDTO> direcciones= new ArrayList<DireccionDTO>();
+		
+		
+					try {
+						direcciones = api.obtenerDirecciones(username);
+						// Agrega las direcciones de el dueño en el model
+						for (DireccionDTO d : direcciones) {
+							modelo.addRow(new Object[] { d.getBarrio(), d.getCalle(), d.getAltura(),
+									d.getCodPostal(), d.getLatitud(),d.getLongitud() });
+							
+						}
+
+					} catch (AppException e2) {
+						JOptionPane.showMessageDialog(null, e2.getMessage(), "error: ",JOptionPane.ERROR_MESSAGE);
+						setVisible(false);
+						dispose();
+						
+					}
+				
+				
+				table.setModel(modelo);
+		
 }
+	
+	private void cambiarVisibilidadKG() {
+		if(this.mostrarKG == 0) {
+			lbKg.setVisible(false);
+		}
+		else {
+			lbKg.setVisible(true);
+		}
+	}
+	
+	private void cambiarVisibilidad(JRadioButton button) {
+		JTextField [] listaTextos = {textField_Vidrio, textField_Plastico,textField_Metal, textField_Carton};
+		String [] nombresTextos = {"Vidrio","Plastico","Metal", "Carton"};
+		boolean validacion = true;int i = 0;
+		
+		while(i < listaTextos.length && validacion) {
+			if(button.getText().equals(nombresTextos[i])) {
+				if(button.isSelected()) {
+					listaTextos[i].setVisible(true);
+					this.mostrarKG++;
+				}
+				else {
+					listaTextos[i].setVisible(false);
+					this.mostrarKG--;
+					
+				}
+			cambiarVisibilidadKG();
+			validacion = false;
+				
+			}
+		i++;
+		}
+		
+		
+	}
+	private void habilitarBotones(boolean b) {
+		//
+	}
 }

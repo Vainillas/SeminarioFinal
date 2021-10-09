@@ -47,6 +47,7 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 	}
+	
 	public VentanaPrincipal(IApi api) {
 		
 		setTitle("Ventana Principal");
@@ -147,17 +148,10 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemPedidoDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.pedido.de.retiro"));
 		menuItemPedidoDeRetiro.addActionListener((e)->{
-			PedidoDeRetiro p  = new PedidoDeRetiro(api);
+			PedidoDeRetiro p  = new PedidoDeRetiro(api,"jordan");//para probar
 			p.setVisible(true);
 			p.setLocationRelativeTo(null);
 			});
-				/*new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				PedidoDeRetiro p = new PedidoDeRetiro(api);
-				p.setVisible(true);
-				p.setLocationRelativoTo(null);
-			}
-		});*/
 		
 		menuPedidos.add(menuItemPedidoDeRetiro);
 		

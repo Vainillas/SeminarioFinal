@@ -289,6 +289,12 @@ public class PersistenceApi implements IApi {
 		
 	}
 
+	@Override
+	public List<DireccionDTO> obtenerDirecciones(String username) throws AppException {
+		// TODO Esbozo de método generado automáticamente
+		return null;
+	}
+
 
 
 
