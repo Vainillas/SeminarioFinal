@@ -148,7 +148,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemPedidoDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.pedido.de.retiro"));
 		menuItemPedidoDeRetiro.addActionListener((e)->{
-			PedidoDeRetiro p  = new PedidoDeRetiro(api,"jordan");//para probar
+			PedidoDeRetiro p  = new PedidoDeRetiro(api);
 			p.setVisible(true);
 			p.setLocationRelativeTo(null);
 			});

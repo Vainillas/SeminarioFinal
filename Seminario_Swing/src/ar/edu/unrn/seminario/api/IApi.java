@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
@@ -76,7 +78,13 @@ public interface IApi {
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
 	boolean existeDueño(String dni) throws AppException;
 
-	List<DireccionDTO> obtenerDirecciones(String username) throws AppException;
+	List<DireccionDTO> obtenerDirecciones() throws AppException;
+
+	void usuarioActivo(String text) throws AppException;
+
+	List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException;
+
+	List<RecolectorDTO> obtenerRecolectores();
 		
 
 

@@ -85,7 +85,7 @@ public class PedidoDeRetiro extends JFrame {
 
 
 
-	public PedidoDeRetiro(IApi api, String username) {
+	public PedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		
@@ -323,7 +323,7 @@ public class PedidoDeRetiro extends JFrame {
 		
 		
 					try {
-						direcciones = api.obtenerDirecciones(username);
+						direcciones = api.obtenerDirecciones();
 						// Agrega las direcciones de el dueño en el model
 						for (DireccionDTO d : direcciones) {
 							modelo.addRow(new Object[] { d.getBarrio(), d.getCalle(), d.getAltura(),

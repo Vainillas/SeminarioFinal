@@ -181,5 +181,11 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 		
 		return usuarios;
 	}
+	@Override
+	public void activate(String username) throws AppException {
+		// TODO Esbozo de método generado automáticamente
+		
+	}
+
 
 }
