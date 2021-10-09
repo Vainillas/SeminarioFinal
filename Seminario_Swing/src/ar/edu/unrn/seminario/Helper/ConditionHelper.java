@@ -34,10 +34,9 @@ public  class ConditionHelper {
 		return obj == null ;
 	}
 	public static boolean IsIncorrectEmail(String email) {
-		if(email.contains("@") && (email.endsWith(".com") | email.endsWith(".ar")))
-			return false;
-		else
-			return true;
+		return !(email.contains("@") &&  email.charAt(0) !='@' && !email.contains("@." )&&
+		(email.endsWith(".com") |email.endsWith(".ar")));
+			
 	}
 	
 	public static boolean IsNotNumber(String number) {

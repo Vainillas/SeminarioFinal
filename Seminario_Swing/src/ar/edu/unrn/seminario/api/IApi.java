@@ -34,7 +34,7 @@ public interface IApi {
 	UsuarioDTO obtenerUsuario(String username);
 
 	void eliminarUsuario(String username);
-	void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException,StringNullException,IncorrectEmailException;
+	void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono) throws DataEmptyException,StringNullException,IncorrectEmailException;
 	void registrarUsuario(String usuario, String password, String email, Integer rol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException;
 	List<RolDTO> obtenerRoles() throws AppException;
 
@@ -85,6 +85,7 @@ public interface IApi {
 	List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException;
 
 	List<RecolectorDTO> obtenerRecolectores();
+
 		
 
 

@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Date;
@@ -37,6 +38,7 @@ import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.Residuo;
 import ar.edu.unrn.seminario.modelo.Residuo_Carton;
 import ar.edu.unrn.seminario.modelo.Residuo_Metal;
@@ -264,10 +266,10 @@ public class PersistenceApi implements IApi {
 		// TODO Esbozo de método generado automáticamente
 
 	@Override
-	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico)
+	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
-		
-
+		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
+	
 		
 		
 	}
@@ -306,6 +308,7 @@ public class PersistenceApi implements IApi {
 		// TODO Esbozo de método generado automáticamente
 		return null;
 	}
+
 
 
 

@@ -171,6 +171,16 @@ public class VentanaPrincipal extends JFrame {
 		});*/
 		menuPedidos.add(menuItemOrdenDeRetiro);
 		
+		JMenu Personal = new JMenu(labels.getString("ventana.principal.menu.personal")); 
+		menuBar.add(Personal);
+		
+		JMenuItem miRegistrarPersonal = new JMenuItem(labels.getString("ventana.principal.menu.item.registrar.personal")); 
+		miRegistrarPersonal.addActionListener((e)->{
+			
+			
+		});
+		Personal.add(miRegistrarPersonal);
+		
 	}
 
 }
