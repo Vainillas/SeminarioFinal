@@ -279,7 +279,9 @@ public class PedidoDeRetiro extends JFrame {
 					dispose();
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
-					System.out.println("crear la exception");
+					JOptionPane.showMessageDialog(null,"Error: " + e1.getMessage(), "Error", 2);
+					dispose();
+					System.out.println("crear la exception" + e1.getMessage());
 				}
 		});
 
