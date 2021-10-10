@@ -13,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import javax.swing.JTable;
 import javax.swing.JLabel;
@@ -30,9 +31,7 @@ public class OrdenDeRetiro extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 851, 346);
 		contentPane = new JPanel();
-//		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.setLayout(null);
-		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		setContentPane(contentPane);
@@ -53,8 +52,6 @@ public class OrdenDeRetiro extends JFrame {
 				labels.getString("generar.orden.retiro.titulos.vivienda.LATITUD"),
 				labels.getString("generar.orden.retiro.titulos.vivienda.LONGITUD")
 		};
-				
-		
 		List<ViviendaDTO> viviendas;
 		try {
 			viviendas = api.obtenerViviendas();
@@ -62,13 +59,10 @@ public class OrdenDeRetiro extends JFrame {
 				modeloVivienda.addRow(new Object[] { v.getDireccion().getBarrio(),v.getDireccion().getCalle(),v.getDireccion().getAltura(),v.getDireccion().getLatitud(), v.getDireccion().getLongitud()});
 			}
 		} catch (Exception e) {
-			JOptionPane.showInputDialog(null,e.getMessage(),"error",2);
+			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
 		modeloVivienda = new DefaultTableModel(new Object[][] {}, titulosVivienda);
-		
-		// Agrega los usuarios en el model
-		
-		
+			
 		tableVivienda.setModel(modeloVivienda);
 		
 		scrollPaneVivienda.setViewportView(tableVivienda);
@@ -88,10 +82,10 @@ public class OrdenDeRetiro extends JFrame {
 		JTable tableRecolector = new JTable();
 		String[] titulosRecolector = {"NOMBRE","APELLIDO","TELEFONO","DNI","EMAIL"};
 		modeloRecolector = new DefaultTableModel(new Object[][] {}, titulosRecolector);
-		//List<RecolectorDTO> recolector= api.obtenerRecolectores();//podria ser
-		/*for(RecolectorDTO r : recolector) {
-			modeloVivienda.addRow(new Object[] {r.getNombre, r.getApellido, r.getNumeroTelefono, r.getDni, r.getCorreoElectronico});
-		}*/
+		List<RecolectorDTO> recolector= api.obtenerRecolectores();
+		for(RecolectorDTO r : recolector) {
+			modeloVivienda.addRow(new Object[] {r.getNombre(), r.getApellido(), r.getTelefono(), r.getDni(), r.getEmail()});
+		}
 		tableRecolector.setModel(modeloRecolector);
 		
 		scrollPaneRecolector.setViewportView(tableRecolector);

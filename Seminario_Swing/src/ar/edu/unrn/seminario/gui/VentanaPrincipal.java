@@ -47,7 +47,9 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});
 	}
+	
 	public VentanaPrincipal(IApi api) {
+		
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
@@ -150,13 +152,6 @@ public class VentanaPrincipal extends JFrame {
 			p.setVisible(true);
 			p.setLocationRelativeTo(null);
 			});
-				/*new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				PedidoDeRetiro p = new PedidoDeRetiro(api);
-				p.setVisible(true);
-				p.setLocationRelativoTo(null);
-			}
-		});*/
 		
 		menuPedidos.add(menuItemPedidoDeRetiro);
 		
@@ -175,6 +170,16 @@ public class VentanaPrincipal extends JFrame {
 			}
 		});*/
 		menuPedidos.add(menuItemOrdenDeRetiro);
+		
+		JMenu Personal = new JMenu(labels.getString("ventana.principal.menu.personal")); 
+		menuBar.add(Personal);
+		
+		JMenuItem miRegistrarPersonal = new JMenuItem(labels.getString("ventana.principal.menu.item.registrar.personal")); 
+		miRegistrarPersonal.addActionListener((e)->{
+			
+			
+		});
+		Personal.add(miRegistrarPersonal);
 		
 	}
 

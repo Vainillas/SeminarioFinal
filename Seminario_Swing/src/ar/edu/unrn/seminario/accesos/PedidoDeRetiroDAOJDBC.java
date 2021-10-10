@@ -69,7 +69,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 		}
 
 		public PedidoDeRetiro find(int codigo) {
-	        /*PedidoDeRetiro pedido = null;
+	        PedidoDeRetiro pedido = null;
 	        Vivienda vivienda = null;
 	        try {
 	            Connection conn = ConnectionManager.getConnection();
@@ -96,8 +96,12 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            listaResiduos.add(metal);
 	            listaResiduos.add(carton);
 	            listaResiduos.add(plastico);
+	            Boolean maq = false;
+	            if(resultSetPedido.getInt("carga") == 1) {
+	            	maq = true;
+	            }
 	            pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
-	                    resultSetPedido.getInt("carga"),
+	                    maq,
 	                    listaResiduos,
 	                    resultSetPedido.getDate("fecha"),
 	                    vivienda);
@@ -112,9 +116,10 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            ConnectionManager.disconnect();
 	        }
 	        return pedido;
-	    }*/
-			return null;
-	}
+	        //return null;
+	    }
+			
+	
 
 		public List<PedidoDeRetiro> findAll() throws AppException{
 			return null;
@@ -124,11 +129,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			return false;
 		}
 
-		@Override
-		public PedidoDeRetiro find(String id) {
-			// TODO Esbozo de método generado automáticamente
-			return null;
-		}
+		
 	
 }
 

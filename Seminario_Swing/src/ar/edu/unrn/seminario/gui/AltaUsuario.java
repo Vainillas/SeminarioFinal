@@ -45,8 +45,8 @@ public class AltaUsuario extends JFrame {
 		} catch (AppException e3) {
 			JOptionPane.showMessageDialog(null,e3.getMessage(),"error",2);
 		}
-
-		setTitle("Alta Usuario");
+		labels = ResourceBundle.getBundle("labels");
+		setTitle(labels.getString("alta.usuario.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 
@@ -54,7 +54,7 @@ public class AltaUsuario extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		labels = ResourceBundle.getBundle("labels");
+		
 		//JLabel usuarioLabel = new JLabel(labels.getString("alta.usuario.label.nombre.usuario"));
 		JLabel usuarioLabel = new JLabel("Usuario");
 		usuarioLabel.setBounds(43, 16, 76, 16);
@@ -85,18 +85,13 @@ public class AltaUsuario extends JFrame {
 		emailTextField.setBounds(148, 93, 160, 22);
 		contentPane.add(emailTextField);
 		emailTextField.setColumns(10);
-		
-		
-		
-		
-		
+
 		JButton aceptarButton = new JButton(labels.getString("alta.usuario.button.aceptar") );
 		aceptarButton.addActionListener((e)->{//utilizando metodos lambda
 			RolDTO rol = roles.get(rolComboBox.getSelectedIndex());
 				
 					try {
-						
-						
+	
 						api.registrarUsuario(usuarioTextField.getText(), contrasenaTextField.getText(),emailTextField.getText(),rol.getCodigo());
 						JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);

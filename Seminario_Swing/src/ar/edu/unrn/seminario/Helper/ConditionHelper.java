@@ -1,4 +1,7 @@
 package ar.edu.unrn.seminario.Helper;
+
+import java.sql.Date;
+
 //Hello there
 public  class ConditionHelper {
 	public static boolean stringIsEmpty(String s) {
@@ -12,7 +15,9 @@ public  class ConditionHelper {
 	public static boolean stringIsNull(String s){
 		return  s == null;
 	}
-	
+	public static boolean IsDateNull(Date d) {
+		return d.equals(null);
+	}
 	public static boolean IsActive(boolean state) {
 		return state;
 	}
@@ -29,10 +34,9 @@ public  class ConditionHelper {
 		return obj == null ;
 	}
 	public static boolean IsIncorrectEmail(String email) {
-		if(email.contains("@") && (email.endsWith(".com") | email.endsWith(".ar")))
-			return false;
-		else
-			return true;
+		return !(email.contains("@") &&  email.charAt(0) !='@' && !email.contains("@." )&&
+		(email.endsWith(".com") |email.endsWith(".ar")));
+			
 	}
 	
 	public static boolean IsNotNumber(String number) {

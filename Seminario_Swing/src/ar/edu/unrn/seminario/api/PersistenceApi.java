@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Date;
@@ -22,6 +23,7 @@ import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -36,6 +38,7 @@ import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.Residuo;
 import ar.edu.unrn.seminario.modelo.Residuo_Carton;
 import ar.edu.unrn.seminario.modelo.Residuo_Metal;
@@ -55,7 +58,6 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
-
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
 		usuarioDao = new UsuarioDAOJDBC();
@@ -230,23 +232,24 @@ public class PersistenceApi implements IApi {
     }
 
     @Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion) throws Exception {
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws Exception {
+    	
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	int i=0;
     	for(String s: residuosSeleccionados){
-    		if(s == "Vidrio"){
+    		if(s.compareTo("Vidrio") == 0){
     			Residuo_Vidrio newVidrio = new Residuo_Vidrio(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newVidrio);
     		}
-    		if(s == "Plastico"){
+    		if(s.compareTo("Plastico") == 0){
     			Residuo_Plastico newPlastico = new Residuo_Plastico(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newPlastico);
     		}
-    		if(s == "Metal"){
+    		if(s.compareTo("Metal") == 0){
     			Residuo_Metal newMetal = new Residuo_Metal(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newMetal);
     		}
-    		if(s == "Carton"){
+    		if(s.compareTo("Carton") == 0){
     			Residuo_Carton newCarton = new Residuo_Carton(Integer.parseInt(residuosSeleccionadosKg.get(i)));
     			listResiduos.add(newCarton);
     		}
@@ -254,7 +257,7 @@ public class PersistenceApi implements IApi {
     	}
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
-    	Vivienda unaVivienda = viviendaDao.find(24);
+    	Vivienda unaVivienda = viviendaDao.find(Integer.parseInt(codViv));
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
     	try {
 			this.pedidoDeRetiroDao.create(nuevoPedido);
@@ -266,10 +269,10 @@ public class PersistenceApi implements IApi {
 		// TODO Esbozo de método generado automáticamente
 
 	@Override
-	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico)
+	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
-		
-
+		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
+	
 		
 		
 	}
@@ -285,11 +288,30 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-	@Override
+
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
 		
 	}
+
+	public List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException {
+		
+		// TODO Esbozo de método generado automáticamente
+		return null;
+	}
+
+	@Override
+	public void usuarioActivo(String username) throws AppException {
+		usuarioDao.activate(username);
+		
+	}
+
+	@Override
+	public List<RecolectorDTO> obtenerRecolectores() {
+		// TODO Esbozo de método generado automáticamente
+		return null;
+	}
+
 
 
 

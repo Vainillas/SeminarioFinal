@@ -1,6 +1,15 @@
 package ar.edu.unrn.seminario.modelo;
 
 import java.util.ArrayList;
+
+
+import ar.edu.unrn.seminario.Helper.ConditionHelper;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
+
+
 import java.sql.Date;
 
 public class PedidoDeRetiro {
@@ -10,19 +19,34 @@ public class PedidoDeRetiro {
 	private ArrayList<Residuo> listResiduos;
 	private Vivienda vivienda;
 	private  Date fechaDelPedido;
+	private Estado estado;
 	
-	
-	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda){
+	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+	throws DataEmptyException,NotNullException, StringNullException, DateNullException{
+		validarDatos(unaObservacion,unaListaDeResiduos,unaFecha,unaVivienda);
 		this.observacion = unaObservacion;
 		this.maquinaPesada = requiereMaquinaPesada;
 		this.listResiduos = unaListaDeResiduos;
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
 	}
-	
+	public void validarDatos(String unaObservacion, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
+		if(ConditionHelper.IsNull(unaListaDeResiduos)) {throw new NotNullException("la lista de residuos esta vacia");}
+		if(ConditionHelper.stringIsEmpty(unaObservacion)) {throw new StringNullException("observacion nula");}
+		if(ConditionHelper.IsDateNull(unaFecha)) {throw new DateNullException("fecha nula");}
+		if(ConditionHelper.stringIsNull(unaObservacion)){throw new DataEmptyException("observacion vacia");}
+		if(ConditionHelper.IsNull(unaVivienda)) {throw new NotNullException("vivienda nula");}
+		
+	}
+	public String obtenerEstado() {
+		return this.estado.obtenerEstado();
+	}
+
 	public PedidoDeRetiro(Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos,  Date unaFecha, Vivienda unaVivienda){
 		this.observacion = null;
 		this.maquinaPesada = requiereMaquinaPesada;
+		System.out.println("Tamaño list residuos parametor: " + unaListaDeResiduos.size());
 		this.listResiduos = unaListaDeResiduos;
 		this.fechaDelPedido = unaFecha;
 		this.vivienda = unaVivienda;
@@ -71,22 +95,42 @@ public class PedidoDeRetiro {
 	}
 
 	public int getPlastico() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cantidad = 0;
+		for(Residuo residuo: listResiduos){
+			if(residuo instanceof Residuo_Plastico) {
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 
 	public int getVidrio() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cantidad = 0;
+		for(Residuo residuo: listResiduos){
+			if(residuo instanceof Residuo_Vidrio) {
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 
 	public int getMetal() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cantidad=0;
+		for(Residuo residuo: listResiduos){
+			if(residuo instanceof Residuo_Metal) {
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 
 	public int getCarton() {
-		// TODO Auto-generated method stub
-		return 0;
+		int cantidad=0;
+		for(Residuo residuo: listResiduos){
+			if(residuo instanceof Residuo_Carton) {
+				cantidad = residuo.getCantidad();
+			}
+		}
+		return cantidad;
 	}
 }

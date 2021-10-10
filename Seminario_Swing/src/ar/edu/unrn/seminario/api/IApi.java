@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
@@ -32,7 +34,7 @@ public interface IApi {
 	UsuarioDTO obtenerUsuario(String username);
 
 	void eliminarUsuario(String username);
-	void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException,StringNullException,IncorrectEmailException;
+	void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono) throws DataEmptyException,StringNullException,IncorrectEmailException;
 	void registrarUsuario(String usuario, String password, String email, Integer rol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException;
 	List<RolDTO> obtenerRoles() throws AppException;
 
@@ -65,10 +67,17 @@ public interface IApi {
 
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
-	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion) throws Exception;
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws Exception;
 
 
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
 	boolean existeDueño(String dni) throws AppException;
+	List<DireccionDTO> obtenerDirecciones() throws AppException;
+
+	void usuarioActivo(String text) throws AppException;
+
+	List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException;
+
+	List<RecolectorDTO> obtenerRecolectores();
 }

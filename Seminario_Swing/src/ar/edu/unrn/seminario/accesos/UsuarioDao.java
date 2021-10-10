@@ -25,4 +25,6 @@ public interface UsuarioDao {
 
 	boolean validateData(UsuarioIngreso user) throws NotRegisterException, AppException,NotCorrectPasswordException;
 
+	void activate(String username) throws AppException;
+
 }
