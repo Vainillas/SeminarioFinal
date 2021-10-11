@@ -34,7 +34,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			statement.setBoolean(4, usuario.isActivo());
 			statement.setInt(5, usuario.getRol().getCodigo());
 			
-			statement.executeUpdate();// faltaba esta linea
+			statement.executeUpdate();// faltaba esta linea que es la que ejecuta las declaraciones
 			
 		} catch (SQLException e  ) {
 			throw new AppException("error al procesar consulta");
