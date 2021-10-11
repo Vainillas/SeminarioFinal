@@ -28,7 +28,7 @@ public class ListadoVivienda extends JFrame {
 	private JButton botonOrdenar;
 
 
-	public ListadoVivienda(IApi api) throws Exception {
+	public ListadoVivienda(IApi api){
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -56,7 +56,6 @@ public class ListadoVivienda extends JFrame {
 		} catch (AppException e1)  {
 			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
 			dispose();
-			throw e1;
 			
 		} catch (Exception e1){
 			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
