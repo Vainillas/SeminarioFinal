@@ -135,7 +135,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				
 			}
 		} catch (Exception  e) {
-			throw new AppException("error al procesar la consulta");
+			throw new AppException("Error al procesar la consulta: " + e.getMessage());
 			
 		}finally {
 		ConnectionManager.disconnect();
