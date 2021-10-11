@@ -21,6 +21,7 @@ public class Usuario {
 		this.contrasena = contrasena;
 		this.email = email;
 		this.rol = rol;
+		this.activo=false;
 	}
 	public void validarDatos(String usuario, String contrasena, String email, Rol rol) throws DataEmptyException, StringNullException, NotNullException, IncorrectEmailException {
 
