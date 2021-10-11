@@ -117,13 +117,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoViviendas.addActionListener((e)->{
-			ListadoVivienda v = null;
-			try {
-				v = new ListadoVivienda(api);
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			ListadoVivienda v =  new ListadoVivienda(api);
 			v.setVisible(true);
 			v.setLocationRelativeTo(null);
 		});
