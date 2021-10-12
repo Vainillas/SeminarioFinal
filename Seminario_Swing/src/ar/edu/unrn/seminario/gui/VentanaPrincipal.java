@@ -175,8 +175,10 @@ public class VentanaPrincipal extends JFrame {
 		menuBar.add(Personal);
 		
 		JMenuItem miRegistrarPersonal = new JMenuItem(labels.getString("ventana.principal.menu.item.registrar.personal")); 
+		
 		miRegistrarPersonal.addActionListener((e)->{
-			
+			RegistrarPersonal personal = new RegistrarPersonal(api);
+			personal.setVisible(true);
 			
 		});
 		Personal.add(miRegistrarPersonal);

@@ -272,6 +272,7 @@ public class PersistenceApi implements IApi {
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
+		
 	
 		
 		
