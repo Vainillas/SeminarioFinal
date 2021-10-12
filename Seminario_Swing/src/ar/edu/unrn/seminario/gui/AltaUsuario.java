@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
@@ -45,7 +46,8 @@ public class AltaUsuario extends JFrame {
 		} catch (AppException e3) {
 			JOptionPane.showMessageDialog(null,e3.getMessage(),"error",2);
 		}
-		labels = ResourceBundle.getBundle("labels");
+		//labels = ResourceBundle.getBundle("labels");
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		setTitle(labels.getString("alta.usuario.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

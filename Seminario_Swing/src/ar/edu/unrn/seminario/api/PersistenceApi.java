@@ -48,7 +48,7 @@ import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Vivienda;
-import jdk.internal.misc.FileSystemOption;
+//import jdk.internal.misc.FileSystemOption;
 
 public class PersistenceApi implements IApi {
 
@@ -58,6 +58,8 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
+	
+	
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
 		usuarioDao = new UsuarioDAOJDBC();
@@ -166,6 +168,7 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
+	
 	public List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
