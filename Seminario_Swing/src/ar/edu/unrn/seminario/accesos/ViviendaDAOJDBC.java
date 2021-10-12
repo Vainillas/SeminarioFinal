@@ -96,6 +96,50 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		}
 		return vivienda;
 	}
+	
+	@Override
+	public Vivienda find(String calle, String altura) throws Exception {
+		Vivienda vivienda=null;
+		Direccion direccion = null;
+		Dueño dueño = null;
+		try {
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.calle = ?");
+			statement.setString(1,calle);
+			ResultSet resultSetViviendas = statement.executeQuery();
+			if(resultSetViviendas.next()) {
+				PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
+				statement2.setString(1, resultSetViviendas.getString("dni"));
+				ResultSet resultSetConstructor = statement2.executeQuery();
+				if(resultSetConstructor.next()) {
+					dueño = new Dueño(resultSetConstructor.getString("nombre"),
+							resultSetConstructor.getString("apellido"),
+							resultSetConstructor.getString("dni"),
+							resultSetConstructor.getString("correo_electronico"));
+				}
+				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
+				statement2.setString(1,resultSetViviendas.getString("calle"));
+				statement2.setInt(2, resultSetViviendas.getInt("altura"));
+				resultSetConstructor=statement2.executeQuery();
+				if(resultSetConstructor.next()) {
+					direccion = new Direccion(resultSetConstructor.getString("calle"), 
+							Integer.toString(resultSetConstructor.getInt("altura")), 
+							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
+							resultSetConstructor.getString("longitud"),
+							resultSetConstructor.getString("latitud"),
+							resultSetConstructor.getString("barrio"));
+				}
+				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
+			}
+		} catch (SQLException e) {
+
+			throw new Exception("Error al registrar una vivienda: "+e.getMessage());
+		 
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return vivienda;
+	}
 
 	@Override
 	public List<Vivienda> findAll() throws Exception {

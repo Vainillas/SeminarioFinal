@@ -19,6 +19,9 @@ public interface ViviendaDao {
 
 	Vivienda find(Integer codigo) throws Exception;
 
+	Vivienda find(String calle, String altura) throws Exception;
+
+	
 	List<Vivienda> findAll() throws Exception;
 
 }

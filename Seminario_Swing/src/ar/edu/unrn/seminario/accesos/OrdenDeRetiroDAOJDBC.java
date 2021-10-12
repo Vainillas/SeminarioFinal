@@ -27,12 +27,12 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            PreparedStatement statement = conn.prepareStatement
 	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, calle, altura, estado, codigoOrden) "
 	                            + "VALUES (?, ?, ?, ?, ?, ?)");
-	            /*statement.setString(1, o.getCodigoPedido());
-	            statement.setInt(2, Integer.parseInt(o.getRecolector().getDni();
-	            statement.setString(3, o.getVivienda().getCalle());
-	            statement.setString(4, o.getVivienda().getAltura());
-	            statement.setDate(5, o.getEstado());
-	            statement.setInt(6, o.getCodigoOrden());*/
+	            //statement.setInt(1, o.getPedidoAsociado().getCodigo());
+	            statement.setString(2, o.getRecolector().getDni());
+	            statement.setString(3, o.getVivienda().getDireccion().getCalle());
+	            statement.setString(4, o.getVivienda().getDireccion().getAltura());
+	            statement.setString(5, o.getEstado().obtenerEstado());
+	            //statement.setInt(6, o.getCodigoOrden());
 	            
 	            int cantidad = statement.executeUpdate();
 	            if (cantidad > 0) {
@@ -86,20 +86,19 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            if(resultSetOrden.getInt("carga") == 1) {
 	            	estado = true;
 	            }
+	            
 	            PedidoDeRetiroDao pedidoDao = new PedidoDeRetiroDAOJDBC();
 	            PedidoDeRetiro pedido = pedidoDao.find(resultSetOrden.getInt("codigoPedido"));
 	            
-	            ViviendaDao viviendaDao = new ViviendaDAOJDBC();
-	            //vivienda = viviendaDao.find(resultSetOrden.getString("calle"), resultSetOrden.getString("altura"));
 	            
-	            //RecolectorDao recolectorDao = new RecolectorDAOJDBC();
-	            //Recolector recolector = recolectorDao.find(resultSetOrden.getString("dniRecolector"));
+	            RecolectorDao recolectorDao = new RecolectorDAOJDBC();
+	            Recolector recolector = recolectorDao.find(resultSetOrden.getString("dniRecolector"));
 	            
-	            //if(recolector != null) {
-	            	//orden = new OrdenDeRetiro(pedido, recolector);
-	            //}else {
+	            if(recolector != null) {
+	            	orden = new OrdenDeRetiro(pedido, recolector);
+	            }else {
 	            	orden = new OrdenDeRetiro(pedido);
-	            //}
+	            }
 	            //orden = new OrdenDeRetiro(null);
 	        } catch (SQLException e) {
 	            System.out.println("Error al procesar consulta");
