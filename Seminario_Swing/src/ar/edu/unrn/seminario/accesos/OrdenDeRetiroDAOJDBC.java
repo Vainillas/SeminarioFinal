@@ -10,6 +10,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.Residuo;
 import ar.edu.unrn.seminario.modelo.Residuo_Carton;
 import ar.edu.unrn.seminario.modelo.Residuo_Metal;
@@ -17,7 +18,7 @@ import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
 import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
-public class OrdenDeRetiroJDBC implements OrdenDeRetiroDao{
+public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 
 
 		public void create(OrdenDeRetiro o) throws Exception{
@@ -85,11 +86,21 @@ public class OrdenDeRetiroJDBC implements OrdenDeRetiroDao{
 	            if(resultSetOrden.getInt("carga") == 1) {
 	            	estado = true;
 	            }
-	            orden = new OrdenDeRetiro(resultSetOrden.getInt("codigoPedido"),
-	            		resultSetOrden.getString("dniRecolector"),
-	            		resultSetOrden.getString("calle"),
-	            		resultSetOrden.getInt("estado"),
-	                    resultSetOrden.getInt("codigoOrden"));
+	            PedidoDeRetiroDao pedidoDao = new PedidoDeRetiroDAOJDBC();
+	            PedidoDeRetiro pedido = pedidoDao.find(resultSetOrden.getInt("codigoPedido"));
+	            
+	            ViviendaDao viviendaDao = new ViviendaDAOJDBC();
+	            //vivienda = viviendaDao.find(resultSetOrden.getString("calle"), resultSetOrden.getString("altura"));
+	            
+	            //RecolectorDao recolectorDao = new RecolectorDAOJDBC();
+	            //Recolector recolector = recolectorDao.find(resultSetOrden.getString("dniRecolector"));
+	            
+	            //if(recolector != null) {
+	            	//orden = new OrdenDeRetiro(pedido, recolector);
+	            //}else {
+	            	orden = new OrdenDeRetiro(pedido);
+	            //}
+	            //orden = new OrdenDeRetiro(null);
 	        } catch (SQLException e) {
 	            System.out.println("Error al procesar consulta");
 	            // TODO: disparar Exception propia
@@ -112,6 +123,4 @@ public class OrdenDeRetiroJDBC implements OrdenDeRetiroDao{
 			return false;
 		}
 	
-
-
 }

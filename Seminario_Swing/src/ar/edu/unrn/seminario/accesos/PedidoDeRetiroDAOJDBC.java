@@ -40,6 +40,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            statement.setInt(8, p.getMetal());
 	            statement.setInt(9, p.getCarton());
 	            int cantidad = statement.executeUpdate();
+	            
 	            if (cantidad > 0) {
 	                System.out.println("Insertando " + cantidad + " registros");
 	            } else {

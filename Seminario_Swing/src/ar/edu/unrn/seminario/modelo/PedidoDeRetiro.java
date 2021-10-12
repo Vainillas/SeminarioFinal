@@ -46,7 +46,7 @@ public class PedidoDeRetiro {
 	public PedidoDeRetiro(Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos,  Date unaFecha, Vivienda unaVivienda){
 		this.observacion = null;
 		this.maquinaPesada = requiereMaquinaPesada;
-		System.out.println("Tamaño list residuos parametor: " + unaListaDeResiduos.size());
+		System.out.println("Tamaño list residuos parametro: " + unaListaDeResiduos.size());
 		this.listResiduos = unaListaDeResiduos;
 		this.fechaDelPedido = unaFecha;
 		this.vivienda = unaVivienda;

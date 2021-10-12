@@ -32,7 +32,7 @@ public class AltaUsuario extends JFrame {
 	private JTextField contrasenaTextField;
 	private JTextField emailTextField;
 	private JComboBox rolComboBox;
-	private ResourceBundle labels ;
+	private ResourceBundle labels;
 	private List<RolDTO> roles = new ArrayList<>();
 
 	/**
@@ -100,6 +100,8 @@ public class AltaUsuario extends JFrame {
 						dispose();
 					} catch ( NotNullException | IncorrectEmailException | DataEmptyException | StringNullException | AppException  e1) {
 						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
+					}finally {
+						
 					}
 					
 					

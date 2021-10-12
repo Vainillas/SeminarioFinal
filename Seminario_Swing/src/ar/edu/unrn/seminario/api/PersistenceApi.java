@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Date;
@@ -48,7 +49,7 @@ import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Vivienda;
-//import jdk.internal.misc.FileSystemOption;
+
 
 public class PersistenceApi implements IApi {
 
@@ -275,6 +276,7 @@ public class PersistenceApi implements IApi {
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
+		
 	
 		
 		

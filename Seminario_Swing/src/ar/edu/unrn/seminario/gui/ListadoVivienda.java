@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
 public class ListadoVivienda extends JFrame {
 	IApi api;
 	private JTable table;
@@ -27,7 +28,7 @@ public class ListadoVivienda extends JFrame {
 	private JButton botonOrdenar;
 
 
-	public ListadoVivienda(IApi api) {
+	public ListadoVivienda(IApi api){
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -52,9 +53,12 @@ public class ListadoVivienda extends JFrame {
 			for (ViviendaDTO v : viviendas) {
 				modelo.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
 			}
-		} catch (Exception e1) {
+		} catch (AppException e1)  {
 			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
+			dispose();
 			
+		} catch (Exception e1){
+			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
 			setVisible(false);
 			dispose();
 		}

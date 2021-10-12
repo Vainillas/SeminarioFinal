@@ -24,7 +24,6 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 	@Override
 	public void create(Usuario usuario) throws AppException {
 		try {
-
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
 					.prepareStatement("INSERT INTO usuarios(usuario, password, email, activo,rol) "
@@ -35,13 +34,15 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			statement.setBoolean(4, usuario.isActivo());
 			statement.setInt(5, usuario.getRol().getCodigo());
 			
-	
+			statement.executeUpdate();// faltaba esta linea que es la que ejecuta las declaraciones
+			
 		} catch (SQLException e  ) {
 			throw new AppException("error al procesar consulta");
 		}  finally {
 			ConnectionManager.disconnect();
 		}
 	}
+	
 	public boolean exists(String username) throws NotRegisterException,AppException {//Exists
 
 		boolean exists = false;
@@ -77,13 +78,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			try {
 				Connection conn = ConnectionManager.getConnection();
 				PreparedStatement statement = conn.prepareStatement("SELECT u.usuario, u.password " + " FROM usuarios as u" + " WHERE u.usuario = ?");
-				statement.setString(1,user.getUser());
-				/*problema: la linea de arriba nose porque pero creo que genera algo y ese algo
-				 *  no me deja tirar la excepcion NotRegisterException que esta abajo.
-				 no comprendo el porque */
-				
-				//lo pude resolver con el if(exists) de arriba
-				
+				statement.setString(1,user.getUser());				
 				ResultSet rs = statement.executeQuery();
 				if (rs.next()) {
 						if(rs.getString("password").equals(user.getPassword())) {
@@ -172,7 +167,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 				usuarios.add(usuario);
 			}
 		} catch (SQLException   | NotNullException   | DataEmptyException  | StringNullException | IncorrectEmailException e1) {
-			throw new AppException("error de aplicacion");
+			throw new AppException("error de aplicacion" + e1.getMessage());
 		
 		}finally {
 			ConnectionManager.disconnect();

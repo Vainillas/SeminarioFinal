@@ -352,9 +352,8 @@ public class PedidoDeRetiro extends JFrame {
 	
 	private void cambiarVisibilidad(JRadioButton button) {
 		JTextField [] listaTextos = {textField_Vidrio, textField_Plastico,textField_Metal, textField_Carton};
-		String [] nombresTextos = {"Vidrio","Plastico","Metal", "Carton"};
+		String [] nombresTextos = {"Vidrio","Plástico","Metal", "Cartón"};
 		boolean validacion = true;int i = 0;
-		
 		while(i < listaTextos.length && validacion) {
 			if(button.getText().equals(nombresTextos[i])) {
 				if(button.isSelected()) {
