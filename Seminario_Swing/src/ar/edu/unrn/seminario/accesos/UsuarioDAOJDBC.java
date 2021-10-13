@@ -127,19 +127,20 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
-					"SELECT u.usuario,  u.contrasena, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol "
+					"SELECT u.usuario,  u.password, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol "
 							+ " FROM usuarios u JOIN roles r ON (u.rol = r.codigo) " + " WHERE u.usuario = ?");
 
 			statement.setString(1, username);
 			ResultSet rs = statement.executeQuery();
 			if (rs.next()) {
 				Rol rol = new Rol(rs.getInt("codigo_rol"), rs.getString("nombre_rol"));
-				usuario = new Usuario(rs.getString("usuario"), rs.getString("contrasena"),
+				usuario = new Usuario(rs.getString("usuario"), rs.getString("password"),
 						rs.getString("email"), rol);
 			}
 
 		} catch (SQLException | NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e) {
-			 throw new AppException("error al procesa consulta");
+			
+			throw new AppException("error al procesa consulta9");
 		}finally {
 			ConnectionManager.disconnect();
 		}

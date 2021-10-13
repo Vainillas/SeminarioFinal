@@ -78,6 +78,6 @@ public interface IApi {
 	void usuarioActivo(String text) throws AppException;
 
 	List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException;
-
+	public String obtenerRolUsuarioActivo();
 	List<RecolectorDTO> obtenerRecolectores();
 }

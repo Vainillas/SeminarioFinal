@@ -58,6 +58,7 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
+	private Usuario usuarioActivo;
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
 		usuarioDao = new UsuarioDAOJDBC();
@@ -303,10 +304,14 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void usuarioActivo(String username) throws AppException {
-		usuarioDao.activate(username);
+		usuarioActivo = usuarioDao.find(username);
+		
 		
 	}
-
+	public String obtenerRolUsuarioActivo() {
+		return usuarioActivo.getRol().getNombre();
+	}
+	
 	@Override
 	public List<RecolectorDTO> obtenerRecolectores() {
 		// TODO Esbozo de método generado automáticamente
