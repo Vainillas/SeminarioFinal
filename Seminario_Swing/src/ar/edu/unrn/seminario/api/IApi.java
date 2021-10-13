@@ -23,6 +23,7 @@ import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
@@ -84,4 +85,6 @@ public interface IApi {
 	List<RecolectorDTO> obtenerRecolectores();
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
+
+	Usuario getUserOnline();
 }

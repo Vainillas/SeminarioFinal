@@ -75,7 +75,7 @@ public class DireccionDAOJDBC implements DireccionDao {
 						resultSetDireccion.getString("longitud"),
 						resultSetDireccion.getString("latitud"),
 						Integer.toString(resultSetDireccion.getInt("altura")),
-						Integer.toString(resultSetDireccion.getInt("codigo postal")),
+						Integer.toString(resultSetDireccion.getInt("codigo_postal")),
 						resultSetDireccion.getString("barrio"));
 			}
 		} catch (SQLException e) {
@@ -102,10 +102,11 @@ public class DireccionDAOJDBC implements DireccionDao {
 
 			while (rs.next()) {
 				Direccion direccion = new Direccion(rs.getString("calle"),
+						
+						Integer.toString(rs.getInt("altura")),
+						Integer.toString(rs.getInt("codigo_postal")),
 						rs.getString("longitud"),
 						rs.getString("latitud"),
-						Integer.toString(rs.getInt("altura")),
-						Integer.toString(rs.getInt("codigo postal")),
 						rs.getString("barrio"));
 				direcciones.add(direccion);
 			}

@@ -30,7 +30,7 @@ public class VentanaPrincipal extends JFrame {
 	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 
 	private JPanel contentPane;
-
+	private IApi api;
 	/**
 	 * Launch the application.
 	 */
@@ -39,8 +39,8 @@ public class VentanaPrincipal extends JFrame {
 			public void run() {
 				try {
 					//IApi api = new MemoryApi();
-					IApi api = new PersistenceApi();
-					VentanaPrincipal frame = new VentanaPrincipal(api);
+					IApi api2 = new PersistenceApi();
+					VentanaPrincipal frame = new VentanaPrincipal(api2);
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -51,7 +51,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	public VentanaPrincipal(IApi api) {
-		
+		this.api = api;
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
@@ -119,8 +119,8 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoViviendas.addActionListener((e)->{
-			
-			try {
+			System.out.print(this.api.getUserOnline().toString());
+			/*try {
 				List<PedidoDeRetiroDTO> lista = api.obtenerPedidosDeRetiro();
 				for(PedidoDeRetiroDTO p: lista) {
 					System.out.println(p.getObservacion());
@@ -128,7 +128,7 @@ public class VentanaPrincipal extends JFrame {
 			} catch (Exception e1) {
 				
 				e1.printStackTrace();
-			}
+			}*/
 			/*ListadoVivienda v =  new ListadoVivienda(api);
 			v.setVisible(true);
 			v.setLocationRelativeTo(null);*/

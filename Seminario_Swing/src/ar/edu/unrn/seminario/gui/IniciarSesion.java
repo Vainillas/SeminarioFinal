@@ -113,12 +113,12 @@ public class IniciarSesion extends JFrame {
 				try {
 						
 						//System.out.printf(textUsuario.getText() + String.valueOf(textPassword.getPassword() ));
-						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword())) ;
-						api.usuarioActivo(textUsuario.getText());
+						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword()));
+							//api.usuarioActivo(textUsuario.getText());
+								VentanaPrincipal ventana = new VentanaPrincipal(api);
+								ventana.setVisible(true);
+								dispose();
 						
-							VentanaPrincipal ventana = new VentanaPrincipal(api);
-							ventana.setVisible(true);
-							dispose();
 				}catch (DataEmptyException | IncorrectEmailException | AppException | NotCorrectPasswordException | StringNullException  e1) {
 					
 					JOptionPane.showMessageDialog(null,e1.getMessage() ,"Error" ,0);

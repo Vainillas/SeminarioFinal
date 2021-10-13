@@ -147,17 +147,17 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            	ResultSet resultSetVivienda = statement2.executeQuery();
 	            	System.out.print("ok4");
 	            	if(resultSetVivienda.next()){
-	            		/*System.out.print("ok5");
+	            		System.out.print("ok5");
 	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
 	            		System.out.print(resultSetVivienda.getInt("codigo"));
-	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));*/
-	            		DueñoDao dueñoDao = new DueñoDAOJDBC();
+	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
+	            		/*DueñoDao dueñoDao = new DueñoDAOJDBC();
 						Dueño dueño = dueñoDao.find(resultSetVivienda.getString("dni"));
 						System.out.print(resultSetVivienda.getString("dni"));
 						DireccionDao direccionDao = new DireccionDAOJDBC();
 						Direccion direccion = direccionDao.find(resultSetVivienda.getString("calle"),resultSetVivienda.getInt("altura"));
 	            		vivienda = new Vivienda(direccion, dueño);
-	            		vivienda.setID(resultSetVivienda.getInt("codigo"));
+	            		vivienda.setID(resultSetVivienda.getInt("codigo"));*/
 	            	}
 	            	System.out.print("ok6");
 	            	

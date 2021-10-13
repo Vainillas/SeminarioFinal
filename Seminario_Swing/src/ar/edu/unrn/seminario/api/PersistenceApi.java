@@ -61,7 +61,7 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
-	
+	private Usuario userOnline;
 	
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
@@ -279,9 +279,6 @@ public class PersistenceApi implements IApi {
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
 		
-	
-		
-		
 	}
 
 
@@ -291,10 +288,16 @@ public class PersistenceApi implements IApi {
 	
 	public boolean validarUsuario(String usuario, String password) throws NotRegisterException,AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException {
 		UsuarioIngreso user = new UsuarioIngreso(usuario,password);
+		if(usuarioDao.validateData(user)){
+			this.userOnline = usuarioDao.find(usuario); 
+		}
 		return usuarioDao.validateData(user);
 		
 	}
-
+	
+	public Usuario getUserOnline(){
+		return this.userOnline;
+	}
 
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
@@ -309,7 +312,7 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void usuarioActivo(String username) throws AppException {
-		usuarioDao.activate(username);
+		//usuarioDao.activate(username);
 		
 	}
 
