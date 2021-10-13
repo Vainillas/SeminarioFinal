@@ -64,7 +64,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			}
 		
 		} catch (SQLException e ) {
-			throw new AppException("error al procesar la consulta");
+			throw new AppException("error al procesar la consulta del nombre del usuario");
 		}finally {
 			ConnectionManager.disconnect();
 		}
@@ -74,6 +74,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 	
 	public boolean validateData(UsuarioIngreso user) throws NotRegisterException,AppException,NotCorrectPasswordException {//Exists
 		boolean exists = false;
+		//System.out.println(this.exists(user.getUser()));
 		if(this.exists(user.getUser())) {
 			try {
 				Connection conn = ConnectionManager.getConnection();
@@ -89,7 +90,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 							}
 				}
 			} catch (SQLException e ) {
-				throw new AppException("error al procesar la consulta");
+				throw new AppException("error al procesar la consulta de las contraseña");
 			}finally {
 				ConnectionManager.disconnect();
 			}

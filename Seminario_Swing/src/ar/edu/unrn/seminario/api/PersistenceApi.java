@@ -24,12 +24,14 @@ import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
+import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
@@ -315,6 +317,15 @@ public class PersistenceApi implements IApi {
 	public List<RecolectorDTO> obtenerRecolectores() {
 		// TODO Esbozo de método generado automáticamente
 		return null;
+	}
+	
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
+		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
+        List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
+        for (PedidoDeRetiro d : pedidos) {
+            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
+        }
+        return pedidosDto;
 	}
 
 

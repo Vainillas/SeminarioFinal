@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.modelo.Direccion;
+import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
 import ar.edu.unrn.seminario.modelo.Residuo_Carton;
@@ -15,6 +18,7 @@ import ar.edu.unrn.seminario.modelo.Residuo_Metal;
 import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
 import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+
 
 public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
@@ -84,6 +88,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                statement.setInt(2, resultSetPedido.getInt("altura"));
 	                ResultSet resultSetVivienda = statement.executeQuery();
 	                if(resultSetVivienda.next()) {
+	                	
 	                    ViviendaDao viviendaDao = new ViviendaDAOJDBC();
 	                    vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
 	                }
@@ -117,13 +122,74 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            ConnectionManager.disconnect();
 	        }
 	        return pedido;
-	      
+	    
 	    }
 			
-	
+		public List<PedidoDeRetiro> findAll() throws Exception{
+			
+			List<PedidoDeRetiro> pedidos = new ArrayList<>();
+			PedidoDeRetiro pedido = null;
+	        Vivienda vivienda = null;
+	        try {
+	        	Connection conn = ConnectionManager.getConnection();
+	            PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p ");
+	            ResultSet resultSetPedido = statement.executeQuery();
+	            
+	            while(resultSetPedido.next()) {
 
-		public List<PedidoDeRetiro> findAll() throws AppException{
-			return null;
+
+	            	PreparedStatement statement2 = conn.prepareStatement("SELECT codigo FROM viviendas v WHERE v.calle = ? AND v.altura = ?");
+
+	            	statement2.setString(1, resultSetPedido.getString("calle"));
+
+	            	statement2.setInt(2, resultSetPedido.getInt("altura"));
+
+	            	ResultSet resultSetVivienda = statement2.executeQuery();
+	            	System.out.print("ok4");
+	            	if(resultSetVivienda.next()){
+	            		/*System.out.print("ok5");
+	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
+	            		System.out.print(resultSetVivienda.getInt("codigo"));
+	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));*/
+	            		DueñoDao dueñoDao = new DueñoDAOJDBC();
+						Dueño dueño = dueñoDao.find(resultSetVivienda.getString("dni"));
+						System.out.print(resultSetVivienda.getString("dni"));
+						DireccionDao direccionDao = new DireccionDAOJDBC();
+						Direccion direccion = direccionDao.find(resultSetVivienda.getString("calle"),resultSetVivienda.getInt("altura"));
+	            		vivienda = new Vivienda(direccion, dueño);
+	            		vivienda.setID(resultSetVivienda.getInt("codigo"));
+	            	}
+	            	System.out.print("ok6");
+	            	
+	            	
+	            	ArrayList<Residuo>listaResiduos = new ArrayList<>();
+	            	Residuo vidrio = new Residuo_Vidrio(resultSetPedido.getInt("vidrio"));
+	            	Residuo metal = new Residuo_Metal(resultSetPedido.getInt("metal"));
+	            	Residuo carton = new Residuo_Carton(resultSetPedido.getInt("carton"));
+	            	Residuo plastico = new Residuo_Plastico(resultSetPedido.getInt("plastico"));
+	            	listaResiduos.add(vidrio);
+	            	listaResiduos.add(metal);
+	            	listaResiduos.add(carton);
+	            	listaResiduos.add(plastico);
+	            	Boolean maq = false;
+	            	if(resultSetPedido.getInt("carga") == 1) {
+	            		maq = true;
+	            	}
+	            	pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
+	            			maq,
+	            			listaResiduos,
+	            			resultSetPedido.getDate("fecha"),
+	            			vivienda);
+
+	            	pedidos.add(pedido);
+	            }
+	        } catch (Exception e   ) {
+
+				throw new Exception("Error al registrar una vivienda: "+e.getLocalizedMessage());
+	        } finally {
+	            ConnectionManager.disconnect();
+	        }
+	        return pedidos;
 		}
 
 		public boolean exists(String dni) throws AppException{

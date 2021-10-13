@@ -111,6 +111,8 @@ public class IniciarSesion extends JFrame {
 		buttonAceptar.addActionListener((e)->{
 				//System.out.println(textUsuario.getText());
 				try {
+						
+						//System.out.printf(textUsuario.getText() + String.valueOf(textPassword.getPassword() ));
 						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword())) ;
 						api.usuarioActivo(textUsuario.getText());
 						
