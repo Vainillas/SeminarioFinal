@@ -35,7 +35,7 @@ public class OrdenDeRetiro extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		setContentPane(contentPane);
-		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("en"));
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelVivienda = new JPanel();
 		panelVivienda.setBounds(10, 11, 370, 253);
@@ -83,10 +83,10 @@ public class OrdenDeRetiro extends JFrame {
 		String[] titulosRecolector = {"NOMBRE","APELLIDO","TELEFONO","DNI","EMAIL"};
 		modeloRecolector = new DefaultTableModel(new Object[][] {}, titulosRecolector);
 		List<RecolectorDTO> recolector= api.obtenerRecolectores();
-		for(RecolectorDTO r : recolector) {
+		/*for(RecolectorDTO r : recolector) {
 			modeloVivienda.addRow(new Object[] {r.getNombre(), r.getApellido(), r.getTelefono(), r.getDni(), r.getEmail()});
 		}
-		tableRecolector.setModel(modeloRecolector);
+		tableRecolector.setModel(modeloRecolector);*/
 		
 		scrollPaneRecolector.setViewportView(tableRecolector);
 		

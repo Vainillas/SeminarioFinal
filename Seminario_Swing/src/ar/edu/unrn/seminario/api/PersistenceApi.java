@@ -30,6 +30,7 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
@@ -50,6 +51,7 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
+
 public class PersistenceApi implements IApi {
 
 	private RolDao rolDao;
@@ -59,6 +61,10 @@ public class PersistenceApi implements IApi {
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
 	private Usuario usuarioActivo;
+
+	
+	
+
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
 		usuarioDao = new UsuarioDAOJDBC();
@@ -68,7 +74,8 @@ public class PersistenceApi implements IApi {
 		pedidoDeRetiroDao = new PedidoDeRetiroDAOJDBC();
 	}
 
-	public void registrarUsuario(String username, String password, String email, Integer codigoRol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
+	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
+		throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
 		Rol rol = rolDao.find(codigoRol);
 		Usuario usuario = new Usuario(username, password, email, rol);
 		this.usuarioDao.create(usuario);
@@ -167,6 +174,7 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
+	
 	public List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -233,7 +241,10 @@ public class PersistenceApi implements IApi {
     }
 
     @Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws Exception {
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) 
+			throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException
+	
+		 {
     	
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	int i=0;
@@ -260,12 +271,13 @@ public class PersistenceApi implements IApi {
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
     	Vivienda unaVivienda = viviendaDao.find(Integer.parseInt(codViv));
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
-    	try {
+    	
+    	
+    	
 			this.pedidoDeRetiroDao.create(nuevoPedido);
-		} catch (Exception e) {
+		
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
     }
 		// TODO Esbozo de método generado automáticamente
 

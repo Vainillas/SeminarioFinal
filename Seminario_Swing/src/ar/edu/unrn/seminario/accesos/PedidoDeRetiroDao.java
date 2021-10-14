@@ -7,7 +7,7 @@ import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 
 public interface PedidoDeRetiroDao {
 
-		void create(PedidoDeRetiro pedido) throws Exception;
+		void create(PedidoDeRetiro pedido) throws AppException;
 
 		void update(PedidoDeRetiro pedido);
 

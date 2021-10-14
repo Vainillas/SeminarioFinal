@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
@@ -54,7 +58,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 
 	@Override
-	public Vivienda find(Integer codigo) throws Exception {
+	public Vivienda find(Integer codigo) throws AppException {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
@@ -87,9 +91,52 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				}
 				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 			}
+		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException | IncorrectEmailException e) {
+			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
+		 
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return vivienda;
+	}
+	
+	@Override
+	public Vivienda find(String calle, String altura) throws Exception {
+		Vivienda vivienda=null;
+		Direccion direccion = null;
+		Dueño dueño = null;
+		try {
+			Connection connection = ConnectionManager.getConnection();
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.calle = ?");
+			statement.setString(1,calle);
+			ResultSet resultSetViviendas = statement.executeQuery();
+			if(resultSetViviendas.next()) {
+				PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
+				statement2.setString(1, resultSetViviendas.getString("dni"));
+				ResultSet resultSetConstructor = statement2.executeQuery();
+				if(resultSetConstructor.next()) {
+					dueño = new Dueño(resultSetConstructor.getString("nombre"),
+							resultSetConstructor.getString("apellido"),
+							resultSetConstructor.getString("dni"),
+							resultSetConstructor.getString("correo_electronico"));
+				}
+				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
+				statement2.setString(1,resultSetViviendas.getString("calle"));
+				statement2.setInt(2, resultSetViviendas.getInt("altura"));
+				resultSetConstructor=statement2.executeQuery();
+				if(resultSetConstructor.next()) {
+					direccion = new Direccion(resultSetConstructor.getString("calle"), 
+							Integer.toString(resultSetConstructor.getInt("altura")), 
+							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
+							resultSetConstructor.getString("longitud"),
+							resultSetConstructor.getString("latitud"),
+							resultSetConstructor.getString("barrio"));
+				}
+				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
+			}
 		} catch (SQLException e) {
 
-			throw new Exception("Error al registrar una vivienda: "+e.getMessage());
+			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
 		 
 		} finally {
 		ConnectionManager.disconnect();

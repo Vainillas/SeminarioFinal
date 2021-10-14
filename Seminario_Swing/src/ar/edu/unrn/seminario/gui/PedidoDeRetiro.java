@@ -18,6 +18,10 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -271,18 +275,24 @@ public class PedidoDeRetiro extends JFrame {
 	                        residuosSeleccionadosKg.add(kg.getText());
 	                    }
 	                }
-				try {
-					api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(), textFieldCodViv.getText());
+	                
+					try {
+						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(), "23");
+					} catch (AppException | DataEmptyException | NotNullException | StringNullException
+							| DateNullException e1) {
+						System.out.println(e1.getMessage());
+						
+					}
 					//api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText());
 					JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 					setVisible(false);
 					dispose();
-				} catch (Exception e1) {
+					
 					// TODO Auto-generated catch block
-					JOptionPane.showMessageDialog(null,"Error: " + e1.getMessage(), "Error", 2);
-					dispose();
-					System.out.println("crear la exception" + e1.getMessage());
-				}
+					//JOptionPane.showMessageDialog(null,"Error: " + e1.getMessage(), "Error", 2);
+					
+					//System.out.println("crear la exception" + e1.getMessage());
+				
 		});
 
 		 lbResiduos = new JLabel(labels.getString("pedido.retiro.label.residuos")); 

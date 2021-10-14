@@ -17,12 +17,10 @@ public class Persona {
 		if(ConditionHelper.stringIsNull(nombre)) {throw new StringNullException("nombre nulo");}
 		if(ConditionHelper.stringIsNull(apellido)) {throw new StringNullException("apellido nulo");}
 		if(ConditionHelper.stringIsNull(dni)) {throw new StringNullException("dni nulo");}
-
+		
 		
 		if(ConditionHelper.stringIsEmpty(nombre)) {throw new DataEmptyException("El campo de nombre está vacío");}
-		if(ConditionHelper.stringIsEmpty(apellido)) {
-			
-			throw new DataEmptyException("El campo de apellido está vacío");}
+		if(ConditionHelper.stringIsEmpty(apellido)) {throw new DataEmptyException("El campo de apellido está vacío");}
 		if(ConditionHelper.stringIsEmpty(dni)) {throw new DataEmptyException("El campo DNI está vacío");}
 		
 	}

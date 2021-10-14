@@ -168,7 +168,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 				usuarios.add(usuario);
 			}
 		} catch (SQLException   | NotNullException   | DataEmptyException  | StringNullException | IncorrectEmailException e1) {
-			throw new AppException("error de aplicacion");
+			throw new AppException("error de aplicacion" + e1.getMessage());
 		
 		}finally {
 			ConnectionManager.disconnect();
