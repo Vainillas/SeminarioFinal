@@ -17,7 +17,7 @@ public interface PedidoDeRetiroDao {
 
 		PedidoDeRetiro find(int id);
 
-		List<PedidoDeRetiro> findAll() throws AppException;
+		List<PedidoDeRetiro> findAll() throws AppException, Exception;
 
 		boolean exists(String dni) throws AppException;
 	

@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +96,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
 		 
 		} finally {
+			
 		ConnectionManager.disconnect();
 		}
 		return vivienda;
@@ -143,7 +145,8 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		}
 		return vivienda;
 	}
-
+	
+	
 	@Override
 	public List<Vivienda> findAll() throws Exception {
 		List<Vivienda>viviendas = new ArrayList<>();

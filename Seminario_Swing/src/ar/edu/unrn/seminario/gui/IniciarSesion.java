@@ -111,12 +111,18 @@ public class IniciarSesion extends JFrame {
 		buttonAceptar.addActionListener((e)->{
 				//System.out.println(textUsuario.getText());
 				try {
+
 						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword())) ;
-						api.usuarioActivo(textUsuario.getText());
-						VentanaPrincipal ventana = new VentanaPrincipal(api);
-						ventana.setVisible(true);
-						dispose();
+						api.usuarioActivo(textUsuario.getText());//sirve para mantener al usuario siempre
+
+						//System.out.printf(textUsuario.getText() + String.valueOf(textPassword.getPassword() ));
+						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword()));
+							//api.usuarioActivo(textUsuario.getText());
+								VentanaPrincipal ventana = new VentanaPrincipal(api);
+								ventana.setVisible(true);
+								dispose();
 						
+
 				}catch (DataEmptyException | IncorrectEmailException | AppException | NotCorrectPasswordException | StringNullException  e1) {
 					
 					JOptionPane.showMessageDialog(null,e1.getMessage() ,"Error" ,0);

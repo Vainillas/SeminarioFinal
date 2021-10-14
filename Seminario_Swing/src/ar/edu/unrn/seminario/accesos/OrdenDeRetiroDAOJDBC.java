@@ -32,7 +32,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            statement.setString(3, o.getVivienda().getDireccion().getCalle());
 	            statement.setString(4, o.getVivienda().getDireccion().getAltura());
 	            statement.setString(5, o.getEstado().obtenerEstado());
-	            //statement.setInt(6, o.getCodigoOrden());
+	            statement.setInt(6, o.getCodigo());
 	            
 	            int cantidad = statement.executeUpdate();
 	            if (cantidad > 0) {
@@ -97,7 +97,6 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            }else {
 	            	orden = new OrdenDeRetiro(pedido);
 	            }
-	            //orden = new OrdenDeRetiro(null);
 	        } catch (SQLException e) {
 	            System.out.println("Error al procesar consulta");
 	            // TODO: disparar Exception propia

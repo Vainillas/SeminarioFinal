@@ -1,19 +1,22 @@
-package ar.edu.unrn.seminario.modelo;
+package ar.edu.unrn.seminario.dto;
 
+import java.sql.Date;
 import java.util.ArrayList;
-
 
 import ar.edu.unrn.seminario.Helper.ConditionHelper;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.modelo.Estado;
+import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.Residuo_Carton;
+import ar.edu.unrn.seminario.modelo.Residuo_Metal;
+import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
+import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
+import ar.edu.unrn.seminario.modelo.Vivienda;
 
-
-import java.sql.Date;
-
-public class PedidoDeRetiro {
-	
+public class PedidoDeRetiroDTO {
 	private String observacion;
 	private Boolean maquinaPesada;
 	private ArrayList<Residuo> listResiduos;
@@ -22,7 +25,7 @@ public class PedidoDeRetiro {
 	private Estado estado;
 	//private int codigo;
 	
-	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+	public PedidoDeRetiroDTO(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
 	throws DataEmptyException,NotNullException, StringNullException, DateNullException{
 		validarDatos(unaObservacion,unaListaDeResiduos,unaFecha,unaVivienda);
 		this.observacion = unaObservacion;
@@ -128,3 +131,4 @@ public class PedidoDeRetiro {
 		return cantidad;
 	}
 }
+

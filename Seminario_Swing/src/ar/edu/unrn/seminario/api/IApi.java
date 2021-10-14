@@ -9,6 +9,7 @@ import java.util.List;
 
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
+import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -21,7 +22,9 @@ import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
+import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
@@ -82,4 +85,8 @@ public interface IApi {
 	List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException;
 	public String obtenerRolUsuarioActivo();
 	List<RecolectorDTO> obtenerRecolectores();
+
+	List<PedidoDeRetiro> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
+
+	Usuario getUserOnline();
 }

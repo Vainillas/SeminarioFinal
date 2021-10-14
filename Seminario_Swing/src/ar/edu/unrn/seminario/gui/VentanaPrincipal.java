@@ -12,6 +12,7 @@ import javax.swing.JMenuItem;
 
 
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ import java.awt.event.ActionEvent;
 import ar.edu.unrn.seminario.api.IApi;
 
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 
 @SuppressWarnings("serial")
 public class VentanaPrincipal extends JFrame {
@@ -28,7 +30,7 @@ public class VentanaPrincipal extends JFrame {
 	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 
 	private JPanel contentPane;
-
+	private IApi api;
 	/**
 	 * Launch the application.
 	 */
@@ -37,8 +39,8 @@ public class VentanaPrincipal extends JFrame {
 			public void run() {
 				try {
 					//IApi api = new MemoryApi();
-					IApi api = new PersistenceApi();
-					VentanaPrincipal frame = new VentanaPrincipal(api);
+					IApi api2 = new PersistenceApi();
+					VentanaPrincipal frame = new VentanaPrincipal(api2);
 					frame.setLocationRelativeTo(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -49,7 +51,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	
 	public VentanaPrincipal(IApi api) {
-		
+		this.api = api;
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
@@ -117,9 +119,19 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoViviendas.addActionListener((e)->{
-			ListadoVivienda v =  new ListadoVivienda(api);
+			System.out.print(this.api.getUserOnline().toString());
+			/*try {
+				List<PedidoDeRetiroDTO> lista = api.obtenerPedidosDeRetiro();
+				for(PedidoDeRetiroDTO p: lista) {
+					System.out.println(p.getObservacion());
+				}
+			} catch (Exception e1) {
+				
+				e1.printStackTrace();
+			}*/
+			/*ListadoVivienda v =  new ListadoVivienda(api);
 			v.setVisible(true);
-			v.setLocationRelativeTo(null);
+			v.setLocationRelativeTo(null);*/
 		});
 		
 				/*new ActionListener() {

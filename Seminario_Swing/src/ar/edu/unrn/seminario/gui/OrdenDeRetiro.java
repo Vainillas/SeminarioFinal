@@ -13,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import javax.swing.JTable;
@@ -45,18 +46,20 @@ public class OrdenDeRetiro extends JFrame {
 		JScrollPane scrollPaneVivienda = new JScrollPane();
 		panelVivienda.add(scrollPaneVivienda, BorderLayout.CENTER);
 		JTable tableVivienda = new JTable();
-		String[] titulosVivienda = {
-				labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
+		String[] titulosVivienda = { "DIRECCION", "FECHA", "OBSERVACION"
+				
+				/*labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
 				labels.getString("generar.orden.retiro.titulos.vivienda.CALLE"),
 				labels.getString("generar.orden.retiro.titulos.vivienda.ALTURA"),
 				labels.getString("generar.orden.retiro.titulos.vivienda.LATITUD"),
-				labels.getString("generar.orden.retiro.titulos.vivienda.LONGITUD")
+				labels.getString("generar.orden.retiro.titulos.vivienda.LONGITUD")*/
 		};
-		List<ViviendaDTO> viviendas;
+		List<PedidoDeRetiro> pedidos;
 		try {
-			viviendas = api.obtenerViviendas();
-			for (ViviendaDTO v : viviendas) {
-				modeloVivienda.addRow(new Object[] { v.getDireccion().getBarrio(),v.getDireccion().getCalle(),v.getDireccion().getAltura(),v.getDireccion().getLatitud(), v.getDireccion().getLongitud()});
+			pedidos = api.obtenerPedidosDeRetiro();
+			for (PedidoDeRetiro v : pedidos) {
+				//modeloVivienda.addRow(new Object[] { v.getObservacion(), v.getMaquinaPesada(), v.getListResiduos(),v.getFechaDelPedido(), v.getVivienda()});
+				//modeloVivienda.addRow(new Object[] { v.getVivienda}());
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);

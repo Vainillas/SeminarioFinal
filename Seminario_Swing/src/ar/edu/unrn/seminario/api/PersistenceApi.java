@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.api;
 import java.sql.SQLException;
 
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Date;
@@ -60,9 +61,13 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
+
 	private Usuario usuarioActivo;
 
 	
+
+	private Usuario userOnline;
+
 	
 
 	public PersistenceApi() {
@@ -286,9 +291,6 @@ public class PersistenceApi implements IApi {
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
 		
-	
-		
-		
 	}
 
 
@@ -298,10 +300,16 @@ public class PersistenceApi implements IApi {
 	
 	public boolean validarUsuario(String usuario, String password) throws NotRegisterException,AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException {
 		UsuarioIngreso user = new UsuarioIngreso(usuario,password);
+		if(usuarioDao.validateData(user)){
+			this.userOnline = usuarioDao.find(usuario); 
+		}
 		return usuarioDao.validateData(user);
 		
 	}
-
+	
+	public Usuario getUserOnline(){
+		return this.userOnline;
+	}
 
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
@@ -318,6 +326,7 @@ public class PersistenceApi implements IApi {
 	public void usuarioActivo(String username) throws AppException {
 		usuarioActivo = usuarioDao.find(username);
 		
+		//usuarioDao.activate(username);
 		
 	}
 	public String obtenerRolUsuarioActivo() {
@@ -325,9 +334,18 @@ public class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public List<RecolectorDTO> obtenerRecolectores() {
+	public List<Recolector> obtenerRecolectores() {
 		// TODO Esbozo de método generado automáticamente
 		return null;
+	}
+	
+	public List<PedidoDeRetiro> obtenerPedidosDeRetiro() throws AppException, Exception {
+		List<PedidoDeRetiro> pedidosDto = new ArrayList<>();
+        List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
+        for (PedidoDeRetiro d : pedidos) {
+            pedidosDto.add(new PedidoDeRetiro(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
+        }
+        return pedidosDto;
 	}
 
 
