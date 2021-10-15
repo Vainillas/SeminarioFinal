@@ -54,10 +54,10 @@ public class OrdenDeRetiro extends JFrame {
 				labels.getString("generar.orden.retiro.titulos.vivienda.LATITUD"),
 				labels.getString("generar.orden.retiro.titulos.vivienda.LONGITUD")*/
 		};
-		List<PedidoDeRetiro> pedidos;
+		List<PedidoDeRetiroDTO> pedidos;
 		try {
 			pedidos = api.obtenerPedidosDeRetiro();
-			for (PedidoDeRetiro v : pedidos) {
+			for (PedidoDeRetiroDTO v : pedidos) {
 				//modeloVivienda.addRow(new Object[] { v.getObservacion(), v.getMaquinaPesada(), v.getListResiduos(),v.getFechaDelPedido(), v.getVivienda()});
 				//modeloVivienda.addRow(new Object[] { v.getVivienda}());
 			}

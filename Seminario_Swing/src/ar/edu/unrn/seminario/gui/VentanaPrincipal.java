@@ -119,7 +119,9 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoViviendas.addActionListener((e)->{
-			System.out.print(this.api.getUserOnline().toString());
+			ListadoVivienda v =  new ListadoVivienda(api);
+			v.setVisible(true);
+			
 			/*try {
 				List<PedidoDeRetiroDTO> lista = api.obtenerPedidosDeRetiro();
 				for(PedidoDeRetiroDTO p: lista) {
@@ -129,9 +131,8 @@ public class VentanaPrincipal extends JFrame {
 				
 				e1.printStackTrace();
 			}*/
-			/*ListadoVivienda v =  new ListadoVivienda(api);
-			v.setVisible(true);
-			v.setLocationRelativeTo(null);*/
+
+			
 		});
 		
 				/*new ActionListener() {

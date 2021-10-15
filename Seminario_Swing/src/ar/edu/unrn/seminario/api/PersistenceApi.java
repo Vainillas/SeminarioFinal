@@ -25,6 +25,7 @@ import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
+import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
@@ -334,16 +335,17 @@ public class PersistenceApi implements IApi {
 	}
 	
 	@Override
-	public List<Recolector> obtenerRecolectores() {
+	public List<RecolectorDTO> obtenerRecolectores() {
 		// TODO Esbozo de método generado automáticamente
 		return null;
 	}
 	
-	public List<PedidoDeRetiro> obtenerPedidosDeRetiro() throws AppException, Exception {
-		List<PedidoDeRetiro> pedidosDto = new ArrayList<>();
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
+		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
+		
         List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
         for (PedidoDeRetiro d : pedidos) {
-            pedidosDto.add(new PedidoDeRetiro(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
+            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
         }
         return pedidosDto;
 	}
