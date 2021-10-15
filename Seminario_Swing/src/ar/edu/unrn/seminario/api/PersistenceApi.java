@@ -133,12 +133,11 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public RolDTO obtenerRolPorCodigo(Integer codigo) {
+	public RolDTO obtenerRolPorCodigo(Integer codigo) throws AppException {
 		Rol rol = rolDao.find(codigo);
 		RolDTO rolDTO = new RolDTO(rol.getCodigo(), rol.getNombre(), rol.isActivo());
 		return rolDTO;
 	}
-
 	@Override
 	public void activarRol(Integer codigo) {
 		// TODO Auto-generated method stub

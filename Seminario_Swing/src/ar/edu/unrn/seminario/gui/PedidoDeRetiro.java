@@ -82,6 +82,7 @@ public class PedidoDeRetiro extends JFrame {
 	private int mostrarKG = 0;
 	private JPanel panelViviendas;
 	private JTable table;
+	private JScrollPane scrollPane;
 
 
 
@@ -95,7 +96,7 @@ public class PedidoDeRetiro extends JFrame {
 		
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 960, 368);
+		setBounds(100, 100, 1049, 368);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.info);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -244,7 +245,7 @@ public class PedidoDeRetiro extends JFrame {
 		textPane.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		textPane.setEditable(false);
 		textPane.setText("Codigo Vivienda"); //$NON-NLS-1$
-		textPane.setBounds(6, 176, 91, 20);
+		textPane.setBounds(6, 176, 80, 10);
 		panelResiduos.add(textPane);
 		
 		textFieldCodViv = new JTextField();
@@ -288,24 +289,22 @@ public class PedidoDeRetiro extends JFrame {
 					setVisible(false);
 					dispose();
 					
-					// TODO Auto-generated catch block
-					//JOptionPane.showMessageDialog(null,"Error: " + e1.getMessage(), "Error", 2);
-					
-					//System.out.println("crear la exception" + e1.getMessage());
+
 				
 		});
 
 		 lbResiduos = new JLabel(labels.getString("pedido.retiro.label.residuos")); 
-		lbResiduos.setBounds(6, 11, 95, 14);
+		lbResiduos.setBounds(0, 11, 115, 14);
 		panelResiduos.add(lbResiduos);
 		
 		 lbKg = new JLabel(labels.getString("pedido.retiro.label.residuos.kg"));
 		lbKg.setVisible(false);
-		lbKg.setBounds(128, 11, 124, 14);
+		lbKg.setBounds(116, 11, 136, 14);
 		panelResiduos.add(lbKg);
 		
 		panelViviendas = new JPanel();
-		panelViviendas.setBounds(619, 11, 315, 307);
+		panelViviendas.setBounds(619, 11, 352, 307);
+		
 		contentPane.add(panelViviendas);
 		String[] titulosDireccion = { 
 				labels.getString("pedido.retiro.titulos.direccion.calle"),  
@@ -314,11 +313,12 @@ public class PedidoDeRetiro extends JFrame {
 				labels.getString("pedido.retiro.titulos.direccion.latitud"), 
 				labels.getString("pedido.retiro.titulos.direccion.longitud"), 
 				labels.getString("pedido.retiro.titulos.direccion.barrio") };
+		panelViviendas.setLayout(new BorderLayout(0, 0));
+		scrollPane = new JScrollPane();
+		panelViviendas.add(scrollPane, BorderLayout.CENTER);
 		
 		table = new JTable();
-		panelViviendas.add(table);
 		table.addMouseListener(new MouseAdapter() {
-
 			public void mouseClicked(MouseEvent arg0) {
 				habilitarBotones(true);
 			}
@@ -348,6 +348,8 @@ public class PedidoDeRetiro extends JFrame {
 				
 				
 				table.setModel(modelo);
+				scrollPane.setViewportView(table);
+				
 		
 }
 	
@@ -363,7 +365,8 @@ public class PedidoDeRetiro extends JFrame {
 	private void cambiarVisibilidad(JRadioButton button) {
 		JTextField [] listaTextos = {textField_Vidrio, textField_Plastico,textField_Metal, textField_Carton};
 		String [] nombresTextos = {"Vidrio","Plástico","Metal", "Cartón"};
-		boolean validacion = true;int i = 0;
+		boolean validacion = true;
+		int i = 0;
 		while(i < listaTextos.length && validacion) {
 			if(button.getText().equals(nombresTextos[i])) {
 				if(button.isSelected()) {

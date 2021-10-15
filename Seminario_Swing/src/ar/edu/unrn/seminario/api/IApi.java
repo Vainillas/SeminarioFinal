@@ -46,7 +46,7 @@ public interface IApi {
 
 	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
 
-	RolDTO obtenerRolPorCodigo(Integer codigo); // recuperar el rol almacenado
+	RolDTO obtenerRolPorCodigo(Integer codigo) throws AppException; // recuperar el rol almacenado
 
 	void activarRol(Integer codigo); // recuperar el objeto Rol, implementar el comportamiento de estado.
 

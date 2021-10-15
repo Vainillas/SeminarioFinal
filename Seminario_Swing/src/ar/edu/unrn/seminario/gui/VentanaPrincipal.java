@@ -23,6 +23,7 @@ import ar.edu.unrn.seminario.api.IApi;
 
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
+import ar.edu.unrn.seminario.exceptions.StateException;
 
 @SuppressWarnings("serial")
 public class VentanaPrincipal extends JFrame {
@@ -52,6 +53,12 @@ public class VentanaPrincipal extends JFrame {
 	
 	public VentanaPrincipal(IApi api) {
 		this.api = api;
+		try {
+			this.api.activarUsuario("jordan");
+		} catch (StateException e1) {
+			// TODO Bloque catch generado automáticamente
+			e1.printStackTrace();
+		}
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
