@@ -22,7 +22,9 @@ import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
+import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
@@ -44,7 +46,7 @@ public interface IApi {
 
 	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
 
-	RolDTO obtenerRolPorCodigo(Integer codigo); // recuperar el rol almacenado
+	RolDTO obtenerRolPorCodigo(Integer codigo) throws AppException; // recuperar el rol almacenado
 
 	void activarRol(Integer codigo); // recuperar el objeto Rol, implementar el comportamiento de estado.
 
@@ -69,7 +71,8 @@ public interface IApi {
 
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
-	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws Exception;
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException 
+			;
 
 
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
@@ -80,8 +83,10 @@ public interface IApi {
 	void usuarioActivo(String text) throws AppException;
 
 	List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException;
-
+	public String obtenerRolUsuarioActivo();
 	List<RecolectorDTO> obtenerRecolectores();
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
+
+	Usuario getUserOnline();
 }

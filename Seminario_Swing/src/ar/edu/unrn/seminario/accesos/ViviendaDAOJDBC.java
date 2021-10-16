@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Vivienda;
@@ -55,7 +59,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 
 	@Override
-	public Vivienda find(Integer codigo) throws Exception {
+	public Vivienda find(Integer codigo) throws AppException {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
@@ -88,9 +92,8 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				}
 				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 			}
-		} catch (SQLException e) {
-
-			throw new Exception("Error al registrar una vivienda: "+e.getMessage());
+		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException | IncorrectEmailException e) {
+			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
 		 
 		} finally {
 			
@@ -135,7 +138,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			}
 		} catch (SQLException e) {
 
-			throw new Exception("Error al registrar una vivienda: "+e.getMessage());
+			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
 		 
 		} finally {
 		ConnectionManager.disconnect();

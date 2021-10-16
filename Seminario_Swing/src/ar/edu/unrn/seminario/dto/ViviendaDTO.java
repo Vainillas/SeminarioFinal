@@ -16,16 +16,14 @@ public class ViviendaDTO {
 		this(unaDireccion,unDueño);
 		this.id=unaID;
 	}
-	
 	public Direccion getDireccion() {
 		return direccion;
 	}
-
-
 	public Dueño getDueño() {
 		return dueño;
 	}
-	public int getID() {
+	
+		public int getID() {
 		return id;
 	}
 	

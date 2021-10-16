@@ -11,7 +11,8 @@ public class RecolectorDTO {
 	private String nombre;
 	private String apellido;
 	private String dni;
-	public RecolectorDTO(String nombre, String apellido, String dni, String telefono, String email) throws DataEmptyException, StringNullException, IncorrectEmailException {
+	public RecolectorDTO(String nombre, String apellido, String dni, String telefono, String email) 
+		throws DataEmptyException, StringNullException, IncorrectEmailException {
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;

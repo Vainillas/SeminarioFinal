@@ -17,7 +17,7 @@ public interface ViviendaDao {
 
 	void remove(Vivienda v);
 
-	Vivienda find(Integer codigo) throws Exception;
+	Vivienda find(Integer codigo) throws AppException;
 
 	Vivienda find(String calle, String altura) throws Exception;
 

@@ -26,7 +26,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("INSERT INTO usuarios(usuario, password, email, activo,rol) "
+					.prepareStatement("INSERT INTO usuarios(usuario, contrasena, email, activo,rol) "
 							+ "VALUES (?, ?, ?, ?, ?)");
 			statement.setString(1, usuario.getUsuario());
 			statement.setString(2, usuario.getContrasena());
@@ -37,6 +37,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			statement.executeUpdate();// faltaba esta linea que es la que ejecuta las declaraciones
 			
 		} catch (SQLException e  ) {
+			System.out.println(e.getMessage());
 			throw new AppException("error al procesar consulta");
 		}  finally {
 			ConnectionManager.disconnect();
@@ -78,11 +79,11 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 		if(this.exists(user.getUser())) {
 			try {
 				Connection conn = ConnectionManager.getConnection();
-				PreparedStatement statement = conn.prepareStatement("SELECT u.usuario, u.password " + " FROM usuarios as u" + " WHERE u.usuario = ?");
+				PreparedStatement statement = conn.prepareStatement("SELECT u.usuario, u.contrasena" + " FROM usuarios as u" + " WHERE u.usuario = ?");
 				statement.setString(1,user.getUser());				
 				ResultSet rs = statement.executeQuery();
 				if (rs.next()) {
-						if(rs.getString("password").equals(user.getPassword())) {
+						if(rs.getString("contrasena").equals(user.getPassword())) {
 							exists = true;
 							}
 							else {
@@ -90,7 +91,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 							}
 				}
 			} catch (SQLException e ) {
-				throw new AppException("error al procesar la consulta de las contraseña");
+				throw new AppException("error al procesar la consulta de la contraseña" + e.getMessage());
 			}finally {
 				ConnectionManager.disconnect();
 			}
@@ -140,7 +141,9 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			}
 
 		} catch (SQLException | NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e) {
-			 throw new AppException("error al procesa consulta");
+			//System.out.println(e.getMessage());
+			
+			throw new AppException("error al procesa consulta");
 		}finally {
 			ConnectionManager.disconnect();
 		}
@@ -156,13 +159,13 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			Connection conn = ConnectionManager.getConnection();
 			Statement statement = conn.createStatement();
 			ResultSet rs = statement.executeQuery(
-					"SELECT u.usuario,  u.password, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol  "
+					"SELECT u.usuario,  u.contrasena, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol  "
 							+ "FROM usuarios u JOIN roles r ON (u.rol = r.codigo) ");
 
 			while (rs.next()) {
 				
 				Rol rol = new Rol(rs.getInt("codigo_rol"), rs.getString("nombre_rol"));
-				Usuario usuario = new Usuario(rs.getString("usuario"), rs.getString("password"),
+				Usuario usuario = new Usuario(rs.getString("usuario"), rs.getString("contrasena"),
 					rs.getString("email"), rol);
 
 				usuarios.add(usuario);

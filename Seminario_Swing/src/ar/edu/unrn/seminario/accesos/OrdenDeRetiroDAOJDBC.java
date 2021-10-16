@@ -42,9 +42,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	                // TODO: disparar Exception propia
 	            }
 	        } catch (SQLException e) {
-	            throw new SQLException("Error al registrar un pedido: "+e.getMessage());
-	        } catch (Exception e) {
-	            throw new Exception("Error al registrar un pedido: "+e.getMessage());
+	            throw new AppException("Error al registrar un pedido: "+e.getMessage());
 	        } finally {
 	            ConnectionManager.disconnect();
 	        }

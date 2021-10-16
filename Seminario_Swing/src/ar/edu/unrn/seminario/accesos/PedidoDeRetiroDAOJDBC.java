@@ -22,7 +22,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
-		public void create(PedidoDeRetiro p) throws Exception{
+		public void create(PedidoDeRetiro p) throws AppException{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
@@ -52,10 +52,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                // TODO: disparar Exception propia
 	            }
 	        } catch (SQLException e) {
-	            throw new SQLException("Error al registrar un pedido: "+e.getMessage());
-	        } catch (Exception e) {
-	            throw new Exception("Error al registrar un pedido: "+e.getMessage());
-	        } finally {
+	        	
+	            throw new AppException("Error al registrar un pedido: "+e.getMessage());
+	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
 
@@ -122,7 +121,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            ConnectionManager.disconnect();
 	        }
 	        return pedido;
-	    
+
+	        //return null;
+
 	    }
 			
 		public List<PedidoDeRetiro> findAll() throws Exception{
@@ -147,17 +148,17 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            	ResultSet resultSetVivienda = statement2.executeQuery();
 	            	System.out.print("ok4");
 	            	if(resultSetVivienda.next()){
-	            		/*System.out.print("ok5");
+	            		System.out.print("ok5");
 	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
 	            		System.out.print(resultSetVivienda.getInt("codigo"));
-	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));*/
-	            		DueñoDao dueñoDao = new DueñoDAOJDBC();
+	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
+	            		/*DueñoDao dueñoDao = new DueñoDAOJDBC();
 						Dueño dueño = dueñoDao.find(resultSetVivienda.getString("dni"));
 						System.out.print(resultSetVivienda.getString("dni"));
 						DireccionDao direccionDao = new DireccionDAOJDBC();
 						Direccion direccion = direccionDao.find(resultSetVivienda.getString("calle"),resultSetVivienda.getInt("altura"));
 	            		vivienda = new Vivienda(direccion, dueño);
-	            		vivienda.setID(resultSetVivienda.getInt("codigo"));
+	            		vivienda.setID(resultSetVivienda.getInt("codigo"));*/
 	            	}
 	            	System.out.print("ok6");
 	            	

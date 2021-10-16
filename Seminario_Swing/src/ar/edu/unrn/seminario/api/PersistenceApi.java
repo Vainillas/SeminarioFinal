@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.api;
 import java.sql.SQLException;
 
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Date;
@@ -61,8 +62,15 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
+
+	private Usuario usuarioActivo;
+
 	
+
+	private Usuario userOnline;
+
 	
+
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
 		usuarioDao = new UsuarioDAOJDBC();
@@ -72,7 +80,8 @@ public class PersistenceApi implements IApi {
 		pedidoDeRetiroDao = new PedidoDeRetiroDAOJDBC();
 	}
 
-	public void registrarUsuario(String username, String password, String email, Integer codigoRol) throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
+	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
+		throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
 		Rol rol = rolDao.find(codigoRol);
 		Usuario usuario = new Usuario(username, password, email, rol);
 		this.usuarioDao.create(usuario);
@@ -124,12 +133,11 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public RolDTO obtenerRolPorCodigo(Integer codigo) {
+	public RolDTO obtenerRolPorCodigo(Integer codigo) throws AppException {
 		Rol rol = rolDao.find(codigo);
 		RolDTO rolDTO = new RolDTO(rol.getCodigo(), rol.getNombre(), rol.isActivo());
 		return rolDTO;
 	}
-
 	@Override
 	public void activarRol(Integer codigo) {
 		// TODO Auto-generated method stub
@@ -238,7 +246,10 @@ public class PersistenceApi implements IApi {
     }
 
     @Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws Exception {
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) 
+			throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException
+	
+		 {
     	
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	int i=0;
@@ -265,12 +276,13 @@ public class PersistenceApi implements IApi {
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
     	Vivienda unaVivienda = viviendaDao.find(Integer.parseInt(codViv));
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
-    	try {
+    	
+    	
+    	
 			this.pedidoDeRetiroDao.create(nuevoPedido);
-		} catch (Exception e) {
+		
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			
     }
 		// TODO Esbozo de método generado automáticamente
 
@@ -278,9 +290,6 @@ public class PersistenceApi implements IApi {
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
 			throws DataEmptyException, StringNullException, IncorrectEmailException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
-		
-	
-		
 		
 	}
 
@@ -291,10 +300,16 @@ public class PersistenceApi implements IApi {
 	
 	public boolean validarUsuario(String usuario, String password) throws NotRegisterException,AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException {
 		UsuarioIngreso user = new UsuarioIngreso(usuario,password);
+		if(usuarioDao.validateData(user)){
+			this.userOnline = usuarioDao.find(usuario); 
+		}
 		return usuarioDao.validateData(user);
 		
 	}
-
+	
+	public Usuario getUserOnline(){
+		return this.userOnline;
+	}
 
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
@@ -309,10 +324,15 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void usuarioActivo(String username) throws AppException {
-		usuarioDao.activate(username);
+		usuarioActivo = usuarioDao.find(username);
+		
+		//usuarioDao.activate(username);
 		
 	}
-
+	public String obtenerRolUsuarioActivo() {
+		return usuarioActivo.getRol().getNombre();
+	}
+	
 	@Override
 	public List<RecolectorDTO> obtenerRecolectores() {
 		// TODO Esbozo de método generado automáticamente
@@ -321,6 +341,7 @@ public class PersistenceApi implements IApi {
 	
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
+		
         List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
         for (PedidoDeRetiro d : pedidos) {
             pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));

@@ -13,6 +13,8 @@ public class Usuario {
 	private String nombre;
 	private String email;
 	private Rol rol;
+	
+
 	private boolean activo;
 
 	public Usuario(String usuario, String contrasena, String email, Rol rol) throws NotNullException,IncorrectEmailException, DataEmptyException, StringNullException{
@@ -128,6 +130,12 @@ public class Usuario {
 		} else if (!usuario.equals(other.usuario))
 			return false;
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "Usuario [usuario=" + usuario + ", contrasena=" + contrasena + ", nombre=" + nombre + ", email=" + email
+				+ ", rol=" + rol + ", activo=" + activo + "]";
 	}
 
 }

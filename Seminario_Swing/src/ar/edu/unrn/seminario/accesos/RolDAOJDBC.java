@@ -46,7 +46,7 @@ public class RolDAOJDBC implements RolDao {
 	}
 
 	@Override
-	public Rol find(Integer codigo) {
+	public Rol find(Integer codigo) throws AppException {
 		Rol rol = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -59,14 +59,12 @@ public class RolDAOJDBC implements RolDao {
 				rol = new Rol(rs.getInt("codigo"), rs.getString("nombre"));
 			}
 
-		} catch (SQLException e) {
+		} catch (SQLException | AppException e) {
 			System.out.println("Error al procesar consulta");
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-			// TODO: disparar Exception propia
-			// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-		} finally {
+			
+			 throw new AppException("error al procesar consulta");
+		} 
+		finally {
 			ConnectionManager.disconnect();
 		}
 
