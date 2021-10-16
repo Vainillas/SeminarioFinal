@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.accesos;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,15 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
-import ar.edu.unrn.seminario.modelo.Residuo_Carton;
-import ar.edu.unrn.seminario.modelo.Residuo_Metal;
-import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
-import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
+
+import ar.edu.unrn.seminario.modelo.Residuo;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 
@@ -49,11 +53,11 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                System.out.println("Insertando " + cantidad + " registros");
 	            } else {
 	                System.out.println("Error al actualizar");
-	                // TODO: disparar Exception propia
+	                throw new AppException("Error al registrar un pedido: ");
 	            }
 	        } catch (SQLException e) {
 	        	
-	            throw new AppException("Error al registrar un pedido: "+e.getMessage());
+	            throw new AppException("Error al registrar un pedido: ");
 	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
@@ -72,7 +76,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			
 		}
 
-		public PedidoDeRetiro find(int codigo) {
+		public PedidoDeRetiro find(int codigo) throws AppException {
 	        PedidoDeRetiro pedido = null;
 	        Vivienda vivienda = null;
 	        try {
@@ -93,14 +97,12 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                }
 	            }
 	            ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            Residuo vidrio = new Residuo_Vidrio(resultSetPedido.getInt("vidrio"));
-	            Residuo metal = new Residuo_Metal(resultSetPedido.getInt("metal"));
-	            Residuo carton = new Residuo_Carton(resultSetPedido.getInt("carton"));
-	            Residuo plastico = new Residuo_Plastico(resultSetPedido.getInt("plastico"));
-	            listaResiduos.add(vidrio);
-	            listaResiduos.add(metal);
-	            listaResiduos.add(carton);
-	            listaResiduos.add(plastico);
+	            listaResiduos.add(new Residuo(resultSetPedido.getString("vidrio"),"Vidrio" ));
+	            listaResiduos.add(new Residuo(resultSetPedido.getString("plastico"),"Plástico"));
+	            listaResiduos.add(new Residuo(resultSetPedido.getString("carton"),"Carton"));
+	            listaResiduos.add(new Residuo(resultSetPedido.getString("metal"),"Metal"));
+	            
+	            
 	            Boolean maq = false;
 	            if(resultSetPedido.getInt("carga") == 1) {
 	            	maq = true;
@@ -110,14 +112,11 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                    listaResiduos,
 	                    resultSetPedido.getDate("fecha"),
 	                    vivienda);
-	        } catch (SQLException e) {
-	            System.out.println("Error al procesar consulta");
-	            // TODO: disparar Exception propia
-	            // throw new AppException(e, e.getSQLState(), e.getMessage());
-	        } catch (Exception e) {
-	            // TODO: disparar Exception propia
-	            // throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-	        } finally {
+	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException | KilogramEmptyException | NotNumberException e) {
+	        	throw new AppException("error al procesar consulta");
+	        	
+	           
+	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
 	        return pedido;
@@ -126,7 +125,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
 	    }
 			
-		public List<PedidoDeRetiro> findAll() throws Exception{
+		public List<PedidoDeRetiro> findAll() throws AppException{
 			
 			List<PedidoDeRetiro> pedidos = new ArrayList<>();
 			PedidoDeRetiro pedido = null;
@@ -152,6 +151,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
 	            		System.out.print(resultSetVivienda.getInt("codigo"));
 	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
+	            		
 	            		/*DueñoDao dueñoDao = new DueñoDAOJDBC();
 						Dueño dueño = dueñoDao.find(resultSetVivienda.getString("dni"));
 						System.out.print(resultSetVivienda.getString("dni"));
@@ -160,18 +160,14 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            		vivienda = new Vivienda(direccion, dueño);
 	            		vivienda.setID(resultSetVivienda.getInt("codigo"));*/
 	            	}
-	            	System.out.print("ok6");
+	            	
 	            	
 	            	
 	            	ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            	Residuo vidrio = new Residuo_Vidrio(resultSetPedido.getInt("vidrio"));
-	            	Residuo metal = new Residuo_Metal(resultSetPedido.getInt("metal"));
-	            	Residuo carton = new Residuo_Carton(resultSetPedido.getInt("carton"));
-	            	Residuo plastico = new Residuo_Plastico(resultSetPedido.getInt("plastico"));
-	            	listaResiduos.add(vidrio);
-	            	listaResiduos.add(metal);
-	            	listaResiduos.add(carton);
-	            	listaResiduos.add(plastico);
+	            	listaResiduos.add(new Residuo(resultSetPedido.getString("vidrio"),"Vidrio" ));
+	 	            listaResiduos.add(new Residuo(resultSetPedido.getString("plastico"),"Plastico"));
+	 	            listaResiduos.add(new Residuo(resultSetPedido.getString("carton"),"Carton"));
+	 	            listaResiduos.add(new Residuo(resultSetPedido.getString("metal"),"Metal"));
 	            	Boolean maq = false;
 	            	if(resultSetPedido.getInt("carga") == 1) {
 	            		maq = true;
@@ -184,9 +180,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
 	            	pedidos.add(pedido);
 	            }
-	        } catch (Exception e   ) {
+	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException | KilogramEmptyException | NotNumberException e   ) {
 
-				throw new Exception("Error al registrar una vivienda: "+e.getLocalizedMessage());
+				throw new AppException("Error al registrar una vivienda: ");
 	        } finally {
 	            ConnectionManager.disconnect();
 	        }

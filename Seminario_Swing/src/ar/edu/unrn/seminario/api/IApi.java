@@ -18,6 +18,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
@@ -71,8 +72,8 @@ public interface IApi {
 
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
-	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException 
-			;
+	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
+		throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException ;
 
 
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;

@@ -30,8 +30,9 @@ public class PedidoDeRetiro {
 		this.listResiduos = unaListaDeResiduos;
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
+		
 	}
-	public void validarDatos(String unaObservacion, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+	private void validarDatos(String unaObservacion, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
 		if(ConditionHelper.IsNull(unaListaDeResiduos)) {throw new NotNullException("la lista de residuos esta vacia");}
 		if(ConditionHelper.stringIsEmpty(unaObservacion)) {throw new StringNullException("observacion nula");}
@@ -91,8 +92,10 @@ public class PedidoDeRetiro {
 	public int getPlastico() {
 		int cantidad = 0;
 		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Plastico) {
+
+			if(residuo.getNombre().equals("Plastico")) {
 				cantidad = residuo.getCantidad();
+				
 			}
 		}
 		return cantidad;
@@ -101,28 +104,34 @@ public class PedidoDeRetiro {
 	public int getVidrio() {
 		int cantidad = 0;
 		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Vidrio) {
+			
+			if(residuo.getNombre().equalsIgnoreCase("Vidrio")) {
 				cantidad = residuo.getCantidad();
+				
 			}
 		}
 		return cantidad;
 	}
 
 	public int getMetal() {
-		int cantidad=0;
+		int cantidad = 0;
 		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Metal) {
+
+			if(residuo.getNombre().equals("Metal")) {
 				cantidad = residuo.getCantidad();
+				
 			}
 		}
 		return cantidad;
 	}
 
 	public int getCarton() {
-		int cantidad=0;
+		int cantidad = 0;
 		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Carton) {
+
+			if(residuo.getNombre().equals("Carton")) {
 				cantidad = residuo.getCantidad();
+				
 			}
 		}
 		return cantidad;

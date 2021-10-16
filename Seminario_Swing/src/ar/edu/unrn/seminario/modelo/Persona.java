@@ -13,7 +13,7 @@ public class Persona {
 		this.apellido = apellido;
 		this.dni = dni;
 	}
-	public void validarDatos(String nombre,String apellido, String dni) throws StringNullException, IncorrectEmailException, DataEmptyException {
+	private void validarDatos(String nombre,String apellido, String dni) throws StringNullException, IncorrectEmailException, DataEmptyException {
 		if(ConditionHelper.stringIsNull(nombre)) {throw new StringNullException("nombre nulo");}
 		if(ConditionHelper.stringIsNull(apellido)) {throw new StringNullException("apellido nulo");}
 		if(ConditionHelper.stringIsNull(dni)) {throw new StringNullException("dni nulo");}
