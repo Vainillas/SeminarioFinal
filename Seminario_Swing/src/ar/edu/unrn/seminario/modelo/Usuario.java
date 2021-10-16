@@ -10,7 +10,6 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 public class Usuario {
 	private String usuario;
 	private String contrasena;
-	private String nombre;
 	private String email;
 	private Rol rol;
 	
@@ -60,13 +59,6 @@ public class Usuario {
 		this.contrasena = contrasena;
 	}
 
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
 
 	public String getEmail() {
 		return email;
@@ -134,7 +126,7 @@ public class Usuario {
 	
 	@Override
 	public String toString() {
-		return "Usuario [usuario=" + usuario + ", contrasena=" + contrasena + ", nombre=" + nombre + ", email=" + email
+		return "Usuario [usuario=" + usuario + ", contrasena=" + contrasena + "email=" + email
 				+ ", rol=" + rol + ", activo=" + activo + "]";
 	}
 

@@ -94,7 +94,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		 
 		} finally {
 			
-		ConnectionManager.disconnect();
+			ConnectionManager.disconnect();
 		}
 		return vivienda;
 	}
