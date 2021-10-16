@@ -15,9 +15,9 @@ public interface PedidoDeRetiroDao {
 
 		void remove(PedidoDeRetiro pedido);
 
-		PedidoDeRetiro find(int id);
+		PedidoDeRetiro find(int id) throws AppException;
 
-		List<PedidoDeRetiro> findAll() throws AppException, Exception;
+		List<PedidoDeRetiro> findAll() throws AppException;
 
 		boolean exists(String dni) throws AppException;
 	

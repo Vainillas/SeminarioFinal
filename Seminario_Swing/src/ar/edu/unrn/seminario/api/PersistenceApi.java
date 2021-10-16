@@ -4,6 +4,7 @@ import java.sql.SQLException;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.sql.Date;
@@ -34,6 +35,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
@@ -44,10 +46,6 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.Residuo;
-import ar.edu.unrn.seminario.modelo.Residuo_Carton;
-import ar.edu.unrn.seminario.modelo.Residuo_Metal;
-import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
-import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
@@ -246,45 +244,56 @@ public class PersistenceApi implements IApi {
     }
 
     @Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) 
-			throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException
-	
-		 {
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
+		throws AppException, DataEmptyException, NotNullException, StringNullException, 
+		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
     	
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
-    	int i=0;
-    	for(String s: residuosSeleccionados){
-    		if(s.compareTo("Vidrio") == 0){
-    			Residuo_Vidrio newVidrio = new Residuo_Vidrio(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newVidrio);
-    		}
-    		if(s.compareTo("Plastico") == 0){
-    			Residuo_Plastico newPlastico = new Residuo_Plastico(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newPlastico);
-    		}
-    		if(s.compareTo("Metal") == 0){
-    			Residuo_Metal newMetal = new Residuo_Metal(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newMetal);
-    		}
-    		if(s.compareTo("Carton") == 0){
-    			Residuo_Carton newCarton = new Residuo_Carton(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newCarton);
-    		}
-    		i++;
+
+    	//hay que solucionar esto
+    	//no me parece correcto que se cree una excepcion en persistence pero 
+    	//si no esta ningnuna de estas, en algun caso va a provocar un error
+
+    	if(domicilioSeleccionado == null) {
+    		throw new NotNullException("no selecciono ningun domicilio");
     	}
+    	 if(residuosSeleccionados.size() != residuosSeleccionadosKg.size()) {
+    		 throw new NotNullException("indique el campo kg");
+         }
+    	
+    	if(residuosSeleccionados.size() == 0) {
+    		throw new NotNullException("no selecciono ningun residuo");
+    	}
+    	if(residuosSeleccionadosKg.size() == 0) {
+    		throw new NotNullException("por favor, indique el kg");
+    	}
+    	//System.out.println(residuosSeleccionados.get(0).toString());
+    	//System.out.println(residuosSeleccionadosKg.get(0).toString());
+    	
+    	for(int i=0;i<residuosSeleccionados.size();i++){
+    		listResiduos.add(new Residuo(residuosSeleccionadosKg.get(i), residuosSeleccionados.get(i)));
+    		
+    		
+    	}
+
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
-    	Vivienda unaVivienda = viviendaDao.find(Integer.parseInt(codViv));
+    	
+    	
+    	
+    	//domicilioSeleccionado.get(1) tiene la calle
+    	// domiciltioSeleccionado.get(2) tiene la altura
+    	Vivienda unaVivienda = viviendaDao.find(domicilioSeleccionado.get(1), domicilioSeleccionado.get(2));
+    	
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
     	
     	
     	
-			this.pedidoDeRetiroDao.create(nuevoPedido);
+		this.pedidoDeRetiroDao.create(nuevoPedido);
 		
-			// TODO Auto-generated catch block
-			
+	
+	
     }
-		// TODO Esbozo de método generado automáticamente
 
 	@Override
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
@@ -348,26 +357,6 @@ public class PersistenceApi implements IApi {
         }
         return pedidosDto;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-	
-
-
-
-
-
 
 
 

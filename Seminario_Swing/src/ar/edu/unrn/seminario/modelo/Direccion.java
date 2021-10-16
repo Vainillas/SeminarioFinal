@@ -26,7 +26,7 @@ public class Direccion {
 		this.barrio = barrio;
 	}
 	
-	public void validarDatos(String calle, String altura, String codigoPostal, String longitud, String latitud, String barrio) throws StringNullException, DataEmptyException, NotNumberException {
+	private void validarDatos(String calle, String altura, String codigoPostal, String longitud, String latitud, String barrio) throws StringNullException, DataEmptyException, NotNumberException {
 		//if(ExceptionsHelper.IsNull(calle)) {throw new NotNullException("Calle nula");}
 		
 		if(ConditionHelper.stringIsNull(altura)) {throw new StringNullException("Altura nula");}

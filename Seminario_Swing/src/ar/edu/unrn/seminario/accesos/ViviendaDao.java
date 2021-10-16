@@ -11,7 +11,7 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public interface ViviendaDao {
-	void create(Vivienda v) throws SQLException, Exception;
+	void create(Vivienda v) throws AppException;
 
 	void update(Vivienda v);
 
@@ -19,7 +19,7 @@ public interface ViviendaDao {
 
 	Vivienda find(Integer codigo) throws AppException;
 
-	Vivienda find(String calle, String altura) throws Exception;
+	Vivienda find(String calle, String altura) throws AppException;
 
 	
 	List<Vivienda> findAll() throws Exception;

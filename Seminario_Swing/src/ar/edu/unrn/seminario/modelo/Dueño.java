@@ -15,7 +15,7 @@ public class Dueño extends Persona {
 	}
 	
 	
-	public void validarDatos (String correoElectronico) throws IncorrectEmailException, DataEmptyException, StringNullException {
+	private void validarDatos (String correoElectronico) throws IncorrectEmailException, DataEmptyException, StringNullException {
 		if(ConditionHelper.IsIncorrectEmail(correoElectronico)) {throw new IncorrectEmailException ("Formato de email incorrecto.");}
 		
 		if(ConditionHelper.stringIsEmpty(correoElectronico)) {throw new DataEmptyException("Campo de Email vacío.");}
