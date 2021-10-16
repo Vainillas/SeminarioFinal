@@ -23,6 +23,7 @@ import ar.edu.unrn.seminario.api.IApi;
 
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
+import ar.edu.unrn.seminario.exceptions.StateException;
 
 @SuppressWarnings("serial")
 public class VentanaPrincipal extends JFrame {
@@ -52,6 +53,12 @@ public class VentanaPrincipal extends JFrame {
 	
 	public VentanaPrincipal(IApi api) {
 		this.api = api;
+		try {
+			this.api.activarUsuario("jordan");
+		} catch (StateException e1) {
+			// TODO Bloque catch generado automáticamente
+			e1.printStackTrace();
+		}
 		setTitle("Ventana Principal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 440, 302);
@@ -119,6 +126,11 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoViviendas.addActionListener((e)->{
+
+			ListadoVivienda v =  new ListadoVivienda(api);
+			v.setVisible(true);
+			
+
 			/*try {
 				List<PedidoDeRetiroDTO> lista = api.obtenerPedidosDeRetiro();
 				for(PedidoDeRetiroDTO p: lista) {
@@ -128,9 +140,8 @@ public class VentanaPrincipal extends JFrame {
 				
 				e1.printStackTrace();
 			}*/
-			ListadoVivienda v =  new ListadoVivienda(api);
-			v.setVisible(true);
-			v.setLocationRelativeTo(null);
+
+			
 		});
 		
 				/*new ActionListener() {

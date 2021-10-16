@@ -37,6 +37,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			statement.executeUpdate();// faltaba esta linea que es la que ejecuta las declaraciones
 			
 		} catch (SQLException e  ) {
+			System.out.println(e.getMessage());
 			throw new AppException("error al procesar consulta");
 		}  finally {
 			ConnectionManager.disconnect();
@@ -140,7 +141,9 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			}
 
 		} catch (SQLException | NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e) {
-			 throw new AppException("error al procesa consulta");
+			//System.out.println(e.getMessage());
+			
+			throw new AppException("error al procesa consulta");
 		}finally {
 			ConnectionManager.disconnect();
 		}

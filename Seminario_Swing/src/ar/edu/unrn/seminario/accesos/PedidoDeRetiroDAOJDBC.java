@@ -22,7 +22,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
-		public void create(PedidoDeRetiro p) throws Exception{
+		public void create(PedidoDeRetiro p) throws AppException{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
@@ -52,10 +52,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                // TODO: disparar Exception propia
 	            }
 	        } catch (SQLException e) {
-	            throw new SQLException("Error al registrar un pedido: "+e.getMessage());
-	        } catch (Exception e) {
-	            throw new Exception("Error al registrar un pedido: "+e.getMessage());
-	        } finally {
+	        	
+	            throw new AppException("Error al registrar un pedido: "+e.getMessage());
+	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
 
@@ -122,7 +121,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            ConnectionManager.disconnect();
 	        }
 	        return pedido;
-	    
+
+	        //return null;
+
 	    }
 			
 		public List<PedidoDeRetiro> findAll() throws Exception{

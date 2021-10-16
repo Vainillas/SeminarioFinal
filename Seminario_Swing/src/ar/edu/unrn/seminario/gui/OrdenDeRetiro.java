@@ -94,8 +94,5 @@ public class OrdenDeRetiro extends JFrame {
 		scrollPaneRecolector.setViewportView(tableRecolector);
 		
 
-
-		
-		
 	}
 }
