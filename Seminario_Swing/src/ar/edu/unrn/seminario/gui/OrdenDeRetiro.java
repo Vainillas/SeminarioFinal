@@ -54,19 +54,20 @@ public class OrdenDeRetiro extends JFrame {
 				labels.getString("generar.orden.retiro.titulos.vivienda.LATITUD"),
 				labels.getString("generar.orden.retiro.titulos.vivienda.LONGITUD")*/
 		};
+		modeloVivienda = new DefaultTableModel(new Object[][] {}, titulosVivienda);
+		
+		tableVivienda.setModel(modeloVivienda);
+		
 		List<PedidoDeRetiroDTO> pedidos;
 		try {
 			pedidos = api.obtenerPedidosDeRetiro();
 			for (PedidoDeRetiroDTO v : pedidos) {
-				//modeloVivienda.addRow(new Object[] { v.getObservacion(), v.getMaquinaPesada(), v.getListResiduos(),v.getFechaDelPedido(), v.getVivienda()});
-				//modeloVivienda.addRow(new Object[] { v.getVivienda}());
+				modeloVivienda.addRow(new Object[] { v.getObservacion(), v.getMaquinaPesada(), v.getListResiduos(),v.getFechaDelPedido(), v.getVivienda()});
+				//modeloVivienda.addRow(new Object[] { v.getVivienda()});
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
-		modeloVivienda = new DefaultTableModel(new Object[][] {}, titulosVivienda);
-			
-		tableVivienda.setModel(modeloVivienda);
 		
 		scrollPaneVivienda.setViewportView(tableVivienda);
 		

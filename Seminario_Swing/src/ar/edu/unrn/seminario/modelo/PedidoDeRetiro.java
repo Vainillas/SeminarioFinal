@@ -88,43 +88,4 @@ public class PedidoDeRetiro {
 		this.vivienda = vivienda;
 	}
 
-	public int getPlastico() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Plastico) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
-	}
-
-	public int getVidrio() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Vidrio) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
-	}
-
-	public int getMetal() {
-		int cantidad=0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Metal) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
-	}
-
-	public int getCarton() {
-		int cantidad=0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Carton) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
-	}
 }
