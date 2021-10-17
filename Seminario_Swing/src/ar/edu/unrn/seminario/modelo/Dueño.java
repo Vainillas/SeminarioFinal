@@ -13,7 +13,7 @@ public class Dueño extends Persona {
 		super(nombre, apellido, dni);
 		validarDatos(correoElectronico);
 		this.correoElectronico = correoElectronico;
-	}
+	} 
 	
 	
 	private void validarDatos (String correoElectronico) throws IncorrectEmailException, DataEmptyException, StringNullException {

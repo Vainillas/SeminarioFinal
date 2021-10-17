@@ -48,7 +48,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            statement.executeUpdate();
 	            
 	            
-	            
+	             
 	            ResultSet clave = statement.getGeneratedKeys();
 	            clave.next();
 	            int codigoPedido = clave.getInt(1);
@@ -144,7 +144,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                    maq,
 	                    listaResiduos,
 	                    resultSetPedido.getDate("fecha"),
-	                    vivienda);
+	                    vivienda, resultSetPedido.getInt("codigo"));
 	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  e) {
 	        	throw new AppException("error al encontrar Pedido"  + e.getMessage());
 	        	
@@ -164,6 +164,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			PedidoDeRetiro pedido = null;
 	        Vivienda vivienda = null;
 	        
+	        Dueño dueño = null;
+	        Direccion direccion = null;
 	        
 	        TipoResiduo tipoResiduo = null;
     		Residuo residuo = null;
@@ -172,11 +174,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	        	Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement("SELECT p.* FROM pedidos p ");
 	            ResultSet resultSetPedido = statement.executeQuery();
-	            //conn.close();
 	            
 	            while(resultSetPedido.next()) {
 	            	conn = ConnectionManager.getConnection();
-	            	//PreparedStatement statement2 = conn.prepareStatement("SELECT v.codigo FROM viviendas v WHERE v.calle = ? AND v.altura = ?");
 	            	PreparedStatement statement2 = conn.prepareStatement("SELECT v.codigo, v.dni FROM viviendas v WHERE v.calle = ? AND v.altura = ?");
 	            	statement2.setString(1, resultSetPedido.getString("calle"));
 	            	statement2.setInt(2, resultSetPedido.getInt("altura"));
@@ -184,18 +184,17 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
 	            	
             		
-	            	//System.out.print("ok4");
-	            	//conn.close();
-	            	if(resultSetVivienda.next() /*&& resultSetDueño.next()*/){
+	            	
+	            	if(resultSetVivienda.next()){
 	            		Connection conn2 = ConnectionManager.getConnection();
-		            	PreparedStatement statement3 = conn2.prepareStatement("SELECT d.* FROM propietarios d WHERE d.dni = ?");
+		            	PreparedStatement statement3 = conn2.prepareStatement("SELECT * FROM propietarios d WHERE d.dni = ?");
 		            	statement3.setString(1, resultSetVivienda.getString("dni"));
 		            	ResultSet resultSetDueño = statement3.executeQuery();
 		            	
 	            		if(resultSetDueño.next()) {
 	            			
 							Connection conn3 = ConnectionManager.getConnection();
-			            	PreparedStatement statement4 = conn3.prepareStatement("SELECT d.* FROM dirección d WHERE d.calle = ? AND d.altura = ?");
+			            	PreparedStatement statement4 = conn3.prepareStatement("SELECT * FROM dirección d WHERE d.calle = ? AND d.altura = ?");
 			            	statement4.setString(1, resultSetPedido.getString("calle"));
 			            	statement4.setInt(2, resultSetPedido.getInt("altura"));
 			            	ResultSet resultSetDireccion = statement4.executeQuery();
@@ -203,9 +202,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							if(resultSetDireccion.next()) {
 								
 								DueñoDao dueñoDao = new DueñoDAOJDBC();
-								Dueño dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetVivienda.getString("dni"), resultSetDueño.getString("correo_electronico"));
+								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetVivienda.getString("dni"), resultSetDueño.getString("correo_electronico"));
 								DireccionDao direccionDao = new DireccionDAOJDBC();
-								Direccion direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
+								direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
 			            		vivienda = new Vivienda(direccion, dueño);
 			            		vivienda.setID(resultSetVivienda.getInt("codigo"));
 			            		
@@ -214,13 +213,13 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 				            	
 				            	Connection conn4 = ConnectionManager.getConnection();
 				            	
-				            	PreparedStatement statement5 = conn3.prepareStatement("SELECT r.* FROM residuos_pedido p WHERE p.codigo_pedido = ?");
+				            	PreparedStatement statement5 = conn3.prepareStatement("SELECT * FROM residuos_pedido p WHERE p.codigo_pedido = ?");
 				            	statement5.setInt(1, resultSetPedido.getInt("codigo"));
 				            	ResultSet resultSetResiduo = statement5.executeQuery();
 				            	
 				            	while(resultSetResiduo.next()) {
 				            		
-				            		PreparedStatement statement6 = conn3.prepareStatement("SELECT t.* FROM residuos r WHERE r.nombre = ?");
+				            		PreparedStatement statement6 = conn3.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
 					            	statement6.setString(1, resultSetResiduo.getString("nombre_residuo"));
 					            	ResultSet resultSetTipoResiduo = statement6.executeQuery();
 					            	
@@ -229,9 +228,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 					            		residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
 					            		listaResiduos.add(residuo);
 					            	}
-					            	
-				            		
-				            		
+					        
 				            	}
 				            	
 				            	
@@ -243,40 +240,15 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 				            			maq,
 				            			listaResiduos,
 				            			resultSetPedido.getDate("fecha"),
-				            			vivienda);
+				            			vivienda,
+				            			resultSetPedido.getInt("codigo"));
+				            			
 
 				            	pedidos.add(pedido);
 							}
 							
 	            		}
 	            	
-	       
-	            		
-
-	            	System.out.print("ok4");
-	            	if(resultSetVivienda.next()){
-	            		System.out.print("ok5");
-	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
-	            		System.out.print(resultSetVivienda.getInt("codigo"));
-	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
-
-	            	
-	            	}
-	            	
-	            	
-	            	
-	            	ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            	Boolean maq = false;
-	            	if(resultSetPedido.getInt("carga") == 1) {
-	            		maq = true;
-	            	}
-	            	pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
-	            			maq,
-	            			listaResiduos,
-	            			resultSetPedido.getDate("fecha"),
-	            			vivienda);
-
-	            	pedidos.add(pedido);
 	            }
 
 	            	}} catch (AppException e) {

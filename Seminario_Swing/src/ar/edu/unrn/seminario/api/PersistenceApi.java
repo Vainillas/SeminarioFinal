@@ -20,7 +20,11 @@ import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DueñoDao;
+import ar.edu.unrn.seminario.accesos.OrdenDeRetiroDAOJDBC;
+import ar.edu.unrn.seminario.accesos.OrdenDeRetiroDao;
 import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDao;
+import ar.edu.unrn.seminario.accesos.RecolectorDAOJDBC;
+import ar.edu.unrn.seminario.accesos.RecolectorDao;
 import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDao;
@@ -49,6 +53,7 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.Residuo;
@@ -68,7 +73,8 @@ public class PersistenceApi implements IApi {
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
 	private TipoResiduoDao tipoResiduoDao;
-	
+	private OrdenDeRetiroDao ordenDeRetiroDao;
+	private RecolectorDao recolectorDao;
 	
 
 	private Usuario userOnline;
@@ -83,6 +89,8 @@ public class PersistenceApi implements IApi {
 		direccionDao = new DireccionDAOJDBC();
 		pedidoDeRetiroDao = new PedidoDeRetiroDAOJDBC();
 		tipoResiduoDao = new TipoResiduoDAOJDBC();
+		ordenDeRetiroDao = new OrdenDeRetiroDAOJDBC();
+		recolectorDao = new RecolectorDAOJDBC();
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
@@ -301,11 +309,25 @@ public class PersistenceApi implements IApi {
     	// domiciltioSeleccionado.get(2) tiene la altura
     	Vivienda unaVivienda = viviendaDao.find(domicilioSeleccionado.get(1), domicilioSeleccionado.get(2));
     	
-    	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
+    	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda, 1);
     	
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
     }
+    
+    
+    
+    public void generarOrdenDeRetiro(PedidoDeRetiro unPedido, String dniRecolector) throws AppException{
+    	
+    	java.util.Date fechaActualUtil = DateHelper.getDate();
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+    	
+    	Recolector recolector = recolectorDao.find(dniRecolector);
+    	OrdenDeRetiro nuevaOrden = new OrdenDeRetiro(unPedido, recolector , fechaActual );
+    	
+    	ordenDeRetiroDao.create(nuevaOrden);
+    }
+    
 
 	@Override
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
@@ -366,6 +388,8 @@ public class PersistenceApi implements IApi {
         for (PedidoDeRetiro d : pedidos) {
             pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
         }
+        System.out.println(pedidos.size());
+        System.out.println("pedido dto: " + pedidosDto.size());
         return pedidosDto;
 	}
 

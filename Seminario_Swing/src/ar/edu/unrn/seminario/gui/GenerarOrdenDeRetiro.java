@@ -46,7 +46,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		JScrollPane scrollPaneVivienda = new JScrollPane();
 		panelVivienda.add(scrollPaneVivienda, BorderLayout.CENTER);
 		JTable tableVivienda = new JTable();
-		String[] titulosVivienda = { "DIRECCION", "FECHA", "OBSERVACION"
+		String[] titulosVivienda = { "OBSERVACION", "FECHA", "DIRECCION", "DNI PROPIETARIO", "MAQUINARIA PESADA", 
 				
 				/*labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
 				labels.getString("generar.orden.retiro.titulos.vivienda.CALLE"),
@@ -61,9 +61,10 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		List<PedidoDeRetiroDTO> pedidos;
 		try {
 			pedidos = api.obtenerPedidosDeRetiro();
+		
 			for (PedidoDeRetiroDTO v : pedidos) {
-				modeloVivienda.addRow(new Object[] { v.getObservacion(), v.getMaquinaPesada(), v.getListResiduos(),v.getFechaDelPedido(), v.getVivienda()});
-				//modeloVivienda.addRow(new Object[] { v.getVivienda()});
+				modeloVivienda.addRow(new Object[] { v.getObservacion(),v.getFechaDelPedido(), v.getVivienda().getDireccion(),v.getVivienda().getDueño().getDni(), v.getMaquinaPesada()});
+				
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);

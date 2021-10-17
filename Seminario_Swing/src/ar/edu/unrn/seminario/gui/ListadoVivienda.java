@@ -77,7 +77,7 @@ public class ListadoVivienda extends JFrame {
 		});
 		contentPane.add(botonAtras, BorderLayout.SOUTH);
 
-		botonOrdenar = new JButton("Ordenar");
+		botonOrdenar = new JButton("Ordenar"); 
 		botonOrdenar.addActionListener((e)->{
 				DefaultTableModel modelo1 = new DefaultTableModel(new Object[][] {}, titulos);
 				
