@@ -1,7 +1,7 @@
 package ar.edu.unrn.seminario.accesos;
 
 import java.sql.Connection;
-
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,14 +22,15 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
-	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, calle, altura, estado, codigoOrden) "
+	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, fecha, estado, codigoOrden) "
 	                            + "VALUES (?, ?, ?, ?, ?, ?)");
-	      
+	            
+	            statement.setInt(1, o.getPedidoAsociado().getCodigo());
 	            statement.setString(2, o.getRecolector().getDni());
-	            statement.setString(3, o.getVivienda().getDireccion().getCalle());
-	            statement.setString(4, o.getVivienda().getDireccion().getAltura());
-	            statement.setString(5, o.getEstado().obtenerEstado());
-	            statement.setInt(6, o.getCodigo());
+	            statement.setDate(3, o.getFechaOrden());
+	            
+	            statement.setString(4, o.getEstado().obtenerEstado());
+	            statement.setInt(5, o.getCodigo()); 
 	            
 	            int cantidad = statement.executeUpdate();
 	            if (cantidad > 0) {
@@ -39,7 +40,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	                // TODO: disparar Exception propia
 	            }
 	        } catch (SQLException e) {
-	            throw new AppException("Error al crear un pedido: ");
+	            throw new AppException("Error al crear una Orden: ");
 	        } finally {
 	            ConnectionManager.disconnect();
 	        }
@@ -59,40 +60,37 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 
 		public OrdenDeRetiro find(int id) throws AppException {
 			OrdenDeRetiro orden = null;
-	        Vivienda vivienda = null;
+	        PedidoDeRetiro pedido = null;
 	        try {
 	            Connection conn = ConnectionManager.getConnection();
-	            PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p "+"WHERE p.codigo = ?");
+	            PreparedStatement statement = conn.prepareStatement("SELECT * FROM ordenes o "+"WHERE po.codigoOrden = ?");
 	            statement.setInt(1, id );
 	            ResultSet resultSetOrden = statement.executeQuery();
 	            if(resultSetOrden.next()) {
-	                statement = conn.prepareStatement("SELECT codigo FROM vivienda v" + 
-	                            "WHERE v.calle = ? AND v.altura = ?");
-	                statement.setString(1, resultSetOrden.getString("calle"));
-	                statement.setInt(2, resultSetOrden.getInt("altura"));
-	                ResultSet resultSetVivienda = statement.executeQuery();
-	                if(resultSetVivienda.next()) {
-	                    ViviendaDao viviendaDao = new ViviendaDAOJDBC();
-	                    vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
+	                statement = conn.prepareStatement("SELECT * FROM pedido p" + 
+	                            "WHERE p.codigo = ?");
+	                statement.setInt(1, resultSetOrden.getInt("codigo"));
+	                
+	                ResultSet resultSetPedido = statement.executeQuery();
+	                if(resultSetPedido.next()) {
+	                    PedidoDeRetiroDao pedidoDao = new PedidoDeRetiroDAOJDBC();
+	                    pedido = pedidoDao.find(resultSetPedido.getInt("codigo"));
 	                }
 	            }
 	           
-	            Boolean estado = false;
-	            if(resultSetOrden.getInt("carga") == 1) {
-	            	estado = true;
-	            }
 	            
-	            PedidoDeRetiroDao pedidoDao = new PedidoDeRetiroDAOJDBC();
-	            PedidoDeRetiro pedido = pedidoDao.find(resultSetOrden.getInt("codigoPedido"));
+	            
 	            
 	            
 	            RecolectorDao recolectorDao = new RecolectorDAOJDBC();
 	            Recolector recolector = recolectorDao.find(resultSetOrden.getString("dniRecolector"));
 	            
+	            Date fechaOrden = resultSetOrden.getDate("fecha");
+	            
 	            if(recolector != null) {
-	            	orden = new OrdenDeRetiro(pedido, recolector);
+	            	orden = new OrdenDeRetiro(pedido, recolector, fechaOrden);
 	            }else {
-	            	orden = new OrdenDeRetiro(pedido);
+	            	orden = new OrdenDeRetiro(pedido, fechaOrden);
 	            }
 	        } catch (SQLException e) {
 	            throw new AppException("error de la aplicacion");
