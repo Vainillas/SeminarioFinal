@@ -256,15 +256,6 @@ public class PersistenceApi implements IApi {
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
 		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
-    	
-    	
-
-    	
-        
-        
-    	//hay que solucionar esto
-    	//no me parece correcto que se cree una excepcion en persistence pero 
-    	//si no esta ningnuna de estas, en algun caso va a provocar un error
 
     	if(domicilioSeleccionado == null) {
     		throw new NotNullException("No selecciono ningun domicilio");
@@ -279,9 +270,6 @@ public class PersistenceApi implements IApi {
     	if(residuosSeleccionadosKg.size() == 0) {
     		throw new NotNullException("Por favor, indique el kg");
     	}
-    	//System.out.println(residuosSeleccionados.get(0).toString());
-    	//System.out.println(residuosSeleccionadosKg.get(0).toString());
-    	
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
     	
     	for(int i=0;i<residuosSeleccionados.size();i++){
