@@ -9,6 +9,8 @@ public class Residuo {
 		this.cantidadKg = cantidadKg;
 	}
 
+
+
 	public TipoResiduo getTipo() {
 		return tipo;
 	}

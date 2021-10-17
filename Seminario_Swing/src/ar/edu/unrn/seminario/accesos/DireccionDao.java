@@ -6,7 +6,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 
 public interface DireccionDao {
-	void create(Direccion direccion) throws Exception;
+	void create(Direccion direccion) throws AppException;
 
 	void update(Direccion direccion);
 

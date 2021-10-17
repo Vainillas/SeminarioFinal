@@ -3,11 +3,12 @@ package ar.edu.unrn.seminario.accesos;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 
 public interface DueñoDao {
-	void create(Dueño dueño) throws Exception;
+	void create(Dueño dueño) throws AppException;
 
 	void update(Dueño dueño);
 
@@ -17,7 +18,7 @@ public interface DueñoDao {
 
 	Dueño find(String dni);
 
-	List<Dueño> findAll() throws AppException;
+	List<Dueño> findAll() throws AppException, NotNumberException;
 
 	boolean exists(String dni) throws AppException;
 }

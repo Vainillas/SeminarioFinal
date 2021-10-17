@@ -259,12 +259,27 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
 	            		System.out.print(resultSetVivienda.getInt("codigo"));
 	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
-	            		
-	            		
-						
+
+	            	
+	            	}
+	            	
+	            	
+	            	
+	            	ArrayList<Residuo>listaResiduos = new ArrayList<>();
+	            	Boolean maq = false;
+	            	if(resultSetPedido.getInt("carga") == 1) {
+	            		maq = true;
+	            	}
+	            	pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
+	            			maq,
+	            			listaResiduos,
+	            			resultSetPedido.getDate("fecha"),
+	            			vivienda);
+
+	            	pedidos.add(pedido);
 	            }
 
-	            	}}} catch (AppException e) {
+	            	}} catch (AppException e) {
 
 	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
 
