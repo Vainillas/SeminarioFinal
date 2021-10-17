@@ -20,14 +20,14 @@ import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class OrdenDeRetiro extends JFrame {
+public class GenerarOrdenDeRetiro extends JFrame {
 
 	private JPanel contentPane;
 	private DefaultTableModel modeloVivienda;
 	private DefaultTableModel modeloRecolector;
 	private  IApi api;
 	
-	public OrdenDeRetiro(IApi api) {
+	public GenerarOrdenDeRetiro(IApi api) {
 		this.api = api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 851, 346);

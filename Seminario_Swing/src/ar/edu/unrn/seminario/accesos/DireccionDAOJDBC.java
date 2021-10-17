@@ -102,7 +102,6 @@ public class DireccionDAOJDBC implements DireccionDao {
 
 			while (rs.next()) {
 				Direccion direccion = new Direccion(rs.getString("calle"),
-						
 						Integer.toString(rs.getInt("altura")),
 						Integer.toString(rs.getInt("codigo_postal")),
 						rs.getString("longitud"),

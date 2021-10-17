@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.accesos;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,17 +12,13 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
-import ar.edu.unrn.seminario.modelo.Residuo;
-import ar.edu.unrn.seminario.modelo.Residuo_Carton;
-import ar.edu.unrn.seminario.modelo.Residuo_Metal;
-import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
-import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 
 
-		public void create(OrdenDeRetiro o) throws Exception{
+		public void create(OrdenDeRetiro o) throws AppException{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement

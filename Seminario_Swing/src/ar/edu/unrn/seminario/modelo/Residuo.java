@@ -1,30 +1,28 @@
 package ar.edu.unrn.seminario.modelo;
 
 public class Residuo {
-	int cantidad;
-	int valor;
+	private TipoResiduo tipo;
+	private int cantidadKg;
 	
-	public Residuo(int kg) {
-		this.cantidad=kg;
+	public Residuo(TipoResiduo tipo, int cantidadKg) {
+		this.tipo = tipo;
+		this.cantidadKg = cantidadKg;
 	}
 
-	public int getCantidad() {
-		return cantidad;
+	public TipoResiduo getTipo() {
+		return tipo;
 	}
 
-	public void setCantidad(int cantidad) {
-		this.cantidad = cantidad;
+	public void setTipo(TipoResiduo tipo) {
+		this.tipo = tipo;
 	}
 
-	public int getValor() {
-		return valor;
+	public int getCantidadKg() {
+		return cantidadKg;
 	}
 
-	public void setValor(int valor) {
-		this.valor = valor;
+	public void setCantidadKg(int cantidadKg) {
+		this.cantidadKg = cantidadKg;
 	}
-
 	
-	
-
 }

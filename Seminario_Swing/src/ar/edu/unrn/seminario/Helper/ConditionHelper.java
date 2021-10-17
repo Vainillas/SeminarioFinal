@@ -43,7 +43,9 @@ public  class ConditionHelper {
         boolean validacion;
 
         try {
+        	System.out.println("el valor del string es: " + number);
             Integer num = Integer.parseInt(number);
+            System.out.println("el valor del integer es: " + num);
             validacion = false;
         }
         catch(NumberFormatException e) {

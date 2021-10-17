@@ -8,7 +8,6 @@ public class DireccionDTO {
 	private String codPostal;
 	private String barrio;
 	public DireccionDTO(String calle, String altura, String codPostal, String longitud, String latitud, String barrio) {
-		super();
 		this.calle = calle;
 		this.longitud = longitud;
 		this.latitud = latitud;

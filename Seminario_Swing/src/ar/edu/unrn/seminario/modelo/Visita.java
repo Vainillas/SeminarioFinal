@@ -6,7 +6,7 @@ import java.util.Calendar;
 
 public class Visita {
 	private String observacion;
-	private ArrayList<Residuo>residuosExtraidos;
+	private ArrayList<TipoResiduo>residuosExtraidos;
 	private Date fecha;
 	
 	public Visita(String observacion) {
@@ -30,10 +30,10 @@ public class Visita {
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-	public ArrayList<Residuo> getResiduosExtraidos() {
+	public ArrayList<TipoResiduo> getResiduosExtraidos() {
 		return residuosExtraidos;
 	}
-	public void añadirResiduo(Residuo residuo) {
-		residuosExtraidos.add(residuo);
+	public void añadirResiduo(TipoResiduo tipoResiduo) {
+		residuosExtraidos.add(tipoResiduo);
 	}
 }

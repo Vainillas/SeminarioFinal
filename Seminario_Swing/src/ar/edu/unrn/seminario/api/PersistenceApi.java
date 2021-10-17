@@ -4,13 +4,18 @@ import java.sql.SQLException;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
+import ar.edu.unrn.seminario.accesos.ConnectionManager;
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
@@ -19,6 +24,8 @@ import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDao;
 import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDao;
+import ar.edu.unrn.seminario.accesos.TipoResiduoDAOJDBC;
+import ar.edu.unrn.seminario.accesos.TipoResiduoDao;
 import ar.edu.unrn.seminario.accesos.UsuarioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.UsuarioDao;
 import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
@@ -34,6 +41,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
@@ -44,10 +52,7 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.Residuo;
-import ar.edu.unrn.seminario.modelo.Residuo_Carton;
-import ar.edu.unrn.seminario.modelo.Residuo_Metal;
-import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
-import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
@@ -62,7 +67,7 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
-
+	private TipoResiduoDao tipoResiduoDao;
 	private Usuario usuarioActivo;
 
 	
@@ -78,6 +83,7 @@ public class PersistenceApi implements IApi {
 		dueñoDao = new DueñoDAOJDBC();
 		direccionDao = new DireccionDAOJDBC();
 		pedidoDeRetiroDao = new PedidoDeRetiroDAOJDBC();
+		tipoResiduoDao = new TipoResiduoDAOJDBC();
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
@@ -236,6 +242,7 @@ public class PersistenceApi implements IApi {
     		}
     	return d;
     	}
+    
     public List<DireccionDTO> obtenerDirecciones() throws AppException {
         List<DireccionDTO> dtos = new ArrayList<>();
         List<Direccion> direcciones = direccionDao.findAll();
@@ -246,45 +253,69 @@ public class PersistenceApi implements IApi {
     }
 
     @Override
-	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, String codViv) 
-			throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException
-	
-		 {
+	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
+		throws AppException, DataEmptyException, NotNullException, StringNullException, 
+		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
+    	
+    	
+
+    	
+        
+        
+    	//hay que solucionar esto
+    	//no me parece correcto que se cree una excepcion en persistence pero 
+    	//si no esta ningnuna de estas, en algun caso va a provocar un error
+
+    	if(domicilioSeleccionado == null) {
+    		throw new NotNullException("No selecciono ningun domicilio");
+    	}
+    	 if(residuosSeleccionados.size() != residuosSeleccionadosKg.size()) {
+    		 throw new NotNullException("Indique el campo kg");
+         }
+    	
+    	if(residuosSeleccionados.size() == 0) {
+    		throw new NotNullException("No selecciono ningun residuo");
+    	}
+    	if(residuosSeleccionadosKg.size() == 0) {
+    		throw new NotNullException("Por favor, indique el kg");
+    	}
+    	//System.out.println(residuosSeleccionados.get(0).toString());
+    	//System.out.println(residuosSeleccionadosKg.get(0).toString());
+    	
+    	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
+    	
+    	for(int i=0;i<residuosSeleccionados.size();i++){
+    		TipoResiduo t = tipoResiduoDao.find(residuosSeleccionados.get(i));
+    		listaTipos.add(t);
+    	}
     	
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
-    	int i=0;
-    	for(String s: residuosSeleccionados){
-    		if(s.compareTo("Vidrio") == 0){
-    			Residuo_Vidrio newVidrio = new Residuo_Vidrio(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newVidrio);
-    		}
-    		if(s.compareTo("Plastico") == 0){
-    			Residuo_Plastico newPlastico = new Residuo_Plastico(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newPlastico);
-    		}
-    		if(s.compareTo("Metal") == 0){
-    			Residuo_Metal newMetal = new Residuo_Metal(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newMetal);
-    		}
-    		if(s.compareTo("Carton") == 0){
-    			Residuo_Carton newCarton = new Residuo_Carton(Integer.parseInt(residuosSeleccionadosKg.get(i)));
-    			listResiduos.add(newCarton);
-    		}
-    		i++;
+    	
+    	for(int i=0;i<residuosSeleccionadosKg.size();i++){
+    		Residuo r = new Residuo(listaTipos.get(i), Integer.parseInt(residuosSeleccionadosKg.get(i)));
+    		listResiduos.add(r);
+    		
     	}
+
+
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
-    	Vivienda unaVivienda = viviendaDao.find(Integer.parseInt(codViv));
+    	
+    	
+    	
+    	//domicilioSeleccionado.get(1) tiene la calle
+    	// domiciltioSeleccionado.get(2) tiene la altura
+    	Vivienda unaVivienda = viviendaDao.find(domicilioSeleccionado.get(1), domicilioSeleccionado.get(2));
+    	
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
     	
     	
     	
-			this.pedidoDeRetiroDao.create(nuevoPedido);
+		this.pedidoDeRetiroDao.create(nuevoPedido);
 		
-			// TODO Auto-generated catch block
-			
+	
+	
     }
-		// TODO Esbozo de método generado automáticamente
 
 	@Override
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
@@ -348,26 +379,6 @@ public class PersistenceApi implements IApi {
         }
         return pedidosDto;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-		
-	
-
-
-
-
-
 
 
 

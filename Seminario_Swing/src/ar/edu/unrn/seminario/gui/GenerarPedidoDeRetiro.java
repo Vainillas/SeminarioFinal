@@ -20,7 +20,9 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 import javax.swing.JLabel;
@@ -55,7 +57,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 
 
-public class PedidoDeRetiro extends JFrame {
+public class GenerarPedidoDeRetiro extends JFrame {
 
 	/**
 	 * 
@@ -73,7 +75,7 @@ public class PedidoDeRetiro extends JFrame {
 	private JTextField textField_Plastico;
 	private JTextField textField_Metal;
 	private JTextField textField_Carton;
-
+	private ArrayList<String> domicilioSeleccionado = null;
 	private JTextField textFieldCodViv;
 
 
@@ -90,7 +92,7 @@ public class PedidoDeRetiro extends JFrame {
 
 
 
-	public PedidoDeRetiro(IApi api) {
+	public GenerarPedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		
@@ -216,26 +218,26 @@ public class PedidoDeRetiro extends JFrame {
 		
 		
 		
-		textField_Vidrio = new JTextField("0");
+		textField_Vidrio = new JTextField("");
 		textField_Vidrio.setVisible(false);
 		textField_Vidrio.setBounds(130, 51, 86, 20);
 		panelResiduos.add(textField_Vidrio);
 		textField_Vidrio.setColumns(10);
 		
-		textField_Plastico = new JTextField("0");
+		textField_Plastico = new JTextField("");
 		textField_Plastico.setBounds(130, 81, 86, 20);
 		textField_Plastico.setVisible(false);
 		panelResiduos.add(textField_Plastico);
 		textField_Plastico.setColumns(10);
 		
-		textField_Metal = new JTextField("0");
+		textField_Metal = new JTextField("");
 	
 		textField_Metal.setBounds(130, 111, 86, 20);
 		textField_Metal.setVisible(false);
 		panelResiduos.add(textField_Metal);
 		textField_Metal.setColumns(10);
 		
-		textField_Carton = new JTextField("0");
+		textField_Carton = new JTextField("");
 		textField_Carton.setVisible(false);
 		textField_Carton.setBounds(130, 141, 86, 20);
 		panelResiduos.add(textField_Carton);
@@ -263,33 +265,40 @@ public class PedidoDeRetiro extends JFrame {
 		buttonFinalizar.addActionListener((e)->{
 			
 				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
-				//ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
 				
 				 for(JRadioButton r : residuos) {
 	                    if(r.isSelected()) {
 	                        residuosSeleccionados.add(r.getText());
+	                        
 	                }
 				 }
-	                ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
-	                for(JTextField kg : residuosKg) {
-	                    if(!kg.getText().equals("0")) {
+				 
+	             ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
+	             for(JTextField kg : residuosKg) {
+	                    if(!kg.getText().equals("")) {
 	                        residuosSeleccionadosKg.add(kg.getText());
+	   
 	                    }
+	                    
+	                    
 	                }
+	               
 	                
 					try {
-						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(), "23");
-					} catch (AppException | DataEmptyException | NotNullException | StringNullException
-							| DateNullException e1) {
-						System.out.println(e1.getMessage());
+						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),domicilioSeleccionado);
+						System.out.println("localidad seleccionada: "+ domicilioSeleccionado);
+						JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
+						setVisible(false);
+						dispose();
+						
+					} catch (AppException | DataEmptyException | NotNullException 
+							| StringNullException| DateNullException | NumberFormatException | KilogramEmptyException | NotNumberException e1) {
+						
+						
+						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 						
 					}
-					//api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText());
-					JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
-					setVisible(false);
-					dispose();
 					
-
 				
 		});
 
@@ -307,22 +316,38 @@ public class PedidoDeRetiro extends JFrame {
 		
 		contentPane.add(panelViviendas);
 		String[] titulosDireccion = { 
+				
+			labels.getString("pedido.retiro.titulos.direccion.barrio"),
 				labels.getString("pedido.retiro.titulos.direccion.calle"),  
 				labels.getString("pedido.retiro.titulos.direccion.altura"), 
 				labels.getString("pedido.retiro.titulos.direccion.codigo.postal"), 
 				labels.getString("pedido.retiro.titulos.direccion.latitud"), 
 				labels.getString("pedido.retiro.titulos.direccion.longitud"), 
-				labels.getString("pedido.retiro.titulos.direccion.barrio") };
+		};	
+	
 		panelViviendas.setLayout(new BorderLayout(0, 0));
 		scrollPane = new JScrollPane();
 		panelViviendas.add(scrollPane, BorderLayout.CENTER);
 		
 		table = new JTable();
+		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
+
+				int fila = table.getColumnCount();
+				
+				domicilioSeleccionado = new ArrayList<String>();
+				for (int i = 0; i < fila; i++) {
+					domicilioSeleccionado.add((String) table.getValueAt(table.getSelectedRow(), i));
+					
+				}
+				
 				habilitarBotones(true);
 			}
 		});
+		
+		table.setRowSelectionAllowed(true);//permitiendo seleccion de fila
+		table.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulosDireccion);
 		
@@ -332,6 +357,7 @@ public class PedidoDeRetiro extends JFrame {
 		
 					try {
 						direcciones = api.obtenerDirecciones();
+						
 						// Agrega las direcciones de el dueño en el model
 						for (DireccionDTO d : direcciones) {
 							modelo.addRow(new Object[] { d.getBarrio(), d.getCalle(), d.getAltura(),

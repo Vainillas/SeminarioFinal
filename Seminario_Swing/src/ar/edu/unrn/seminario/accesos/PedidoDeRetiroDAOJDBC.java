@@ -1,22 +1,29 @@
 package ar.edu.unrn.seminario.accesos;
 
 import java.sql.Connection;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
-import ar.edu.unrn.seminario.modelo.Residuo_Carton;
-import ar.edu.unrn.seminario.modelo.Residuo_Metal;
-import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
-import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
+
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 
@@ -26,8 +33,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
-	                    ("INSERT INTO pedidos(calle,altura,observacion,carga,fecha,vidrio,plastico,metal,carton) "
-	                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	                    ("INSERT INTO pedidos(calle,altura,observacion,carga,fecha) "
+	                            + "VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 	            statement.setString(1, p.getVivienda().getDireccion().getCalle());
 	            statement.setInt(2, Integer.parseInt(p.getVivienda().getDireccion().getAltura()));
 	            statement.setString(3, p.getObservacion());
@@ -37,23 +44,30 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            }else {
 	            	statement.setInt(4, 0);
 	            }
-	            
 	            statement.setDate(5, p.getFechaDelPedido());
-	            statement.setInt(6, p.getVidrio());
-	            statement.setInt(7, p.getPlastico());
-	            statement.setInt(8, p.getMetal());
-	            statement.setInt(9, p.getCarton());
-	            int cantidad = statement.executeUpdate();
+	            statement.executeUpdate();
 	            
-	            if (cantidad > 0) {
-	                System.out.println("Insertando " + cantidad + " registros");
-	            } else {
-	                System.out.println("Error al actualizar");
-	                // TODO: disparar Exception propia
+	            
+	            
+	            ResultSet clave = statement.getGeneratedKeys();
+	            clave.next();
+	            int codigoPedido = clave.getInt(1);
+	            clave.close();
+	            
+	            Connection conn2 = ConnectionManager.getConnection();
+	            PreparedStatement statement2 = conn2.prepareStatement
+	                    ("INSERT INTO residuos_pedido(codigo_pedido , nombre_residuo , cantidad) "
+	                            + "VALUES (?, ?, ?)");
+	            
+	            for(int i=0; i < p.getListResiduos().size() ; i++) {
+		            statement2.setInt(1, codigoPedido);
+		            statement2.setString(2, p.getListResiduos().get(i).getTipo().getNombre());
+		            statement2.setInt(3, p.getListResiduos().get(i).getCantidadKg());
+		            statement2.executeUpdate();
 	            }
+	            
 	        } catch (SQLException e) {
-	        	
-	            throw new AppException("Error al registrar un pedido: "+e.getMessage());
+	            throw new AppException("Error al registrar un pedido: "  + e.getMessage());
 	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
@@ -72,9 +86,13 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			
 		}
 
-		public PedidoDeRetiro find(int codigo) {
+		public PedidoDeRetiro find(int codigo) throws AppException {
 	        PedidoDeRetiro pedido = null;
 	        Vivienda vivienda = null;
+	        
+	        TipoResiduo tipoResiduo = null;
+    		Residuo residuo = null;
+	        
 	        try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p "+"WHERE p.codigo = ?");
@@ -92,15 +110,32 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                    vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
 	                }
 	            }
+	            
+	            
 	            ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            Residuo vidrio = new Residuo_Vidrio(resultSetPedido.getInt("vidrio"));
-	            Residuo metal = new Residuo_Metal(resultSetPedido.getInt("metal"));
-	            Residuo carton = new Residuo_Carton(resultSetPedido.getInt("carton"));
-	            Residuo plastico = new Residuo_Plastico(resultSetPedido.getInt("plastico"));
-	            listaResiduos.add(vidrio);
-	            listaResiduos.add(metal);
-	            listaResiduos.add(carton);
-	            listaResiduos.add(plastico);
+	            
+	            
+	            Connection conn4 = ConnectionManager.getConnection();
+            	
+            	PreparedStatement statement5 = conn4.prepareStatement("SELECT r.* FROM residuos_pedido p WHERE p.codigo_pedido = ?");
+            	statement5.setInt(1, resultSetPedido.getInt("codigo"));
+            	ResultSet resultSetResiduo = statement5.executeQuery();
+            	
+            	while(resultSetResiduo.next()) {
+            		
+            		PreparedStatement statement6 = conn4.prepareStatement("SELECT t.* FROM residuos r WHERE r.nombre = ?");
+	            	statement6.setString(1, resultSetResiduo.getString("nombre_residuo"));
+	            	ResultSet resultSetTipoResiduo = statement6.executeQuery();
+	            	
+	            	if(resultSetTipoResiduo.next()) {
+	            		tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+	            		residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
+	            		listaResiduos.add(residuo);
+	            	}
+	            	
+            	}
+	            
+	            
 	            Boolean maq = false;
 	            if(resultSetPedido.getInt("carga") == 1) {
 	            	maq = true;
@@ -110,14 +145,11 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                    listaResiduos,
 	                    resultSetPedido.getDate("fecha"),
 	                    vivienda);
-	        } catch (SQLException e) {
-	            System.out.println("Error al procesar consulta");
-	            // TODO: disparar Exception propia
-	            // throw new AppException(e, e.getSQLState(), e.getMessage());
-	        } catch (Exception e) {
-	            // TODO: disparar Exception propia
-	            // throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-	        } finally {
+	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  e) {
+	        	throw new AppException("error al encontrar Pedido"  + e.getMessage());
+	        	
+	           
+	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
 	        return pedido;
@@ -126,11 +158,16 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
 	    }
 			
-		public List<PedidoDeRetiro> findAll() throws Exception{
+		public List<PedidoDeRetiro> findAll() throws AppException, IncorrectEmailException{
 			
 			List<PedidoDeRetiro> pedidos = new ArrayList<>();
 			PedidoDeRetiro pedido = null;
 	        Vivienda vivienda = null;
+	        
+	        
+	        TipoResiduo tipoResiduo = null;
+    		Residuo residuo = null;
+	        
 	        try {
 	        	Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement("SELECT p.* FROM pedidos p ");
@@ -144,6 +181,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            	statement2.setString(1, resultSetPedido.getString("calle"));
 	            	statement2.setInt(2, resultSetPedido.getInt("altura"));
 	            	ResultSet resultSetVivienda = statement2.executeQuery();
+
 	            	
             		
 	            	//System.out.print("ok4");
@@ -173,14 +211,30 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			            		
 			            		
 			            		ArrayList<Residuo>listaResiduos = new ArrayList<>();
-				            	Residuo vidrio = new Residuo_Vidrio(resultSetPedido.getInt("vidrio"));
-				            	Residuo metal = new Residuo_Metal(resultSetPedido.getInt("metal"));
-				            	Residuo carton = new Residuo_Carton(resultSetPedido.getInt("carton"));
-				            	Residuo plastico = new Residuo_Plastico(resultSetPedido.getInt("plastico"));
-				            	listaResiduos.add(vidrio);
-				            	listaResiduos.add(metal);
-				            	listaResiduos.add(carton);
-				            	listaResiduos.add(plastico);
+				            	
+				            	Connection conn4 = ConnectionManager.getConnection();
+				            	
+				            	PreparedStatement statement5 = conn3.prepareStatement("SELECT r.* FROM residuos_pedido p WHERE p.codigo_pedido = ?");
+				            	statement5.setInt(1, resultSetPedido.getInt("codigo"));
+				            	ResultSet resultSetResiduo = statement5.executeQuery();
+				            	
+				            	while(resultSetResiduo.next()) {
+				            		
+				            		PreparedStatement statement6 = conn3.prepareStatement("SELECT t.* FROM residuos r WHERE r.nombre = ?");
+					            	statement6.setString(1, resultSetResiduo.getString("nombre_residuo"));
+					            	ResultSet resultSetTipoResiduo = statement6.executeQuery();
+					            	
+					            	if(resultSetTipoResiduo.next()) {
+					            		tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+					            		residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
+					            		listaResiduos.add(residuo);
+					            	}
+					            	
+				            		
+				            		
+				            	}
+				            	
+				            	
 				            	Boolean maq = false;
 				            	if(resultSetPedido.getInt("carga") == 1) {
 				            		maq = true;
@@ -195,53 +249,34 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							}
 							
 	            		}
-	            		//Connection conn2 = ConnectionManager.getConnection();
-	            		//System.out.print("ok5");
-	            		//ViviendaDao viviendaDao = new ViviendaDAOJDBC();
-	            		
-	            		
-	            		//vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
-	            		
-	            		//conn = ConnectionManager.getConnection();
-	            		//hacer otro select quizas? buscando el dueño y la direccion idk
-	            		//vivienda.setDueño(resultSetVivienda.ge);
-	            		//conn2.close();
-	            		
-	            	}
-	            	//System.out.print("ok6");
 	            	
-	         
-	            	/*ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            	Residuo vidrio = new Residuo_Vidrio(resultSetPedido.getInt("vidrio"));
-	            	Residuo metal = new Residuo_Metal(resultSetPedido.getInt("metal"));
-	            	Residuo carton = new Residuo_Carton(resultSetPedido.getInt("carton"));
-	            	Residuo plastico = new Residuo_Plastico(resultSetPedido.getInt("plastico"));
-	            	listaResiduos.add(vidrio);
-	            	listaResiduos.add(metal);
-	            	listaResiduos.add(carton);
-	            	listaResiduos.add(plastico);
-	            	Boolean maq = false;
-	            	if(resultSetPedido.getInt("carga") == 1) {
-	            		maq = true;
-	            	}
-	            	pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
-	            			maq,
-	            			listaResiduos,
-	            			resultSetPedido.getDate("fecha"),
-	            			vivienda);
+	       
+	            		
 
-	            	pedidos.add(pedido);*/
+	            	System.out.print("ok4");
+	            	if(resultSetVivienda.next()){
+	            		System.out.print("ok5");
+	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
+	            		System.out.print(resultSetVivienda.getInt("codigo"));
+	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
+	            		
+	            		
+						
 	            }
-	        } catch (AppException e) {
 
-				throw new Exception("Error al registrar una vivienda: "+e.getLocalizedMessage());
+	            	}}} catch (AppException e) {
+
+	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
+
+				throw new AppException("Error al encontrar todos los Pedidos: " + e.getMessage());
 	        } finally {
 	            ConnectionManager.disconnect();
 	        }
 	        return pedidos;
 		}
+	       
 
-		public boolean exists(String dni) throws AppException{
+		public boolean exists(String dni) {
 			return false;
 		}
 

@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.dto;
 
 import java.sql.Date;
+
 import java.util.ArrayList;
 
 import ar.edu.unrn.seminario.Helper.ConditionHelper;
@@ -10,10 +11,8 @@ import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Estado;
 import ar.edu.unrn.seminario.modelo.Residuo;
-import ar.edu.unrn.seminario.modelo.Residuo_Carton;
-import ar.edu.unrn.seminario.modelo.Residuo_Metal;
-import ar.edu.unrn.seminario.modelo.Residuo_Plastico;
-import ar.edu.unrn.seminario.modelo.Residuo_Vidrio;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
+
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class PedidoDeRetiroDTO {
@@ -89,46 +88,6 @@ public class PedidoDeRetiroDTO {
 
 	public void setVivienda(Vivienda vivienda) {
 		this.vivienda = vivienda;
-	}
-
-	public int getPlastico() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Plastico) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
-	}
-
-	public int getVidrio() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Vidrio) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
-	}
-
-	public int getMetal() {
-		int cantidad=0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Metal) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
-	}
-
-	public int getCarton() {
-		int cantidad=0;
-		for(Residuo residuo: listResiduos){
-			if(residuo instanceof Residuo_Carton) {
-				cantidad = residuo.getCantidad();
-			}
-		}
-		return cantidad;
 	}
 }
 

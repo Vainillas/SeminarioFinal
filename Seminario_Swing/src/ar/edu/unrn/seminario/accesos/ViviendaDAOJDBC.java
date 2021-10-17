@@ -20,7 +20,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class ViviendaDAOJDBC implements ViviendaDao {
 
 	@Override
-	public void create(Vivienda v) throws Exception {
+	public void create(Vivienda v) throws AppException {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
@@ -103,7 +103,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	}
 	
 	@Override
-	public Vivienda find(String calle, String altura) throws Exception {
+	public Vivienda find(String calle, String altura) throws AppException {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
@@ -136,9 +136,9 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				}
 				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
 			}
-		} catch (SQLException e) {
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e) {
 
-			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
+			throw new AppException("Error al buscar una vivienda: ");
 		 
 		} finally {
 		ConnectionManager.disconnect();
@@ -148,7 +148,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	
 	
 	@Override
-	public List<Vivienda> findAll() throws Exception {
+	public List<Vivienda> findAll() throws AppException {
 		List<Vivienda>viviendas = new ArrayList<>();
 		Vivienda vivienda=null;
 		Direccion direccion = null;
