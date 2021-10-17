@@ -10,20 +10,20 @@ import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Estado;
-import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class PedidoDeRetiroDTO {
 	private String observacion;
 	private Boolean maquinaPesada;
-	private ArrayList<Residuo> listResiduos;
+	private ArrayList<TipoResiduo> listResiduos;
 	private Vivienda vivienda;
 	private  Date fechaDelPedido;
 	private Estado estado;
 	//private int codigo;
 	
-	public PedidoDeRetiroDTO(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+	public PedidoDeRetiroDTO(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<TipoResiduo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
 	throws DataEmptyException,NotNullException, StringNullException, DateNullException{
 		validarDatos(unaObservacion,unaListaDeResiduos,unaFecha,unaVivienda);
 		this.observacion = unaObservacion;
@@ -32,7 +32,7 @@ public class PedidoDeRetiroDTO {
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
 	}
-	public void validarDatos(String unaObservacion, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+	public void validarDatos(String unaObservacion, ArrayList<TipoResiduo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
 		if(ConditionHelper.IsNull(unaListaDeResiduos)) {throw new NotNullException("la lista de residuos esta vacia");}
 		if(ConditionHelper.stringIsEmpty(unaObservacion)) {throw new StringNullException("observacion nula");}
@@ -73,11 +73,11 @@ public class PedidoDeRetiroDTO {
 		this.maquinaPesada = maquinaPesada;
 	}
 
-	public ArrayList<Residuo> getListResiduos() {
+	public ArrayList<TipoResiduo> getListResiduos() {
 		return listResiduos;
 	}
 
-	public void setListResiduos(ArrayList<Residuo> listResiduos) {
+	public void setListResiduos(ArrayList<TipoResiduo> listResiduos) {
 		this.listResiduos = listResiduos;
 	}
 

@@ -8,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
-import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
-import ar.edu.unrn.seminario.exceptions.NotNumberException;
-import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
 public class ResiduoDAOJDBC implements ResiduoDao {
 
 	@Override
-	public void create(Residuo r) throws AppException {
+	public void create(TipoResiduo r) throws AppException {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
@@ -24,7 +24,7 @@ public class ResiduoDAOJDBC implements ResiduoDao {
 			
 			statement.setString(1, r.getNombre());
 			statement.setInt(2, r.getValor());
-			int cantidad = statement.executeUpdate();
+			statement.executeUpdate();
 		} catch (SQLException  e) {
 			throw new AppException("Error en la creación: "+ e.getMessage());
 		} catch (Exception e) {
@@ -35,13 +35,13 @@ public class ResiduoDAOJDBC implements ResiduoDao {
 	}
 
 	@Override
-	public void update(Residuo r) {
+	public void update(TipoResiduo r) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void remove(Residuo r) {
+	public void remove(TipoResiduo r) {
 		// TODO Auto-generated method stub
 
 	}
@@ -53,40 +53,40 @@ public class ResiduoDAOJDBC implements ResiduoDao {
 	}
 
 	@Override
-	public Residuo find(String nombre) throws AppException {
-		Residuo residuo = null;
+	public TipoResiduo find(String nombre) throws AppException {
+		TipoResiduo tipoResiduo = null;
 		try {
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement statement = connection.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
 			statement.setString(1, nombre);
 			ResultSet resultSetResiduo = statement.executeQuery();
 			if(resultSetResiduo.next()) {
-				residuo = new Residuo(resultSetResiduo.getInt("puntaje"),
+				tipoResiduo = new TipoResiduo(resultSetResiduo.getInt("puntaje"),
 						resultSetResiduo.getString("nombre"));
 			}
-		} catch (SQLException | KilogramEmptyException | NotNumberException e) {
+		} catch (SQLException | NotNullException | DataEmptyException e) {
 			throw new AppException("Error en la búsqueda: "+ e.getMessage());
 		}
 		finally {
 			ConnectionManager.disconnect();
 		}
-		return residuo;
+		return tipoResiduo;
 	}
 
 	@Override
-	public List<Residuo> findAll() throws AppException {
-		List<Residuo>listaResiduos = new ArrayList<>();
-		Residuo residuo = null;
+	public List<TipoResiduo> findAll() throws AppException {
+		List<TipoResiduo>listaResiduos = new ArrayList<>();
+		TipoResiduo tipoResiduo = null;
 		try {
 			Connection connection = ConnectionManager.getConnection();
 			PreparedStatement statement = connection.prepareStatement("SELECT * FROM residuos");
 			ResultSet resultSetResiduo = statement.executeQuery();
 			while(resultSetResiduo.next()) {
-				residuo = new Residuo(resultSetResiduo.getInt("puntaje"),
+				tipoResiduo = new TipoResiduo(resultSetResiduo.getInt("puntaje"),
 						resultSetResiduo.getString("nombre"));
-				listaResiduos.add(residuo);
+				listaResiduos.add(tipoResiduo);
 			}
-		} catch (SQLException | KilogramEmptyException | NotNumberException e) {
+		} catch (SQLException | NotNullException | DataEmptyException e) {
 			throw new AppException("Error en la búsqueda: "+ e.getMessage());
 		}finally {
 			ConnectionManager.disconnect();

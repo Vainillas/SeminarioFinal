@@ -18,9 +18,9 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
-import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
-import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 
@@ -83,11 +83,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	                    vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
 	                }
 	            }
-	            ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            listaResiduos.add(new Residuo(resultSetPedido.getString("vidrio"),"Vidrio" ));
-	            listaResiduos.add(new Residuo(resultSetPedido.getString("plastico"),"Plástico"));
-	            listaResiduos.add(new Residuo(resultSetPedido.getString("carton"),"Carton"));
-	            listaResiduos.add(new Residuo(resultSetPedido.getString("metal"),"Metal"));
+	            ArrayList<TipoResiduo>listaResiduos = new ArrayList<>();
+	            
 	            
 	            
 	            Boolean maq = false;
@@ -150,11 +147,11 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            	
 	            	
 	            	
-	            	ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            	listaResiduos.add(new Residuo(resultSetPedido.getString("vidrio"),"Vidrio" ));
-	 	            listaResiduos.add(new Residuo(resultSetPedido.getString("plastico"),"Plastico"));
-	 	            listaResiduos.add(new Residuo(resultSetPedido.getString("carton"),"Carton"));
-	 	            listaResiduos.add(new Residuo(resultSetPedido.getString("metal"),"Metal"));
+	            	ArrayList<TipoResiduo>listaResiduos = new ArrayList<>();
+	            	listaResiduos.add(new TipoResiduo(resultSetPedido.getString("vidrio"),"Vidrio" ));
+	 	            listaResiduos.add(new TipoResiduo(resultSetPedido.getString("plastico"),"Plastico"));
+	 	            listaResiduos.add(new TipoResiduo(resultSetPedido.getString("carton"),"Carton"));
+	 	            listaResiduos.add(new TipoResiduo(resultSetPedido.getString("metal"),"Metal"));
 	            	Boolean maq = false;
 	            	if(resultSetPedido.getInt("carga") == 1) {
 	            		maq = true;

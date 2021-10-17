@@ -45,7 +45,7 @@ import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
-import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
@@ -248,7 +248,7 @@ public class PersistenceApi implements IApi {
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
 		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
     	
-    	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
+    	ArrayList<TipoResiduo> listResiduos = new ArrayList<TipoResiduo>();
 
     	//hay que solucionar esto
     	//no me parece correcto que se cree una excepcion en persistence pero 
@@ -271,7 +271,7 @@ public class PersistenceApi implements IApi {
     	//System.out.println(residuosSeleccionadosKg.get(0).toString());
     	
     	for(int i=0;i<residuosSeleccionados.size();i++){
-    		listResiduos.add(new Residuo(residuosSeleccionadosKg.get(i), residuosSeleccionados.get(i)));
+    		listResiduos.add(new TipoResiduo(residuosSeleccionadosKg.get(i), residuosSeleccionados.get(i)));
     		
     		
     	}
