@@ -68,8 +68,7 @@ public class PersistenceApi implements IApi {
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
 	private TipoResiduoDao tipoResiduoDao;
-	private Usuario usuarioActivo;
-
+	
 	
 
 	private Usuario userOnline;
@@ -200,6 +199,7 @@ public class PersistenceApi implements IApi {
 		dueño = new Dueño(nombre, apellido, dni, correo);
         this.dueñoDao.create(dueño);
     }
+	
 	public DueñoDTO obtenerDueño(String dni) {
 		Dueño dueño = dueñoDao.find(dni);
 		DueñoDTO dueñodto = null;
@@ -257,11 +257,6 @@ public class PersistenceApi implements IApi {
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
 		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
     	
-    	
-
-    	
-        
-        
     	//hay que solucionar esto
     	//no me parece correcto que se cree una excepcion en persistence pero 
     	//si no esta ningnuna de estas, en algun caso va a provocar un error
@@ -309,11 +304,7 @@ public class PersistenceApi implements IApi {
     	
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
     	
-    	
-    	
 		this.pedidoDeRetiroDao.create(nuevoPedido);
-		
-	
 	
     }
 
@@ -355,13 +346,12 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void usuarioActivo(String username) throws AppException {
-		usuarioActivo = usuarioDao.find(username);
-		
+		userOnline = usuarioDao.find(username);
 		//usuarioDao.activate(username);
-		
 	}
+	
 	public String obtenerRolUsuarioActivo() {
-		return usuarioActivo.getRol().getNombre();
+		return userOnline.getRol().getNombre();
 	}
 	
 	@Override
