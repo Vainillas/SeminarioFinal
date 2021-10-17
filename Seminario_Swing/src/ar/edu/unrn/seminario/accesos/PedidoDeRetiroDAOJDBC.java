@@ -30,8 +30,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
-	                    ("INSERT INTO pedidos(calle,altura,observacion,carga,fecha,vidrio,plastico,metal,carton) "
-	                            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	                    ("INSERT INTO pedidos(calle,altura,observacion,carga,fecha) "
+	                            + "VALUES (?, ?, ?, ?, ?)");
 	            statement.setString(1, p.getVivienda().getDireccion().getCalle());
 	            statement.setInt(2, Integer.parseInt(p.getVivienda().getDireccion().getAltura()));
 	            statement.setString(3, p.getObservacion());
@@ -41,22 +41,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            }else {
 	            	statement.setInt(4, 0);
 	            }
-	            
 	            statement.setDate(5, p.getFechaDelPedido());
-	            statement.setInt(6, p.getVidrio());
-	            statement.setInt(7, p.getPlastico());
-	            statement.setInt(8, p.getMetal());
-	            statement.setInt(9, p.getCarton());
-	            int cantidad = statement.executeUpdate();
-	            
-	            if (cantidad > 0) {
-	                System.out.println("Insertando " + cantidad + " registros");
-	            } else {
-	                System.out.println("Error al actualizar");
-	                throw new AppException("Error al registrar un pedido: ");
-	            }
+	            statement.executeUpdate();
 	        } catch (SQLException e) {
-	        	
 	            throw new AppException("Error al registrar un pedido: ");
 	        }  finally {
 	            ConnectionManager.disconnect();

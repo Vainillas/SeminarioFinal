@@ -12,10 +12,7 @@ public class DueñoDTO  {
 	
 private String correoElectronico;
 public DueñoDTO (String nombre, String apellido, String dni, String correoElectronico) {
-	
-
 	this.correoElectronico = correoElectronico;
-	
 }
 public String obtenerCorreo() {
 	return correoElectronico;

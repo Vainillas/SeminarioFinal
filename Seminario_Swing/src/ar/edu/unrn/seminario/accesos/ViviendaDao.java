@@ -22,6 +22,6 @@ public interface ViviendaDao {
 	Vivienda find(String calle, String altura) throws AppException;
 
 	
-	List<Vivienda> findAll() throws Exception;
+	List<Vivienda> findAll() throws AppException;
 
 }

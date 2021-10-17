@@ -84,7 +84,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetDueño.getString("correo_electronico"));
 			}
 		} catch (SQLException e) {
-			System.out.println("Error al procesar consultaXDDDD");
+			System.out.println("Error al procesar consulta");
 		// TODO: disparar Exception propia
 		// throw new AppException(e, e.getSQLState(), e.getMessage());
 		} catch (Exception e) {
