@@ -18,6 +18,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
+import javax.swing.SwingConstants;
 public class ListadoVivienda extends JFrame {
 	IApi api;
 	private JTable table;
@@ -26,20 +27,25 @@ public class ListadoVivienda extends JFrame {
 	private JPanel contentPane;
 	private JButton botonAtras;
 	private JButton botonOrdenar;
+	private JPanel panel;
 
 
 	public ListadoVivienda(IApi api){
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 598, 583);
 		contentPane = new JPanel();
+		panel = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		contentPane.setLayout(new BorderLayout(5, 5));
 		setContentPane(contentPane);
-
+		contentPane.add(panel);
+		contentPane.add(panel, BorderLayout.NORTH);
+		panel.setLayout(new BorderLayout(0, 0));
+		
 		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
+		panel.add(scrollPane);
 		table = new JTable();
 		String[] titulos = { "DIRECCION", "DUEÑO","CÓDIGO" };
 		
@@ -71,11 +77,12 @@ public class ListadoVivienda extends JFrame {
 		scrollPane.setViewportView(table);
 
 		botonAtras = new JButton("Atras");
+
 		botonAtras.addActionListener((e)->{
 				setVisible(false);
 			
 		});
-		contentPane.add(botonAtras, BorderLayout.SOUTH);
+		panel.add(botonAtras, BorderLayout.SOUTH);
 
 		botonOrdenar = new JButton("Ordenar");
 		botonOrdenar.addActionListener((e)->{
@@ -94,6 +101,6 @@ public class ListadoVivienda extends JFrame {
 				table.setModel(modelo1);
 			
 		});
-		contentPane.add(botonOrdenar, BorderLayout.NORTH);
+		panel.add(botonOrdenar, BorderLayout.NORTH);
 	}
 }

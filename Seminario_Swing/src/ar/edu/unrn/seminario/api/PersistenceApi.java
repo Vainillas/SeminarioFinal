@@ -176,16 +176,18 @@ public class PersistenceApi implements IApi {
 	
 
 	@Override
-	public List<ViviendaDTO> obtenerViviendas() throws Exception {
+	public List<ViviendaDTO> obtenerViviendas() throws AppException {
 		List<ViviendaDTO> dtos = new ArrayList<>();
+		
 		List<Vivienda> viviendas = viviendaDao.findAll();
+		
 		for (Vivienda v : viviendas) {
 			dtos.add(new ViviendaDTO(v.getDireccion(),v.getDueño(),v.getID()));
 		}
 		return dtos;
 	}
 	
-	public List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception{
+	public List<ViviendaDTO> obtenerViviendasOrdenadas() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
 				.sorted((v1,v2)->v1.getID()-v2.getID())

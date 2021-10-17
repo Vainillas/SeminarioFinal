@@ -13,6 +13,7 @@ public class Dueño extends Persona {
 		super(nombre, apellido, dni);
 		validarDatos(correoElectronico);
 		this.correoElectronico = correoElectronico;
+		
 	}
 	
 	

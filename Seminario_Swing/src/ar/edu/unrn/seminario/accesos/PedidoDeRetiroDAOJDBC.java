@@ -263,8 +263,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            	
 	            	}
 	            	
-	            	
-	            	
+	            
 	            	ArrayList<Residuo>listaResiduos = new ArrayList<>();
 	            	Boolean maq = false;
 	            	if(resultSetPedido.getInt("carga") == 1) {
