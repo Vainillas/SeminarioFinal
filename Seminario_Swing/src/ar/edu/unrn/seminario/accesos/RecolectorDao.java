@@ -6,7 +6,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Recolector;
 
 public interface RecolectorDao {
-	void create(Recolector recolector) throws Exception;
+	void create(Recolector recolector) throws AppException;
 
 	void update(Recolector recolector);
 

@@ -2,6 +2,8 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -40,56 +42,98 @@ public class VentanaPrincipalPrueba extends JFrame {
 	 */
 	public VentanaPrincipalPrueba(IApi api) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 972, 533);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		
 		JPanel panelAdministrador = new JPanel();
 		panelAdministrador.setLayout(null);
-		panelAdministrador.setBounds(10, 11, 414, 239);
+		panelAdministrador.setBounds(488, 11, 458, 239);
 		panelAdministrador.setVisible(false);
 		contentPane.add(panelAdministrador);
 		JPanel panelPersonal = new JPanel();
-		panelPersonal.setLayout(null);
 		panelPersonal.setVisible(false);
-		panelPersonal.setBounds(10, 11, 414, 239);
+		panelPersonal.setBounds(10, 11, 458, 239);
 		contentPane.add(panelPersonal);
+		panelPersonal.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel_2 = new JLabel("panel personal");
-		lblNewLabel_2.setBounds(50, 150, 46, 14);
-		panelPersonal.add(lblNewLabel_2);
+		JMenuBar mbPersonal = new JMenuBar();
+		panelPersonal.add(mbPersonal, BorderLayout.NORTH);
 		
-		if(api.obtenerRolUsuarioActivo().equals("ADMIN")) {//nose si esta bien esto
-			panelAdministrador.setVisible(true);
-		}
-		if(api.obtenerRolUsuarioActivo().equals("Comunidad")){//
-			panelPersonal.setVisible(true);//se tendria que mostrar la ventana de usuario, esto esta mal por ahora
-			
-		}
+		JMenu mnOrdenes = new JMenu(labels.getString("ventana.principal.dinamica.menu.ordenes"));
+		mbPersonal.add(mnOrdenes);
 		
-		JMenuBar mbPrincipal = new JMenuBar();
-		mbPrincipal.setBounds(0, 0, 404, 22);
-		panelAdministrador.add(mbPrincipal);
+		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.listar.ordenes.de.retiro"));
+		mnOrdenes.add(mntmPerListarOrdenesDeRetiro);
+		
+		JMenu MnDatosDelPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.del.personal"));
+		mbPersonal.add(MnDatosDelPersonal);
+		
+		JMenuItem mntmVivPerDatosDelPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.vivienda.datos.del.personal"));
+		MnDatosDelPersonal.add(mntmVivPerDatosDelPersonal);
+		
+		panelAdministrador.setVisible(true);
+		JMenuBar mbAdministrador = new JMenuBar();
+		mbAdministrador.setBounds(0, 0, 448, 22);
+		panelAdministrador.add(mbAdministrador);
 		
 		JMenu mUsuarios = new JMenu("New menu");
-		mbPrincipal.add(mUsuarios);
+		mbAdministrador.add(mUsuarios);
 		
-		JMenuItem minListadoUsuario = new JMenuItem("New menu item");
-		mUsuarios.add(minListadoUsuario);
+		JMenuItem minAdmListadoUsuario = new JMenuItem("New menu item");
+		mUsuarios.add(minAdmListadoUsuario);
 		
 		JMenu mnViviendas = new JMenu("New menu");
-		mbPrincipal.add(mnViviendas);
+		mbAdministrador.add(mnViviendas);
 		
-		JMenuItem mniListadoVivienda = new JMenuItem("New menu item");
-		mnViviendas.add(mniListadoVivienda);
+		JMenuItem mniAdmListadoViviendas = new JMenuItem("New menu item");
+		mnViviendas.add(mniAdmListadoViviendas);
 		
-		JMenu mnNewMenu = new JMenu("New menu");
-		mbPrincipal.add(mnNewMenu);
+		JMenu mnOrdenesDeRetiro = new JMenu("New menu");
+		mbAdministrador.add(mnOrdenesDeRetiro);
 		
-		JLabel lblNewLabel = new JLabel("label administrador");
-		lblNewLabel.setBounds(175, 115, 117, 14);
-		panelAdministrador.add(lblNewLabel);
+		JMenuItem mntmAdmListadoOrdenesDeRetiros = new JMenuItem("New menu item");
+		mnOrdenesDeRetiro.add(mntmAdmListadoOrdenesDeRetiros);
+		
+		JMenu mnPedidosDeRetiro = new JMenu("New menu");
+		mbAdministrador.add(mnPedidosDeRetiro);
+		
+		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem("New menu item");
+		mnPedidosDeRetiro.add(mntmAdmListadoPedidosDeRetiros);
+		
+		JMenu mnDueño = new JMenu("New menu");
+		mbAdministrador.add(mnDueño);
+		
+		JMenuItem mntmAdmListadoDueños = new JMenuItem("New menu item");
+		mnDueño.add(mntmAdmListadoDueños);
+		
+		JMenu mnPersonal = new JMenu("New menu");
+		mbAdministrador.add(mnPersonal);
+		
+		JMenuItem mntmAdmListadoPersonal = new JMenuItem("New menu item");
+		mnPersonal.add(mntmAdmListadoPersonal);
+		
+		JPanel panelDueño = new JPanel();
+		panelDueño.setBounds(10, 261, 458, 239);
+		contentPane.add(panelDueño);
+		panelDueño.setLayout(new BorderLayout(0, 0));
+		
+		JMenuBar mbDueño = new JMenuBar();
+		panelDueño.add(mbDueño, BorderLayout.NORTH);
+		
+		JMenu mnViviendasDueño = new JMenu("New menu");
+		mbDueño.add(mnViviendasDueño);
+		
+		JMenuItem mntmListarViviendasDueño = new JMenuItem("New menu item");
+		mnViviendasDueño.add(mntmListarViviendasDueño);
+		
+		JMenu menuDatosDueño = new JMenu("New menu");
+		mbDueño.add(menuDatosDueño);
+		
+		JMenuItem mntmVivDatosDelDueño = new JMenuItem("New menu item");
+		menuDatosDueño.add(mntmVivDatosDelDueño);
 	}
 }

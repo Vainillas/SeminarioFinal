@@ -3,12 +3,13 @@ package ar.edu.unrn.seminario.modelo;
 import ar.edu.unrn.seminario.Helper.ConditionHelper;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class Dueño extends Persona {
 	private String correoElectronico;
 	
-	public Dueño(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException, StringNullException, IncorrectEmailException {
+	public Dueño(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		super(nombre, apellido, dni);
 		validarDatos(correoElectronico);
 		this.correoElectronico = correoElectronico;

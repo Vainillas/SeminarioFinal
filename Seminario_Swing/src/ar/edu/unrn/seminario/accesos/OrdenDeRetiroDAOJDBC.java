@@ -24,7 +24,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            PreparedStatement statement = conn.prepareStatement
 	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, calle, altura, estado, codigoOrden) "
 	                            + "VALUES (?, ?, ?, ?, ?, ?)");
-	            //statement.setInt(1, o.getPedidoAsociado().getCodigo());
+	      
 	            statement.setString(2, o.getRecolector().getDni());
 	            statement.setString(3, o.getVivienda().getDireccion().getCalle());
 	            statement.setString(4, o.getVivienda().getDireccion().getAltura());
@@ -39,7 +39,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	                // TODO: disparar Exception propia
 	            }
 	        } catch (SQLException e) {
-	            throw new AppException("Error al registrar un pedido: "+e.getMessage());
+	            throw new AppException("Error al crear un pedido: ");
 	        } finally {
 	            ConnectionManager.disconnect();
 	        }
@@ -57,7 +57,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 			
 		}
 
-		public OrdenDeRetiro find(int id) {
+		public OrdenDeRetiro find(int id) throws AppException {
 			OrdenDeRetiro orden = null;
 	        Vivienda vivienda = null;
 	        try {
@@ -95,13 +95,8 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            	orden = new OrdenDeRetiro(pedido);
 	            }
 	        } catch (SQLException e) {
-	            System.out.println("Error al procesar consulta");
-	            // TODO: disparar Exception propia
-	            // throw new AppException(e, e.getSQLState(), e.getMessage());
-	        } catch (Exception e) {
-	            // TODO: disparar Exception propia
-	            // throw new AppException(e, e.getCause().getMessage(), e.getMessage());
-	        } finally {
+	            throw new AppException("error de la aplicacion");
+	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
 	        return orden;

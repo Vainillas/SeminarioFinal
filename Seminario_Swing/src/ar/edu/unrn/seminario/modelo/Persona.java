@@ -7,13 +7,13 @@ public class Persona {
 	protected String nombre;
 	protected String apellido;
 	protected String dni;
-	public Persona (String nombre, String apellido, String dni)throws DataEmptyException, StringNullException, IncorrectEmailException {
+	public Persona (String nombre, String apellido, String dni)throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		validarDatos(nombre,apellido,dni);
 		this.nombre = nombre;
 		this.apellido = apellido;
 		this.dni = dni;
 	}
-	private void validarDatos(String nombre,String apellido, String dni) throws StringNullException, IncorrectEmailException, DataEmptyException {
+	private void validarDatos(String nombre,String apellido, String dni) throws StringNullException, IncorrectEmailException, DataEmptyException, NotNumberException {
 		if(ConditionHelper.stringIsNull(nombre)) {throw new StringNullException("nombre nulo");}
 		if(ConditionHelper.stringIsNull(apellido)) {throw new StringNullException("apellido nulo");}
 		if(ConditionHelper.stringIsNull(dni)) {throw new StringNullException("dni nulo");}
@@ -23,6 +23,7 @@ public class Persona {
 		if(ConditionHelper.stringIsEmpty(apellido)) {throw new DataEmptyException("El campo de apellido está vacío");}
 		if(ConditionHelper.stringIsEmpty(dni)) {throw new DataEmptyException("El campo DNI está vacío");}
 		
+		if(ConditionHelper.IsNotNumber(dni)) {throw new NotNumberException("el dni debe ser numerico.");}
 	}
 	public String getNombre () {
 		return this.nombre;

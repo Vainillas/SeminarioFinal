@@ -205,7 +205,7 @@ public class PersistenceApi implements IApi {
 	}
 
 
-    public List<DueñoDTO> obtenerDueños() throws AppException {
+    public List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
@@ -234,6 +234,7 @@ public class PersistenceApi implements IApi {
     		}
     	return d;
     	}
+    
     public List<DireccionDTO> obtenerDirecciones() throws AppException {
         List<DireccionDTO> dtos = new ArrayList<>();
         List<Direccion> direcciones = direccionDao.findAll();
@@ -254,6 +255,7 @@ public class PersistenceApi implements IApi {
     	//no me parece correcto que se cree una excepcion en persistence pero 
     	//si no esta ningnuna de estas, en algun caso va a provocar un error
 
+    	
     	if(domicilioSeleccionado == null) {
     		throw new NotNullException("no selecciono ningun domicilio");
     	}
@@ -267,8 +269,6 @@ public class PersistenceApi implements IApi {
     	if(residuosSeleccionadosKg.size() == 0) {
     		throw new NotNullException("por favor, indique el kg");
     	}
-    	//System.out.println(residuosSeleccionados.get(0).toString());
-    	//System.out.println(residuosSeleccionadosKg.get(0).toString());
     	
     	for(int i=0;i<residuosSeleccionados.size();i++){
     		listResiduos.add(new Residuo(residuosSeleccionadosKg.get(i), residuosSeleccionados.get(i)));
@@ -297,7 +297,7 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
-			throws DataEmptyException, StringNullException, IncorrectEmailException {
+			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
 		
 	}

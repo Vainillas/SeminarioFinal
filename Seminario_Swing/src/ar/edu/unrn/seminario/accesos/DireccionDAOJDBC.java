@@ -19,27 +19,36 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 public class DireccionDAOJDBC implements DireccionDao {
 
 	@Override
-	public void create(Direccion d) throws Exception {
+	public void create(Direccion d) throws AppException  {
 		
 
-			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn
+			Connection conn;
+			try {
+				conn = ConnectionManager.getConnection();
+				PreparedStatement statement = conn
 					.prepareStatement("INSERT INTO dirección(calle,altura,barrio,codigo_postal,latitud,longitud) "
 							+ "VALUES (?, ?, ?, ?, ?, ?)");
-
-			statement.setString(1, d.getCalle());
-			statement.setInt(2, Integer.parseInt(d.getAltura()));
-			statement.setString(3, d.getBarrio());
-			statement.setInt(4, Integer.parseInt(d.getCodPostal()));
-			statement.setString(5, d.getLatitud());
-			statement.setString(6, d.getLongitud());
-			int cantidad = statement.executeUpdate();
-			if (cantidad > 0) {
-				System.out.println("Modificando " + cantidad + " registros");
-			} else {
-				System.out.println("Error al actualizar");
-				// TODO: disparar Exception propia
+	
+				statement.setString(1, d.getCalle());
+				statement.setInt(2, Integer.parseInt(d.getAltura()));
+				statement.setString(3, d.getBarrio());
+				statement.setInt(4, Integer.parseInt(d.getCodPostal()));
+				statement.setString(5, d.getLatitud());
+				statement.setString(6, d.getLongitud());
+				int cantidad = statement.executeUpdate();
+				if (cantidad > 0) {
+					System.out.println("Modificando " + cantidad + " registros");
+				} else {
+					System.out.println("Error al actualizar");
+					// TODO: disparar Exception propia
+				}
+			} catch (AppException | SQLException e) {
+				throw new AppException("error al crear la direccion");
+			
 			}
+			
+
+			
 	}
 
 	
