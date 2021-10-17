@@ -8,7 +8,7 @@ import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 
 public interface OrdenDeRetiroDao {
 
-		void create(OrdenDeRetiro orden) throws Exception;
+		void create(OrdenDeRetiro orden) throws AppException;
 
 		void update(OrdenDeRetiro pedido);
 
@@ -16,7 +16,7 @@ public interface OrdenDeRetiroDao {
 
 		void remove(OrdenDeRetiro pedido);
 
-		OrdenDeRetiro find(int id);
+		OrdenDeRetiro find(int id) throws AppException;
 
 		List<OrdenDeRetiro> findAll() throws AppException;
 

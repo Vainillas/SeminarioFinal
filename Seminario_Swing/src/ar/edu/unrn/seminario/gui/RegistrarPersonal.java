@@ -13,6 +13,7 @@ import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 import javax.swing.JLabel;
@@ -103,7 +104,7 @@ public class RegistrarPersonal extends JFrame {
 					JOptionPane.showMessageDialog(null,"Recolector registrado con exito","Mensaje informativo",1);
 					setVisible(false);
 					dispose();
-				} catch (DataEmptyException | StringNullException | IncorrectEmailException e1) {
+				} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.WARNING_MESSAGE);
 					
 				}

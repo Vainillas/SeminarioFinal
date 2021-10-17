@@ -80,12 +80,13 @@ public class ListadoVivienda extends JFrame {
 		botonOrdenar = new JButton("Ordenar");
 		botonOrdenar.addActionListener((e)->{
 				DefaultTableModel modelo1 = new DefaultTableModel(new Object[][] {}, titulos);
-				List<ViviendaDTO> viviendasOrdenadas = null ;
-				for (ViviendaDTO v : viviendasOrdenadas) {
-					modelo1.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
-				}
+				
 				try {
-					viviendasOrdenadas = api.obtenerViviendasOrdenadas();
+					List<ViviendaDTO> viviendasOrdenadas = api.obtenerViviendasOrdenadas();
+					
+					for (ViviendaDTO v : viviendasOrdenadas) {
+						modelo1.addRow(new Object[] { v.getDireccion().toString(), v.getDueño().toString(), v.getID() });
+					}
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
 				}

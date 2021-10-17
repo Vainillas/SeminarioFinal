@@ -6,7 +6,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.modelo.Recolector;
 
 public class RecolectorDAOJDBC implements RecolectorDao {
-	public void create(Recolector recolector) throws Exception{
+	public void create(Recolector recolector) throws AppException{
 		
 	}
 

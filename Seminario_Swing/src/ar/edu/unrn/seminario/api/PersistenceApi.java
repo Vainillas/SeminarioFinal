@@ -68,8 +68,7 @@ public class PersistenceApi implements IApi {
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
 	private TipoResiduoDao tipoResiduoDao;
-	private Usuario usuarioActivo;
-
+	
 	
 
 	private Usuario userOnline;
@@ -200,6 +199,7 @@ public class PersistenceApi implements IApi {
 		dueño = new Dueño(nombre, apellido, dni, correo);
         this.dueñoDao.create(dueño);
     }
+	
 	public DueñoDTO obtenerDueño(String dni) {
 		Dueño dueño = dueñoDao.find(dni);
 		DueñoDTO dueñodto = null;
@@ -213,7 +213,7 @@ public class PersistenceApi implements IApi {
 	}
 
 
-    public List<DueñoDTO> obtenerDueños() throws AppException {
+    public List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
@@ -256,7 +256,7 @@ public class PersistenceApi implements IApi {
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
 		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
-
+    	
     	if(domicilioSeleccionado == null) {
     		throw new NotNullException("No selecciono ningun domicilio");
     	}
@@ -297,17 +297,13 @@ public class PersistenceApi implements IApi {
     	
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda);
     	
-    	
-    	
 		this.pedidoDeRetiroDao.create(nuevoPedido);
-		
-	
 	
     }
 
 	@Override
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
-			throws DataEmptyException, StringNullException, IncorrectEmailException {
+			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
 		
 	}
@@ -343,13 +339,12 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void usuarioActivo(String username) throws AppException {
-		usuarioActivo = usuarioDao.find(username);
-		
+		userOnline = usuarioDao.find(username);
 		//usuarioDao.activate(username);
-		
 	}
+	
 	public String obtenerRolUsuarioActivo() {
-		return usuarioActivo.getRol().getNombre();
+		return userOnline.getRol().getNombre();
 	}
 	
 	@Override

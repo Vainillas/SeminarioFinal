@@ -34,10 +34,9 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			statement.setBoolean(4, usuario.isActivo());
 			statement.setInt(5, usuario.getRol().getCodigo());
 			
-			statement.executeUpdate();// faltaba esta linea que es la que ejecuta las declaraciones
+			statement.executeUpdate();
 			
 		} catch (SQLException e  ) {
-			System.out.println(e.getMessage());
 			throw new AppException("error al procesar consulta");
 		}  finally {
 			ConnectionManager.disconnect();
@@ -60,10 +59,10 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 					exists = true;
 				}		
 			}
-			if(!exists) {//si no existe el usuario se genera una excepcion
-				throw new NotRegisterException("usuario no registrado");//como hacerlo una excepcion sin if?esta bien igual?
+			if(!exists) {
+				throw new NotRegisterException("usuario no registrado");
 			}
-		
+			
 		} catch (SQLException e ) {
 			throw new AppException("error al procesar la consulta del nombre del usuario");
 		}finally {
@@ -171,7 +170,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 				usuarios.add(usuario);
 			}
 		} catch (SQLException   | NotNullException   | DataEmptyException  | StringNullException | IncorrectEmailException e1) {
-			throw new AppException("error de aplicacion" + e1.getMessage());
+			throw new AppException("error de aplicacion");
 		
 		}finally {
 			ConnectionManager.disconnect();

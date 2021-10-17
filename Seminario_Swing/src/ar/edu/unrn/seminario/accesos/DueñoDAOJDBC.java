@@ -11,6 +11,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
@@ -22,7 +23,7 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 public class DueñoDAOJDBC implements DueñoDao {
 
 	@Override
-	public void create(Dueño d) throws Exception {
+	public void create(Dueño d) throws AppException {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
@@ -41,10 +42,8 @@ public class DueñoDAOJDBC implements DueñoDao {
 				// TODO: disparar Exception propia
 			}
 		} catch (SQLException e) {
-			throw new SQLException("Error al procesar consulta: "+e.getMessage());
-		} catch (Exception e) {
-			throw new Exception("Error al insertar un dueño: "+e.getMessage());
-		} finally {
+			throw new AppException("Error al procesar consulta: ");
+		}  finally {
 			ConnectionManager.disconnect();
 		}
 
@@ -97,7 +96,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 	}
 
 	@Override
-	public List<Dueño> findAll() throws AppException {
+	public List<Dueño> findAll() throws AppException, NotNumberException {
 		List<Dueño> dueños = new ArrayList<Dueño>();
 		try {
 			Connection conn = ConnectionManager.getConnection();
