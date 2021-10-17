@@ -1,21 +1,10 @@
 package ar.edu.unrn.seminario.api;
 
-import java.sql.SQLException;
-
-
-
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
-import ar.edu.unrn.seminario.accesos.ConnectionManager;
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
