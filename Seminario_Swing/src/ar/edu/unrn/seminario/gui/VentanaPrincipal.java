@@ -126,9 +126,11 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoViviendas.addActionListener((e)->{
+
 			ListadoVivienda v =  new ListadoVivienda(api);
 			v.setVisible(true);
 			
+
 			/*try {
 				List<PedidoDeRetiroDTO> lista = api.obtenerPedidosDeRetiro();
 				for(PedidoDeRetiroDTO p: lista) {
@@ -168,7 +170,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemPedidoDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.pedido.de.retiro"));
 		menuItemPedidoDeRetiro.addActionListener((e)->{
-			PedidoDeRetiro p  = new PedidoDeRetiro(api);
+			GenerarPedidoDeRetiro p  = new GenerarPedidoDeRetiro(api);
 			p.setVisible(true);
 			p.setLocationRelativeTo(null);
 			});
@@ -178,7 +180,7 @@ public class VentanaPrincipal extends JFrame {
 		JMenuItem menuItemOrdenDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.generar.orden.de.retiro"));
 		
 		menuItemOrdenDeRetiro.addActionListener( (e)->{ 
-			OrdenDeRetiro o = new OrdenDeRetiro(api);
+			GenerarOrdenDeRetiro o = new GenerarOrdenDeRetiro(api);
 			o.setVisible(true);
 			o.setLocationRelativeTo(null); 
 			

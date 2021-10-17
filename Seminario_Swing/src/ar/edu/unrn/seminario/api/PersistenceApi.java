@@ -7,11 +7,15 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
+import ar.edu.unrn.seminario.accesos.ConnectionManager;
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
@@ -20,6 +24,8 @@ import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDao;
 import ar.edu.unrn.seminario.accesos.PedidoDeRetiroDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDAOJDBC;
 import ar.edu.unrn.seminario.accesos.RolDao;
+import ar.edu.unrn.seminario.accesos.TipoResiduoDAOJDBC;
+import ar.edu.unrn.seminario.accesos.TipoResiduoDao;
 import ar.edu.unrn.seminario.accesos.UsuarioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.UsuarioDao;
 import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
@@ -46,6 +52,7 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
 import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
@@ -60,7 +67,7 @@ public class PersistenceApi implements IApi {
 	private DueñoDao dueñoDao;
 	private DireccionDao direccionDao;
 	private PedidoDeRetiroDao pedidoDeRetiroDao;
-
+	private TipoResiduoDao tipoResiduoDao;
 	private Usuario usuarioActivo;
 
 	
@@ -76,6 +83,7 @@ public class PersistenceApi implements IApi {
 		dueñoDao = new DueñoDAOJDBC();
 		direccionDao = new DireccionDAOJDBC();
 		pedidoDeRetiroDao = new PedidoDeRetiroDAOJDBC();
+		tipoResiduoDao = new TipoResiduoDAOJDBC();
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
@@ -249,32 +257,45 @@ public class PersistenceApi implements IApi {
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
 		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
     	
-    	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
+    	
 
+    	
+        
+        
     	//hay que solucionar esto
     	//no me parece correcto que se cree una excepcion en persistence pero 
     	//si no esta ningnuna de estas, en algun caso va a provocar un error
 
     	
     	if(domicilioSeleccionado == null) {
-    		throw new NotNullException("no selecciono ningun domicilio");
+    		throw new NotNullException("No selecciono ningun domicilio");
     	}
     	 if(residuosSeleccionados.size() != residuosSeleccionadosKg.size()) {
-    		 throw new NotNullException("indique el campo kg");
+    		 throw new NotNullException("Indique el campo kg");
          }
     	
     	if(residuosSeleccionados.size() == 0) {
-    		throw new NotNullException("no selecciono ningun residuo");
+    		throw new NotNullException("No selecciono ningun residuo");
     	}
     	if(residuosSeleccionadosKg.size() == 0) {
-    		throw new NotNullException("por favor, indique el kg");
+    		throw new NotNullException("Por favor, indique el kg");
     	}
     	
+    	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
+    	
     	for(int i=0;i<residuosSeleccionados.size();i++){
-    		listResiduos.add(new Residuo(residuosSeleccionadosKg.get(i), residuosSeleccionados.get(i)));
-    		
+    		TipoResiduo t = tipoResiduoDao.find(residuosSeleccionados.get(i));
+    		listaTipos.add(t);
+    	}
+    	
+    	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
+    	
+    	for(int i=0;i<residuosSeleccionadosKg.size();i++){
+    		Residuo r = new Residuo(listaTipos.get(i), Integer.parseInt(residuosSeleccionadosKg.get(i)));
+    		listResiduos.add(r);
     		
     	}
+
 
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());

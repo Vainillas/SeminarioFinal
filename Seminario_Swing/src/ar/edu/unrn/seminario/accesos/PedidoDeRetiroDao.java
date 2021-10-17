@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.accesos;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 
 public interface PedidoDeRetiroDao {
@@ -17,7 +18,7 @@ public interface PedidoDeRetiroDao {
 
 		PedidoDeRetiro find(int id) throws AppException;
 
-		List<PedidoDeRetiro> findAll() throws AppException;
+		List<PedidoDeRetiro> findAll() throws AppException, IncorrectEmailException;
 
 		boolean exists(String dni) throws AppException;
 	

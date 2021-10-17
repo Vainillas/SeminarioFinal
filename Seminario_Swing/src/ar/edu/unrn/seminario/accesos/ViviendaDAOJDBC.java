@@ -97,7 +97,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		 
 		} finally {
 			
-		ConnectionManager.disconnect();
+			ConnectionManager.disconnect();
 		}
 		return vivienda;
 	}
@@ -148,7 +148,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 	
 	
 	@Override
-	public List<Vivienda> findAll() throws Exception {
+	public List<Vivienda> findAll() throws AppException {
 		List<Vivienda>viviendas = new ArrayList<>();
 		Vivienda vivienda=null;
 		Direccion direccion = null;

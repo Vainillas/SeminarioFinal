@@ -11,6 +11,7 @@ import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Estado;
 import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
 
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
@@ -87,54 +88,6 @@ public class PedidoDeRetiroDTO {
 
 	public void setVivienda(Vivienda vivienda) {
 		this.vivienda = vivienda;
-	}
-
-	public int getPlastico() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-
-			if(residuo.getNombre().equals("Plastico")) {
-				cantidad = residuo.getCantidad();
-				
-			}
-		}
-		return cantidad;
-	}
-
-	public int getVidrio() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-
-			if(residuo.getNombre().equals("Vidrio")) {
-				cantidad = residuo.getCantidad();
-				
-			}
-		}
-		return cantidad;
-	}
-
-	public int getMetal() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-
-			if(residuo.getNombre().equals("Metal")) {
-				cantidad = residuo.getCantidad();
-				
-			}
-		}
-		return cantidad;
-	}
-
-	public int getCarton() {
-		int cantidad = 0;
-		for(Residuo residuo: listResiduos){
-
-			if(residuo.getNombre().equals("Carton")) {
-				cantidad = residuo.getCantidad();
-				
-			}
-		}
-		return cantidad;
 	}
 }
 
