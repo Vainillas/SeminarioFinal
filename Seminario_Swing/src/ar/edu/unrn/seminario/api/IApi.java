@@ -98,4 +98,7 @@ public interface IApi {
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
 
 	Usuario getUserOnline();
+
+	 public void generarOrdenDeRetiro(PedidoDeRetiro unPedido, String dniRecolector) throws AppException;
+	 
 }

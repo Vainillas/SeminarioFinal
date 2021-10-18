@@ -70,27 +70,12 @@ después seguro pasemos a los recolectores.*/
 
 
 public class GenerarOrdenDeRetiro extends JFrame {
-	
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PersistenceApi api = new PersistenceApi();
-					GenerarOrdenDeRetiro frame = new GenerarOrdenDeRetiro(api);
-					frame.setVisible(true);
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	private ArrayList<String> pedidoSeleccionado = null;
 	private JPanel contentPane;
 	private DefaultTableModel modeloPedidos;
 	private DefaultTableModel modeloRecolector;
 	private  IApi api;
-	private ArrayList<String> recolectorSeleccionado = null;
+	private String recolectorSeleccionado = null;
 	
 	public GenerarOrdenDeRetiro(IApi api) throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
 		setTitle("Orden de retiro");
@@ -178,12 +163,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int fila = tablePedidos.getColumnCount();
-				recolectorSeleccionado = new ArrayList<String>();
-				for (int i = 0; i < fila; i++) {
-					recolectorSeleccionado.add((String) tablePedidos.getValueAt(tablePedidos.getSelectedRow(), i));
-					
-				}
-				
+				String recolectorseleccionado = (String) tablePedidos.getValueAt(tablePedidos.getSelectedRow(), 0);
 			}
 		});
 		
@@ -205,8 +185,14 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		
 		JButton btnAceptar = new JButton("Generar Orden");
 		btnAceptar.addActionListener((e)->{
+			try {
+				api.generarOrdenDeRetiro(null, recolectorSeleccionado);
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
 			
-			api.
+			
+			
 		});
 		btnAceptar.setHorizontalAlignment(SwingConstants.LEADING);
 		btnAceptar.setVerticalAlignment(SwingConstants.TOP);
