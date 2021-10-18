@@ -21,10 +21,9 @@ public class PedidoDeRetiroDTO {
 	private ArrayList<Residuo> listResiduos;
 	private Vivienda vivienda;
 	private  Date fechaDelPedido;
-	private Estado estado;
-	//private int codigo;
+	private int codigo;
 	
-	public PedidoDeRetiroDTO(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+	public PedidoDeRetiroDTO(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda, int codigo)
 	throws DataEmptyException,NotNullException, StringNullException, DateNullException{
 		validarDatos(unaObservacion,unaListaDeResiduos,unaFecha,unaVivienda);
 		this.observacion = unaObservacion;
@@ -32,6 +31,7 @@ public class PedidoDeRetiroDTO {
 		this.listResiduos = unaListaDeResiduos;
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
+		this.codigo=codigo;
 	}
 	public void validarDatos(String unaObservacion, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
@@ -42,10 +42,6 @@ public class PedidoDeRetiroDTO {
 		if(ConditionHelper.IsNull(unaVivienda)) {throw new NotNullException("vivienda nula");}
 		
 	}
-	public String obtenerEstado() {
-		return this.estado.obtenerEstado();
-	}
-
 	
 	
 	public Date getFechaDelPedido() {
@@ -88,6 +84,18 @@ public class PedidoDeRetiroDTO {
 
 	public void setVivienda(Vivienda vivienda) {
 		this.vivienda = vivienda;
+	}
+	public int getCodigo() {
+		return codigo;
+	}
+	public void setCodigo(int codigo) {
+		this.codigo=codigo;
+	}
+	@Override
+	public String toString() {
+		return "PedidoDeRetiroDTO [observacion=" + observacion + ", maquinaPesada=" + maquinaPesada + ", listResiduos="
+				+ listResiduos + ", vivienda=" + vivienda + ", fechaDelPedido=" + fechaDelPedido +
+				", codigo=" + codigo + "]";
 	}
 }
 

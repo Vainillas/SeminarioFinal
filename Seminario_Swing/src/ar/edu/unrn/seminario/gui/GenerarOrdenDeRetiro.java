@@ -2,7 +2,6 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 
-import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -16,42 +15,20 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 
-import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 
-import javax.swing.JTable;
-import javax.swing.JLabel;
-
 import javax.swing.JOptionPane;
 
 import javax.swing.JButton;
 
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.GridBagLayout;
-
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.SwingConstants;
 
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import java.awt.CardLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -93,13 +70,6 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		panelOrdenesRetiro.setBounds(10, 11, 442, 539);
 		panelOrdenesRetiro.setLayout(new BorderLayout(0, 0));
 		contentPane.add(panelOrdenesRetiro);
-		
-
-		JScrollPane scrollPaneVivienda = new JScrollPane();
-		//panelVivienda.add(scrollPaneVivienda, BorderLayout.CENTER);
-		JTable tableVivienda = new JTable();
-
-		String[] titulosPedidoDeRetiro = { "DIRECCION","CARGA PESADA", "FECHA", "OBSERVACION"};
 
 		JScrollPane scrollPaneOrdenes = new JScrollPane();
 
@@ -120,7 +90,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		});
 
 		
-		String[] titulosPedidoRetiro = { "OBSERVACION", "DIRECCION" ,"DNI PROPIETARIO","FECHA PEDIDO", "MAQUINARIA PESADA", 
+		String[] titulosPedidoRetiro = { "OBSERVACION", "DIRECCION" ,"DNI PROPIETARIO","FECHA PEDIDO", "MAQUINARIA PESADA", "CODIGO"
 				
 				/*labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
 				labels.getString("generar.orden.retiro.titulos.vivienda.CALLE"),
@@ -135,10 +105,8 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		List<PedidoDeRetiroDTO> pedidos;
 		try {
 			pedidos = api.obtenerPedidosDeRetiro();
-		
 			for (PedidoDeRetiroDTO p : pedidos) {
-				modeloPedidos.addRow(new Object[] { p.getObservacion(),p.getVivienda().getDireccion(),p.getVivienda().getDueño().getDni(), p.getFechaDelPedido(),p.getMaquinaPesada()});
-				
+				modeloPedidos.addRow(new Object[] { p.getObservacion(),p.getVivienda().getDireccion(),p.getVivienda().getDueño().getDni(), p.getFechaDelPedido(),p.getMaquinaPesada(), p.getCodigo()});
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
