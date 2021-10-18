@@ -244,12 +244,17 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
+
     
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
 		
 	}
+
+ 
     
+    
+
     
     public void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
         //Rol rol = rolDao.find(codigoRol);
@@ -324,6 +329,10 @@ public class PersistenceApi implements IApi {
     	Vivienda unaVivienda = viviendaDao.find(domicilioSeleccionado.get(1), domicilioSeleccionado.get(2));
     	
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda, 1);
+    	/*for(Residuo r : nuevoPedido.getListResiduos()) {
+    		System.out.println(r.getTipo().getNombre());
+    	}*/
+    	
     	
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
@@ -374,6 +383,7 @@ public class PersistenceApi implements IApi {
 		recolectorDao.create(p);
 	}
 	
+
 	//public List<RecolectorDTO> obtenerRecolector() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
 		/*RecolectorDTO recolectoresDto = null;
 		
@@ -382,17 +392,27 @@ public class PersistenceApi implements IApi {
         return recolectoresDto;*/
 	//}
 	
-	public List<RecolectorDTO> obtenerRecolectores() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
-		List<RecolectorDTO> recolectoresDto = new ArrayList<>();
+	
+
+	public List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException {
 		
-        List<Recolector> recolectores = recolectorDao.findAll();
-        for (Recolector r : recolectores) {
-
-            recolectoresDto.add(new RecolectorDTO(r.getNombre(), r.getApellido(), r.getDni() , r.getTelefono(), r.getEmail()));
-
-        }
-        return recolectoresDto;
+		// TODO Esbozo de método generado automáticamente
+		return null;
 	}
+
+	
+	@Override
+	public List<RecolectorDTO> obtenerRecolectores() 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
+		 List<Recolector> recolectores = recolectorDao.findAll();
+		 List<RecolectorDTO> recolectoresDTO = new ArrayList<>();
+	        for (Recolector r : recolectores) {
+	            recolectoresDTO.add(new RecolectorDTO(r.getNombre(), r.getApellido(), r.getDni(), r.getTelefono(), r.getEmail()));
+	        }
+	        return recolectoresDTO;
+	}
+	
+	
 
 
 

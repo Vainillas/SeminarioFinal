@@ -15,8 +15,10 @@ public class Direccion {
 	private String barrio;
 	
 	
-	public Direccion(String calle, String altura, String codPostal, String longitud, String latitud, String barrio) throws DataEmptyException, StringNullException, NotNumberException {
+	public Direccion(String calle, String altura, String codPostal, String longitud, String latitud, String barrio) 
+			throws DataEmptyException, StringNullException, NotNumberException {
 		super();
+
 		validarDatos(calle, altura, codPostal,longitud,latitud,barrio);
 		this.calle = calle;
 		this.longitud = longitud;

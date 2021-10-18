@@ -1,7 +1,8 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
+
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +17,7 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
+
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
@@ -29,25 +30,17 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+
 
 import javax.swing.JTextPane;
-import javax.swing.JScrollBar;
-import javax.swing.JSpinner;
-import javax.swing.JTree;
-import javax.swing.JPasswordField;
+
 import javax.swing.JRadioButton;
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
-import javax.swing.DropMode;
-import javax.swing.JSlider;
-import javax.swing.JList;
+
 import javax.swing.JCheckBox;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
-import java.awt.Canvas;
+
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
@@ -57,7 +50,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 
 
-public class GenerarPedidoDeRetiro extends JFrame {
+public class PedidoDeRetiro extends JFrame {
 
 	/**
 	 * 
@@ -92,7 +85,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 
 
 
-	public GenerarPedidoDeRetiro(IApi api) {
+	public PedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		
@@ -286,7 +279,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	                
 					try {
 						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),domicilioSeleccionado);
-						
 						JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
@@ -298,7 +290,10 @@ public class GenerarPedidoDeRetiro extends JFrame {
 						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 						
 					}
+					//api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText());
 					
+					
+
 				
 		});
 
@@ -362,7 +357,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 						for (DireccionDTO d : direcciones) {
 							modelo.addRow(new Object[] { d.getBarrio(), d.getCalle(), d.getAltura(),
 									d.getCodPostal(), d.getLatitud(),d.getLongitud() });
-							
+
 						}
 
 					} catch (AppException e2) {
@@ -397,6 +392,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 			if(button.getText().equals(nombresTextos[i])) {
 				if(button.isSelected()) {
 					listaTextos[i].setVisible(true);
+					
 					this.mostrarKG++;
 				}
 				else {

@@ -199,7 +199,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			            	statement4.setInt(2, resultSetPedido.getInt("altura"));
 			            	ResultSet resultSetDireccion = statement4.executeQuery();
 			            	
-							if(resultSetDireccion.next()) {
+							if(resultSetDireccion.next()) { 
 								
 								DueñoDao dueñoDao = new DueñoDAOJDBC();
 								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetVivienda.getString("dni"), resultSetDueño.getString("correo_electronico"));
@@ -249,6 +249,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							
 	            		}
 
+	            	
+	            	
 	            }
 
 	            	}} catch (AppException e) {
