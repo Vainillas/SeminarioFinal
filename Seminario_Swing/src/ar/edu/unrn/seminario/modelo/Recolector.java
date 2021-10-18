@@ -8,18 +8,18 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class Recolector extends Persona{
 	private String email;
-	private int telefono;
+	private String telefono;
 	public Recolector(String nombre, String apellido, String dni, String email, String telefono) 
 		throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		super(nombre,apellido,dni);
 
 		verificarDatos(email, telefono);
 		this.email = email;
+		this.telefono=telefono;
 		
 	}
-	private void verificarDatos(String email, String telefono) throws StringNullException, DataEmptyException, IncorrectEmailException, NotNumberException {
+	private void verificarDatos(String email, String telefono) throws StringNullException, DataEmptyException, IncorrectEmailException {
 		if(ConditionHelper.stringIsNull(telefono)) {throw new StringNullException("telefono vacio");}
-		if(ConditionHelper.IsNotNumber(telefono)) {throw new NotNumberException("telefono debe ser numerico.");}
 		
 		if(ConditionHelper.stringIsNull(email)) {throw new StringNullException("email vacio");}
 		
@@ -31,7 +31,7 @@ public class Recolector extends Persona{
 		
 	}
 	
-	public int getTelefono () {
+	public String getTelefono () {
 		return telefono;
 	}
 	public String getEmail() {
