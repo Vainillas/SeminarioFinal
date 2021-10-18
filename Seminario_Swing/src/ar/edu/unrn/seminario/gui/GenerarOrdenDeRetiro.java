@@ -164,6 +164,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				int fila = tablePedidos.getColumnCount();
 				String recolectorseleccionado = (String) tablePedidos.getValueAt(tablePedidos.getSelectedRow(), 0);
+				System.out.println(recolectorSeleccionado);
 			}
 		});
 		
