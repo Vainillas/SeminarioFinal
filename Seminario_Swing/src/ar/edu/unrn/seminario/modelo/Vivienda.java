@@ -35,5 +35,9 @@ public class Vivienda {
 	public void setID(int unaID) {
 		this.id=unaID;
 	}
+	@Override
+	public String toString() {
+		return "Vivienda [dueño=" + dueño + ", direccion=" + direccion + ", id=" + id + "]";
+	}
 	
 }

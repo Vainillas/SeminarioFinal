@@ -19,7 +19,6 @@ public class PedidoDeRetiro {
 	private ArrayList<Residuo> listResiduos;
 	private Vivienda vivienda;
 	private  Date fechaDelPedido;
-	private Estado estado;
 	private int codigo;
 	
 	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda, int unCodigo)
@@ -30,6 +29,7 @@ public class PedidoDeRetiro {
 		this.listResiduos = unaListaDeResiduos;
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
+		this.codigo=unCodigo;
 	}
 	public PedidoDeRetiro(String observacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda) 
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
@@ -49,9 +49,6 @@ public class PedidoDeRetiro {
 		if(ConditionHelper.stringIsNull(unaObservacion)){throw new DataEmptyException("observacion vacia");}
 		if(ConditionHelper.IsNull(unaVivienda)) {throw new NotNullException("vivienda nula");}
 		
-	}
-	public String obtenerEstado() {
-		return this.estado.obtenerEstado();
 	}
 
 	public int getCodigo(){
@@ -98,6 +95,12 @@ public class PedidoDeRetiro {
 
 	public void setVivienda(Vivienda vivienda) {
 		this.vivienda = vivienda;
+	}
+	@Override
+	public String toString() {
+		return "PedidoDeRetiro [observacion=" + observacion + ", maquinaPesada=" + maquinaPesada + ", listResiduos="
+				+ listResiduos + ", vivienda=" + vivienda + ", fechaDelPedido=" + fechaDelPedido + 
+				 ", codigo=" + codigo + "]";
 	}
 
 }

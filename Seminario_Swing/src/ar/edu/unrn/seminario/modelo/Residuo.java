@@ -26,5 +26,12 @@ public class Residuo {
 	public void setCantidadKg(int cantidadKg) {
 		this.cantidadKg = cantidadKg;
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "Residuo [tipo=" + tipo + ", cantidadKg=" + cantidadKg + "]";
+	}
 	
 }
