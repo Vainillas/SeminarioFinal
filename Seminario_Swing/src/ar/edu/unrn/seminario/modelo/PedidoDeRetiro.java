@@ -20,12 +20,21 @@ public class PedidoDeRetiro {
 	private Vivienda vivienda;
 	private  Date fechaDelPedido;
 	private Estado estado;
-	//private int codigo;
+	private int codigo;
 	
-	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
+	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda, int unCodigo)
 	throws DataEmptyException,NotNullException, StringNullException, DateNullException{
 		validarDatos(unaObservacion,unaListaDeResiduos,unaFecha,unaVivienda);
 		this.observacion = unaObservacion;
+		this.maquinaPesada = requiereMaquinaPesada;
+		this.listResiduos = unaListaDeResiduos;
+		this.vivienda = unaVivienda;
+		this.fechaDelPedido = unaFecha;
+	}
+	public PedidoDeRetiro(String observacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda) 
+			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
+		validarDatos(observacion,unaListaDeResiduos,unaFecha,unaVivienda);
+		this.observacion = observacion;
 		this.maquinaPesada = requiereMaquinaPesada;
 		this.listResiduos = unaListaDeResiduos;
 		this.vivienda = unaVivienda;
@@ -45,7 +54,9 @@ public class PedidoDeRetiro {
 		return this.estado.obtenerEstado();
 	}
 
-	
+	public int getCodigo(){
+		return this.codigo;
+	}
 	
 	public Date getFechaDelPedido() {
 		return fechaDelPedido;

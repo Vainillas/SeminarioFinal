@@ -23,7 +23,8 @@ public class Persona {
 		if(ConditionHelper.stringIsEmpty(apellido)) {throw new DataEmptyException("El campo de apellido está vacío");}
 		if(ConditionHelper.stringIsEmpty(dni)) {throw new DataEmptyException("El campo DNI está vacío");}
 		
-		if(ConditionHelper.IsNotNumber(dni)) {throw new NotNumberException("el dni debe ser numerico.");}
+
+		//if(ConditionHelper.IsNotNumber(dni)) {throw new NotNumberException("el dni debe ser numerico.");}
 	}
 	public String getNombre () {
 		return this.nombre;

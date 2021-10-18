@@ -157,22 +157,28 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM viviendas v");
 			ResultSet resultSetViviendas = statement.executeQuery();
+			
+
 			while(resultSetViviendas.next()) {
 				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
 				statement2.setString(1, resultSetViviendas.getString("dni"));
 				ResultSet resultSetConstructor = statement2.executeQuery();
+				
 				if(resultSetConstructor.next()) {
-
+					System.out.println("llego");
 					dueño = new Dueño(resultSetConstructor.getString("nombre"),
 							resultSetConstructor.getString("apellido"),
+							
 							resultSetConstructor.getString("dni"),
 							resultSetConstructor.getString("correo_electronico"));
 				}
+				
 				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
 				statement2.setString(1,resultSetViviendas.getString("calle"));
 				statement2.setInt(2, resultSetViviendas.getInt("altura"));
 				resultSetConstructor=statement2.executeQuery();
 				if(resultSetConstructor.next()) {
+					
 					direccion = new Direccion(resultSetConstructor.getString("calle"), 
 							Integer.toString(resultSetConstructor.getInt("altura")), 
 							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
