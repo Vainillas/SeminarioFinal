@@ -16,15 +16,16 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
+
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JList;
 import java.awt.GridBagLayout;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JButton;
 import java.awt.FlowLayout;
 import java.awt.CardLayout;
@@ -48,7 +49,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 	private DefaultTableModel modeloRecolector;
 	private  IApi api;
 	
-	public GenerarOrdenDeRetiro(IApi api) {
+	public GenerarOrdenDeRetiro(IApi api) throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
 		setTitle("Orden de retiro");
 		this.api = api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

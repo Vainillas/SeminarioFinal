@@ -28,7 +28,6 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            statement.setInt(1, o.getPedidoAsociado().getCodigo());
 	            statement.setString(2, o.getRecolector().getDni());
 	            statement.setDate(3, o.getFechaOrden());
-	            
 	            statement.setString(4, o.getEstado().obtenerEstado());
 	            statement.setInt(5, o.getCodigo()); 
 	            
