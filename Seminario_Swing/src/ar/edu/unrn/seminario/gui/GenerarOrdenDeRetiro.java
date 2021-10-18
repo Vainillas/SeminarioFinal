@@ -134,7 +134,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			pedidos = api.obtenerPedidosDeRetiro();
 		
 			for (PedidoDeRetiroDTO p : pedidos) {
-				modeloPedidos.addRow(new Object[] { p.getObservacion(),p.getVivienda().getDireccion(),p.getVivienda().getDueño().getDni(), p.getFechaDelPedido(),p.getMaquinaPesada()});
+				modeloPedidos.addRow(new Object[] { p.getObservacion(),p.getVivienda().getDireccion(),p.getVivienda().getDueño().getDni(), p.getFechaDelPedido(),p.getMaquinaPesada(),p.getCodigo()});
 				
 			}
 		} catch (Exception e) {
@@ -160,7 +160,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dniRecolectorSeleccionado = (String) tableRecolector.getValueAt(tableRecolector.getSelectedRow(),2);
-				System.out.println(dniRecolectorSeleccionado);
+				//System.out.println(dniRecolectorSeleccionado);
 			}
 		});
 		
