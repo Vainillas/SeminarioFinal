@@ -99,8 +99,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            statement.setInt(1,codigo);
 	            ResultSet resultSetPedido = statement.executeQuery();
 	            if(resultSetPedido.next()) {
-	                statement = conn.prepareStatement("SELECT codigo FROM vivienda v" + 
-	                            "WHERE v.calle = ? AND v.altura = ?");
+	                statement = conn.prepareStatement("SELECT codigo FROM viviendas v WHERE v.calle = ? AND v.altura = ?");
+	                            
 	                statement.setString(1, resultSetPedido.getString("calle"));
 	                statement.setInt(2, resultSetPedido.getInt("altura"));
 	                ResultSet resultSetVivienda = statement.executeQuery();
@@ -153,8 +153,6 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            ConnectionManager.disconnect();
 	        }
 	        return pedido;
-
-	        //return null;
 
 	    }
 			
