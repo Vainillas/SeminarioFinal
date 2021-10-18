@@ -365,6 +365,16 @@ public class PersistenceApi implements IApi {
     	
     	ordenDeRetiroDao.create(nuevaOrden);
     }
+    public void generarOrdenDeRetiro(PedidoDeRetiro unPedido) throws AppException{
+    	
+    	java.util.Date fechaActualUtil = DateHelper.getDate();
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+    	
+    	Recolector recolector = null;
+    	OrdenDeRetiro nuevaOrden = new OrdenDeRetiro(unPedido, recolector , fechaActual );
+    	
+    	ordenDeRetiroDao.create(nuevaOrden);
+    }
     
     
     
