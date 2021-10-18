@@ -70,7 +70,7 @@ después seguro pasemos a los recolectores.*/
 
 
 public class GenerarOrdenDeRetiro extends JFrame {
-	private ArrayList<String> pedidoSeleccionado = null;
+	private Integer codigoPedidoSeleccionado = null;
 	private JPanel contentPane;
 	private DefaultTableModel modeloPedidos;
 	private DefaultTableModel modeloRecolector;
@@ -104,20 +104,24 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		tablePedidos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+			
 				
-				int fila = tablePedidos.getColumnCount();
+					
+					codigoPedidoSeleccionado = (Integer) tablePedidos.getValueAt(tablePedidos.getSelectedRow(),5 );
+					System.out.println(codigoPedidoSeleccionado);
 				
-				pedidoSeleccionado = new ArrayList<String>();
-				for (int i = 0; i < fila; i++) {
-					
-					pedidoSeleccionado.add((String) tablePedidos.getValueAt(tablePedidos.getSelectedRow(), i));
-					
-				}
 			}
 		});
-
+		tablePedidos.setRowSelectionAllowed(true);//permitiendo seleccion de fila
+		tablePedidos.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
 		
-		String[] titulosPedidoRetiro = { "OBSERVACION", "DIRECCION" ,"DNI PROPIETARIO","FECHA PEDIDO", "MAQUINARIA PESADA", 
+		String[] titulosPedidoRetiro = { 
+				"OBSERVACION", 
+				"DIRECCION" ,
+				"DNI PROPIETARIO",
+				"FECHA PEDIDO", 
+				"MAQUINARIA PESADA",
+				"CODIGO PEDIDO"
 				
 				/*labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
 				labels.getString("generar.orden.retiro.titulos.vivienda.CALLE"),
@@ -127,7 +131,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		};
 		modeloPedidos = new DefaultTableModel(new Object[][] {}, titulosPedidoRetiro); 
 		
-		tablePedidos.setModel(modeloPedidos);
+		
 		
 		List<PedidoDeRetiroDTO> pedidos;
 		try {
@@ -141,7 +145,12 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
 		
+		tablePedidos.setModel(modeloPedidos);
 		scrollPaneOrdenes.setViewportView(tablePedidos);
+		
+		
+		
+		
 		
 		JPanel panelRecolector = new JPanel();
 		panelRecolector.setBounds(600, 11, 446, 539);
@@ -195,7 +204,12 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		JButton btnAceptar = new JButton("Generar Orden");
 		btnAceptar.addActionListener((e)->{
 			try {
-				api.generarOrdenDeRetiro(null,dniRecolectorSeleccionado);
+				if(this.dniRecolectorSeleccionado!= null) {
+					api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado,dniRecolectorSeleccionado);
+				}
+				else {
+					api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
+				}
 			} catch (AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}

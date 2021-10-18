@@ -100,5 +100,6 @@ public interface IApi {
 	Usuario getUserOnline();
 
 	 public void generarOrdenDeRetiro(PedidoDeRetiro unPedido, String dniRecolector) throws AppException;
+	 public void generarOrdenDeRetiro(PedidoDeRetiro unPedido) throws AppException;
 	 
 }
