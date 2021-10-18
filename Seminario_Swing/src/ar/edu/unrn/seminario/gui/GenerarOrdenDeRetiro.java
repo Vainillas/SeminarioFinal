@@ -45,7 +45,7 @@ después seguro pasemos a los recolectores.*/
 public class GenerarOrdenDeRetiro extends JFrame {
 
 	private JPanel contentPane;
-	private DefaultTableModel modeloVivienda;
+	private DefaultTableModel modeloPedidos;
 	private DefaultTableModel modeloRecolector;
 	private  IApi api;
 	
@@ -61,18 +61,16 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		setContentPane(contentPane);
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
-		JPanel panelVivienda = new JPanel();
-		panelVivienda.setBounds(10, 11, 409, 539);
-		panelVivienda.setLayout(new BorderLayout(0, 0));
-		contentPane.add(panelVivienda);
+		JPanel panelOrdenesRetiro = new JPanel();
+		panelOrdenesRetiro.setBounds(10, 11, 409, 539);
+		panelOrdenesRetiro.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panelOrdenesRetiro);
 		
-		JScrollPane scrollPaneVivienda = new JScrollPane();
-		panelVivienda.add(scrollPaneVivienda, BorderLayout.CENTER);
-		JTable tableVivienda = new JTable();
-
-		String[] titulosPedidoDeRetiro = { "DIRECCION", "FECHA", "OBSERVACION"};
+		JScrollPane scrollPaneOrdenes = new JScrollPane();
+		panelOrdenesRetiro.add(scrollPaneOrdenes, BorderLayout.CENTER);
+		JTable tablePedidos = new JTable();
 		
-		String[] titulosVivienda = { "OBSERVACION", "FECHA", "DIRECCION", "DNI PROPIETARIO", "MAQUINARIA PESADA", 
+		String[] titulosPedidoRetiro = { "OBSERVACION", "DIRECCION" ,"DNI PROPIETARIO","FECHA PEDIDO", "MAQUINARIA PESADA", 
 				
 				/*labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
 				labels.getString("generar.orden.retiro.titulos.vivienda.CALLE"),
@@ -80,23 +78,23 @@ public class GenerarOrdenDeRetiro extends JFrame {
 				labels.getString("generar.orden.retiro.titulos.vivienda.LATITUD"),
 				labels.getString("generar.orden.retiro.titulos.vivienda.LONGITUD")*/
 		};
-		modeloVivienda = new DefaultTableModel(new Object[][] {}, titulosPedidoDeRetiro);
+		modeloPedidos = new DefaultTableModel(new Object[][] {}, titulosPedidoRetiro); 
 		
-		tableVivienda.setModel(modeloVivienda);
+		tablePedidos.setModel(modeloPedidos);
 		
 		List<PedidoDeRetiroDTO> pedidos;
 		try {
 			pedidos = api.obtenerPedidosDeRetiro();
 		
-			for (PedidoDeRetiroDTO v : pedidos) {
-				modeloVivienda.addRow(new Object[] { v.getObservacion(),v.getFechaDelPedido(), v.getVivienda().getDireccion(),v.getVivienda().getDueño().getDni(), v.getMaquinaPesada()});
+			for (PedidoDeRetiroDTO p : pedidos) {
+				modeloPedidos.addRow(new Object[] { p.getObservacion(),p.getVivienda().getDireccion(),p.getVivienda().getDueño().getDni(), p.getFechaDelPedido(),p.getMaquinaPesada()});
 				
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
 		
-		scrollPaneVivienda.setViewportView(tableVivienda);
+		scrollPaneOrdenes.setViewportView(tablePedidos);
 		
 		JPanel panelRecolector = new JPanel();
 		panelRecolector.setBounds(637, 11, 409, 539);
@@ -111,14 +109,14 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		
 		panelRecolector.add(scrollPaneRecolector,BorderLayout.CENTER);
 		JTable tableRecolector = new JTable();
-		String[] titulosRecolector = {"NOMBRE","APELLIDO","TELEFONO","DNI","EMAIL"};
+		String[] titulosRecolector = {"NOMBRE","APELLIDO","DNI","TELEFONO","EMAIL"};
 		modeloRecolector = new DefaultTableModel(new Object[][] {}, titulosRecolector);
 		tableRecolector.setModel(modeloRecolector);
 		List<RecolectorDTO> recolector= api.obtenerRecolectores();
-		/*for(RecolectorDTO r : recolector) {
-			modeloVivienda.addRow(new Object[] {r.getNombre(), r.getApellido(), r.getTelefono(), r.getDni(), r.getEmail()});
+		for(RecolectorDTO r : recolector) {
+			modeloRecolector.addRow(new Object[] {r.getNombre(), r.getApellido(), r.getDni(), r.getTelefono(), r.getEmail()});
 		}
-		tableRecolector.setModel(modeloRecolector);*/
+		tableRecolector.setModel(modeloRecolector);
 		
 		scrollPaneRecolector.setViewportView(tableRecolector);
 		

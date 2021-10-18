@@ -380,7 +380,7 @@ public class PersistenceApi implements IApi {
 		
         List<Recolector> recolectores = recolectorDao.findAll();
         for (Recolector r : recolectores) {
-            recolectoresDto.add(new RecolectorDTO(r.getNombre(), r.getApellido(), r.getDni(), r.getEmail(), r.getTelefono()));
+            recolectoresDto.add(new RecolectorDTO(r.getNombre(), r.getApellido(), r.getDni(), r.getTelefono(), r.getEmail()));
         }
         return recolectoresDto;
 	}
