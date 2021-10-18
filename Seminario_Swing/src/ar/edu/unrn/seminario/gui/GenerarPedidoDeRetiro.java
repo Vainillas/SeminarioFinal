@@ -66,7 +66,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	private JPanel contentPane;
 	private Date fechaActual = DateHelper.getDate();
 	private IApi api = null;
-	DefaultTableModel modelo;
+	private DefaultTableModel modelo;
 	private JPanel panelBotones;
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
@@ -338,7 +338,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				
 				domicilioSeleccionado = new ArrayList<String>();
 				for (int i = 0; i < fila; i++) {
-					domicilioSeleccionado.add((String) table.getValueAt(table.getSelectedRow(), i));
+					domicilioSeleccionado.add( (String) table.getValueAt(table.getSelectedRow(), i));
 					
 				}
 				
