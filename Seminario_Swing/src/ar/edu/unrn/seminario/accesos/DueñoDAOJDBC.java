@@ -42,7 +42,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 				// TODO: disparar Exception propia
 			}
 		} catch (SQLException e) {
-			throw new AppException("Error al procesar consulta: ");
+			throw new AppException("Error al insertar dueño: " + e.getMessage());
 		}  finally {
 			ConnectionManager.disconnect();
 		}
@@ -69,7 +69,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 	}
 
 	@Override
-	public Dueño find(String dni) {
+	public Dueño find(String dni) throws AppException {
 		Dueño dueño = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -82,13 +82,8 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetDueño.getString("dni"),
 						resultSetDueño.getString("correo_electronico"));
 			}
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e) {
+			throw new AppException("Error al procesar consulta: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
 		}
@@ -111,21 +106,8 @@ public class DueñoDAOJDBC implements DueñoDao {
 						rs.getString("correo electronico"));
 				dueños.add(dueño);
 			}
-		} catch (SQLException e) {
-			System.out.println("Error de mySql\n" + e.toString());
-			// TODO: disparar Exception propia
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			// TODO: disparar Exception propia
-		} catch (DataEmptyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (StringNullException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IncorrectEmailException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException e) {
+			System.out.println("Error al encontrar todos los dueños:" + e.toString());
 		} finally {
 			ConnectionManager.disconnect();
 		}
@@ -134,27 +116,27 @@ public class DueñoDAOJDBC implements DueñoDao {
 
 	@Override
 	public boolean exists(String dni) throws AppException {
-boolean exists = false;
-		
+		boolean exists = false;
+
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
 					"SELECT u.dni " + " FROM propietarios as u" + " WHERE u.dni = ?");
 			statement.setString(1, dni);
 			ResultSet rs = statement.executeQuery();
-			
+
 			if (rs.next()) {
 				if(rs.getString("dni").equals(dni)) {
 					exists = true;
 				}		
 			}
 		} catch (SQLException | AppException e ) {
-			throw new AppException("error al procesar la consulta");
+			throw new AppException("Error al verificar existencia: "+ e.getMessage());
 		}finally {
 			ConnectionManager.disconnect();
 		}
 		return exists;
-		
+
 	}
 
 }

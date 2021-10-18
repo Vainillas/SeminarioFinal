@@ -98,13 +98,13 @@ public class RegistrarPersonal extends JFrame {
 		btnAceptar = new JButton(labels.getString("registrar.personal.button.aceptar"));
 		btnAceptar.addActionListener((e)->{
 			
-				try {
+				try { //Resolver AppException con un catch
 					api.agregarPersonal(tfNombre.getText(), tfApellido.getText(),
 							tfDni.getText(), tfEmail.getText(), tfTelefono.getText());
 					JOptionPane.showMessageDialog(null,"Recolector registrado con exito","Mensaje informativo",1);
 					setVisible(false);
 					dispose();
-				} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e1) {
+				} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | AppException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.WARNING_MESSAGE);
 					
 				}

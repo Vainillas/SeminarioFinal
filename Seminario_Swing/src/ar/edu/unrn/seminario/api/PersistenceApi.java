@@ -1,21 +1,10 @@
 package ar.edu.unrn.seminario.api;
 
-import java.sql.SQLException;
-
-
-
-
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
-import ar.edu.unrn.seminario.accesos.ConnectionManager;
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
@@ -111,6 +100,7 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
+	
 	@Override
 	public UsuarioDTO obtenerUsuario(String username) {
 		// TODO Auto-generated method stub
@@ -172,7 +162,33 @@ public class PersistenceApi implements IApi {
 		// TODO Auto-generated method stub
 
 	}
+	public void usuarioActivo(String username) throws AppException {
+		userOnline = usuarioDao.find(username);
+		//usuarioDao.activate(username);
+	}
+	public String obtenerRolUsuarioActivo() {
+		return userOnline.getRol().getNombre();
+	}
+	public boolean existeUsuario(String usuario) throws NotRegisterException, AppException {
+		return usuarioDao.exists(usuario);
+	}
+	
+	public boolean validarUsuario(String usuario, String password) throws NotRegisterException,AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException {
+		UsuarioIngreso user = new UsuarioIngreso(usuario,password);
+		if(usuarioDao.validateData(user)){
+			this.userOnline = usuarioDao.find(usuario); 
+		}
+		return usuarioDao.validateData(user);
+		
+	}
+	public Usuario getUserOnline(){
+		return this.userOnline;
+	}
 
+	
+
+	
+	
 	public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
 			throws Exception {
@@ -203,14 +219,17 @@ public class PersistenceApi implements IApi {
 		return vDTO;
 	}
 		
-	@Override
+	
+	
+	
+	
     public void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception   {
         Dueño dueño = null;
 		dueño = new Dueño(nombre, apellido, dni, correo);
         this.dueñoDao.create(dueño);
     }
 	
-	public DueñoDTO obtenerDueño(String dni) {
+	public DueñoDTO obtenerDueño(String dni) throws AppException {
 		Dueño dueño = dueñoDao.find(dni);
 		DueñoDTO dueñodto = null;
 		if(dueño!=null) {
@@ -221,8 +240,6 @@ public class PersistenceApi implements IApi {
 		}
 		return dueñodto;
 	}
-
-
     public List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
@@ -231,6 +248,12 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
+
+ 
+    
+    
+    
+    
     
     public void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
         //Rol rol = rolDao.find(codigoRol);
@@ -261,16 +284,16 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
-
-    @Override
+	
+ 
+    
+    
+    
+    
+    
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
 		DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException {
-    	
-    	//hay que solucionar esto
-    	//no me parece correcto que se cree una excepcion en persistence pero 
-    	//si no esta ningnuna de estas, en algun caso va a provocar un error
-
     	
     	if(domicilioSeleccionado == null) {
     		throw new NotNullException("No selecciono ningun domicilio");
@@ -285,7 +308,6 @@ public class PersistenceApi implements IApi {
     	if(residuosSeleccionadosKg.size() == 0) {
     		throw new NotNullException("Por favor, indique el kg");
     	}
-    	
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
     	
     	for(int i=0;i<residuosSeleccionados.size();i++){
@@ -320,7 +342,17 @@ public class PersistenceApi implements IApi {
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
     }
-    
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
+		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
+		
+        List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
+        for (PedidoDeRetiro d : pedidos) {
+            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
+        }
+        System.out.println(pedidos.size());
+        System.out.println("pedido dto: " + pedidosDto.size());
+        return pedidosDto;
+	}
     
     
     public void generarOrdenDeRetiro(PedidoDeRetiro unPedido, String dniRecolector) throws AppException{
@@ -333,32 +365,27 @@ public class PersistenceApi implements IApi {
     	
     	ordenDeRetiroDao.create(nuevaOrden);
     }
+    public void generarOrdenDeRetiro(PedidoDeRetiro unPedido) throws AppException{
+    	
+    	java.util.Date fechaActualUtil = DateHelper.getDate();
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+    	
+    	Recolector recolector = null;
+    	OrdenDeRetiro nuevaOrden = new OrdenDeRetiro(unPedido, recolector , fechaActual );
+    	
+    	ordenDeRetiroDao.create(nuevaOrden);
+    }
     
-
-	@Override
+    
+    
+    
+    
 	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
-			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
+			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
-		
-	}
-
-
-	public boolean existeUsuario(String usuario) throws NotRegisterException, AppException {
-		return usuarioDao.exists(usuario);
+		recolectorDao.create(p);
 	}
 	
-	public boolean validarUsuario(String usuario, String password) throws NotRegisterException,AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException {
-		UsuarioIngreso user = new UsuarioIngreso(usuario,password);
-		if(usuarioDao.validateData(user)){
-			this.userOnline = usuarioDao.find(usuario); 
-		}
-		return usuarioDao.validateData(user);
-		
-	}
-	
-	public Usuario getUserOnline(){
-		return this.userOnline;
-	}
 
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
@@ -371,32 +398,33 @@ public class PersistenceApi implements IApi {
 		return null;
 	}
 
-	@Override
-	public void usuarioActivo(String username) throws AppException {
-		userOnline = usuarioDao.find(username);
-		//usuarioDao.activate(username);
-	}
-	
-	public String obtenerRolUsuarioActivo() {
-		return userOnline.getRol().getNombre();
-	}
 	
 	@Override
-	public List<RecolectorDTO> obtenerRecolectores() {
-		// TODO Esbozo de método generado automáticamente
-		return null;
+	public List<RecolectorDTO> obtenerRecolectores() 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
+		 List<Recolector> recolectores = recolectorDao.findAll();
+		 List<RecolectorDTO> recolectoresDTO = new ArrayList<>();
+	        for (Recolector r : recolectores) {
+	            recolectoresDTO.add(new RecolectorDTO(r.getNombre(), r.getApellido(), r.getDni(), r.getTelefono(), r.getEmail()));
+	        }
+	        return recolectoresDTO;
 	}
 	
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
+	/*public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
 		
         List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
-        /*for (PedidoDeRetiro d : pedidos) {
+        for (PedidoDeRetiro d : pedidos) {
             pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
-        }*/
+        }
 
         return pedidosDto;
-	}
+
+       
+
+	}*/
+
+
 
 
 

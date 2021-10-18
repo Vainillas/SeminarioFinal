@@ -1,13 +1,12 @@
 package ar.edu.unrn.seminario.dto;
 
-import ar.edu.unrn.seminario.Helper.ConditionHelper;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class RecolectorDTO {
 	private String email;
-	private int telefono;
+	private String telefono;
 	private String nombre;
 	private String apellido;
 	private String dni;
@@ -17,7 +16,7 @@ public class RecolectorDTO {
 		this.apellido = apellido;
 		this.dni = dni;
 		this.email = email;
-		this.telefono = Integer.parseInt(telefono);
+		this.telefono = telefono;
 		
 	}
 	public String getNombre() {
@@ -29,7 +28,7 @@ public class RecolectorDTO {
 	public String getDni() {
 		return this.dni;
 	}
-	public int getTelefono () {
+	public String getTelefono () {
 		return telefono;
 	}
 	public String getEmail() {

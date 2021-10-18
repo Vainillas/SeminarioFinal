@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +27,13 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	                            + "VALUES (?, ?, ?, ?, ?, ?)");
 	            
 	            statement.setInt(1, o.getPedidoAsociado().getCodigo());
-	            statement.setString(2, o.getRecolector().getDni());
+	            if(o.getRecolector()!=null) {
+	            	statement.setString(2, o.getRecolector().getDni());
+	            }
+	            else {
+	            	statement.setNull(2, Types.VARCHAR);
+	            }
 	            statement.setDate(3, o.getFechaOrden());
-	            
 	            statement.setString(4, o.getEstado().obtenerEstado());
 	            statement.setInt(5, o.getCodigo()); 
 	            

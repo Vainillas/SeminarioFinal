@@ -42,14 +42,12 @@ public class DireccionDAOJDBC implements DireccionDao {
 					System.out.println("Error al actualizar");
 					// TODO: disparar Exception propia
 				}
-			} catch (AppException | SQLException e) {
-				throw new AppException("error al crear la direccion");
-			
+			} catch (SQLException e) {
+				throw new AppException("Error al crear la direccion: " + e.getMessage());
+			} finally {
+				ConnectionManager.disconnect();
+				}
 			}
-			
-
-			
-	}
 
 	
 	@Override
@@ -70,8 +68,7 @@ public class DireccionDAOJDBC implements DireccionDao {
 
 	}
 
-	@Override
-	public Direccion find(String calle, Integer altura) {
+	public Direccion find(String calle, Integer altura) throws AppException {
 		Direccion direccion = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
@@ -87,20 +84,40 @@ public class DireccionDAOJDBC implements DireccionDao {
 						Integer.toString(resultSetDireccion.getInt("codigo_postal")),
 						resultSetDireccion.getString("barrio"));
 			}
-		} catch (SQLException e) {
-			System.out.println("Error al procesar consulta");
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getSQLState(), e.getMessage());
-		} catch (Exception e) {
-		// TODO: disparar Exception propia
-		// throw new AppException(e, e.getCause().getMessage(), e.getMessage());
+		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException e) {
+			throw new AppException("Error al encontrar la direccion: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
 		}
 		return direccion;
 	}
 
-	@Override
+	public List<Direccion> findDireccionesDueño(Dueño d) throws AppException { 
+		//Para hacer esto se necesitan hacer JOINS con la tabla de Viviendas y la de Dueño creo.
+		List<Direccion> direcciones = new ArrayList<Direccion>();
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			Statement statement = conn.createStatement();
+			ResultSet rs = statement.executeQuery(
+					"SELECT * from dirección");
+
+			while (rs.next()) {
+				Direccion direccion = new Direccion(rs.getString("calle"),
+						Integer.toString(rs.getInt("altura")),
+						Integer.toString(rs.getInt("codigo_postal")),
+						rs.getString("longitud"),
+						rs.getString("latitud"),
+						rs.getString("barrio"));
+				direcciones.add(direccion);
+			}
+		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException e) {
+			throw new AppException("Error al encontrar las direcciones relacionadas al dueño: " + e.getMessage());
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return direcciones;
+	}
+
 	public List<Direccion> findAll() throws AppException {
 		List<Direccion> direcciones = new ArrayList<Direccion>();
 		try {
@@ -118,25 +135,11 @@ public class DireccionDAOJDBC implements DireccionDao {
 						rs.getString("barrio"));
 				direcciones.add(direccion);
 			}
-		} catch (SQLException e) {
-			System.out.println("Error de mySql\n" + e.toString());
-			// TODO: disparar Exception propia
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-			// TODO: disparar Exception propia
-		} catch (DataEmptyException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (StringNullException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NotNumberException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException e) {
+			throw new AppException("Error al encontrar las direcciones: " + e.getMessage());
 		} finally {
-			ConnectionManager.disconnect();
+		ConnectionManager.disconnect();
 		}
 		return direcciones;
 	}
-
 }

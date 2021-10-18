@@ -248,6 +248,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							}
 							
 	            		}
+
 	            	
 	       
 	            		
@@ -275,6 +276,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            			vivienda);
 
 	            	pedidos.add(pedido);
+
 
 	            }
 

@@ -14,7 +14,7 @@ public interface RecolectorDao {
 
 	void remove(Recolector recolector);
 
-	Recolector find(String dni);
+	Recolector find(String dni) throws AppException;
 
 	List<Recolector> findAll() throws AppException;
 

@@ -11,19 +11,16 @@ import javax.swing.JMenuItem;
 
 
 
-import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.awt.event.ActionEvent;
-
-
-
 import ar.edu.unrn.seminario.api.IApi;
 
 import ar.edu.unrn.seminario.api.PersistenceApi;
-import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StateException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 @SuppressWarnings("serial")
 public class VentanaPrincipal extends JFrame {
@@ -180,7 +177,13 @@ public class VentanaPrincipal extends JFrame {
 		JMenuItem menuItemOrdenDeRetiro = new JMenuItem(labels.getString("ventana.principal.menu.item.generar.orden.de.retiro"));
 		
 		menuItemOrdenDeRetiro.addActionListener( (e)->{ 
-			GenerarOrdenDeRetiro o = new GenerarOrdenDeRetiro(api);
+			GenerarOrdenDeRetiro o = null;
+			try {
+				o = new GenerarOrdenDeRetiro(api);
+			} catch (DataEmptyException | StringNullException | IncorrectEmailException | AppException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} //Resolver AppException con un catch
 			o.setVisible(true);
 			o.setLocationRelativeTo(null); 
 			
