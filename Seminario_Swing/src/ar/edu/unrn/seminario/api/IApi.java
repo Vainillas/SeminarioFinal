@@ -34,13 +34,13 @@ public interface IApi {
 	
 	//void registrarVivienda(Direccion unaDireccion, String unDueño);
 	
-	void agregarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
+	void registrarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
 	void eliminarUsuario(String username);
 	
-	void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono) 
+	void registrarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono) 
 			throws DataEmptyException,StringNullException,IncorrectEmailException, NotNumberException, AppException;
 	
 	
@@ -69,9 +69,9 @@ public interface IApi {
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
-	void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception;
+	void registrarDueño(String nombre, String apellido, String dni, String correo) throws Exception;
 
-	void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
+	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio) throws Exception;
 
 	List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception;

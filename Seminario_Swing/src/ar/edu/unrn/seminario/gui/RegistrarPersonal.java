@@ -99,7 +99,7 @@ public class RegistrarPersonal extends JFrame {
 		btnAceptar.addActionListener((e)->{
 			
 				try { //Resolver AppException con un catch
-					api.agregarPersonal(tfNombre.getText(), tfApellido.getText(),
+					api.registrarPersonal(tfNombre.getText(), tfApellido.getText(),
 							tfDni.getText(), tfEmail.getText(), tfTelefono.getText());
 					JOptionPane.showMessageDialog(null,"Recolector registrado con exito","Mensaje informativo",1);
 					setVisible(false);

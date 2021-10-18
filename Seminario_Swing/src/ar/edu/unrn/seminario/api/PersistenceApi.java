@@ -189,7 +189,7 @@ public class PersistenceApi implements IApi {
 
 	
 	
-	public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
+	public void registrarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
 			throws Exception {
 		Dueño dueño = new Dueño(nombre,apellido,dni,correo);
@@ -223,7 +223,7 @@ public class PersistenceApi implements IApi {
 	
 	
 	
-    public void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception   {
+    public void registrarDueño(String nombre, String apellido, String dni, String correo) throws Exception   {
         Dueño dueño = null;
 		dueño = new Dueño(nombre, apellido, dni, correo);
         this.dueñoDao.create(dueño);
@@ -255,7 +255,7 @@ public class PersistenceApi implements IApi {
     
     
     
-    public void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
+    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
         //Rol rol = rolDao.find(codigoRol);
         Direccion direccion = null;
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
@@ -378,7 +378,7 @@ public class PersistenceApi implements IApi {
     
     
     
-	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
+	public void registrarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
 		recolectorDao.create(p);
