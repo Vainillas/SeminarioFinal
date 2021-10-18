@@ -164,7 +164,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				statement2.setString(1, resultSetViviendas.getString("dni"));
 				ResultSet resultSetConstructor = statement2.executeQuery();
 				
-				if(resultSetConstructor.next()) {
+				if(resultSetConstructor.next()) { 
 					dueño = new Dueño(resultSetConstructor.getString("nombre"),
 							resultSetConstructor.getString("apellido"),
 							

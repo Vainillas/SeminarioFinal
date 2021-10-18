@@ -61,7 +61,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            
 	            for(int i=0; i < p.getListResiduos().size() ; i++) {
 		            statement2.setInt(1, codigoPedido);
-		            statement2.setString(2, p.getListResiduos().get(i).getTipo().getNombre());
+		            statement2.setString(2, p.getListResiduos().get(i).getTipo().getNombre()); 
 		            statement2.setInt(3, p.getListResiduos().get(i).getCantidadKg());
 		            statement2.executeUpdate();
 	            }
@@ -249,32 +249,6 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							
 	            		}
 	            	
-	       
-	            		
-
-	            	System.out.print("ok4");
-	            	if(resultSetVivienda.next()){
-	            		System.out.print("ok5");
-	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
-	            		System.out.print(resultSetVivienda.getInt("codigo"));
-	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
-
-	            	
-	            	}
-	            	
-	            
-	            	ArrayList<Residuo>listaResiduos = new ArrayList<>();
-	            	Boolean maq = false;
-	            	if(resultSetPedido.getInt("carga") == 1) {
-	            		maq = true;
-	            	}
-	            	pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
-	            			maq,
-	            			listaResiduos,
-	            			resultSetPedido.getDate("fecha"),
-	            			vivienda);
-
-	            	pedidos.add(pedido);
 
 	            }
 

@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
@@ -61,7 +62,7 @@ public class RegistrarPersonal extends JFrame {
 	public RegistrarPersonal(IApi api) {
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		labels = ResourceBundle.getBundle("labels");
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		
 		setBounds(100, 100, 450, 315);
 		setTitle(labels.getString("registrar.personal.titulo"));
