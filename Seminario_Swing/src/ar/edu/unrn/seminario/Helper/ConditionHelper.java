@@ -2,7 +2,7 @@ package ar.edu.unrn.seminario.Helper;
 
 import java.sql.Date;
 
-//Hello there
+
 public  class ConditionHelper {
 	public static boolean stringIsEmpty(String s) {
 		return s.equals("") || s.equals(" ");
@@ -43,9 +43,7 @@ public  class ConditionHelper {
         boolean validacion;
 
         try {
-        	System.out.println("el valor del string es: " + number);
             Integer num = Integer.parseInt(number);
-            System.out.println("el valor del integer es: " + num);
             validacion = false;
         }
         catch(NumberFormatException e) {

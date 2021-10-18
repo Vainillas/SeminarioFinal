@@ -90,7 +90,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		});
 
 		
-		String[] titulosPedidoRetiro = { "OBSERVACION", "DIRECCION" ,"DNI PROPIETARIO","FECHA PEDIDO", "MAQUINARIA PESADA", 
+		String[] titulosPedidoRetiro = { "OBSERVACION", "DIRECCION" ,"DNI PROPIETARIO","FECHA PEDIDO", "MAQUINARIA PESADA", "CODIGO"
 				
 				/*labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
 				labels.getString("generar.orden.retiro.titulos.vivienda.CALLE"),
@@ -105,10 +105,8 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		List<PedidoDeRetiroDTO> pedidos;
 		try {
 			pedidos = api.obtenerPedidosDeRetiro();
-		
 			for (PedidoDeRetiroDTO p : pedidos) {
-				modeloPedidos.addRow(new Object[] { p.getObservacion(),p.getVivienda().getDireccion(),p.getVivienda().getDueño().getDni(), p.getFechaDelPedido(),p.getMaquinaPesada()});
-				
+				modeloPedidos.addRow(new Object[] { p.getObservacion(),p.getVivienda().getDireccion(),p.getVivienda().getDueño().getDni(), p.getFechaDelPedido(),p.getMaquinaPesada(), p.getCodigo()});
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);

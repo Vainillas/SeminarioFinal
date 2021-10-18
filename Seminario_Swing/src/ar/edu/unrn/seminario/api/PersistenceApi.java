@@ -343,10 +343,8 @@ public class PersistenceApi implements IApi {
 		
         List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
         for (PedidoDeRetiro d : pedidos) {
-            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
+            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda(), d.getCodigo() ));
         }
-        System.out.println(pedidos.size());
-        System.out.println("pedido dto: " + pedidosDto.size());
         return pedidosDto;
 	}
     

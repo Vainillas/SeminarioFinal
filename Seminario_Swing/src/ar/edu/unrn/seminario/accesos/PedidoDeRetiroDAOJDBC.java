@@ -172,7 +172,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	        
 	        try {
 	        	Connection conn = ConnectionManager.getConnection();
-	            PreparedStatement statement = conn.prepareStatement("SELECT p.* FROM pedidos p ");
+	            PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p ");
 	            ResultSet resultSetPedido = statement.executeQuery();
 	            
 	            while(resultSetPedido.next()) {
@@ -236,6 +236,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 				            	if(resultSetPedido.getInt("carga") == 1) {
 				            		maq = true;
 				            	}
+				            	
 				            	pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
 				            			maq,
 				            			listaResiduos,
@@ -249,11 +250,15 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							
 	            		}
 
+
 	            	
 	            	
 	            }
 
+	            	
+
 	            	}} catch (AppException e) {
+
 
 	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
 
