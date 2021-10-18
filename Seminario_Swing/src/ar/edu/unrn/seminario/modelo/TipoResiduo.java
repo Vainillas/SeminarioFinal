@@ -15,7 +15,7 @@ public class TipoResiduo {
 		this.nombre = nombre;
 	}
 	
-	private void validarDatos(String nombre) throws NotNullException, DataEmptyException { //No deberia tirar KilogramEmpty
+	private void validarDatos(String nombre) throws NotNullException, DataEmptyException {
 		if(ConditionHelper.stringIsNull(nombre)) {throw new NotNullException("nombre nulo");}
 		if(ConditionHelper.stringIsEmpty(nombre)) {throw new DataEmptyException("nombre vacio");}
 	}

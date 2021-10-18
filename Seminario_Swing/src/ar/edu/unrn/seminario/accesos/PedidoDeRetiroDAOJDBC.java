@@ -252,11 +252,11 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	       
 	            		
 
-	            	System.out.print("ok4");
+	            	
 	            	if(resultSetVivienda.next()){
-	            		System.out.print("ok5");
+	            		
 	            		ViviendaDao viviendaDao = new ViviendaDAOJDBC();
-	            		System.out.print(resultSetVivienda.getInt("codigo"));
+	            	
 	            		vivienda = viviendaDao.find(resultSetVivienda.getInt("codigo"));
 
 	            	

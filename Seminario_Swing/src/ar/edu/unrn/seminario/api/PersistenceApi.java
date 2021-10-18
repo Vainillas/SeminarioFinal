@@ -312,6 +312,10 @@ public class PersistenceApi implements IApi {
     	Vivienda unaVivienda = viviendaDao.find(domicilioSeleccionado.get(1), domicilioSeleccionado.get(2));
     	
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda, 1);
+    	/*for(Residuo r : nuevoPedido.getListResiduos()) {
+    		System.out.println(r.getTipo().getNombre());
+    	}*/
+    	
     	
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
@@ -387,11 +391,10 @@ public class PersistenceApi implements IApi {
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
 		
         List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
-        for (PedidoDeRetiro d : pedidos) {
+        /*for (PedidoDeRetiro d : pedidos) {
             pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
-        }
-        System.out.println(pedidos.size());
-        System.out.println("pedido dto: " + pedidosDto.size());
+        }*/
+
         return pedidosDto;
 	}
 

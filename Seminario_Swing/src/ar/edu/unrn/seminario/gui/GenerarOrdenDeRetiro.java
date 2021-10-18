@@ -9,27 +9,29 @@ import java.util.ResourceBundle;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
-import ar.edu.unrn.seminario.dto.ViviendaDTO;
-import javax.swing.JTable;
-import javax.swing.JLabel;
+
 import javax.swing.JOptionPane;
-import javax.swing.JList;
+
+import javax.swing.JButton;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
 import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import com.jgoodies.forms.layout.FormSpecs;
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import java.awt.CardLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
+import javax.swing.SwingConstants;
 /*La pantalla de GenerarOrdenRetiro tiene que ser mas grande por el tema de que la observación puede 
  * ser de muchos renglones. 
  * 
@@ -41,8 +43,25 @@ Nosotros vamos a estar trabajando en la implementación de la OrdenDeRetiro en la
 después seguro pasemos a los recolectores.*/
 
 
-public class GenerarOrdenDeRetiro extends JFrame {
 
+
+
+public class GenerarOrdenDeRetiro extends JFrame {
+	
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					PersistenceApi api = new PersistenceApi();
+					GenerarOrdenDeRetiro frame = new GenerarOrdenDeRetiro(api);
+					frame.setVisible(true);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
 	private JPanel contentPane;
 	private DefaultTableModel modeloVivienda;
 	private DefaultTableModel modeloRecolector;
@@ -69,7 +88,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		panelVivienda.add(scrollPaneVivienda, BorderLayout.CENTER);
 		JTable tableVivienda = new JTable();
 
-		String[] titulosPedidoDeRetiro = { "DIRECCION", "FECHA", "OBSERVACION"};
+		String[] titulosPedidoDeRetiro = { "DIRECCION","CARGA PESADA", "FECHA", "OBSERVACION"};
 		
 		String[] titulosVivienda = { "OBSERVACION", "FECHA", "DIRECCION", "DNI PROPIETARIO", "MAQUINARIA PESADA", 
 				
@@ -122,32 +141,21 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		scrollPaneRecolector.setViewportView(tableRecolector);
 		
 		JPanel panelBotones = new JPanel();
-		panelBotones.setBounds(462, 11, 130, 472);
+		panelBotones.setBounds(462, 11, 128, 472);
 		contentPane.add(panelBotones);
+		panelBotones.setLayout(null);
 		
-		JButton btnCancelar = new JButton("New button");
+		JButton btnAceptar = new JButton("Generar Orden");
+		btnAceptar.setHorizontalAlignment(SwingConstants.LEADING);
+		btnAceptar.setVerticalAlignment(SwingConstants.TOP);
+		btnAceptar.setToolTipText("");
+		btnAceptar.setBounds(0, 179, 128, 23);
+		panelBotones.add(btnAceptar);
 		
-		JButton btnAceptar = new JButton("New button");
-		GroupLayout gl_panelBotones = new GroupLayout(panelBotones);
-		gl_panelBotones.setHorizontalGroup(
-			gl_panelBotones.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panelBotones.createSequentialGroup()
-					.addGap(20)
-					.addGroup(gl_panelBotones.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnAceptar)
-						.addComponent(btnCancelar))
-					.addContainerGap(21, Short.MAX_VALUE))
-		);
-		gl_panelBotones.setVerticalGroup(
-			gl_panelBotones.createParallelGroup(Alignment.LEADING)
-				.addGroup(Alignment.TRAILING, gl_panelBotones.createSequentialGroup()
-					.addContainerGap(187, Short.MAX_VALUE)
-					.addComponent(btnAceptar)
-					.addGap(18)
-					.addComponent(btnCancelar)
-					.addGap(221))
-		);
-		panelBotones.setLayout(gl_panelBotones);
+		JButton btnCancelar = new JButton("Cancelar Orden");
+		btnCancelar.setHorizontalAlignment(SwingConstants.LEADING);
+		btnCancelar.setBounds(0, 213, 128, 23);
+		panelBotones.add(btnCancelar);
 		
 
 	}

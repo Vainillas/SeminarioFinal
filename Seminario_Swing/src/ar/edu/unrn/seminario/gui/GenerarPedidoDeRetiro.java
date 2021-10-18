@@ -286,7 +286,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	                
 					try {
 						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),domicilioSeleccionado);
-						System.out.println("localidad seleccionada: "+ domicilioSeleccionado);
+						
 						JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();

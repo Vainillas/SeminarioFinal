@@ -279,7 +279,6 @@ public class PedidoDeRetiro extends JFrame {
 	                
 					try {
 						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),domicilioSeleccionado);
-						System.out.println("localidad seleccionada: "+ domicilioSeleccionado);
 						JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
@@ -337,7 +336,7 @@ public class PedidoDeRetiro extends JFrame {
 					domicilioSeleccionado.add((String) table.getValueAt(table.getSelectedRow(), i));
 					
 				}
-				System.out.println(domicilioSeleccionado);
+				
 				habilitarBotones(true);
 			}
 		});
