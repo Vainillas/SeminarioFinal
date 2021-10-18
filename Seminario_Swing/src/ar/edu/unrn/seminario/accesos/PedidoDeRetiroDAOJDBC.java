@@ -248,7 +248,6 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							}
 							
 	            		}
-	            	
 
 	            }
 

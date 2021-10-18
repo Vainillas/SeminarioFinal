@@ -328,6 +328,7 @@ public class PersistenceApi implements IApi {
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
     }
+	
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
 		
@@ -352,6 +353,17 @@ public class PersistenceApi implements IApi {
     	ordenDeRetiroDao.create(nuevaOrden);
     }
     
+    public void generarOrdenDeRetiro(PedidoDeRetiro unPedido) throws AppException{
+    	
+    	java.util.Date fechaActualUtil = DateHelper.getDate();
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+    	
+    	Recolector recolector = null;
+    	OrdenDeRetiro nuevaOrden = new OrdenDeRetiro(unPedido, recolector , fechaActual );
+    	
+    	ordenDeRetiroDao.create(nuevaOrden);
+    }
+    
     
     
     
@@ -361,12 +373,23 @@ public class PersistenceApi implements IApi {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
 		recolectorDao.create(p);
 	}
+	
+	//public List<RecolectorDTO> obtenerRecolector() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
+		/*RecolectorDTO recolectoresDto = null;
+		
+        List<Recolector> recolectores = recolectorDao.find();
+        
+        return recolectoresDto;*/
+	//}
+	
 	public List<RecolectorDTO> obtenerRecolectores() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
 		List<RecolectorDTO> recolectoresDto = new ArrayList<>();
 		
         List<Recolector> recolectores = recolectorDao.findAll();
         for (Recolector r : recolectores) {
+
             recolectoresDto.add(new RecolectorDTO(r.getNombre(), r.getApellido(), r.getDni() , r.getTelefono(), r.getEmail()));
+
         }
         return recolectoresDto;
 	}
