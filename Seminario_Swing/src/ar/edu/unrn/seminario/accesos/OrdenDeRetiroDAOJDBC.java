@@ -24,7 +24,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
 	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, fecha, estado, codigoOrden) "
-	                            + "VALUES (?, ?, ?, ?, ?, ?)");
+	                            + "VALUES (?, ?, ?, ?, ?)");
 	            
 	            statement.setInt(1, o.getPedidoAsociado().getCodigo());
 	            if(o.getRecolector()!=null) {
@@ -45,7 +45,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	                // TODO: disparar Exception propia
 	            }
 	        } catch (SQLException e) {
-	            throw new AppException("Error al crear una Orden: ");
+	            throw new AppException("Error al crear una Orden: " + e.getMessage());
 	        } finally {
 	            ConnectionManager.disconnect();
 	        }
