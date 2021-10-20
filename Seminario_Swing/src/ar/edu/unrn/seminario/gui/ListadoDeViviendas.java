@@ -19,7 +19,7 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import javax.swing.SwingConstants;
-public class ListadoVivienda extends JFrame {
+public class ListadoDeViviendas extends JFrame {
 	IApi api;
 	private JTable table;
 	DefaultTableModel modelo;
@@ -30,7 +30,7 @@ public class ListadoVivienda extends JFrame {
 	private JPanel panel;
 
 
-	public ListadoVivienda(IApi api){
+	public ListadoDeViviendas(IApi api){
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 598, 583);

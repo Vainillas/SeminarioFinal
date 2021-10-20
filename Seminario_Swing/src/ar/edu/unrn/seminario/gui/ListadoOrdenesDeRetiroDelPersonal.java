@@ -1,8 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.EventQueue;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -23,21 +22,20 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
-import ar.edu.unrn.seminario.exceptions.DataEmptyException;
-import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StateException;
+import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
-public class ListadoUsuario extends JFrame {
+public class ListadoOrdenesDeRetiroDelPersonal extends JFrame {
 
 	private JPanel contentPane;
+	private IApi api;
 	private JTable table;
-	DefaultTableModel modelo;
-	IApi api;
-	JButton activarButton;
-	JButton desactivarButton;
-
-	public ListadoUsuario(IApi api){
+	private	DefaultTableModel modelo;
+	private JButton activarButton;
+	private JButton desactivarButton;
+	public ListadoOrdenesDeRetiroDelPersonal(IApi api){
 		this.api = api;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -49,6 +47,16 @@ public class ListadoUsuario extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
+		
+		JLabel lblNewLabel = new JLabel("EN MANTENIMIENTO, DISCULPE LAS MOLESTIAS");
+		scrollPane.setViewportView(lblNewLabel);
+		
+		JButton btnNewButton = new JButton("SALIR");
+		btnNewButton.addActionListener((e)->{
+			setVisible(false);
+			dispose();
+		});
+		scrollPane.setColumnHeaderView(btnNewButton);
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
 		table = new JTable();
@@ -58,7 +66,7 @@ public class ListadoUsuario extends JFrame {
 				labels.getString("listado.usuario.titulos.usuario.ESTADO"), 
 				labels.getString("listado.usuario.titulos.usuario.ROL") };
 		
-		table.addMouseListener(new MouseAdapter() {
+		/*table.addMouseListener(new MouseAdapter() {
 			
 			public void mouseClicked(MouseEvent arg0) {
 				// Habilitar botones
@@ -149,7 +157,7 @@ public class ListadoUsuario extends JFrame {
 		pnlBotonesOperaciones.add(cerrarButton);
 
 		// Deshabilitar botones que requieren tener una fila seleccionada
-		habilitarBotones(false);
+		habilitarBotones(false);*/
 		
 	}
 
@@ -164,8 +172,8 @@ public class ListadoUsuario extends JFrame {
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 		// Obtiene la lista de usuarios a mostrar
 		List<UsuarioDTO> usuarios;
-		try {	
-			usuarios = api.obtenerUsuarios();
+		/*try {	
+			//usuarios = api.obtenerOrdenesDeRetiro();
 			// Resetea el model
 			modelo.setRowCount(0);
 			
@@ -176,7 +184,8 @@ public class ListadoUsuario extends JFrame {
 		} catch (AppException e) {
 			setVisible(false);
 			JOptionPane.showMessageDialog(null,e.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-		}
+		}*/
+		
 
 
 	}
