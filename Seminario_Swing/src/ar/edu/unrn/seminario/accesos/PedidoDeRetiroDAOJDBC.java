@@ -33,18 +33,17 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
-	                    ("INSERT INTO pedidos(calle,altura,observacion,carga,fecha) "
-	                            + "VALUES (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-	            statement.setString(1, p.getVivienda().getDireccion().getCalle());
-	            statement.setInt(2, Integer.parseInt(p.getVivienda().getDireccion().getAltura()));
-	            statement.setString(3, p.getObservacion());
+	                    ("INSERT INTO pedidos(codigo_vivienda,observacion,carga,fecha) "
+	                            + "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+	            statement.setInt(1, p.getVivienda().getID());
+	            statement.setString(2, p.getObservacion());
 	            
 	            if(p.getMaquinaPesada()) {
-	            	statement.setInt(4, 1);
+	            	statement.setInt(3, 1);
 	            }else {
-	            	statement.setInt(4, 0);
+	            	statement.setInt(3, 0);
 	            }
-	            statement.setDate(5, p.getFechaDelPedido());
+	            statement.setDate(4, p.getFechaDelPedido());
 	            statement.executeUpdate();
 	            
 	            
@@ -103,31 +102,27 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 				statement.setInt(1,codigo);
 				ResultSet resultSetPedido = statement.executeQuery();
 				if(resultSetPedido.next()) {
-					statement = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.calle = ? AND v.altura = ?");
-					statement.setString(1, resultSetPedido.getString("calle"));
-					statement.setInt(2, resultSetPedido.getInt("altura"));
+					statement = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.codigo = ?");
+					statement.setInt(1, resultSetPedido.getInt("codigo_vivienda"));
 					ResultSet resultSetVivienda = statement.executeQuery();
 					if(resultSetVivienda.next()) {
 						Connection conn2 = ConnectionManager.getConnection();
 						PreparedStatement statement3 = conn2.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
 						statement3.setString(1, resultSetVivienda.getString("dni"));
 						ResultSet resultSetDueño = statement3.executeQuery();
+						
 						if(resultSetDueño.next()) {
 
 							Connection conn3 = ConnectionManager.getConnection();
 							PreparedStatement statement4 = conn3.prepareStatement("SELECT * FROM dirección d WHERE d.calle = ? AND d.altura = ?");
-							statement4.setString(1, resultSetPedido.getString("calle"));
-							statement4.setInt(2, resultSetPedido.getInt("altura"));
+							statement4.setString(1, resultSetVivienda.getString("calle"));
+							statement4.setInt(2, resultSetVivienda.getInt("altura"));
 							ResultSet resultSetDireccion = statement4.executeQuery();
-
+							
 							if(resultSetDireccion.next()) {
-
-								DueñoDao dueñoDao = new DueñoDAOJDBC();
 								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"));
-								DireccionDao direccionDao = new DireccionDAOJDBC();
-								direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
-								vivienda = new Vivienda(direccion, dueño);
-								vivienda.setID(resultSetVivienda.getInt("codigo"));
+								direccion = new Direccion(resultSetDireccion.getString("calle"), Integer.toString(resultSetDireccion.getInt("altura")), Integer.toString(resultSetDireccion.getInt("codigo_postal")), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
+								vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
 							}
 						}
 					}
@@ -197,9 +192,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            
 	            while(resultSetPedido.next()) {
 	            	conn = ConnectionManager.getConnection();
-	            	PreparedStatement statement2 = conn.prepareStatement("SELECT v.codigo, v.dni FROM viviendas v WHERE v.calle = ? AND v.altura = ?");
-	            	statement2.setString(1, resultSetPedido.getString("calle"));
-	            	statement2.setInt(2, resultSetPedido.getInt("altura"));
+	            	PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.codigo = ?");
+	            	statement2.setInt(1, resultSetPedido.getInt("codigo_vivienda"));
 	            	ResultSet resultSetVivienda = statement2.executeQuery();
 
 	            	
@@ -215,31 +209,27 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            			
 							Connection conn3 = ConnectionManager.getConnection();
 			            	PreparedStatement statement4 = conn3.prepareStatement("SELECT * FROM dirección d WHERE d.calle = ? AND d.altura = ?");
-			            	statement4.setString(1, resultSetPedido.getString("calle"));
-			            	statement4.setInt(2, resultSetPedido.getInt("altura"));
+			            	statement4.setString(1, resultSetVivienda.getString("calle"));
+			            	statement4.setInt(2, resultSetVivienda.getInt("altura"));
 			            	ResultSet resultSetDireccion = statement4.executeQuery();
 			            	
 							if(resultSetDireccion.next()) {
 								
-								DueñoDao dueñoDao = new DueñoDAOJDBC();
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetVivienda.getString("dni"), resultSetDueño.getString("correo_electronico"));
-								DireccionDao direccionDao = new DireccionDAOJDBC();
+								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"));
 								direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
-			            		vivienda = new Vivienda(direccion, dueño);
-			            		vivienda.setID(resultSetVivienda.getInt("codigo"));
-			            		
+			            		vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
 			            		
 			            		ArrayList<Residuo>listaResiduos = new ArrayList<>();
 				            	
 				            	Connection conn4 = ConnectionManager.getConnection();
 				            	
-				            	PreparedStatement statement5 = conn3.prepareStatement("SELECT * FROM residuos_pedido p WHERE p.codigo_pedido = ?");
+				            	PreparedStatement statement5 = conn4.prepareStatement("SELECT * FROM residuos_pedido p WHERE p.codigo_pedido = ?");
 				            	statement5.setInt(1, resultSetPedido.getInt("codigo"));
 				            	ResultSet resultSetResiduo = statement5.executeQuery();
 				            	
 				            	while(resultSetResiduo.next()) {
 				            		
-				            		PreparedStatement statement6 = conn3.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
+				            		PreparedStatement statement6 = conn4.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
 					            	statement6.setString(1, resultSetResiduo.getString("nombre_residuo"));
 					            	ResultSet resultSetTipoResiduo = statement6.executeQuery();
 					            	

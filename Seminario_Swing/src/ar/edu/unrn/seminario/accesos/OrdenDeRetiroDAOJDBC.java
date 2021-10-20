@@ -23,8 +23,8 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 			try {
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
-	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, fecha, estado, codigoOrden) "
-	                            + "VALUES (?, ?, ?, ?, ?)");
+	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, fecha, estado) "
+	                            + "VALUES (?, ?, ?, ?)");
 	            
 	            statement.setInt(1, o.getPedidoAsociado().getCodigo());
 	            if(o.getRecolector()!=null) {
@@ -35,7 +35,6 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            }
 	            statement.setDate(3, o.getFechaOrden());
 	            statement.setString(4, o.getEstado().obtenerEstado());
-	            statement.setInt(5, o.getCodigo()); 
 	            
 	            int cantidad = statement.executeUpdate();
 	            if (cantidad > 0) {
