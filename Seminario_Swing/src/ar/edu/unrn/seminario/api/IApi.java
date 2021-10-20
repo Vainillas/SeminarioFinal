@@ -50,7 +50,10 @@ public interface IApi {
 	List<RolDTO> obtenerRoles() 
 			throws AppException;
 	
-
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException;
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException;
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException;
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException;
 	List<RolDTO> obtenerRolesActivos();
 
 	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
@@ -65,7 +68,7 @@ public interface IApi {
 	
 	List<ViviendaDTO> obtenerViviendas() throws Exception;
 	
-	void activarUsuario(String username) throws StateException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
+	void activarUsuario(String username) throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 

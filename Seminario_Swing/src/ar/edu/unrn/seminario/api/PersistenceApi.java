@@ -153,8 +153,8 @@ public class PersistenceApi implements IApi {
 
 	}
 
-	public void activarUsuario(String username) {
-		// TODO Auto-generated method stub
+	public void activarUsuario(String username) throws AppException {
+		this.usuarioDao.activate(username);
 
 	}
 
@@ -218,9 +218,62 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
+
+			return 1;
+		}
+			
+		else {
+			return -1;}
 		
+		})
+		.collect(Collectors.toList());
+		
+		
+		
+		return usuario;
+	}	
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		 usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getEmail().compareToIgnoreCase(v2.getEmail()) >= 0) {
+			
+			return 1;}
+		else {
+			return -1;
+		}
+		})
+		.collect(Collectors.toList());
+	return usuario;
 	
+	}
 	
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		 usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getRol().compareToIgnoreCase(v2.getRol())>=0)
+			return 1;
+		else
+			return -1;
+		})
+		.collect(Collectors.toList());
+	return usuario;
+	
+	}
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		 usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getEstado().compareToIgnoreCase(v2.getEstado())>=0)
+			return 1;
+		else
+			return -1;
+		})
+		.collect(Collectors.toList());
+	return usuario;
+	}
 	
 	
     public void registrarDueño(String nombre, String apellido, String dni, String correo) throws Exception   {
