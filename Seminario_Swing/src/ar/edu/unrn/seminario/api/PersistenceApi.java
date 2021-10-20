@@ -211,13 +211,109 @@ public class PersistenceApi implements IApi {
 		return dtos;
 	}
 	
-	public List<ViviendaDTO> obtenerViviendasOrdenadas() throws AppException{
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
 				.sorted((v1,v2)->v1.getID()-v2.getID())
 				.collect(Collectors.toList());
 		return vDTO;
 	}
+	
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+					
+				String var1 = (v1.getDueño().getNombre()+ " " +  v1.getDueño().getApellido());
+				String var2 = (v2.getDueño().getNombre()+ " " + v2.getDueño().getApellido());
+				if(var1.compareToIgnoreCase(var2)>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+					
+
+				if(v1.getDireccion().getCodPostal().compareToIgnoreCase(v2.getDireccion().getCodPostal())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getBarrio().compareToIgnoreCase(v2.getDireccion().getBarrio())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getAltura().compareToIgnoreCase(v2.getDireccion().getAltura())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	
+	
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getCalle().compareToIgnoreCase(v2.getDireccion().getCalle())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+					String latLong1 = (v1.getDireccion().getLatitud() +" " +  v1.getDireccion().getLongitud());
+					String latLong2 = (v2.getDireccion().getLatitud() +" " + v2.getDireccion().getLongitud());
+					
+				if(latLong1.compareToIgnoreCase(latLong2)>0) 
+					return 1;
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	
+	
+	
+	
+	
+	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		usuario = usuario.stream().sorted((v1,v2)->{

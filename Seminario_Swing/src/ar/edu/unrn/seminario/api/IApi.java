@@ -54,8 +54,11 @@ public interface IApi {
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException;
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException;
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException;
-	List<RolDTO> obtenerRolesActivos();
 
+	
+	
+	
+	List<RolDTO> obtenerRolesActivos();
 	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
 
 	RolDTO obtenerRolPorCodigo(Integer codigo) throws AppException; // recuperar el rol almacenado
@@ -77,8 +80,14 @@ public interface IApi {
 	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio) throws Exception;
 
-	List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception;
-
+	List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws Exception;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException;
+	
 	DueñoDTO obtenerDueño(String text) throws AppException;
 
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
