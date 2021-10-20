@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -67,7 +68,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelOrdenesRetiro = new JPanel();
-		panelOrdenesRetiro.setBounds(10, 11, 442, 539);
+		panelOrdenesRetiro.setBounds(10, 46, 442, 504);
 		panelOrdenesRetiro.setLayout(new BorderLayout(0, 0));
 		contentPane.add(panelOrdenesRetiro);
 		
@@ -90,7 +91,6 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		});
 		tablePedidos.setRowSelectionAllowed(true);//permitiendo seleccion de fila
 		tablePedidos.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
-		
 		String[] titulosPedidoRetiro = { 
 				"OBSERVACION", 
 				"DIRECCION" ,
@@ -98,12 +98,6 @@ public class GenerarOrdenDeRetiro extends JFrame {
 				"FECHA PEDIDO", 
 				"MAQUINARIA PESADA",
 				"CODIGO PEDIDO"
-				
-				/*labels.getString("generar.orden.retiro.titulos.vivienda.BARRIO"), 
-				labels.getString("generar.orden.retiro.titulos.vivienda.CALLE"),
-				labels.getString("generar.orden.retiro.titulos.vivienda.ALTURA"),
-				labels.getString("generar.orden.retiro.titulos.vivienda.LATITUD"),
-				labels.getString("generar.orden.retiro.titulos.vivienda.LONGITUD")*/
 		};
 		modeloPedidos = new DefaultTableModel(new Object[][] {}, titulosPedidoRetiro); 
 		
@@ -123,13 +117,9 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		
 		tablePedidos.setModel(modeloPedidos);
 		scrollPaneOrdenes.setViewportView(tablePedidos);
-		
-		
-		
-		
-		
+
 		JPanel panelRecolector = new JPanel();
-		panelRecolector.setBounds(600, 11, 446, 539);
+		panelRecolector.setBounds(600, 46, 446, 504);
 		panelRecolector.setLayout(new BorderLayout(0,0));
 		contentPane.add(panelRecolector);
 		
@@ -145,7 +135,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				dniRecolectorSeleccionado = (String) tableRecolector.getValueAt(tableRecolector.getSelectedRow(),2);
-				//System.out.println(dniRecolectorSeleccionado);
+				
 			}
 		});
 		
@@ -182,11 +172,13 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			try {
 				System.out.println(codigoPedidoSeleccionado);
 				if(this.dniRecolectorSeleccionado!= null) {
-					api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado,dniRecolectorSeleccionado);
+					api.generarOrdenDeRetiro(codigoPedidoSeleccionado, dniRecolectorSeleccionado);
 				}
 				else {
-					api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
+				api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
 				}
+				
+				
 			} catch (AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
@@ -209,6 +201,17 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		btnCancelar.setHorizontalAlignment(SwingConstants.LEADING);
 		btnCancelar.setBounds(0, 213, 128, 23);
 		panelBotones.add(btnCancelar);
+		
+		JLabel lbRecolector = new JLabel("Seleccionar recolector");
+		lbRecolector.setHorizontalAlignment(SwingConstants.CENTER);
+		lbRecolector.setVerticalAlignment(SwingConstants.BOTTOM);
+		lbRecolector.setBounds(694, 21, 275, 14);
+		contentPane.add(lbRecolector);
+		
+		JLabel lblNewLabel = new JLabel("Seleccionar Pedido De Retiro");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(97, 21, 268, 14);
+		contentPane.add(lblNewLabel);
 		
 
 	}

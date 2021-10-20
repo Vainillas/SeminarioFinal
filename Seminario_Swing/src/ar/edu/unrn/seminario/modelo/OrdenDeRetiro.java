@@ -3,6 +3,9 @@ package ar.edu.unrn.seminario.modelo;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import ar.edu.unrn.seminario.Helper.ConditionHelper;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+
 
 	
 public class OrdenDeRetiro {
@@ -17,6 +20,7 @@ public class OrdenDeRetiro {
 	private int codigo;
 	
 	public OrdenDeRetiro(PedidoDeRetiro p, Recolector r, Date fechaActual) {
+		//validarDatos(p, r, fechaActual);
 		pedidoAsociado = p;
 		recolector = r;
 		fechaOrden = fechaActual;
@@ -25,6 +29,7 @@ public class OrdenDeRetiro {
 	}
 	
 	public OrdenDeRetiro(PedidoDeRetiro p, Date fechaActual) {
+		//validarDatos(p, fechaActual);
 		pedidoAsociado = p;
 		recolector = null;
 		fechaOrden = fechaActual;
@@ -32,6 +37,17 @@ public class OrdenDeRetiro {
 		visitas=new ArrayList<>();
 	}
 	
+	private void validarDatos(PedidoDeRetiro pedido, Recolector recolector, Date fechaActual) throws NotNullException{
+		if(ConditionHelper.IsNull(pedido)){throw new NotNullException("pedido NULO");}
+		if(ConditionHelper.IsNull(recolector)) {throw new NotNullException("recolector NULO");}
+		if(ConditionHelper.IsNull(fechaActual)) {throw new NotNullException("Fecha NULA");}
+		
+	}
+	private void validarDatos(PedidoDeRetiro pedido, Date fechaActual) throws NotNullException{
+		if(ConditionHelper.IsNull(pedido)){throw new NotNullException("pedido NULO");}
+		if(ConditionHelper.IsNull(fechaActual)) {throw new NotNullException("Fecha NULA");}
+		
+	}
 	
 	public Date getFechaOrden() {
 		return fechaOrden;

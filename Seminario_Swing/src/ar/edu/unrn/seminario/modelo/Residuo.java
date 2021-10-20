@@ -7,6 +7,7 @@ public class Residuo {
 	public Residuo(TipoResiduo tipo, int cantidadKg) {
 		this.tipo = tipo;
 		this.cantidadKg = cantidadKg;
+		
 	}
 
 

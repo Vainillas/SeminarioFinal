@@ -123,18 +123,18 @@ public class RegistroVivienda extends JFrame {
             	try {
             		if(!api.existeDueño(dniIngresado.getText())) {//si el dueño no existe se procede a crear uno
 
-            			api.agregarDueño(nombreIngresado.getText(),
+            			api.registrarDueño(nombreIngresado.getText(),
                 				apellidoIngresado.getText(),
                 				dniIngresado.getText(),
                 				correoIngresado.getText());
             		}
-            		api.agregarDireccion(calleIngresada.getText(),
+            		api.registrarDireccion(calleIngresada.getText(),
             				alturaIngresada.getText(),
             				codPostIngresado.getText(),
             				latitudIngresada.getText(),
             				longitudIngresada.getText(),
             				barrioIngresado.getText());
-            		api.agregarVivienda(nombreIngresado.getText(),
+            		api.registrarVivienda(nombreIngresado.getText(),
             				apellidoIngresado.getText(),
             				dniIngresado.getText(),
             				correoIngresado.getText(),
