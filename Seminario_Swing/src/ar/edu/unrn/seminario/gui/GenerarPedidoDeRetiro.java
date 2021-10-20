@@ -1,7 +1,6 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,8 +14,6 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.DireccionDTO;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
@@ -30,25 +27,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import javax.swing.JTextPane;
-import javax.swing.JScrollBar;
-import javax.swing.JSpinner;
-import javax.swing.JTree;
-import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
-import javax.swing.DropMode;
-import javax.swing.JSlider;
-import javax.swing.JList;
 import javax.swing.JCheckBox;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
-import java.awt.Canvas;
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
