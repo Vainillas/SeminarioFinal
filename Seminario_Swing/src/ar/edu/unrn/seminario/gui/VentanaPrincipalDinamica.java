@@ -33,7 +33,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 
 	private JPanel contentPane;
 	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
-
+	private JMenuItem mntmPantallaNormalPersonal;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -107,12 +107,27 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbPersonal.add(mnConfiguracionPersonal);
 		
 		JMenuItem mntmPantallaCompletaPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.completa"));
+		mntmPantallaCompletaPersonal.addActionListener((e)->{
+			this.setExtendedState(JFrame.MAXIMIZED_BOTH);	
+			mntmPantallaNormalPersonal.setVisible(true);
+			mntmPantallaCompletaPersonal.setVisible(false);
+			
+		});
 		mnConfiguracionPersonal.add(mntmPantallaCompletaPersonal);
 		
 		JMenuItem mntmConfiguracionPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.personal")); 
 		
 		mnConfiguracionPersonal.add(mntmConfiguracionPersonal);
 		
+		mntmPantallaNormalPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.normal")); 
+		mntmPantallaNormalPersonal.addActionListener((e)->{
+			this.setExtendedState(JFrame.NORMAL);	
+			mntmPantallaNormalPersonal.setVisible(false);
+			mntmPantallaCompletaPersonal.setVisible(true);
+		});
+		
+		mnConfiguracionPersonal.add(mntmPantallaNormalPersonal);
+		mntmPantallaNormalPersonal.setVisible(false);
 		panelAdministrador.setVisible(true);
 		panelAdministrador.setLayout(new BorderLayout(0, 0));
 		JMenuBar mbAdministrador = new JMenuBar();
@@ -219,6 +234,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnConfiguracionDueño.add(mntnSalirDueño);
 		
 		JMenuItem mntmPantallaCompletaDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.pantalla.completa.dueño"));
+		mntmPantallaCompletaDueño.addActionListener((e)->{
+			this.setExtendedState(JFrame.NORMAL);
+			
+		});
 		mnConfiguracionDueño.add(mntmPantallaCompletaDueño);
 		
 		JMenu mnPedidoDeRetiroDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.pedido.de.retiro.dueño")); 
