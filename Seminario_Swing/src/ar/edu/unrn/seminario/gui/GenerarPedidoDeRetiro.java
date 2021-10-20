@@ -1,7 +1,6 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,8 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.DireccionDTO;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
@@ -29,25 +27,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 import javax.swing.JTextPane;
-import javax.swing.JScrollBar;
-import javax.swing.JSpinner;
-import javax.swing.JTree;
-import javax.swing.JPasswordField;
 import javax.swing.JRadioButton;
 import java.awt.Color;
 import java.awt.SystemColor;
 import javax.swing.UIManager;
-import javax.swing.DropMode;
-import javax.swing.JSlider;
-import javax.swing.JList;
 import javax.swing.JCheckBox;
-import javax.swing.JProgressBar;
-import javax.swing.JSeparator;
-import java.awt.Canvas;
 import javax.swing.JScrollPane;
 
 import java.awt.Font;
@@ -109,7 +94,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		
 		
 		
-		
+		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(SystemColor.info);
 		panelDatos.setLayout(null);
@@ -312,7 +297,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		panelResiduos.add(lbKg);
 		
 		panelViviendas = new JPanel();
-		panelViviendas.setBounds(619, 11, 352, 307);
+		panelViviendas.setBounds(619, 11, 404, 307);
 		
 		contentPane.add(panelViviendas);
 		String[] titulosDireccion = { 
@@ -321,9 +306,9 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				labels.getString("pedido.retiro.titulos.direccion.calle"),  
 				labels.getString("pedido.retiro.titulos.direccion.altura"), 
 				labels.getString("pedido.retiro.titulos.direccion.codigo.postal"), 
-				labels.getString("pedido.retiro.titulos.direccion.latitud"), 
-				labels.getString("pedido.retiro.titulos.direccion.longitud"), 
-				"Codigo"
+				labels.getString("pedido.retiro.titulos.dueño.nombre"), 
+				labels.getString("pedido.retiro.titulos.dueño.apellido"), 
+				labels.getString("pedido.retiro.titulos.dueño.dni"), 
 		};	
 	
 		panelViviendas.setLayout(new BorderLayout(0, 0));
@@ -353,20 +338,25 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulosDireccion);
 		
 		// Obtiene la lista de direcciones a mostrar
-				List<DireccionDTO> direcciones= new ArrayList<DireccionDTO>();
-		
+				List<ViviendaDTO> viviendas= new ArrayList<ViviendaDTO>();	
 		
 					try {
-						direcciones = api.obtenerDirecciones();
+						viviendas = api.obtenerViviendas();
 						
 						// Agrega las direcciones de el dueño en el model
-						for (DireccionDTO d : direcciones) {
-							modelo.addRow(new Object[] { d.getBarrio(), d.getCalle(), d.getAltura(),
-									d.getCodPostal(), d.getLatitud(),d.getLongitud() });
+						for (ViviendaDTO d : viviendas) {
+							modelo.addRow(new Object[] { d.getDireccion().getBarrio(), 
+									d.getDireccion().getCalle(), 
+									d.getDireccion().getAltura(),
+									d.getDireccion().getCodPostal(), 
+									d.getDueño().getNombre(),
+									d.getDueño().getApellido(),
+									d.getDueño().getDni()
+							});
 							
 						}
 
-					} catch (AppException e2) {
+					} catch (Exception e2) {
 						JOptionPane.showMessageDialog(null, e2.getMessage(), "error: ",JOptionPane.ERROR_MESSAGE);
 						setVisible(false);
 						dispose();
@@ -416,5 +406,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	}
 	private void habilitarBotones(boolean b) {
 		//
-	}
+
+}
 }
