@@ -2,8 +2,6 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 
-import java.awt.EventQueue;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -16,18 +14,13 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 
-import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
-
-import javax.swing.JTable;
-import javax.swing.JLabel;
 
 import javax.swing.JOptionPane;
 
@@ -39,15 +32,9 @@ import java.awt.GridBagLayout;
 
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+
 import javax.swing.SwingConstants;
 
-import javax.swing.JButton;
-import java.awt.FlowLayout;
-import java.awt.CardLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -202,6 +189,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		JButton btnAceptar = new JButton("Generar Orden");
 		btnAceptar.addActionListener((e)->{
 			try {
+				System.out.println(codigoPedidoSeleccionado);
 				if(this.dniRecolectorSeleccionado!= null) {
 					api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado,dniRecolectorSeleccionado);
 				}

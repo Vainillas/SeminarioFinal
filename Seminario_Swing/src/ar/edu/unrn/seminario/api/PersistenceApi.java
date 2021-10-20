@@ -349,23 +349,29 @@ public class PersistenceApi implements IApi {
 	}
     
     
-    public void generarOrdenDeRetiro(PedidoDeRetiro unPedido, String dniRecolector) throws AppException{
+    public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException{
     	
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
     	
     	Recolector recolector = recolectorDao.find(dniRecolector);
+    	PedidoDeRetiro unPedido = pedidoDeRetiroDao.find(codigoPedidoSeleccionado);
     	OrdenDeRetiro nuevaOrden = new OrdenDeRetiro(unPedido, recolector , fechaActual );
     	
     	ordenDeRetiroDao.create(nuevaOrden);
     }
+
     
-    public void generarOrdenDeRetiro(PedidoDeRetiro unPedido) throws AppException{
+   
+
+    public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException{
+
     	
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
     	
     	Recolector recolector = null;
+    	PedidoDeRetiro unPedido = pedidoDeRetiroDao.find(codigoPedidoSeleccionado);
     	OrdenDeRetiro nuevaOrden = new OrdenDeRetiro(unPedido, recolector , fechaActual );
     	
     	ordenDeRetiroDao.create(nuevaOrden);
