@@ -30,6 +30,8 @@ public class PedidoDeRetiro {
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
 		this.codigo=unCodigo;
+		
+		
 	}
 	public PedidoDeRetiro(String observacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda) 
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {

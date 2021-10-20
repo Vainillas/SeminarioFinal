@@ -32,9 +32,8 @@ import java.awt.event.ActionEvent;
 public class VentanaPrincipalDinamica extends JFrame {
 
 	private JPanel contentPane;
-	//ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
-	private static GraphicsDevice device = GraphicsEnvironment
-	        .getLocalGraphicsEnvironment().getScreenDevices()[0];
+	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -51,9 +50,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api) {
+		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
-		setBounds(100, 100, 1056, 533);
+		setBounds(100, 100, 1161, 533);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
@@ -61,7 +61,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		try {
 			roles = api.obtenerRoles();
 		} catch (AppException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("ventana.principal.dinamica.mensaje.error"),JOptionPane.ERROR_MESSAGE);
 		}
 		if(roles.get(0).getNombre().equals("PERSONAL")) {
 			//mostrarPanelPersonal();
@@ -76,42 +76,41 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		
 		JPanel panelAdministrador = new JPanel();
-		panelAdministrador.setBounds(530, 11, 500, 240);
+		panelAdministrador.setBounds(560, 11, 565, 240);
 		panelAdministrador.setVisible(false);
 		contentPane.setLayout(null);
 		contentPane.add(panelAdministrador);
 		JPanel panelPersonal = new JPanel();
-		panelPersonal.setBounds(10, 11, 500, 240);
-		panelPersonal.setVisible(false);
+		panelPersonal.setBounds(10, 11, 540, 240);
+		panelPersonal.setVisible(true);
 		contentPane.add(panelPersonal);
 		panelPersonal.setLayout(new BorderLayout(0, 0));
 		
 		JMenuBar mbPersonal = new JMenuBar();
 		panelPersonal.add(mbPersonal, BorderLayout.NORTH);
 		
-		JMenu mnOrdenes = new JMenu();
-		mnOrdenes.setText("new menu");
-		mbPersonal.add(mnOrdenes);
+		JMenu mnOrdenesPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.ordenes"));
+		mbPersonal.add(mnOrdenesPersonal);
 		
-		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem();
-		mnOrdenes.add(mntmPerListarOrdenesDeRetiro);
+		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.lista.ordenes"));
+		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);
 		
-		JMenu MnDatosDelPersonal = new JMenu();
-		MnDatosDelPersonal.setText("new mnu");
-		mbPersonal.add(MnDatosDelPersonal);
+		JMenu MnDatosPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.personal"));
 		
-		JMenuItem mntmVivPerDatosDelPersonal = new JMenuItem();
-		MnDatosDelPersonal.add(mntmVivPerDatosDelPersonal);
+		mbPersonal.add(MnDatosPersonal);
 		
-		JMenu mnConfiguracionPersonal = new JMenu(); //$NON-NLS-1$
-		mnConfiguracionPersonal.setText("new menu");
+		JMenuItem mntmVivPerDatosDelPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.viviendas.datos.personal"));
+		MnDatosPersonal.add(mntmVivPerDatosDelPersonal);
+		
+		JMenu mnConfiguracionPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.personal.configuracion"));
+		
 		mbPersonal.add(mnConfiguracionPersonal);
 		
-		JMenuItem mntmPantallaCompletaPersonal = new JMenuItem("New menu item");
+		JMenuItem mntmPantallaCompletaPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.completa"));
 		mnConfiguracionPersonal.add(mntmPantallaCompletaPersonal);
 		
-		JMenuItem mntmConfiguracionPersonal = new JMenuItem(); //$NON-NLS-1$
-		mntmConfiguracionPersonal.setText("New menu item");
+		JMenuItem mntmConfiguracionPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.personal")); 
+		
 		mnConfiguracionPersonal.add(mntmConfiguracionPersonal);
 		
 		panelAdministrador.setVisible(true);
@@ -119,13 +118,13 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenuBar mbAdministrador = new JMenuBar();
 		panelAdministrador.add(mbAdministrador, BorderLayout.NORTH);
 		
-		JMenu mnConfiguracion = new JMenu("New menu");
-		mbAdministrador.add(mnConfiguracion);
+		JMenu mnConfiguracionAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.configuracion.administrador"));
+		mbAdministrador.add(mnConfiguracionAdministrador);
 		
-		JMenuItem mntmSalirAdmin = new JMenuItem(); 
-		mnConfiguracion.add(mntmSalirAdmin);
+		JMenuItem mntmSalirAdmin = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.salir.administrador")); 
+		mnConfiguracionAdministrador.add(mntmSalirAdmin);
 		
-		JMenuItem mntmPantallaCompletaAdmin = new JMenuItem("New menu item");
+		JMenuItem mntmPantallaCompletaAdmin = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.completa"));
 		mntmPantallaCompletaAdmin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setExtendedState(MAXIMIZED_BOTH);
@@ -134,75 +133,75 @@ public class VentanaPrincipalDinamica extends JFrame {
 
 			}
 		});
-		mnConfiguracion.add(mntmPantallaCompletaAdmin);
+		mnConfiguracionAdministrador.add(mntmPantallaCompletaAdmin);
 		
-		JMenu mUsuarios = new JMenu("New menu");
-		mbAdministrador.add(mUsuarios);
+		JMenu mUsuariosAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.usuarios.administrador"));
+		mbAdministrador.add(mUsuariosAdministrador);
 		
-		JMenuItem mntmAdmListadoUsuario = new JMenuItem("New menu item");
-		mUsuarios.add(mntmAdmListadoUsuario);
+		JMenuItem mntmAdmListadoUsuario = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.usuarios"));
+		mUsuariosAdministrador.add(mntmAdmListadoUsuario);
 		
-		JMenuItem mntmAdmAltaUsuario = new JMenuItem(); //$NON-NLS-1$
-		mUsuarios.add(mntmAdmAltaUsuario);
+		JMenuItem mntmAdmAltaUsuario = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.usuario.administrador")); 
+		mUsuariosAdministrador.add(mntmAdmAltaUsuario);
 		
-		JMenu mnViviendas = new JMenu("New menu");
-		mnViviendas.setBackground(new Color(240, 240, 240));
-		mbAdministrador.add(mnViviendas);
+		JMenu mnViviendasAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.viviendas.administrador"));
+		mnViviendasAdministrador.setBackground(new Color(240, 240, 240));
+		mbAdministrador.add(mnViviendasAdministrador);
 		
-		JMenuItem mntmiAdmListadoViviendas = new JMenuItem("New menu item");
-		mnViviendas.add(mntmiAdmListadoViviendas);
+		JMenuItem mntmiAdmListadoViviendas = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.viviendas.administrador"));
+		mnViviendasAdministrador.add(mntmiAdmListadoViviendas);
 		
-		JMenu mnOrdenesDeRetiro = new JMenu("New menu");
-		mbAdministrador.add(mnOrdenesDeRetiro);
+		JMenu mnOrdenesDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.ordenes.de.retiro.administrador"));
+		mbAdministrador.add(mnOrdenesDeRetiroAdministrador);
 		
-		JMenuItem mntmAdmListadoOrdenesDeRetiros = new JMenuItem("New menu item");
-		mnOrdenesDeRetiro.add(mntmAdmListadoOrdenesDeRetiros);
+		JMenuItem mntmAdmListadoOrdenesDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.ordenes.de.retiro.administrador"));
+		mnOrdenesDeRetiroAdministrador.add(mntmAdmListadoOrdenesDeRetiros);
 		
-		JMenu mnPedidosDeRetiro = new JMenu("New menu");
-		mbAdministrador.add(mnPedidosDeRetiro);
+		JMenu mnPedidosDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.pedidos.de.retiro.administrador"));
+		mbAdministrador.add(mnPedidosDeRetiroAdministrador);
 		
-		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem("New menu item");
-		mnPedidosDeRetiro.add(mntmAdmListadoPedidosDeRetiros);
+		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.pedidos.de.retiro.administrador"));
+		mnPedidosDeRetiroAdministrador.add(mntmAdmListadoPedidosDeRetiros);
 		
-		JMenu mnDueño = new JMenu("New menu");
-		mbAdministrador.add(mnDueño);
+		JMenu mnDueñoAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.dueño.administrador"));
+		mbAdministrador.add(mnDueñoAdministrador);
 		
-		JMenuItem mntmAdmListadoDueños = new JMenuItem("New menu item");
-		mnDueño.add(mntmAdmListadoDueños);
+		JMenuItem mntmAdmListadoDueños = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.dueños.administrador"));
+		mnDueñoAdministrador.add(mntmAdmListadoDueños);
 		
-		JMenu mnPersonal = new JMenu("New menu");
-		mbAdministrador.add(mnPersonal);
+		JMenu mnPersonalAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.personal.administrador"));
+		mbAdministrador.add(mnPersonalAdministrador);
 		
-		JMenuItem mntmAdmListadoPersonal = new JMenuItem("New menu item");
-		mnPersonal.add(mntmAdmListadoPersonal);
+		JMenuItem mntmAdmListadoPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.personal.administrador"));
+		mnPersonalAdministrador.add(mntmAdmListadoPersonal);
 		
 		JPanel panelDueño = new JPanel();
-		panelDueño.setBounds(10, 261, 500, 240);
+		panelDueño.setBounds(10, 262, 540, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		
 		JMenuBar mbDueño = new JMenuBar();
 		panelDueño.add(mbDueño, BorderLayout.NORTH);
 		
-		JMenu mnViviendasDueño = new JMenu("New menu");
+		JMenu mnViviendasDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.viviendas.dueño"));
 		mbDueño.add(mnViviendasDueño);
 		
-		JMenuItem mntmListarViviendasDueño = new JMenuItem("New menu item");
+		JMenuItem mntmListarViviendasDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.viviendas.dueño"));
 		mnViviendasDueño.add(mntmListarViviendasDueño);
 		
-		JMenu menuDatosDueño = new JMenu("New menu");
+		JMenu menuDatosDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.dueño"));
 		mbDueño.add(menuDatosDueño);
 		
-		JMenuItem mntmVivDatosDelDueño = new JMenuItem("New menu item");
+		JMenuItem mntmVivDatosDelDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.datos.del,dueño"));
 		menuDatosDueño.add(mntmVivDatosDelDueño);
 		
-		JMenu mnConfiguracionDueño = new JMenu("New menu");
+		JMenu mnConfiguracionDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.configuracion.dueño"));
 		mbDueño.add(mnConfiguracionDueño);
 		
-		JMenuItem mntnSalirDueño = new JMenuItem("New menu item");
+		JMenuItem mntnSalirDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.salir.dueño"));
 		mnConfiguracionDueño.add(mntnSalirDueño);
 		
-		JMenuItem mntmPantallaCompletaDueño = new JMenuItem("New menu item");
+		JMenuItem mntmPantallaCompletaDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.pantalla.completa.dueño"));
 		mnConfiguracionDueño.add(mntmPantallaCompletaDueño);
 	}
 

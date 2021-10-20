@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -171,10 +172,10 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			try {
 				System.out.println(codigoPedidoSeleccionado);
 				if(this.dniRecolectorSeleccionado!= null) {
-					api.generarOrdenDeRetiro(null,dniRecolectorSeleccionado);
+					api.generarOrdenDeRetiro(codigoPedidoSeleccionado, dniRecolectorSeleccionado);
 				}
 				else {
-				//api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
+				api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
 				}
 				
 				

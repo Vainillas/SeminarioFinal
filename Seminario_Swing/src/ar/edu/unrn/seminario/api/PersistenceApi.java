@@ -308,13 +308,15 @@ public class PersistenceApi implements IApi {
     	if(residuosSeleccionadosKg.size() == 0) {
     		throw new NotNullException("Por favor, indique el kg");
     	}
+    	
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
     	
     	for(int i=0;i<residuosSeleccionados.size();i++){
+    		
     		TipoResiduo t = tipoResiduoDao.find(residuosSeleccionados.get(i));
     		listaTipos.add(t);
     	}
-    	
+
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	
     	for(int i=0;i<residuosSeleccionadosKg.size();i++){
@@ -322,7 +324,7 @@ public class PersistenceApi implements IApi {
     		listResiduos.add(r);
     		
     	}
-
+    	
 
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
@@ -333,11 +335,8 @@ public class PersistenceApi implements IApi {
     	// domiciltioSeleccionado.get(2) tiene la altura
     	Vivienda unaVivienda = viviendaDao.find(domicilioSeleccionado.get(1), domicilioSeleccionado.get(2));
     	
+    	//System.out.println(listResiduos.get(0).getTipo());
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda, 1);
-    	/*for(Residuo r : nuevoPedido.getListResiduos()) {
-    		System.out.println(r.getTipo().getNombre());
-    	}*/
-    	
     	
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
