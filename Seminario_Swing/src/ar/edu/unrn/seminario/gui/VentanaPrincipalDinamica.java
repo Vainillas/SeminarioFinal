@@ -93,14 +93,21 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbPersonal.add(mnOrdenesPersonal);
 		
 		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.lista.ordenes"));
+		mntmPerListarOrdenesDeRetiro.addActionListener((e)->{
+			ListadoOrdenesDeRetiroDelPersonal listado = new ListadoOrdenesDeRetiroDelPersonal(api);
+			listado.setVisible(true);
+		});
 		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);
 		
 		JMenu MnDatosPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.personal"));
 		
 		mbPersonal.add(MnDatosPersonal);
 		
-		JMenuItem mntmVivPerDatosDelPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.viviendas.datos.personal"));
-		MnDatosPersonal.add(mntmVivPerDatosDelPersonal);
+		JMenuItem mntmPerDatosDelPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.viviendas.datos.personal"));
+		mntmPerDatosDelPersonal.addActionListener((e)->{
+			
+		});
+		MnDatosPersonal.add(mntmPerDatosDelPersonal);
 		
 		JMenu mnConfiguracionPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.personal.configuracion"));
 		
@@ -115,10 +122,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 		mnConfiguracionPersonal.add(mntmPantallaCompletaPersonal);
 		
-		JMenuItem mntmConfiguracionPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.personal")); 
-		
-		mnConfiguracionPersonal.add(mntmConfiguracionPersonal);
-		
 		mntmPantallaNormalPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.normal")); 
 		mntmPantallaNormalPersonal.addActionListener((e)->{
 			this.setExtendedState(JFrame.NORMAL);	
@@ -128,6 +131,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		mnConfiguracionPersonal.add(mntmPantallaNormalPersonal);
 		mntmPantallaNormalPersonal.setVisible(false);
+		
+		JMenuItem mntmConfiguracionPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.personal")); 
+		
+		mnConfiguracionPersonal.add(mntmConfiguracionPersonal);
 		panelAdministrador.setVisible(true);
 		panelAdministrador.setLayout(new BorderLayout(0, 0));
 		JMenuBar mbAdministrador = new JMenuBar();

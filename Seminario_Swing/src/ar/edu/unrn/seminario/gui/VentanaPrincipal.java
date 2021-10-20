@@ -82,7 +82,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		JMenuItem menuItemListadoUsuarios = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoUsuarios.addActionListener((e)->{
-				ListadoUsuario listado= new ListadoUsuario(api);
+				ListadoDeUsuarios listado= new ListadoDeUsuarios(api);
 				listado.setLocationRelativeTo(null);
 				listado.setVisible(true);
 		});
@@ -124,7 +124,7 @@ public class VentanaPrincipal extends JFrame {
 		JMenuItem menuItemListadoViviendas = new JMenuItem(labels.getString("ventana.principal.menu.item.listado"));
 		menuItemListadoViviendas.addActionListener((e)->{
 
-			ListadoVivienda v =  new ListadoVivienda(api);
+			ListadoDeViviendas v =  new ListadoDeViviendas(api);
 			v.setVisible(true);
 			
 
