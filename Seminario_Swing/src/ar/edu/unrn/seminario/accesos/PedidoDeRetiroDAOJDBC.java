@@ -62,6 +62,8 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            for(int i=0; i < p.getListResiduos().size() ; i++) {
 		            statement2.setInt(1, codigoPedido);
 		            statement2.setString(2, p.getListResiduos().get(i).getTipo().getNombre()); 
+		            System.out.println(p.getListResiduos().get(i).getTipo().getNombre());
+		            statement2.setString(2, p.getListResiduos().get(i).getTipo().getNombre());
 		            statement2.setInt(3, p.getListResiduos().get(i).getCantidadKg());
 		            statement2.executeUpdate();
 	            }

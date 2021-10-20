@@ -129,7 +129,7 @@ public class IniciarSesion extends JFrame {
 					
 				}
 				catch(NotRegisterException e1) {
-					panelNoRegistrado.setVisible(true);
+					
 					JOptionPane.showMessageDialog(null,e1.getMessage() ,"Error" ,0);
 				}
 			
@@ -141,9 +141,8 @@ public class IniciarSesion extends JFrame {
 		 panelNoRegistrado = new JPanel();
 		panelNoRegistrado.setBounds(211, 191, 213, 84);
 		panelNoRegistrado.setLayout(null);
-		panelNoRegistrado.setVisible(false);
+		panelNoRegistrado.setVisible(true);
 		contentPane.add(panelNoRegistrado);
-		
 		JLabel labelNoRegistrado = new JLabel(labels.getString("iniciar.sesion.label.no.registrado"));
 		labelNoRegistrado.setBounds(53, 11, 150, 14);
 		panelNoRegistrado.add(labelNoRegistrado);

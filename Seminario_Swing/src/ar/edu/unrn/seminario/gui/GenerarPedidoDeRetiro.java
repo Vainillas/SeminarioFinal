@@ -109,7 +109,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		
 		
 		
-		//ResourceBundle labels = ResourceBundle.getBundle("labels");
+		
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(SystemColor.info);
 		panelDatos.setLayout(null);
@@ -323,6 +323,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				labels.getString("pedido.retiro.titulos.direccion.codigo.postal"), 
 				labels.getString("pedido.retiro.titulos.direccion.latitud"), 
 				labels.getString("pedido.retiro.titulos.direccion.longitud"), 
+				"Codigo"
 		};	
 	
 		panelViviendas.setLayout(new BorderLayout(0, 0));

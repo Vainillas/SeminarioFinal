@@ -188,7 +188,15 @@ public class PersistenceApi implements IApi {
 		return this.userOnline;
 	}
 
-	public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
+
+	//public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
+
+	
+
+	
+	
+	public void registrarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
+
 			String codigoPostal, String latitud, String longitud, String barrio)
 			throws Exception {
 		Dueño dueño = new Dueño(nombre,apellido,dni,correo);
@@ -218,7 +226,11 @@ public class PersistenceApi implements IApi {
 		return vDTO;
 	}
 	
-    public void agregarDueño(String nombre, String apellido, String dni, String correo) throws Exception {
+
+   
+	
+    public void registrarDueño(String nombre, String apellido, String dni, String correo) throws Exception   {
+
         Dueño dueño = null;
 		dueño = new Dueño(nombre, apellido, dni, correo);
         this.dueñoDao.create(dueño);
@@ -256,7 +268,7 @@ public class PersistenceApi implements IApi {
     
 
     
-    public void agregarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
+    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
         //Rol rol = rolDao.find(codigoRol);
         Direccion direccion = null;
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
@@ -303,13 +315,15 @@ public class PersistenceApi implements IApi {
     	if(residuosSeleccionadosKg.size() == 0) {
     		throw new NotNullException("Por favor, indique el kg");
     	}
+    	
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
     	
     	for(int i=0;i<residuosSeleccionados.size();i++){
+    		
     		TipoResiduo t = tipoResiduoDao.find(residuosSeleccionados.get(i));
     		listaTipos.add(t);
     	}
-    	
+
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	
     	for(int i=0;i<residuosSeleccionadosKg.size();i++){
@@ -317,7 +331,7 @@ public class PersistenceApi implements IApi {
     		listResiduos.add(r);
     		
     	}
-
+    	
 
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
@@ -328,11 +342,8 @@ public class PersistenceApi implements IApi {
     	// domiciltioSeleccionado.get(2) tiene la altura
     	Vivienda unaVivienda = viviendaDao.find(domicilioSeleccionado.get(1), domicilioSeleccionado.get(2));
     	
+    	//System.out.println(listResiduos.get(0).getTipo());
     	PedidoDeRetiro nuevoPedido = new PedidoDeRetiro(observacion, cargaPesada, listResiduos, fechaActual, unaVivienda, 1);
-    	/*for(Residuo r : nuevoPedido.getListResiduos()) {
-    		System.out.println(r.getTipo().getNombre());
-    	}*/
-    	
     	
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
@@ -381,7 +392,7 @@ public class PersistenceApi implements IApi {
     
     
     
-	public void agregarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
+	public void registrarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
 		Recolector p = new Recolector(nombre, apellido, dni, correoElectronico, telefono);
 		recolectorDao.create(p);
