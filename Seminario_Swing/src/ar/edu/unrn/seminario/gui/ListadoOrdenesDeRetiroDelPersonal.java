@@ -37,7 +37,6 @@ public class ListadoOrdenesDeRetiroDelPersonal extends JFrame {
 	private JButton desactivarButton;
 	public ListadoOrdenesDeRetiroDelPersonal(IApi api){
 		this.api = api;
-		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();

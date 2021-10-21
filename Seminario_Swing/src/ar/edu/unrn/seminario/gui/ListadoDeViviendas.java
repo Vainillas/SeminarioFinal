@@ -114,7 +114,12 @@ public class ListadoDeViviendas extends JFrame {
 
 		scrollPane.setViewportView(table);
 		
-		btnSalir = new JButton("New button");
+		btnSalir = new JButton("SALIR");
+		btnSalir.addActionListener((e)->{
+			setVisible(false);
+			dispose();
+			
+		});
 		panel.add(btnSalir, BorderLayout.SOUTH);
 		
 		panelOrdenamiento = new JPanel();
