@@ -145,6 +145,12 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbAdministrador.add(mUsuariosAdministrador);
 		
 		JMenuItem mntmAdmListadoUsuario = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.usuarios"));
+		mntmAdmListadoUsuario.addActionListener((e)->{
+			ListadoDeUsuarios listUsuario = new ListadoDeUsuarios(api);
+			listUsuario.setVisible(true);
+			
+			
+		});
 		mUsuariosAdministrador.add(mntmAdmListadoUsuario);
 		
 		JMenuItem mntmAdmAltaUsuario = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.usuario.administrador")); 
@@ -155,6 +161,11 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbAdministrador.add(mnViviendasAdministrador);
 		
 		JMenuItem mntmiAdmListadoViviendas = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.viviendas.administrador"));
+		mntmiAdmListadoViviendas.addActionListener((e)->{
+			ListadoDeViviendas listadoViviendas = new ListadoDeViviendas(api);
+			listadoViviendas.setVisible(true);
+			
+		});
 		mnViviendasAdministrador.add(mntmiAdmListadoViviendas);
 		
 		JMenuItem mntmRegistrarViviendaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.vivienda.administrador"));
@@ -195,6 +206,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbAdministrador.add(mnPersonalAdministrador);
 		
 		JMenuItem mntmAdmListadoPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.personal.administrador"));
+		mntmAdmListadoPersonal.addActionListener((e)->{
+			ListadoDePersonal listadoPersonal = new ListadoDePersonal(api);
+			listadoPersonal.setVisible(true);
+		});
 		mnPersonalAdministrador.add(mntmAdmListadoPersonal);
 		
 		JMenuItem mntmRegistrarPersonalAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.personal.administrador")); 

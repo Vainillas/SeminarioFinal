@@ -124,7 +124,7 @@ public class ListadoDeViviendas extends JFrame {
 		
 		panelOrdenamiento = new JPanel();
 		panelOrdenamiento.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 0), null, null, null));
-		panelOrdenamiento.setBounds(619, 149, 234, 180);
+		panelOrdenamiento.setBounds(619, 143, 234, 189);
 		contentPane.add(panelOrdenamiento);
 		
 		btnOrdenarPorCalle = new JButton("FILTRAR POR CALLE");
