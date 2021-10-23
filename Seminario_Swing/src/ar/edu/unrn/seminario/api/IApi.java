@@ -34,7 +34,7 @@ public interface IApi {
 	
 	//void registrarVivienda(Direccion unaDireccion, String unDueño);
 	
-	void registrarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
+	void registrarVivienda(/*String nombre, String apellido, String dni, String correo,*/String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
@@ -50,9 +50,15 @@ public interface IApi {
 	List<RolDTO> obtenerRoles() 
 			throws AppException;
 	
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException;
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException;
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException;
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException;
 
+	
+	
+	
 	List<RolDTO> obtenerRolesActivos();
-
 	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
 
 	RolDTO obtenerRolPorCodigo(Integer codigo) throws AppException; // recuperar el rol almacenado
@@ -65,17 +71,23 @@ public interface IApi {
 	
 	List<ViviendaDTO> obtenerViviendas() throws Exception;
 	
-	void activarUsuario(String username) throws StateException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
+	void activarUsuario(String username) throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
-	void registrarDueño(String nombre, String apellido, String dni, String correo) throws Exception;
+	void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception;
 
 	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio) throws Exception;
 
-	List<ViviendaDTO> obtenerViviendasOrdenadas() throws Exception;
-
+	List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws Exception;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException;
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException;
+	
 	DueñoDTO obtenerDueño(String text) throws AppException;
 
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
@@ -87,12 +99,15 @@ public interface IApi {
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
 	
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
+	
 	boolean existeDueño(String dni) throws AppException;
+	
 	List<DireccionDTO> obtenerDirecciones() throws AppException;
 
 	void usuarioActivo(String text) throws AppException;
 
 	public String obtenerRolUsuarioActivo();
+	
 	List<RecolectorDTO> obtenerRecolectores() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
@@ -100,6 +115,7 @@ public interface IApi {
 	Usuario getUserOnline();
 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException;
+	 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException;
 	 
 }

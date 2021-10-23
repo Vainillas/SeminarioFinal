@@ -52,7 +52,7 @@ public class VentanaPrincipal extends JFrame {
 		this.api = api;
 		try {
 			this.api.activarUsuario("jordan");
-		} catch (StateException e1) {
+		} catch (StateException | AppException e1) {
 			// TODO Bloque catch generado automáticamente
 			e1.printStackTrace();
 		}

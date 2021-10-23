@@ -8,17 +8,20 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class Dueño extends Persona {
 	private String correoElectronico;
+	private String userName;
 	
-	public Dueño(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
+	/*public Dueño(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		super(nombre, apellido, dni);
 		validarDatos(correoElectronico);
 		this.correoElectronico = correoElectronico;
-
-		
+	}*/
+	
+	public Dueño(String nombre, String apellido, String dni, String correoElectronico, String username) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
+		super(nombre, apellido, dni);
+		validarDatos(correoElectronico);
+		this.correoElectronico = correoElectronico;
+		this.userName = username;
 	}
-	
-
-	
 	
 	private void validarDatos (String correoElectronico) throws IncorrectEmailException, DataEmptyException, StringNullException {
 		if(ConditionHelper.IsIncorrectEmail(correoElectronico)) {throw new IncorrectEmailException ("Formato de email incorrecto.");}
@@ -40,4 +43,11 @@ public class Dueño extends Persona {
 		this.correoElectronico=correoElectronico;
 	}
 	
+	public String getUsername(){
+		return this.userName;
+	}
+	
+	public void setUsername(String username) {
+		this.userName = username;
+	}
 }

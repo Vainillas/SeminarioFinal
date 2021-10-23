@@ -76,7 +76,9 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 					dueño = new Dueño(resultSetConstructor.getString("nombre"),
 							resultSetConstructor.getString("apellido"),
 							resultSetConstructor.getString("dni"),
-							resultSetConstructor.getString("correo_electronico"));
+							resultSetConstructor.getString("correo_electronico"),
+							resultSetConstructor.getString("username")
+							);
 				}
 				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
 				statement2.setString(1,resultSetViviendas.getString("calle"));
@@ -120,7 +122,9 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 					dueño = new Dueño(resultSetConstructor.getString("nombre"),
 							resultSetConstructor.getString("apellido"),
 							resultSetConstructor.getString("dni"),
-							resultSetConstructor.getString("correo_electronico"));
+							resultSetConstructor.getString("correo_electronico"),
+							resultSetConstructor.getString("username")
+							);
 				}
 				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
 				statement2.setString(1,resultSetViviendas.getString("calle"));
@@ -174,7 +178,9 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 							resultSetConstructor.getString("apellido"),
 							
 							resultSetConstructor.getString("dni"),
-							resultSetConstructor.getString("correo_electronico"));
+							resultSetConstructor.getString("correo_electronico"),
+							resultSetConstructor.getString("username")
+							);
 				}
 				
 				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
