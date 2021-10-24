@@ -95,7 +95,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.lista.ordenes"));
 		mntmPerListarOrdenesDeRetiro.addActionListener((e)->{
-			ListadoOrdenesDeRetiroDelPersonal listado = new ListadoOrdenesDeRetiroDelPersonal(api);
+			ListadoOrdenes listado = new ListadoOrdenes(api);
 			listado.setVisible(true);
 		});
 		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);

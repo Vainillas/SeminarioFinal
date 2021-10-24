@@ -46,10 +46,10 @@ public class ListadoDeViviendas extends JFrame {
 	public ListadoDeViviendas(IApi api){
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 879, 581);
+		setBounds(100, 100, 879, 523);
 		contentPane = new JPanel();
 		panel = new JPanel();
-		panel.setBounds(5, 5, 604, 473);
+		panel.setBounds(0, 5, 622, 473);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
@@ -124,7 +124,7 @@ public class ListadoDeViviendas extends JFrame {
 		
 		panelOrdenamiento = new JPanel();
 		panelOrdenamiento.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 0), null, null, null));
-		panelOrdenamiento.setBounds(619, 143, 234, 189);
+		panelOrdenamiento.setBounds(620, 143, 233, 189);
 		contentPane.add(panelOrdenamiento);
 		
 		btnOrdenarPorCalle = new JButton("FILTRAR POR CALLE");

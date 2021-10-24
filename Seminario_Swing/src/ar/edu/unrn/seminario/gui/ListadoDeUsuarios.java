@@ -161,50 +161,14 @@ public class ListadoDeUsuarios extends JFrame {
 		
 		btnOrdenarPorCorreo = new JButton(labels.getString("listado.usuario.button.ordenar.por.correo")); //$NON-NLS-1$
 		btnOrdenarPorCorreo.addActionListener((e)->{
-			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			// Obtiene la lista de usuarios a mostrar
-			List<UsuarioDTO> usuario = null ;
-			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorCorreo();
-				modelo.setRowCount(0);
-				
-				// Agrega los usuarios en el model
-				for (UsuarioDTO u : usuario) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-				}
-				
-				// Resetea el model
-				//reload(usuarios);
-			} catch (AppException e2) {
-				setVisible(false);
-				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-			}
+			reloadGrid("correo");
 			
 			
 		});
 		
 		btnOrdenarPorNombre = new JButton(labels.getString("listado.usuario.button.ordenar.por.nombre")); //$NON-NLS-1$
 		btnOrdenarPorNombre.addActionListener((e)->{
-			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			// Obtiene la lista de usuarios a mostrar
-			List<UsuarioDTO> usuario = null ;
-			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorNombre();
-				modelo.setRowCount(0);
-				
-				// Agrega los usuarios en el model
-				for (UsuarioDTO u : usuario) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-				}
-				
-				// Resetea el model
-				//reload(usuarios);
-			} catch (AppException e2) {
-				setVisible(false);
-				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-			}
-			
-			
+			reloadGrid("nombre");
 		});
 			
 		panel.add(btnOrdenarPorNombre);
@@ -212,26 +176,10 @@ public class ListadoDeUsuarios extends JFrame {
 		
 		btnOrdenarPorRol = new JButton(labels.getString("listado.usuario.button.ordenar.por.rol"));
 		btnOrdenarPorRol.addActionListener((e)->{
-			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			// Obtiene la lista de usuarios a mostrar
-			List<UsuarioDTO> usuario = null ;
+			
 			reloadGrid("rol");
 			
-			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorRol();
-				modelo.setRowCount(0);
-				
-				// Agrega los usuarios en el model
-				for (UsuarioDTO u : usuario) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-				}
-				
-				// Resetea el model
-				//reload(usuarios);
-			} catch (AppException e2) {
-				setVisible(false);
-				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-			}
+		
 			
 			
 		});
