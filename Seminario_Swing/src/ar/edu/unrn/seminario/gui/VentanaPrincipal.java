@@ -57,7 +57,7 @@ public class VentanaPrincipal extends JFrame {
 			e1.printStackTrace();
 		}
 		setTitle("Ventana Principal");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
 		setBounds(100, 100, 440, 302);
 		//i18n
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));

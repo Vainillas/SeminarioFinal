@@ -29,7 +29,7 @@ public class RecolectorDTO {
 		return this.dni;
 	}
 	public String getTelefono () {
-		return telefono;
+		return this.telefono;
 	}
 	public String getEmail() {
 		return this.email;

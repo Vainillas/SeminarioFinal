@@ -162,13 +162,16 @@ public class PersistenceApi implements IApi {
 		// TODO Auto-generated method stub
 
 	}
+	
 	public void usuarioActivo(String username) throws AppException {
 		userOnline = usuarioDao.find(username);
 		//usuarioDao.activate(username);
 	}
+	
 	public String obtenerRolUsuarioActivo() {
 		return userOnline.getRol().getNombre();
 	}
+	
 	public boolean existeUsuario(String usuario) throws NotRegisterException, AppException {
 		return usuarioDao.exists(usuario);
 	}
@@ -178,26 +181,25 @@ public class PersistenceApi implements IApi {
 		if(usuarioDao.validateData(user)){
 			this.userOnline = usuarioDao.find(usuario); 
 		}
-		return usuarioDao.validateData(user);
-		
+		return usuarioDao.validateData(user);	
 	}
+	
 	public Usuario getUserOnline(){
 		return this.userOnline;
 	}
 
-	
 
+	//public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
 	
-	
-	public void registrarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
+	public void registrarVivienda(/*String nombre, String apellido, String dni, String correo, */String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
 			throws Exception {
-		Dueño dueño = new Dueño(nombre,apellido,dni,correo);
+		//Dueño dueño = new Dueño(nombre,apellido,dni,correo);
+		Dueño dueño = dueñoDao.find(this.userOnline.getUsuario());
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
 		this.viviendaDao.create(vivienda);
 	}
-	
 
 	@Override
 	public List<ViviendaDTO> obtenerViviendas() throws AppException {
@@ -236,6 +238,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
+	
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -252,6 +255,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
+	
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -265,6 +269,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
+	
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -293,6 +298,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
+	
 	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -308,11 +314,6 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
-	
-	
-	
-	
 	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
@@ -344,7 +345,9 @@ public class PersistenceApi implements IApi {
 		})
 		.collect(Collectors.toList());
 	return usuario;
-	
+
+   
+
 	}
 	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException{
@@ -357,8 +360,8 @@ public class PersistenceApi implements IApi {
 		})
 		.collect(Collectors.toList());
 	return usuario;
-	
 	}
+	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		 usuario = usuario.stream().sorted((v1,v2)->{
@@ -371,10 +374,9 @@ public class PersistenceApi implements IApi {
 	return usuario;
 	}
 	
-	
-    public void registrarDueño(String nombre, String apellido, String dni, String correo) throws Exception   {
+    public void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception   {
         Dueño dueño = null;
-		dueño = new Dueño(nombre, apellido, dni, correo);
+		dueño = new Dueño(nombre, apellido, dni, correo, username);
         this.dueñoDao.create(dueño);
     }
 	
@@ -389,6 +391,7 @@ public class PersistenceApi implements IApi {
 		}
 		return dueñodto;
 	}
+	
     public List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
@@ -398,11 +401,16 @@ public class PersistenceApi implements IApi {
         return dtos;
     }
 
+    
+	public boolean existeDueño(String dni) throws AppException {
+		return dueñoDao.exists(dni);
+		
+	}
+
  
     
     
-    
-    
+
     
     public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
         //Rol rol = rolDao.find(codigoRol);
@@ -433,12 +441,6 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
-	
- 
-    
-    
-    
-    
     
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
@@ -490,6 +492,7 @@ public class PersistenceApi implements IApi {
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
     }
+	
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
 		
@@ -512,7 +515,12 @@ public class PersistenceApi implements IApi {
     	
     	ordenDeRetiroDao.create(nuevaOrden);
     }
+
+    
+   
+
     public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException{
+
     	
     	java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
@@ -535,10 +543,15 @@ public class PersistenceApi implements IApi {
 	}
 	
 
-	public boolean existeDueño(String dni) throws AppException {
-		return dueñoDao.exists(dni);
+	//public List<RecolectorDTO> obtenerRecolector() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
+		/*RecolectorDTO recolectoresDto = null;
 		
-	}
+        List<Recolector> recolectores = recolectorDao.find();
+        
+        return recolectoresDto;*/
+	//}
+	
+	
 
 	public List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException {
 		
@@ -558,19 +571,7 @@ public class PersistenceApi implements IApi {
 	        return recolectoresDTO;
 	}
 	
-	/*public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
-		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
-		
-        List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
-        for (PedidoDeRetiro d : pedidos) {
-            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda() ));
-        }
-
-        return pedidosDto;
-
-       
-
-	}*/
+	
 
 
 

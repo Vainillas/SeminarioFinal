@@ -17,6 +17,8 @@ public interface DueñoDao {
 	void remove(Dueño dueño);
 
 	Dueño find(String dni) throws AppException;
+	
+	Dueño findByUser(String username) throws AppException;
 
 	List<Dueño> findAll() throws AppException, NotNumberException;
 

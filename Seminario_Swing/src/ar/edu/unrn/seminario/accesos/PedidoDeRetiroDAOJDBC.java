@@ -44,7 +44,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            	statement.setInt(3, 0);
 	            }
 	            statement.setDate(4, p.getFechaDelPedido());
-	            statement.executeUpdate();
+	            statement.executeUpdate(); 
 	            
 	            
 	             
@@ -60,6 +60,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            
 	            for(int i=0; i < p.getListResiduos().size() ; i++) {
 		            statement2.setInt(1, codigoPedido);
+		            statement2.setString(2, p.getListResiduos().get(i).getTipo().getNombre()); 
 		            System.out.println(p.getListResiduos().get(i).getTipo().getNombre());
 		            statement2.setString(2, p.getListResiduos().get(i).getTipo().getNombre());
 		            statement2.setInt(3, p.getListResiduos().get(i).getCantidadKg());
@@ -120,7 +121,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							ResultSet resultSetDireccion = statement4.executeQuery();
 							
 							if(resultSetDireccion.next()) {
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"));
+								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
 								direccion = new Direccion(resultSetDireccion.getString("calle"), Integer.toString(resultSetDireccion.getInt("altura")), Integer.toString(resultSetDireccion.getInt("codigo_postal")), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
 								vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
 							}
@@ -213,9 +214,9 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			            	statement4.setInt(2, resultSetVivienda.getInt("altura"));
 			            	ResultSet resultSetDireccion = statement4.executeQuery();
 			            	
-							if(resultSetDireccion.next()) {
+							if(resultSetDireccion.next()) { 
 								
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"));
+								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
 								direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
 			            		vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
 			            		
@@ -260,7 +261,15 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							
 	            		}
 
-	            	}}} catch (AppException e) {
+
+	            	
+	            	
+	            }
+
+	            	
+
+	            	}} catch (AppException e) {
+
 
 	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
 

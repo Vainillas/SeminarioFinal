@@ -20,7 +20,7 @@ public class PedidoDeRetiro {
 	private Vivienda vivienda;
 	private  Date fechaDelPedido;
 	private int codigo;
-	
+	 
 	public PedidoDeRetiro(String unaObservacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda, int unCodigo)
 	throws DataEmptyException,NotNullException, StringNullException, DateNullException{
 		validarDatos(unaObservacion,unaListaDeResiduos,unaFecha,unaVivienda);
@@ -33,6 +33,7 @@ public class PedidoDeRetiro {
 		
 		
 	}
+	
 	public PedidoDeRetiro(String observacion, Boolean requiereMaquinaPesada, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda) 
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
 		validarDatos(observacion,unaListaDeResiduos,unaFecha,unaVivienda);
@@ -41,8 +42,8 @@ public class PedidoDeRetiro {
 		this.listResiduos = unaListaDeResiduos;
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
-		
 	}
+	
 	private void validarDatos(String unaObservacion, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
 		if(ConditionHelper.IsNull(unaListaDeResiduos)) {throw new NotNullException("la lista de residuos esta vacia");}
@@ -50,7 +51,6 @@ public class PedidoDeRetiro {
 		if(ConditionHelper.IsDateNull(unaFecha)) {throw new DateNullException("fecha nula");}
 		if(ConditionHelper.stringIsNull(unaObservacion)){throw new DataEmptyException("observacion vacia");}
 		if(ConditionHelper.IsNull(unaVivienda)) {throw new NotNullException("vivienda nula");}
-		
 	}
 
 	public int getCodigo(){

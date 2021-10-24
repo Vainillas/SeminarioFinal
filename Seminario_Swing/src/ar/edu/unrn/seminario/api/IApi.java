@@ -34,7 +34,7 @@ public interface IApi {
 	
 	//void registrarVivienda(Direccion unaDireccion, String unDueño);
 	
-	void registrarVivienda(String nombre, String apellido, String dni, String correo,String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
+	void registrarVivienda(/*String nombre, String apellido, String dni, String correo,*/String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
@@ -75,7 +75,7 @@ public interface IApi {
 
 	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
-	void registrarDueño(String nombre, String apellido, String dni, String correo) throws Exception;
+	void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception;
 
 	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio) throws Exception;
@@ -99,12 +99,15 @@ public interface IApi {
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
 	
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
+	
 	boolean existeDueño(String dni) throws AppException;
+	
 	List<DireccionDTO> obtenerDirecciones() throws AppException;
 
 	void usuarioActivo(String text) throws AppException;
 
 	public String obtenerRolUsuarioActivo();
+	
 	List<RecolectorDTO> obtenerRecolectores() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
@@ -112,6 +115,7 @@ public interface IApi {
 	Usuario getUserOnline();
 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException;
+	 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException;
 	 
 }

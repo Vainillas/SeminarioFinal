@@ -47,7 +47,7 @@ public class TipoResiduoDAOJDBC implements TipoResiduoDao {
 	}
 
 	@Override
-	public void remove(String nombre) {
+	public void remove(String nombre) { 
 		// TODO Auto-generated method stub
 
 	}
