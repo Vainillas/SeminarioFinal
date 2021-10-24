@@ -94,7 +94,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            if(recolector != null) {
 	            	orden = new OrdenDeRetiro(pedido, recolector, fechaOrden);
 	            }else {
-	            	orden = new OrdenDeRetiro(pedido, fechaOrden);
+	            	orden = new OrdenDeRetiro(pedido, fechaOrden); 
 	            }
 	        } catch (SQLException e) {
 	            throw new AppException("error de la aplicacion");

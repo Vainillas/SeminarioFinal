@@ -116,7 +116,7 @@ public class IniciarSesion extends JFrame {
 						api.usuarioActivo(textUsuario.getText());//sirve para mantener al usuario siempre
 						
 						//System.out.printf(textUsuario.getText() + String.valueOf(textPassword.getPassword() ))
-						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword()));
+						//api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword()));
 							
 								VentanaPrincipal ventana = new VentanaPrincipal(api);
 								ventana.setVisible(true);

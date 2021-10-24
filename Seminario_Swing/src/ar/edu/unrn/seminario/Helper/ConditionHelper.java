@@ -2,7 +2,7 @@ package ar.edu.unrn.seminario.Helper;
 
 import java.sql.Date;
 
-//Hello there
+
 public  class ConditionHelper {
 	public static boolean stringIsEmpty(String s) {
 		return s.equals("") || s.equals(" ");

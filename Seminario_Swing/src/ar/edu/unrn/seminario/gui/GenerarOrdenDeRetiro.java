@@ -27,6 +27,13 @@ import javax.swing.JOptionPane;
 
 import javax.swing.JButton;
 
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import java.awt.GridBagLayout;
+
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
 import javax.swing.SwingConstants;
 
 import java.awt.event.MouseAdapter;
@@ -145,7 +152,9 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		String[] titulosRecolector = {"NOMBRE","APELLIDO","DNI","TELEFONO","EMAIL"};
 		modeloRecolector = new DefaultTableModel(new Object[][] {}, titulosRecolector);
 		
-		
+
+		tableRecolector.setModel(modeloRecolector);
+
 		List<RecolectorDTO> recolector= api.obtenerRecolectores();
 		
 		for(RecolectorDTO r : recolector) {
@@ -182,8 +191,6 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			} catch (AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
-			
-			
 			
 		});
 		btnAceptar.setHorizontalAlignment(SwingConstants.LEADING);

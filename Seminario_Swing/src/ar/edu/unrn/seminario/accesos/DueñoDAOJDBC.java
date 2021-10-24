@@ -27,13 +27,14 @@ public class DueñoDAOJDBC implements DueñoDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("INSERT INTO propietarios(nombre,apellido,dni,correo_electronico) "
-							+ "VALUES (?, ?, ?, ?)");
+					.prepareStatement("INSERT INTO propietarios(nombre,apellido,dni,correo_electronico,username) "
+							+ "VALUES (?, ?, ?, ?, ?)");
 			
 			statement.setString(1, d.getNombre());
 			statement.setString(2, d.getApellido());
 			statement.setString(3, d.getDni());
 			statement.setString(4, d.getCorreo());
+			statement.setString(5, d.getUsername());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
@@ -80,7 +81,30 @@ public class DueñoDAOJDBC implements DueñoDao {
 				dueño= new Dueño(resultSetDueño.getString("nombre"),
 						resultSetDueño.getString("apellido"),
 						resultSetDueño.getString("dni"),
-						resultSetDueño.getString("correo_electronico"));
+						resultSetDueño.getString("correo_electronico"),
+						resultSetDueño.getString("username"));
+			}
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e) {
+			throw new AppException("Error al procesar consulta: " + e.getMessage());
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return dueño;
+	}
+	
+	public Dueño findByUser(String username) throws AppException {
+		Dueño dueño = null;
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p "+"WHERE p.username = ?");
+			statement.setString(1,username);
+			ResultSet resultSetDueño = statement.executeQuery();
+			if(resultSetDueño.next()) {
+				dueño= new Dueño(resultSetDueño.getString("nombre"),
+						resultSetDueño.getString("apellido"),
+						resultSetDueño.getString("dni"),
+						resultSetDueño.getString("correo_electronico"),
+						resultSetDueño.getString("username"));
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e) {
 			throw new AppException("Error al procesar consulta: " + e.getMessage());
@@ -103,7 +127,8 @@ public class DueñoDAOJDBC implements DueñoDao {
 				Dueño dueño = new Dueño(rs.getString("nombre"),
 						rs.getString("apellido"),
 						rs.getString("dni"),
-						rs.getString("correo electronico"));
+						rs.getString("correo electronico"),
+						rs.getString("username"));
 				dueños.add(dueño);
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException e) {

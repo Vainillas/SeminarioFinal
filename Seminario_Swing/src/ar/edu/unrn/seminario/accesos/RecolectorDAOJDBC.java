@@ -50,7 +50,7 @@ public class RecolectorDAOJDBC implements RecolectorDao {
 	}
 
 	public Recolector find(String dni) throws AppException {
-		Recolector recolector = null;
+		Recolector recolector = null; 
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM recolectores r "+"WHERE r.dni = ?");

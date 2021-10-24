@@ -31,7 +31,7 @@ public class PedidoDeRetiroDTO {
 		this.listResiduos = unaListaDeResiduos;
 		this.vivienda = unaVivienda;
 		this.fechaDelPedido = unaFecha;
-		this.codigo=codigo;
+		this.codigo=codigo; 
 	}
 	public void validarDatos(String unaObservacion, ArrayList<Residuo> unaListaDeResiduos, Date unaFecha, Vivienda unaVivienda)
 			throws NotNullException, DataEmptyException, StringNullException, DateNullException {
@@ -40,7 +40,6 @@ public class PedidoDeRetiroDTO {
 		if(ConditionHelper.IsDateNull(unaFecha)) {throw new DateNullException("fecha nula");}
 		if(ConditionHelper.stringIsNull(unaObservacion)){throw new DataEmptyException("observacion vacia");}
 		if(ConditionHelper.IsNull(unaVivienda)) {throw new NotNullException("vivienda nula");}
-		
 	}
 	
 	

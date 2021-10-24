@@ -406,5 +406,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	}
 	private void habilitarBotones(boolean b) {
 		//
-	}
+
+}
 }
