@@ -255,8 +255,7 @@ public class PersistenceApi implements IApi {
     
     
     
-    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
-        //Rol rol = rolDao.find(codigoRol);
+    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
         Direccion direccion = null;
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
         this.direccionDao.create(direccion);
