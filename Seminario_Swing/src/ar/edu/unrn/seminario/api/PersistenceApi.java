@@ -361,6 +361,17 @@ public class PersistenceApi implements IApi {
 		.collect(Collectors.toList());
 	return usuario;
 	}
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		 usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getEstado().compareToIgnoreCase(v2.getEstado())>=0)
+			return 1;
+		else
+			return -1;
+		})
+		.collect(Collectors.toList());
+	return usuario;
+	}
 	
 	public static class filtradoUsuarioRol implements Comparator<UsuarioDTO>{
 		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
@@ -397,17 +408,6 @@ public class PersistenceApi implements IApi {
 		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
 		.collect(Collectors.toList());
 		return usuario;
-	}
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
-		List<UsuarioDTO> usuario = this.obtenerUsuarios();
-		 usuario = usuario.stream().sorted((v1,v2)->{
-		if(v1.getEstado().compareToIgnoreCase(v2.getEstado())>=0)
-			return 1;
-		else
-			return -1;
-		})
-		.collect(Collectors.toList());
-	return usuario;
 	}
 	
     public void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception   {

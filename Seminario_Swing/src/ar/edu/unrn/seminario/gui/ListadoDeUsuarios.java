@@ -261,7 +261,7 @@ public class ListadoDeUsuarios extends JFrame {
 		desactivarButton.setEnabled(b);
 
 	}
-	private void reloadGrid(String tipoOrdenamiento){
+	private void reloadGrid(String tipoOrdenamiento){ //CAMBIAR
 		// Obtiene el model del table
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 		// Obtiene la lista de usuarios a mostrar
