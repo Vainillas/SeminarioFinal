@@ -364,11 +364,11 @@ public class PersistenceApi implements IApi {
 	
 	public static class filtradoUsuarioRol implements Comparator<UsuarioDTO>{
 		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
-			if(v1.getEstado().compareToIgnoreCase(v2.getEstado())>=0)
+			if(v1.getRol().compareToIgnoreCase(v2.getRol())>=0)
 				return 1;
 			else
 				return -1;
-		}
+			}
 	}
 	public static class filtradoUsuarioNombre implements Comparator<UsuarioDTO>{
 		public int compare(UsuarioDTO v1, UsuarioDTO v2) {

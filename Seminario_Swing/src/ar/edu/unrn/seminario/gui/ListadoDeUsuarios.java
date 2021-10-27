@@ -220,7 +220,7 @@ public class ListadoDeUsuarios extends JFrame {
 			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 			// Obtiene la lista de usuarios a mostrar
 			List<UsuarioDTO> usuario = null ;
-			reloadGrid("rol");
+			reloadGrid("rol"); //Por qué en este hacés un reloadGrid al principio y en los otros no? 
 			
 			try {	
 				filtradoUsuarioRol p = new filtradoUsuarioRol();
