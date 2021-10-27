@@ -21,6 +21,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioCorreo;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
@@ -165,7 +168,8 @@ public class ListadoDeUsuarios extends JFrame {
 			// Obtiene la lista de usuarios a mostrar
 			List<UsuarioDTO> usuario = null ;
 			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorCorreo();
+				filtradoUsuarioCorreo p = new filtradoUsuarioCorreo();
+				usuario = api.obtenerUsuariosOrdenados(p);
 				modelo.setRowCount(0);
 				
 				// Agrega los usuarios en el model
@@ -189,7 +193,8 @@ public class ListadoDeUsuarios extends JFrame {
 			// Obtiene la lista de usuarios a mostrar
 			List<UsuarioDTO> usuario = null ;
 			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorNombre();
+				filtradoUsuarioNombre p = new filtradoUsuarioNombre();
+				usuario = api.obtenerUsuariosOrdenados(p);
 				modelo.setRowCount(0);
 				
 				// Agrega los usuarios en el model
@@ -218,7 +223,8 @@ public class ListadoDeUsuarios extends JFrame {
 			reloadGrid("rol");
 			
 			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorRol();
+				filtradoUsuarioRol p = new filtradoUsuarioRol();
+				usuario = api.obtenerUsuariosOrdenados(p);
 				modelo.setRowCount(0);
 				
 				// Agrega los usuarios en el model

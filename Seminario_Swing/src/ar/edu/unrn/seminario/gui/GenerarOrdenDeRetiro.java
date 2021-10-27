@@ -58,7 +58,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 	private JPanel contentPane;
 	private DefaultTableModel modeloPedidos;
 	private DefaultTableModel modeloRecolector;
-	private  IApi api;
+	private IApi api;
 	private String dniRecolectorSeleccionado = null;
 
 	
