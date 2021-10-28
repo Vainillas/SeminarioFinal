@@ -55,6 +55,8 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import utilities.Filtro;
+import utilities.Predicate;
 
 
 public class PersistenceApi implements IApi {
@@ -312,8 +314,11 @@ public class PersistenceApi implements IApi {
 	}
 	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{
-		List<UsuarioDTO> usuario = this.obtenerUsuarios();
-		usuario = usuario.stream().sorted((v1,v2)->{
+		//List<UsuarioDTO> usuario = Filtro.filtrar(this.obtenerUsuarios());
+		
+		List<UsuarioDTO> usuario = null;
+		
+		return usuario.stream().sorted((v1,v2)->{
 		if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
 
 			return 1;
@@ -324,9 +329,13 @@ public class PersistenceApi implements IApi {
 		
 		})
 		.collect(Collectors.toList());
-		return usuario;
+
+		//return usuario;
 	}
 	
+
+	
+
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		 usuario = usuario.stream().sorted((v1,v2)->{
@@ -652,7 +661,18 @@ public class PersistenceApi implements IApi {
 	        }
 	        return recolectoresDTO;
 	}
+
+	@Override
+	public List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException {
+		return Filtro.filtrar(this.obtenerUsuarios(), predicate);	
+	}
 	
+	public List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException{
+		return Filtro.filtrar(this.obtenerViviendas(), predicate);
+		
+		
+	}
+
 	
 
 

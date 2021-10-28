@@ -1,8 +1,6 @@
 package ar.edu.unrn.seminario.gui;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -26,39 +24,48 @@ import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
-import ar.edu.unrn.seminario.exceptions.DataEmptyException;
-import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
+
 import ar.edu.unrn.seminario.exceptions.StateException;
+import utilities.Filtro;
+import utilities.Predicate;
+
+import javax.swing.JTextField;
+import javax.swing.JLabel;
+import java.awt.event.ActionListener;
+import javax.swing.SwingConstants;
 
 public class ListadoDeUsuarios extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	DefaultTableModel modelo;
-	IApi api;
-	JButton activarButton;
-	JButton desactivarButton;
-	private JPanel panel;
+	private DefaultTableModel modelo;
+	private IApi api;
+	private JButton activarButton;
+	private JButton desactivarButton;
+	private JPanel panelBotonesOrdenamiento;
 	private JButton btnOrdenarPorCorreo;
 	private JButton btnOrdenarPorNombre;
 	private JButton btnOrdenarPorRol;
 	private JButton btnOrdenarPorEstado;
+	private JLabel lbUsername;
+	private JTextField tfUsernameSeleccionado;
+	private JButton btnAceptar;
+	private JButton btnLimpiarFIltro;
 
 	public ListadoDeUsuarios(IApi api){
 		this.api = api;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 725, 300);
+		setBounds(100, 100, 977, 415);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(208, 5, 491, 214);
+		scrollPane.setBounds(250, 5, 701, 312);
 		contentPane.add(scrollPane);
-		//ResourceBundle labels = ResourceBundle.getBundle("labels");
+		//ResourceBundle labels = ResourceBundle.getBundle("labels"); 
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		table = new JTable();
 		String[] titulosUsuario = { 
@@ -109,7 +116,7 @@ public class ListadoDeUsuarios extends JFrame {
 					String username = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
 					try {
 						api.activarUsuario(username);
-						reloadGrid(null);
+						//reloadGrid();
 					}
 					catch(StateException | AppException e1){
 						JOptionPane.showMessageDialog(null, e1.getMessage(), 
@@ -132,7 +139,7 @@ public class ListadoDeUsuarios extends JFrame {
 					String username = (String) table.getModel().getValueAt(table.getSelectedRow(), 0);
 					try {
 						api.desactivarUsuario(username);
-						reloadGrid(null);
+						//reloadGrid(null);
 					} catch (StateException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), 
 								labels.getString("listado.usuario.mensaje.error"), 
@@ -148,17 +155,22 @@ public class ListadoDeUsuarios extends JFrame {
 				dispose();
 			
 		});
-//		contentPane.add(cerrarButton, BorderLayout.SOUTH);
+
 
 		JPanel pnlBotonesOperaciones = new JPanel();
-		pnlBotonesOperaciones.setBounds(5, 219, 694, 37);
+		pnlBotonesOperaciones.setBounds(250, 328, 679, 37);
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones);
 		pnlBotonesOperaciones.add(desactivarButton);
 		pnlBotonesOperaciones.add(activarButton);
 		pnlBotonesOperaciones.add(cerrarButton);
 		
-		panel = new JPanel();
+
+		panelBotonesOrdenamiento = new JPanel();
+		panelBotonesOrdenamiento.setBounds(53, 5, 165, 167);
+		contentPane.add(panelBotonesOrdenamiento);
+
+		JPanel panel = new JPanel();
 		panel.setBounds(22, 5, 156, 214);
 		contentPane.add(panel);
 		
@@ -214,14 +226,24 @@ public class ListadoDeUsuarios extends JFrame {
 			
 		panel.add(btnOrdenarPorNombre);
 		panel.add(btnOrdenarPorCorreo);
+
 		
 		btnOrdenarPorRol = new JButton(labels.getString("listado.usuario.button.ordenar.por.rol"));
+
+		btnOrdenarPorRol.setBounds(39, 25, 87, 23);
 		btnOrdenarPorRol.addActionListener((e)->{
+
+			reloadGrid("rol");
+
 			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 			// Obtiene la lista de usuarios a mostrar
 			List<UsuarioDTO> usuario = null ;
 			reloadGrid("rol"); //Por qué en este hacés un reloadGrid al principio y en los otros no? 
+
 			
+
+		
+
 			try {	
 				filtradoUsuarioRol p = new filtradoUsuarioRol();
 				usuario = api.obtenerUsuariosOrdenados(p);
@@ -238,18 +260,93 @@ public class ListadoDeUsuarios extends JFrame {
 				setVisible(false);
 				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
 			}
+
 			
 			
 		});
-		panel.add(btnOrdenarPorRol);
+		panelBotonesOrdenamiento.setLayout(null);
+		
+		JLabel lblNewLabel_1 = new JLabel("Ordenar por:");
+		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1.setBounds(10, 11, 145, 14);
+		panelBotonesOrdenamiento.add(lblNewLabel_1);
+		panelBotonesOrdenamiento.add(btnOrdenarPorRol);
 		
 		btnOrdenarPorEstado = new JButton(labels.getString("listado.usuario.button.ordenar.por.estado")); 
+		btnOrdenarPorEstado.setBounds(39, 59, 87, 23);
 		btnOrdenarPorEstado.addActionListener((e)->{
 			reloadGrid("estado");
 			
 			
 		});
-		panel.add(btnOrdenarPorEstado);
+		panelBotonesOrdenamiento.add(btnOrdenarPorEstado);
+		
+		btnOrdenarPorNombre = new JButton(labels.getString("listado.usuario.button.ordenar.por.nombre")); //$NON-NLS-1$
+		btnOrdenarPorNombre.setBounds(39, 127, 87, 23);
+		btnOrdenarPorNombre.addActionListener((e)->{
+			reloadGrid("nombre");
+		});
+		
+		btnOrdenarPorCorreo = new JButton(labels.getString("listado.usuario.button.ordenar.por.correo")); //$NON-NLS-1$
+		btnOrdenarPorCorreo.setBounds(39, 93, 87, 23);
+		btnOrdenarPorCorreo.addActionListener((e)->{
+			reloadGrid("correo");
+			
+			
+		});
+		panelBotonesOrdenamiento.add(btnOrdenarPorCorreo);
+		
+		panelBotonesOrdenamiento.add(btnOrdenarPorNombre);
+		
+		JPanel panelBotonesFiltrados = new JPanel();
+		panelBotonesFiltrados.setBounds(10, 186, 230, 179);
+		contentPane.add(panelBotonesFiltrados);
+		panelBotonesFiltrados.setLayout(null);
+		
+		JLabel lbFiltradoPor = new JLabel("filtrar por:"); 
+		lbFiltradoPor.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFiltradoPor.setBounds(24, 11, 181, 14);
+		panelBotonesFiltrados.add(lbFiltradoPor);
+		
+		lbUsername = new JLabel("Username"); 
+		lbUsername.setBounds(10, 40, 73, 20);
+		panelBotonesFiltrados.add(lbUsername);
+		
+		JTextField tfUsernameSeleccionado = new JTextField("");
+		tfUsernameSeleccionado.setBounds(91, 40, 100, 20);
+		panelBotonesFiltrados.add(tfUsernameSeleccionado);
+		tfUsernameSeleccionado.setColumns(10);
+		
+		btnAceptar = new JButton("Aceptar"); 
+		btnAceptar.addActionListener((e)->{
+			
+		
+			Predicate <UsuarioDTO> predicate = (UsuarioDTO usuario)->usuario.getUsername().contains((String)tfUsernameSeleccionado.getText());
+			
+			
+			try {
+				List<UsuarioDTO> us =api.obtenerUsuarios(predicate);
+				reloadGrid(us);
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
+						
+		});
+		btnAceptar.setBounds(199, 40, 21, 20);
+		panelBotonesFiltrados.add(	btnAceptar);
+		
+		btnLimpiarFIltro = new JButton("Limpiar Filtro"); //$NON-NLS-1$
+		btnLimpiarFIltro.addActionListener((e)->{
+			
+			try {
+				this.reloadGrid(api.obtenerUsuarios());
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
+			
+		});
+		btnLimpiarFIltro.setBounds(71, 114, 89, 23);
+		panelBotonesFiltrados.add(btnLimpiarFIltro);
 
 		// Deshabilitar botones que requieren tener una fila seleccionada
 		habilitarBotones(false);
@@ -261,6 +358,14 @@ public class ListadoDeUsuarios extends JFrame {
 		desactivarButton.setEnabled(b);
 
 	}
+	private void reloadGrid(List<UsuarioDTO> us) {
+		modelo.setRowCount(0);
+		// Agrega los usuarios en el model
+		for (UsuarioDTO u : us) {
+		modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+		}
+	}
+	
 	private void reloadGrid(String tipoOrdenamiento){
 		// Obtiene el model del table
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
