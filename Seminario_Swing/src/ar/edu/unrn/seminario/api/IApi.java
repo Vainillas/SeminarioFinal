@@ -71,7 +71,8 @@ public interface IApi {
 	List<UsuarioDTO> obtenerUsuarios() throws AppException; // recuperar todos los usuarios
 	List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException; // recuperar todos los usuarios
 	
-	List<ViviendaDTO> obtenerViviendas() throws Exception;
+	List<ViviendaDTO> obtenerViviendas() throws AppException;
+	List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
 	
 	void activarUsuario(String username) throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 

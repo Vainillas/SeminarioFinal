@@ -581,6 +581,12 @@ public class PersistenceApi implements IApi {
 		return Filtro.filtrar(this.obtenerUsuarios(), predicate);	
 	}
 	
+	public List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException{
+		return Filtro.filtrar(this.obtenerViviendas(), predicate);
+		
+		
+	}
+
 	
 
 
