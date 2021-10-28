@@ -3,10 +3,11 @@ package ar.edu.unrn.seminario.api;
 import java.sql.SQLException;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.sql.Date;
 import java.util.List;
 
-
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioCorreo;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
@@ -120,5 +121,7 @@ public interface IApi {
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException;
 	 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException;
+
+	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) throws AppException;
 	 
 }

@@ -201,7 +201,6 @@ public class ListadoDeViviendas extends JFrame {
 		
 		JButton btnNombre_apellido = new JButton();
 		btnNombre_apellido .addActionListener((e)->{
-			System.out.println("aca entra");
 			System.out.println(txNombre_Apellido.getText());
 			Predicate <ViviendaDTO> predicate =
 					(ViviendaDTO v)->v.getDueño().getNombre().contains(txNombre_Apellido.getText())
@@ -224,7 +223,6 @@ public class ListadoDeViviendas extends JFrame {
 		
 		btnCalle_Altura = new JButton("New button");
 		btnCalle_Altura.addActionListener((e)->{
-			System.out.println("entro");
 			Predicate <ViviendaDTO> predicate =
 					(ViviendaDTO v)->v.getDireccion().getBarrio().contains(this.txCalle_Altura.getText())
 					||v.getDireccion().getCalle().contains(this.txCalle_Altura.getText());

@@ -19,6 +19,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioCorreo;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 
@@ -162,17 +165,102 @@ public class ListadoDeUsuarios extends JFrame {
 		pnlBotonesOperaciones.add(activarButton);
 		pnlBotonesOperaciones.add(cerrarButton);
 		
+
 		panelBotonesOrdenamiento = new JPanel();
 		panelBotonesOrdenamiento.setBounds(53, 5, 165, 167);
 		contentPane.add(panelBotonesOrdenamiento);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(22, 5, 156, 214);
+		contentPane.add(panel);
+		
+		btnOrdenarPorCorreo = new JButton(labels.getString("listado.usuario.button.ordenar.por.correo")); //$NON-NLS-1$
+		btnOrdenarPorCorreo.addActionListener((e)->{
+			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+			// Obtiene la lista de usuarios a mostrar
+			List<UsuarioDTO> usuario = null ;
+			try {	
+				filtradoUsuarioCorreo p = new filtradoUsuarioCorreo();
+				usuario = api.obtenerUsuariosOrdenados(p);
+				modelo.setRowCount(0);
+				
+				// Agrega los usuarios en el model
+				for (UsuarioDTO u : usuario) {
+					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+				}
+				
+				// Resetea el model
+				//reload(usuarios);
+			} catch (AppException e2) {
+				setVisible(false);
+				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
+			}
+			
+			
+		});
+		
+		btnOrdenarPorNombre = new JButton(labels.getString("listado.usuario.button.ordenar.por.nombre")); //$NON-NLS-1$
+		btnOrdenarPorNombre.addActionListener((e)->{
+			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+			// Obtiene la lista de usuarios a mostrar
+			List<UsuarioDTO> usuario = null ;
+			try {	
+				filtradoUsuarioNombre p = new filtradoUsuarioNombre();
+				usuario = api.obtenerUsuariosOrdenados(p);
+				modelo.setRowCount(0);
+				
+				// Agrega los usuarios en el model
+				for (UsuarioDTO u : usuario) {
+					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+				}
+				
+				// Resetea el model
+				//reload(usuarios);
+			} catch (AppException e2) {
+				setVisible(false);
+				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
+			}
+			
+			
+		});
+			
+		panel.add(btnOrdenarPorNombre);
+		panel.add(btnOrdenarPorCorreo);
+
 		
 		btnOrdenarPorRol = new JButton(labels.getString("listado.usuario.button.ordenar.por.rol"));
 
 		btnOrdenarPorRol.setBounds(39, 25, 87, 23);
 		btnOrdenarPorRol.addActionListener((e)->{
+
 			reloadGrid("rol");
+
+			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
+			// Obtiene la lista de usuarios a mostrar
+			List<UsuarioDTO> usuario = null ;
+			reloadGrid("rol"); //Por qué en este hacés un reloadGrid al principio y en los otros no? 
+
 			
+
 		
+
+			try {	
+				filtradoUsuarioRol p = new filtradoUsuarioRol();
+				usuario = api.obtenerUsuariosOrdenados(p);
+				modelo.setRowCount(0);
+				
+				// Agrega los usuarios en el model
+				for (UsuarioDTO u : usuario) {
+					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+				}
+				
+				// Resetea el model
+				//reload(usuarios);
+			} catch (AppException e2) {
+				setVisible(false);
+				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
+			}
+
 			
 			
 		});
