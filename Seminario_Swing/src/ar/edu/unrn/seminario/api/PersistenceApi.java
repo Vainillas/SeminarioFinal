@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +22,8 @@ import ar.edu.unrn.seminario.accesos.TipoResiduoDAOJDBC;
 import ar.edu.unrn.seminario.accesos.TipoResiduoDao;
 import ar.edu.unrn.seminario.accesos.UsuarioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.UsuarioDao;
+import ar.edu.unrn.seminario.accesos.VisitaDAOJDBC;
+import ar.edu.unrn.seminario.accesos.VisitaDao;
 import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
@@ -50,6 +53,7 @@ import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
+import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 
@@ -64,7 +68,7 @@ public class PersistenceApi implements IApi {
 	private TipoResiduoDao tipoResiduoDao;
 	private OrdenDeRetiroDao ordenDeRetiroDao;
 	private RecolectorDao recolectorDao;
-	
+	private VisitaDao visitaDao;
 
 	private Usuario userOnline;
 
@@ -78,8 +82,8 @@ public class PersistenceApi implements IApi {
 		tipoResiduoDao = new TipoResiduoDAOJDBC();
 		ordenDeRetiroDao = new OrdenDeRetiroDAOJDBC();
 		recolectorDao = new RecolectorDAOJDBC();
+		visitaDao = new VisitaDAOJDBC();
 	}
-
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
 		throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
 		Rol rol = rolDao.find(codigoRol);
@@ -321,7 +325,7 @@ public class PersistenceApi implements IApi {
 		})
 		.collect(Collectors.toList());
 		return usuario;
-	}	
+	}
 	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
@@ -347,6 +351,44 @@ public class PersistenceApi implements IApi {
 		})
 		.collect(Collectors.toList());
 	return usuario;
+	}
+	
+	public static class filtradoUsuarioRol implements Comparator<UsuarioDTO>{
+		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
+			if(v1.getRol().compareToIgnoreCase(v2.getRol())>=0)
+				return 1;
+			else
+				return -1;
+			}
+	}
+	public static class filtradoUsuarioNombre implements Comparator<UsuarioDTO>{
+		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
+			if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
+
+				return 1;
+			}
+
+			else {
+				return -1;}
+
+		}
+	}
+	public static class filtradoUsuarioCorreo implements Comparator<UsuarioDTO>{
+		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
+			if(v1.getEmail().compareToIgnoreCase(v2.getEmail()) >= 0) {
+				
+				return 1;}
+			else {
+				return -1;
+			}
+		}
+	}
+	
+	public List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador)throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
+		.collect(Collectors.toList());
+		return usuario;
 	}
 	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
@@ -394,12 +436,66 @@ public class PersistenceApi implements IApi {
 	}
 
  
-    
-    
+    public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException{
+    	
+    	Visita visita = null;
+    	
+    	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
+    	
+    	for(int i=0;i<residuosIngresados.size();i++){
+    		
+    		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
+    		listaTipos.add(t);
+    	}
 
+    	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
+    	
+    	for(int i=0;i<residuosIngresadosKg.size();i++){
+    		Residuo r = new Residuo(listaTipos.get(i), Integer.parseInt(residuosIngresadosKg.get(i)));
+    		listResiduos.add(r);
+    	}
+    	
+    	visita = new Visita(observacion, listResiduos, codOrden);
+    	
+    	this.visitaDao.create(visita);
+    	
+    	if(!comprobarCantidadResiduos(codOrden)) {
+    		//this.ordenDeRetiroDao.update();
+    	}
+    }
     
-    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws Exception {
-        //Rol rol = rolDao.find(codigoRol);
+    public Boolean comprobarCantidadResiduos(int codOrden) throws AppException {
+    	
+    	ArrayList<Residuo> listaResiduos = this.ordenDeRetiroDao.find(codOrden).getPedidoAsociado().getListResiduos();
+    	ArrayList<Visita> listaVisitas = this.ordenDeRetiroDao.find(codOrden).getVisitas();
+    	
+    	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
+    	
+    	int i = 0;
+    	for(Visita visita: listaVisitas){
+
+        	int j = 0;
+    		for(Residuo residuo: visita.getResiduosExtraidos()){
+    			
+    			listaSumaVisitas.set(i, listaSumaVisitas.get(j) + residuo.getCantidadKg());
+    			
+    			j++;
+    		}
+    		i++;
+    	}
+    	
+    	Boolean rtado = false;
+    	
+    	for(i=0;i<listaResiduos.size();i++) {
+    		if(listaResiduos.get(i).getCantidadKg() != listaSumaVisitas.get(i)) {
+    			rtado = true;
+    		}
+    	}
+    	
+    	return rtado;
+    }
+    
+    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
         Direccion direccion = null;
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
         this.direccionDao.create(direccion);

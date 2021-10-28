@@ -55,7 +55,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            
 	            Connection conn2 = ConnectionManager.getConnection();
 	            PreparedStatement statement2 = conn2.prepareStatement
-	                    ("INSERT INTO residuos_pedido(codigo_pedido , nombre_residuo , cantidad) "
+	                    ("INSERT INTO residuos_visita(codigo_pedido , nombre_residuo , cantidad) "
 	                            + "VALUES (?, ?, ?)");
 	            
 	            for(int i=0; i < p.getListResiduos().size() ; i++) {

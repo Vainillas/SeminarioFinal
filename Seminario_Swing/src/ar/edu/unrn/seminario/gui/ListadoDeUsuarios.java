@@ -21,6 +21,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioCorreo;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
@@ -55,8 +58,8 @@ public class ListadoDeUsuarios extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(208, 5, 491, 214);
 		contentPane.add(scrollPane);
-		ResourceBundle labels = ResourceBundle.getBundle("labels");
-		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
+		//ResourceBundle labels = ResourceBundle.getBundle("labels");
+		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		table = new JTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.usuario.titulos.usuario.USUARIO"),  
@@ -165,7 +168,8 @@ public class ListadoDeUsuarios extends JFrame {
 			// Obtiene la lista de usuarios a mostrar
 			List<UsuarioDTO> usuario = null ;
 			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorCorreo();
+				filtradoUsuarioCorreo p = new filtradoUsuarioCorreo();
+				usuario = api.obtenerUsuariosOrdenados(p);
 				modelo.setRowCount(0);
 				
 				// Agrega los usuarios en el model
@@ -189,7 +193,8 @@ public class ListadoDeUsuarios extends JFrame {
 			// Obtiene la lista de usuarios a mostrar
 			List<UsuarioDTO> usuario = null ;
 			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorNombre();
+				filtradoUsuarioNombre p = new filtradoUsuarioNombre();
+				usuario = api.obtenerUsuariosOrdenados(p);
 				modelo.setRowCount(0);
 				
 				// Agrega los usuarios en el model
@@ -215,10 +220,11 @@ public class ListadoDeUsuarios extends JFrame {
 			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 			// Obtiene la lista de usuarios a mostrar
 			List<UsuarioDTO> usuario = null ;
-			reloadGrid("rol");
+			reloadGrid("rol"); //Por qué en este hacés un reloadGrid al principio y en los otros no? 
 			
 			try {	
-				usuario = api.obtenerUsuariosOrdenadosPorRol();
+				filtradoUsuarioRol p = new filtradoUsuarioRol();
+				usuario = api.obtenerUsuariosOrdenados(p);
 				modelo.setRowCount(0);
 				
 				// Agrega los usuarios en el model
