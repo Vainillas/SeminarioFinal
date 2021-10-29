@@ -26,8 +26,8 @@ import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 
 import ar.edu.unrn.seminario.exceptions.StateException;
-import utilities.Filtro;
-import utilities.Predicate;
+import ar.edu.unrn.seminario.utilities.Filtro;
+import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;

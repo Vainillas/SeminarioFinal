@@ -18,7 +18,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
-import utilities.Predicate;
+import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;

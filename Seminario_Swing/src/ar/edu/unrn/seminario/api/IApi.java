@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.api;
 
 import java.sql.SQLException;
 
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.sql.Date;
@@ -24,10 +25,11 @@ import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
+
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
-import utilities.Predicate;
+import ar.edu.unrn.seminario.utilities.Predicate;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
@@ -56,8 +58,6 @@ public interface IApi {
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException;
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException;
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException;
-
-	
 	
 	
 	List<RolDTO> obtenerRolesActivos();

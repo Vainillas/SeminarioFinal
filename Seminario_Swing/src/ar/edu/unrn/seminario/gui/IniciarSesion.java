@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
+import javax.swing.JComboBox;
 
 public class IniciarSesion extends JFrame {
 
@@ -35,6 +36,7 @@ public class IniciarSesion extends JFrame {
 	private JPasswordField textPassword;	
 	private IApi api;
 	private JPanel panelNoRegistrado;
+	private JComboBox comboBoxIdioma;
 	/**
 	 * Launch the application.
 	 */
@@ -56,9 +58,11 @@ public class IniciarSesion extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public IniciarSesion(IApi api) {
 		
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+		
 		setTitle(labels.getString("iniciar.sesion.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 316);
@@ -151,10 +155,29 @@ public class IniciarSesion extends JFrame {
 		buttonRegistrarse.addActionListener((e)->{
 				AltaUsuario usuario = new AltaUsuario(api);
 				usuario.setVisible(true);
+				String idioma = (String) comboBoxIdioma.getSelectedItem();
+				
 			
 		});
 		
 		buttonRegistrarse.setBounds(54, 36, 107, 23);
 		panelNoRegistrado.add(buttonRegistrarse);
+		
+		JPanel panel = new JPanel();
+		panel.setLayout(null);
+		panel.setBounds(20, 191, 181, 86);
+		contentPane.add(panel);
+		
+		comboBoxIdioma = new JComboBox();
+		comboBoxIdioma.addItem("ESPAÑOL");
+		comboBoxIdioma.addItem("INGLES");
+		
+		comboBoxIdioma.setBounds(58, 33, 113, 22);
+		panel.add(comboBoxIdioma);
+		
+		JLabel lbIdioma = new JLabel(labels.getString("iniciar.sesion.label.idioma")); 
+		lbIdioma.setBounds(10, 11, 46, 14);
+		panel.add(lbIdioma);
+		
 	}
 }

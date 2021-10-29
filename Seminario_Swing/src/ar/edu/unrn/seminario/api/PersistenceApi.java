@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -52,8 +53,8 @@ import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Vivienda;
-import utilities.Filtro;
-import utilities.Predicate;
+import ar.edu.unrn.seminario.utilities.Filtro;
+import ar.edu.unrn.seminario.utilities.Predicate;
 
 
 public class PersistenceApi implements IApi {
@@ -68,7 +69,6 @@ public class PersistenceApi implements IApi {
 	private OrdenDeRetiroDao ordenDeRetiroDao;
 	private RecolectorDao recolectorDao;
 	
-
 	private Usuario userOnline;
 
 	
@@ -84,6 +84,7 @@ public class PersistenceApi implements IApi {
 		ordenDeRetiroDao = new OrdenDeRetiroDAOJDBC();
 		recolectorDao = new RecolectorDAOJDBC();
 	}
+
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
 		throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
 		Rol rol = rolDao.find(codigoRol);
