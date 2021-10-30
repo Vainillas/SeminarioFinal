@@ -1,15 +1,13 @@
-package ar.edu.unrn.seminario.modelo;
+package ar.edu.unrn.seminario.dto;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.List;
 
-import ar.edu.unrn.seminario.Helper.ConditionHelper;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.modelo.*;
 
 
 	
-public class OrdenDeRetiro {
+public class OrdenDeRetiroDTO {
 	private PedidoDeRetiro pedidoAsociado;
 	private Recolector recolector;
 	private Date fechaOrden;
@@ -17,7 +15,7 @@ public class OrdenDeRetiro {
 	private ArrayList<Visita>visitas;
 	private int codigo;
 	
-	public OrdenDeRetiro(PedidoDeRetiro p, Recolector r, Date fechaActual, Estado estado, ArrayList<Visita> visitas) {
+	public OrdenDeRetiroDTO(PedidoDeRetiro p, Recolector r, Date fechaActual, Estado estado, ArrayList<Visita> visitas) {
 		//validarDatos(p, r, fechaActual);
 		pedidoAsociado = p;
 		recolector = r;
@@ -25,8 +23,8 @@ public class OrdenDeRetiro {
 		this.estado=estado;
 		this.visitas=visitas;
 	}
-	public OrdenDeRetiro(PedidoDeRetiro p, Recolector r, Date fechaActual) {
-		//validarDatos(p, r, fechaActual);
+	
+	public OrdenDeRetiroDTO(PedidoDeRetiro p, Recolector r, Date fechaActual) {
 		pedidoAsociado = p;
 		recolector = r;
 		fechaOrden = fechaActual;
@@ -34,25 +32,12 @@ public class OrdenDeRetiro {
 		visitas=new ArrayList<>();
 	}
 	
-	public OrdenDeRetiro(PedidoDeRetiro p, Date fechaActual) {
-		//validarDatos(p, fechaActual);
+	public OrdenDeRetiroDTO(PedidoDeRetiro p, Date fechaActual) {
 		pedidoAsociado = p;
 		recolector = null;
 		fechaOrden = fechaActual;
 		estado=new Estado("pendiente");
 		visitas=new ArrayList<>();
-	}
-	
-	private void validarDatos(PedidoDeRetiro pedido, Recolector recolector, Date fechaActual) throws NotNullException{
-		if(ConditionHelper.IsNull(pedido)){throw new NotNullException("pedido NULO");}
-		if(ConditionHelper.IsNull(recolector)) {throw new NotNullException("recolector NULO");}
-		if(ConditionHelper.IsNull(fechaActual)) {throw new NotNullException("Fecha NULA");}
-		
-	}
-	private void validarDatos(PedidoDeRetiro pedido, Date fechaActual) throws NotNullException{
-		if(ConditionHelper.IsNull(pedido)){throw new NotNullException("pedido NULO");}
-		if(ConditionHelper.IsNull(fechaActual)) {throw new NotNullException("Fecha NULA");}
-		
 	}
 	
 	public Date getFechaOrden() {

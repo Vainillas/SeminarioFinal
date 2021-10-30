@@ -10,11 +10,11 @@ public interface OrdenDeRetiroDao {
 
 		void create(OrdenDeRetiro orden) throws AppException;
 
-		void update(OrdenDeRetiro pedido) throws AppException;
+		void update(OrdenDeRetiro orden) throws AppException;
 
 		void remove(int id);
 
-		void remove(OrdenDeRetiro pedido);
+		void remove(OrdenDeRetiro orden);
 
 		OrdenDeRetiro find(int id) throws AppException;
 

@@ -28,6 +28,7 @@ import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
@@ -605,10 +606,6 @@ public class PersistenceApi implements IApi {
     	
     	ordenDeRetiroDao.create(nuevaOrden);
     }
-
-    
-   
-
     public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException{
 
     	
@@ -622,8 +619,34 @@ public class PersistenceApi implements IApi {
     	ordenDeRetiroDao.create(nuevaOrden);
     }
     
-    
-    
+    public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro() throws AppException{
+    	List<OrdenDeRetiroDTO> ordenesDto = new ArrayList<>();
+
+    	List<OrdenDeRetiro> ordenes = ordenDeRetiroDao.findAll();
+    	for (OrdenDeRetiro o : ordenes) {
+    		ordenesDto.add(new OrdenDeRetiroDTO(o.getPedidoAsociado(),
+    				o.getRecolector(),
+    				o.getFechaOrden(),
+    				o.getEstado(),
+    				o.getVisitas()));
+    	}
+    	return ordenesDto;
+    }
+    public OrdenDeRetiroDTO obtenerOrdenDeRetiro(int codigo) throws AppException {
+    	OrdenDeRetiroDTO o = null;
+    	OrdenDeRetiro orden = ordenDeRetiroDao.find(codigo);
+    	if(orden!=null) {
+    		o = new OrdenDeRetiroDTO(o.getPedidoAsociado(),
+    				o.getRecolector(),
+    				o.getFechaOrden(),
+    				o.getEstado(),
+    				o.getVisitas());
+    	}
+    	return o;
+    }
+    public void actualizarOrdenDeRetiro(OrdenDeRetiro orden) throws AppException {
+    	ordenDeRetiroDao.update(orden);
+    }
     
     
 	public void registrarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono)
