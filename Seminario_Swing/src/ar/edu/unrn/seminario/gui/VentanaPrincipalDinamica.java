@@ -95,7 +95,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.lista.ordenes"));
 		mntmPerListarOrdenesDeRetiro.addActionListener((e)->{
-			ListadoOrdenes listado = new ListadoOrdenes(api);
+			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api);
 			listado.setVisible(true);
 		});
 		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);
@@ -170,18 +170,30 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmRegistrarViviendaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.vivienda.administrador"));
 		mntmRegistrarViviendaAdministrador.addActionListener((e)->{
+			RegistroVivienda vivienda = new RegistroVivienda(api);
+			vivienda.setVisible(true);
 			
 			
 		});
+		
 		mnViviendasAdministrador.add(mntmRegistrarViviendaAdministrador);
 		
 		JMenu mnOrdenesDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.ordenes.de.retiro.administrador"));
 		mbAdministrador.add(mnOrdenesDeRetiroAdministrador);
 		
 		JMenuItem mntmAdmListadoOrdenesDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.ordenes.de.retiro.administrador"));
+		mntmAdmListadoOrdenesDeRetiros.addActionListener((e)->{
+			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api);
+			listado.setVisible(true);
+		});
 		mnOrdenesDeRetiroAdministrador.add(mntmAdmListadoOrdenesDeRetiros);
 		
 		JMenuItem mntmGenerarOrdenDeRetiroAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.generar.orden.de.retiro.administrador")); 
+		mntmGenerarOrdenDeRetiroAdministrador.addActionListener((e)->{
+			GenerarOrdenDeRetiro ordenDeRetiro = new GenerarOrdenDeRetiro(api);
+			ordenDeRetiro.setVisible(true);
+			ordenDeRetiro.setLocationRelativeTo(null); 
+		});
 		mnOrdenesDeRetiroAdministrador.add(mntmGenerarOrdenDeRetiroAdministrador);
 		
 		JMenu mnPedidosDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.pedidos.de.retiro.administrador"));
@@ -260,8 +272,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenu menuDatosDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.dueño"));
 		mbDueño.add(menuDatosDueño);
 		
-		JMenuItem mntmVivDatosDelDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.datos.del.dueño"));
-		menuDatosDueño.add(mntmVivDatosDelDueño);
+		JMenuItem mntmDatosDelDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.datos.del.dueño"));
+		menuDatosDueño.add(mntmDatosDelDueño);
 		
 		JMenu mnConfiguracionDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.configuracion.dueño"));
 		mbDueño.add(mnConfiguracionDueño);

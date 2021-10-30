@@ -12,6 +12,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
@@ -170,63 +171,6 @@ public class ListadoDeUsuarios extends JFrame {
 		panelBotonesOrdenamiento.setBounds(53, 5, 165, 167);
 		contentPane.add(panelBotonesOrdenamiento);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(22, 5, 156, 214);
-		contentPane.add(panel);
-		
-		btnOrdenarPorCorreo = new JButton(labels.getString("listado.usuario.button.ordenar.por.correo")); //$NON-NLS-1$
-		btnOrdenarPorCorreo.addActionListener((e)->{
-			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			// Obtiene la lista de usuarios a mostrar
-			List<UsuarioDTO> usuario = null ;
-			try {	
-				filtradoUsuarioCorreo p = new filtradoUsuarioCorreo();
-				usuario = api.obtenerUsuariosOrdenados(p);
-				modelo.setRowCount(0);
-				
-				// Agrega los usuarios en el model
-				for (UsuarioDTO u : usuario) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-				}
-				
-				// Resetea el model
-				//reload(usuarios);
-			} catch (AppException e2) {
-				setVisible(false);
-				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-			}
-			
-			
-		});
-		
-		btnOrdenarPorNombre = new JButton(labels.getString("listado.usuario.button.ordenar.por.nombre")); //$NON-NLS-1$
-		btnOrdenarPorNombre.addActionListener((e)->{
-			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			// Obtiene la lista de usuarios a mostrar
-			List<UsuarioDTO> usuario = null ;
-			try {	
-				filtradoUsuarioNombre p = new filtradoUsuarioNombre();
-				usuario = api.obtenerUsuariosOrdenados(p);
-				modelo.setRowCount(0);
-				
-				// Agrega los usuarios en el model
-				for (UsuarioDTO u : usuario) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-				}
-				
-				// Resetea el model
-				//reload(usuarios);
-			} catch (AppException e2) {
-				setVisible(false);
-				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-			}
-			
-			
-		});
-			
-		panel.add(btnOrdenarPorNombre);
-		panel.add(btnOrdenarPorCorreo);
-
 		
 		btnOrdenarPorRol = new JButton(labels.getString("listado.usuario.button.ordenar.por.rol"));
 
@@ -317,23 +261,25 @@ public class ListadoDeUsuarios extends JFrame {
 		panelBotonesFiltrados.add(tfUsernameSeleccionado);
 		tfUsernameSeleccionado.setColumns(10);
 		
-		btnAceptar = new JButton("Aceptar"); 
-		btnAceptar.addActionListener((e)->{
-			
-		
-			Predicate <UsuarioDTO> predicate = (UsuarioDTO usuario)->usuario.getUsername().contains((String)tfUsernameSeleccionado.getText());
-			
-			
-			try {
-				List<UsuarioDTO> us =api.obtenerUsuarios(predicate);
-				reloadGrid(us);
-			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+		JRadioButton rdbtnAceptar = new JRadioButton(""); 
+		rdbtnAceptar.addActionListener((e)->{
+			if(rdbtnAceptar.isSelected()) {
+				Predicate <UsuarioDTO> predicate = (UsuarioDTO usuario)->usuario.getUsername().contains((String)tfUsernameSeleccionado.getText());
+				
+				
+				try {
+					List<UsuarioDTO> us =api.obtenerUsuarios(predicate);
+					reloadGrid(us);
+				} catch (AppException e1) {
+					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
 			}
+		
+			
 						
 		});
-		btnAceptar.setBounds(199, 40, 21, 20);
-		panelBotonesFiltrados.add(	btnAceptar);
+		rdbtnAceptar.setBounds(199, 40, 21, 20);
+		panelBotonesFiltrados.add(rdbtnAceptar);
 		
 		btnLimpiarFIltro = new JButton("Limpiar Filtro"); //$NON-NLS-1$
 		btnLimpiarFIltro.addActionListener((e)->{

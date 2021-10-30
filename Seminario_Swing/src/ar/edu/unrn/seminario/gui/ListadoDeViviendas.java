@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
@@ -198,48 +199,50 @@ public class ListadoDeViviendas extends JFrame {
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(87, 5, 124, 14);
 		panelFiltrado.add(lbFiltrarPor);
-		
-		JButton btnNombre_apellido = new JButton();
-		btnNombre_apellido .addActionListener((e)->{
-			System.out.println(txNombre_Apellido.getText());
-			Predicate <ViviendaDTO> predicate =
+		JRadioButton rdbtnNombre_apellido = new JRadioButton();
+		rdbtnNombre_apellido.setBounds(228, 34, 21, 14);
+		panelFiltrado.add(rdbtnNombre_apellido);
+		rdbtnNombre_apellido .addActionListener((e)->{
+			if(rdbtnNombre_apellido.isSelected()) {
+					Predicate <ViviendaDTO> predicate =
 					(ViviendaDTO v)->v.getDueño().getNombre().contains(txNombre_Apellido.getText())
 					
 					|| v.getDueño().getApellido().contains(txNombre_Apellido.getText());
 					
-			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(predicate);
+					try {
+						List<ViviendaDTO> v = api.obtenerViviendas(predicate);
 				
-				this.reloadGrid(v);
+						this.reloadGrid(v);
 				
-			} catch (Exception e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
-			}
+					} catch (Exception e1) {
+						// TODO Bloque catch generado automáticamente
+						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					}
+		}
 			
 		});
-		btnNombre_apellido.setBounds(228, 30, 25, 23);
-		panelFiltrado.add(btnNombre_apellido);
 		
-		btnCalle_Altura = new JButton("New button");
-		btnCalle_Altura.addActionListener((e)->{
-			Predicate <ViviendaDTO> predicate =
-					(ViviendaDTO v)->v.getDireccion().getBarrio().contains(this.txCalle_Altura.getText())
-					||v.getDireccion().getCalle().contains(this.txCalle_Altura.getText());
+		JRadioButton rdbtnCalle_Altura = new JRadioButton("");
+
+		rdbtnCalle_Altura.addActionListener((e)->{
+			if(rdbtnCalle_Altura.isSelected()) {
+				Predicate <ViviendaDTO> predicate =
+						(ViviendaDTO v)->v.getDireccion().getBarrio().contains(this.txCalle_Altura.getText())
+						||v.getDireccion().getCalle().contains(this.txCalle_Altura.getText());
 					
-			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(predicate);
+						try {
+							List<ViviendaDTO> v = api.obtenerViviendas(predicate);
+							
+							this.reloadGrid(v);
 				
-				this.reloadGrid(v);
-				
-			} catch (Exception e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
-			}
-			
+						} catch (Exception e1) {
+							// TODO Bloque catch generado automáticamente
+							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						}
+		}
 		});
-		btnCalle_Altura.setBounds(228, 66, 25, 23);
-		panelFiltrado.add(btnCalle_Altura);
+		rdbtnCalle_Altura.setBounds(228, 66, 25, 23);
+		panelFiltrado.add(rdbtnCalle_Altura);
 		
 		txCalle_Altura = new JTextField();
 		txCalle_Altura.setBounds(110, 67, 114, 20);
@@ -272,27 +275,27 @@ public class ListadoDeViviendas extends JFrame {
 		panelFiltrado.add(txDni);
 		txDni.setColumns(10);
 		
-		btnDni = new JButton("New button");
-		btnDni.addActionListener((e)->{
-			Predicate <ViviendaDTO> predicate = (ViviendaDTO v)->v.getDueño().getDni().contains(txDni.getText());
+		JRadioButton rdbtnDni = new JRadioButton("");
+		rdbtnDni.addActionListener((e)->{
+			if(rdbtnDni.isSelected()) {
+				Predicate <ViviendaDTO> predicate = (ViviendaDTO v)->v.getDueño().getDni().contains(txDni.getText());
 			
-			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(predicate);
-				this.reloadGrid(v);
+				try {
+					List<ViviendaDTO> v = api.obtenerViviendas(predicate);
+					this.reloadGrid(v);
 				
-			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
-			}
-			
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
+		}
 		});
-		btnDni.setBounds(228, 102, 25, 23);
-		panelFiltrado.add(btnDni);
+		rdbtnDni.setBounds(228, 102, 25, 23);
+		panelFiltrado.add(rdbtnDni);
 		
-		btnCodigo = new JButton("New button");
-		btnCodigo.addActionListener((E)->{
-		Predicate <ViviendaDTO> predicate = (ViviendaDTO v)-> String.valueOf(v.getID()). contains(this.txCodigo.getText());
-
-			
+		JRadioButton rdbtnCodigo = new JRadioButton("");
+		rdbtnCodigo.addActionListener((E)->{
+		if(rdbtnCodigo.isSelected()) {
+			Predicate <ViviendaDTO> predicate = (ViviendaDTO v)-> String.valueOf(v.getID()). contains(this.txCodigo.getText());
 			try {
 				List<ViviendaDTO> v = api.obtenerViviendas(predicate);
 				this.reloadGrid(v);
@@ -300,10 +303,12 @@ public class ListadoDeViviendas extends JFrame {
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
+		}
+		
 			
 		});
-		btnCodigo.setBounds(228, 136, 25, 23);
-		panelFiltrado.add(btnCodigo);
+		rdbtnCodigo.setBounds(228, 136, 25, 23);
+		panelFiltrado.add(rdbtnCodigo);
 		
 		txCodigo = new JTextField();
 		txCodigo.setColumns(10);
@@ -321,7 +326,8 @@ public class ListadoDeViviendas extends JFrame {
 				reloadGrid(api.obtenerViviendas());
 			} catch (AppException e1) {
 				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 			}
 			
 		});

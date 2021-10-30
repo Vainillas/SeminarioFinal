@@ -11,6 +11,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioCorreo;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
@@ -25,7 +26,7 @@ import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
-
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
@@ -123,5 +124,9 @@ public interface IApi {
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException;
 
 	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) throws AppException;
+
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()throws AppException;
+
+	void registrarDueño(String nombre, String apellido, String dni) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException;
 	 
 }

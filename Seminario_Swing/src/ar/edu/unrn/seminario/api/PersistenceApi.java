@@ -27,6 +27,7 @@ import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
@@ -623,6 +624,22 @@ public class PersistenceApi implements IApi {
 	public List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException{
 		return Filtro.filtrar(this.obtenerViviendas(), predicate);
 		
+		
+	}
+
+	@Override
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro() throws AppException{
+		// TODO Esbozo de método generado automáticamente
+		return null;
+	}
+
+	@Override
+	public void registrarDueño(String nombre, String apellido, String dni) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
+		Dueño dueño = null;
+		dueño = new Dueño(nombre, apellido, dni,this.userOnline.getEmail(),this.userOnline.getUsuario());
+		
+        this.dueñoDao.create(dueño);
+        
 		
 	}
 
