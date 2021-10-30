@@ -50,15 +50,29 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	        }
 		}
 
-		public void update(OrdenDeRetiro pedido) {
-			
+		public void update(OrdenDeRetiro orden) throws AppException {
+			try {
+				Connection conn = ConnectionManager.getConnection();
+	            PreparedStatement statement = conn.prepareStatement("UPDATE ordenes SET codigoPedido = ?, dniRecolector = ?, fecha = ?, estado = ?"
+	            		+ "WHERE codigoOrden = ?");
+	            statement.setInt(1, orden.getPedidoAsociado().getCodigo());
+	            statement.setString(2, orden.getRecolector().getDni());
+	            statement.setDate(3, orden.getFechaOrden());
+	            statement.setString(4, orden.getEstado().obtenerEstado());
+	            statement.setInt(5, orden.getCodigo());
+	            statement.executeUpdate();
+			}catch (SQLException e) {
+	            throw new AppException("Error de SQL al actualizar orden de retiro: " + e.getMessage());
+	        }  finally {
+	            ConnectionManager.disconnect();
+	        }
 		}
 
 		public void remove(int id) {
 			
 		}
 
-		public void remove(OrdenDeRetiro pedido) {
+		public void remove(OrdenDeRetiro orden) {
 			
 		}
 
