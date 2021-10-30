@@ -102,8 +102,11 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 			ArrayList<Visita> listaVisitas = new ArrayList<Visita>(); 
             Visita visita = null;
 
-			TipoResiduo tipoResiduo = null;
-			Residuo residuo = null;
+            TipoResiduo tipoResiduoPedido = null;
+			Residuo residuoPedido = null;
+			
+			TipoResiduo tipoResiduoVisita = null;
+			Residuo residuoVisita = null;
            
 			try {
 				Connection conn = ConnectionManager.getConnection();
@@ -155,9 +158,9 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 							ResultSet resultSetTipoResiduo = statement6.executeQuery();
 
 							if(resultSetTipoResiduo.next()) {
-								tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
-								residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
-								listaResiduos.add(residuo);
+								tipoResiduoPedido = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+								residuoPedido = new Residuo(tipoResiduoPedido, resultSetResiduo.getInt("cantidad"));
+								listaResiduos.add(residuoPedido);
 							}
 
 						}
@@ -188,7 +191,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 					statement.setInt(1, resultSetOrden.getInt("codigoOrden"));
 					ResultSet resultSetVisita = statement.executeQuery();
 					while(resultSetVisita.next()) {
-						ArrayList<Residuo> listaResiduos = new ArrayList<Residuo>(); 
+						ArrayList<Residuo> listaResiduosVisita = new ArrayList<Residuo>(); 
 						Connection conn2 = ConnectionManager.getConnection();
 						PreparedStatement statement2 = conn2.prepareStatement("SELECT * FROM residuos_visita rv ");
 						
@@ -202,23 +205,22 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 							ResultSet resultSetTipoResiduo = statement3.executeQuery();
 
 							if(resultSetTipoResiduo.next()) {
-								tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
-								residuo = new Residuo(tipoResiduo, resultSetResiduosVisita.getInt("cantidad"));
-								listaResiduos.add(residuo);
+								tipoResiduoVisita = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+								residuoVisita = new Residuo(tipoResiduoVisita, resultSetResiduosVisita.getInt("cantidad"));
+								listaResiduosVisita.add(residuoVisita);
 							}
 						}
-						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduos,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));
+						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduosVisita,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));
 						listaVisitas.add(visita);
 					}
-					//AGREGAR EL FIND DE VISITAS
 					
 					estado = new Estado(resultSetOrden.getString("estado"));
 					int codigoOrden = resultSetOrden.getInt("codigoOrden");
 					orden = new OrdenDeRetiro(pedido, recolector, resultSetOrden.getDate("fecha"), estado, listaVisitas);
 					orden.setCodigo(codigoOrden);
 	            }
-	        }catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException | DateNullException e) {
-	            throw new AppException("error de la aplicacion");
+	        } catch (SQLException | DataEmptyException | StringNullException | NotNumberException | NotNullException | DateNullException | IncorrectEmailException e) {
+	            throw new AppException("Error al encontrar una orden de retiro : " +e.getMessage());
 	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
@@ -234,13 +236,19 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 
 			Dueño dueño = null;
 			Direccion direccion = null;
-
-			TipoResiduo tipoResiduo = null;
-			Residuo residuo = null;
 			
 			Recolector recolector = null;
 			
 			Estado estado = null;
+			
+			ArrayList<Visita> listaVisitas = new ArrayList<Visita>(); 
+            Visita visita = null;
+
+			TipoResiduo tipoResiduoPedido = null;
+			Residuo residuoPedido = null;
+			
+			TipoResiduo tipoResiduoVisita = null;
+			Residuo residuoVisita = null;
 			try {
 				Connection conn = ConnectionManager.getConnection();
 				PreparedStatement statement = conn.prepareStatement("SELECT * from ordenes");
@@ -291,9 +299,9 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 							ResultSet resultSetTipoResiduo = statement6.executeQuery();
 
 							if(resultSetTipoResiduo.next()) {
-								tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
-								residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
-								listaResiduos.add(residuo);
+								tipoResiduoPedido = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+								residuoPedido = new Residuo(tipoResiduoPedido, resultSetResiduo.getInt("cantidad"));
+								listaResiduos.add(residuoPedido);
 							}
 
 						}
@@ -320,18 +328,41 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								resultSetRecolector.getString("email"),
 								resultSetRecolector.getString("telefono"));
 					}
-					
-					//AGREGAR EL FIND DE VISITAS
+					statement = conn.prepareStatement("SELECT * FROM visitas v WHERE v.codigoOrden = ?");
+					statement.setInt(1, resultSetOrden.getInt("codigoOrden"));
+					ResultSet resultSetVisita = statement.executeQuery();
+					while(resultSetVisita.next()) {
+						ArrayList<Residuo> listaResiduosVisita = new ArrayList<Residuo>(); 
+						Connection conn2 = ConnectionManager.getConnection();
+						PreparedStatement statement2 = conn2.prepareStatement("SELECT * FROM residuos_visita rv ");
+						
+						ResultSet resultSetResiduosVisita = statement2.executeQuery();
+						Connection conn3 = ConnectionManager.getConnection();
+
+						while(resultSetResiduosVisita.next()){
+
+							PreparedStatement statement3 = conn3.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
+							statement3.setString(1, resultSetResiduosVisita.getString("nombre_residuo"));
+							ResultSet resultSetTipoResiduo = statement3.executeQuery();
+
+							if(resultSetTipoResiduo.next()) {
+								tipoResiduoVisita = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+								residuoVisita = new Residuo(tipoResiduoVisita, resultSetResiduosVisita.getInt("cantidad"));
+								listaResiduosVisita.add(residuoVisita);
+							}
+						}
+						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduosVisita,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));
+						listaVisitas.add(visita);
+					}
 					
 					estado = new Estado(resultSetOrden.getString("estado"));
 					int codigoOrden = resultSetOrden.getInt("codigoOrden");
-					orden = new OrdenDeRetiro(pedido, recolector, resultSetOrden.getDate("fecha"));
-					orden.setEstado(estado);
+					orden = new OrdenDeRetiro(pedido, recolector, resultSetOrden.getDate("fecha"), estado, listaVisitas);
 					orden.setCodigo(codigoOrden);
 					listaOrdenes.add(orden);
 	            }
 	        }catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException | DateNullException e) {
-	            throw new AppException("error de la aplicacion");
+	            throw new AppException("Error al encontrar todas las ordenes de retiro : " +e.getMessage());
 	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
