@@ -82,10 +82,6 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	                }
 	            }
 	           
-	            
-	            
-	            
-	            
 	            RecolectorDao recolectorDao = new RecolectorDAOJDBC();
 	            Recolector recolector = recolectorDao.find(resultSetOrden.getString("dniRecolector"));
 	            
@@ -102,7 +98,6 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            ConnectionManager.disconnect();
 	        }
 	        return orden;
-	      
 		}
 
 		public List<OrdenDeRetiro> findAll() throws AppException{

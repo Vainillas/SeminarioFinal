@@ -9,7 +9,11 @@ public class Visita {
 	private ArrayList<Residuo>residuosExtraidos;
 	private Date fecha;
 	private int codOrden;
+	private int codigo;
 	
+	
+	
+
 	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden) {
 		this.observacion=observacion;
 		residuosExtraidos = listaResiduos;
@@ -17,10 +21,21 @@ public class Visita {
 		fecha = new Date(Calendar.getInstance().getTime().getTime());
 	}
 	
-	/*public Visita(String observacion, Date fecha) {
-		this(observacion);
-		this.fecha=fecha;
-	}*/
+	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden, int codigo) {
+		this.observacion=observacion;
+		residuosExtraidos = listaResiduos;
+		this.codOrden = codOrden;
+		fecha = new Date(Calendar.getInstance().getTime().getTime());
+	}
+	
+	public int getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+	
 	
 	public String getObservacion() {
 		return observacion;

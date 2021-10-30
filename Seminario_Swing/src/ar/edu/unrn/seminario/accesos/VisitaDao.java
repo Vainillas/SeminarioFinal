@@ -4,6 +4,7 @@ import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.modelo.Visita;
 
 public interface VisitaDao {
@@ -16,9 +17,9 @@ public interface VisitaDao {
 
 		void remove(Visita visita);
 
-		Visita find() throws AppException;
+		Visita find(int codigo) throws AppException, NotNullException;
 
-		List<Visita> findAll() throws AppException, IncorrectEmailException;
+		List<Visita> findAll() throws AppException, IncorrectEmailException, NotNullException;
 
 		boolean exists() throws AppException;
 	

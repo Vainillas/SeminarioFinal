@@ -455,6 +455,7 @@ public class PersistenceApi implements IApi {
     		
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
+    		
     	}
 
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
