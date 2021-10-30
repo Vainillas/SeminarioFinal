@@ -22,6 +22,8 @@ import ar.edu.unrn.seminario.accesos.TipoResiduoDAOJDBC;
 import ar.edu.unrn.seminario.accesos.TipoResiduoDao;
 import ar.edu.unrn.seminario.accesos.UsuarioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.UsuarioDao;
+import ar.edu.unrn.seminario.accesos.VisitaDAOJDBC;
+import ar.edu.unrn.seminario.accesos.VisitaDao;
 import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
@@ -51,7 +53,10 @@ import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
+import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
+import utilities.Filtro;
+import utilities.Predicate;
 
 
 public class PersistenceApi implements IApi {
@@ -65,11 +70,9 @@ public class PersistenceApi implements IApi {
 	private TipoResiduoDao tipoResiduoDao;
 	private OrdenDeRetiroDao ordenDeRetiroDao;
 	private RecolectorDao recolectorDao;
-	
+	private VisitaDao visitaDao;
 
 	private Usuario userOnline;
-
-	
 
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
@@ -81,6 +84,7 @@ public class PersistenceApi implements IApi {
 		tipoResiduoDao = new TipoResiduoDAOJDBC();
 		ordenDeRetiroDao = new OrdenDeRetiroDAOJDBC();
 		recolectorDao = new RecolectorDAOJDBC();
+		visitaDao = new VisitaDAOJDBC();
 	}
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
 		throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
@@ -100,7 +104,7 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
-	
+	 
 	@Override
 	public UsuarioDTO obtenerUsuario(String username) {
 		// TODO Auto-generated method stub
@@ -110,7 +114,6 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void eliminarUsuario(String username) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -155,7 +158,6 @@ public class PersistenceApi implements IApi {
 
 	public void activarUsuario(String username) throws AppException {
 		this.usuarioDao.activate(username);
-
 	}
 
 	public void desactivarUsuario(String username) {
@@ -187,15 +189,12 @@ public class PersistenceApi implements IApi {
 	public Usuario getUserOnline(){
 		return this.userOnline;
 	}
-
-
-	//public void agregarVivienda(String nombre, String apellido, String dni, String correo, String calle, String altura,
 	
 	public void registrarVivienda(/*String nombre, String apellido, String dni, String correo, */String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
 			throws Exception {
 		//Dueño dueño = new Dueño(nombre,apellido,dni,correo);
-		Dueño dueño = dueñoDao.find(this.userOnline.getUsuario());
+		Dueño dueño = dueñoDao.findByUser(this.userOnline.getUsuario());
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
 		this.viviendaDao.create(vivienda);
@@ -241,13 +240,12 @@ public class PersistenceApi implements IApi {
 	
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
+		vDTO = vDTO.stream()
 				.sorted((v1,v2)->{
 					
-
 				if(v1.getDireccion().getCodPostal().compareToIgnoreCase(v2.getDireccion().getCodPostal())>0) 
 					return 1;
-				
+			
 				else 
 					return -1;
 				})
@@ -258,7 +256,7 @@ public class PersistenceApi implements IApi {
 	
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
+		vDTO = vDTO.stream()
 				.sorted((v1,v2)->{
 				if(v1.getDireccion().getBarrio().compareToIgnoreCase(v2.getDireccion().getBarrio())>0) 
 					return 1;
@@ -316,8 +314,11 @@ public class PersistenceApi implements IApi {
 	}
 	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{
-		List<UsuarioDTO> usuario = this.obtenerUsuarios();
-		usuario = usuario.stream().sorted((v1,v2)->{
+		//List<UsuarioDTO> usuario = Filtro.filtrar(this.obtenerUsuarios());
+		
+		List<UsuarioDTO> usuario = null;
+		
+		return usuario.stream().sorted((v1,v2)->{
 		if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
 
 			return 1;
@@ -328,11 +329,13 @@ public class PersistenceApi implements IApi {
 		
 		})
 		.collect(Collectors.toList());
-		
-		
-		
-		return usuario;
+
+		//return usuario;
 	}
+	
+
+	
+
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		 usuario = usuario.stream().sorted((v1,v2)->{
@@ -345,9 +348,6 @@ public class PersistenceApi implements IApi {
 		})
 		.collect(Collectors.toList());
 	return usuario;
-
-   
-
 	}
 	
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException{
@@ -403,6 +403,7 @@ public class PersistenceApi implements IApi {
 			}
 		}
 	}
+	
 	public List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador)throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
@@ -440,13 +441,67 @@ public class PersistenceApi implements IApi {
     
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
-		
 	}
 
  
-    
-    
+    public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException{
+    	
+    	Visita visita = null;
+    	
+    	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
+    	
+    	for(int i=0;i<residuosIngresados.size();i++){
+    		
+    		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
+    		listaTipos.add(t);
+    	}
 
+    	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
+    	
+    	for(int i=0;i<residuosIngresadosKg.size();i++){
+    		Residuo r = new Residuo(listaTipos.get(i), Integer.parseInt(residuosIngresadosKg.get(i)));
+    		listResiduos.add(r);
+    	}
+    	
+    	visita = new Visita(observacion, listResiduos, codOrden);
+    	
+    	this.visitaDao.create(visita);
+    	
+    	if(!comprobarCantidadResiduos(codOrden)) {
+    		//this.ordenDeRetiroDao.update();
+    	}
+    }
+    
+    public Boolean comprobarCantidadResiduos(int codOrden) throws AppException {
+    	
+    	ArrayList<Residuo> listaResiduos = this.ordenDeRetiroDao.find(codOrden).getPedidoAsociado().getListResiduos();
+    	ArrayList<Visita> listaVisitas = this.ordenDeRetiroDao.find(codOrden).getVisitas();
+    	
+    	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
+    	
+    	int i = 0;
+    	for(Visita visita: listaVisitas){
+
+        	int j = 0;
+    		for(Residuo residuo: visita.getResiduosExtraidos()){
+    			
+    			listaSumaVisitas.set(i, listaSumaVisitas.get(j) + residuo.getCantidadKg());
+    			
+    			j++;
+    		}
+    		i++;
+    	}
+    	
+    	Boolean rtado = false;
+    	
+    	for(i=0;i<listaResiduos.size();i++) {
+    		if(listaResiduos.get(i).getCantidadKg() != listaSumaVisitas.get(i)) {
+    			rtado = true;
+    		}
+    	}
+    	
+    	return rtado;
+    }
     
     public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
         Direccion direccion = null;
@@ -605,7 +660,18 @@ public class PersistenceApi implements IApi {
 	        }
 	        return recolectoresDTO;
 	}
+
+	@Override
+	public List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException {
+		return Filtro.filtrar(this.obtenerUsuarios(), predicate);	
+	}
 	
+	public List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException{
+		return Filtro.filtrar(this.obtenerViviendas(), predicate);
+		
+		
+	}
+
 	
 
 

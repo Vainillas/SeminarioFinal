@@ -10,12 +10,6 @@ public class Dueño extends Persona {
 	private String correoElectronico;
 	private String userName;
 	
-	/*public Dueño(String nombre, String apellido, String dni, String correoElectronico) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
-		super(nombre, apellido, dni);
-		validarDatos(correoElectronico);
-		this.correoElectronico = correoElectronico;
-	}*/
-	
 	public Dueño(String nombre, String apellido, String dni, String correoElectronico, String username) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		super(nombre, apellido, dni);
 		validarDatos(correoElectronico);

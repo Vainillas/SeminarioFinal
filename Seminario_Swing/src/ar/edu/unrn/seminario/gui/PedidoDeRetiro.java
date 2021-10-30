@@ -48,6 +48,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 
 
 public class PedidoDeRetiro extends JFrame {
@@ -59,7 +60,7 @@ public class PedidoDeRetiro extends JFrame {
 	private JPanel contentPane;
 	private Date fechaActual = DateHelper.getDate();
 	private IApi api = null;
-	DefaultTableModel modelo;
+	private DefaultTableModel modelo;
 	private JPanel panelBotones;
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
@@ -119,16 +120,15 @@ public class PedidoDeRetiro extends JFrame {
 		labelObservacion.setBounds(10, 65, 175, 14);
 		panelDatos.add(labelObservacion);
 		
-		JTextPane textObservacion = new JTextPane();
-		textObservacion.setForeground(Color.BLACK);
-		textObservacion.setBackground(SystemColor.textHighlightText);
-		textObservacion.setBounds(88, 90, 249, 106);
-		panelDatos.add(textObservacion);
-		
 		JCheckBox boxCargaPesada = new JCheckBox(labels.getString("pedido.retiro.check.box.si.no"));
 		boxCargaPesada.setBackground(UIManager.getColor("window"));
 		boxCargaPesada.setBounds(224, 10, 81, 23);
 		panelDatos.add(boxCargaPesada);
+		
+		JTextArea textArea = new JTextArea();
+		textArea.setText(labels.getString("pedido.retiro.label.area.observacion")); 
+		textArea.setBounds(20, 90, 296, 95);
+		panelDatos.add(textArea);
 		
 
 		panelBotones = new JPanel();
@@ -278,7 +278,7 @@ public class PedidoDeRetiro extends JFrame {
 	               
 	                
 					try {
-						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),domicilioSeleccionado);
+						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textArea.getText(),domicilioSeleccionado);
 						JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();

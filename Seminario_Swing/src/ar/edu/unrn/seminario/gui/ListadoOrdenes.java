@@ -27,7 +27,7 @@ import javax.swing.JLabel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class ListadoOrdenesDeRetiroDelPersonal extends JFrame {
+public class ListadoOrdenes extends JFrame {
 
 	private JPanel contentPane;
 	private IApi api;
@@ -35,7 +35,7 @@ public class ListadoOrdenesDeRetiroDelPersonal extends JFrame {
 	private	DefaultTableModel modelo;
 	private JButton activarButton;
 	private JButton desactivarButton;
-	public ListadoOrdenesDeRetiroDelPersonal(IApi api){
+	public ListadoOrdenes(IApi api){
 		this.api = api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

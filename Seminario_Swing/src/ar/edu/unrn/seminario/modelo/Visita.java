@@ -6,34 +6,53 @@ import java.util.Calendar;
 
 public class Visita {
 	private String observacion;
-	private ArrayList<TipoResiduo>residuosExtraidos;
+	private ArrayList<Residuo>residuosExtraidos;
 	private Date fecha;
+	private int codOrden;
 	
-	public Visita(String observacion) {
+	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden) {
 		this.observacion=observacion;
-		residuosExtraidos = new ArrayList<>();
+		residuosExtraidos = listaResiduos;
+		this.codOrden = codOrden;
 		fecha = new Date(Calendar.getInstance().getTime().getTime());
 	}
-	public Visita(String observacion, Date fecha) {
+	
+	/*public Visita(String observacion, Date fecha) {
 		this(observacion);
 		this.fecha=fecha;
-	}
+	}*/
+	
 	public String getObservacion() {
 		return observacion;
 	}
+	
 	public void setObservacion(String observacion) {
 		this.observacion = observacion;
 	}
+	
 	public Date getFecha() {
 		return fecha;
 	}
+	
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-	public ArrayList<TipoResiduo> getResiduosExtraidos() {
+	
+	public ArrayList<Residuo> getResiduosExtraidos() {
 		return residuosExtraidos;
 	}
-	public void añadirResiduo(TipoResiduo tipoResiduo) {
+	
+	public void añadirResiduo(Residuo tipoResiduo) {
 		residuosExtraidos.add(tipoResiduo);
 	}
+	
+
+	public int getCodOrden() {
+		return codOrden;
+	}
+
+	public void setCodOrden(int codOrden) {
+		this.codOrden = codOrden;
+	}
+
 }
