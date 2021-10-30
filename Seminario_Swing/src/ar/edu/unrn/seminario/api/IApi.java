@@ -127,6 +127,7 @@ public interface IApi {
 
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()throws AppException;
 
-	void registrarDueño(String nombre, String apellido, String dni) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException;
+	void registrarDueño(String nombre, String apellido, String dni) 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
 	 
 }

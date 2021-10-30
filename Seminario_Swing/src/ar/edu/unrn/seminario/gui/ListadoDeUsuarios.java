@@ -5,7 +5,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
@@ -66,8 +66,8 @@ public class ListadoDeUsuarios extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(250, 5, 701, 312);
 		contentPane.add(scrollPane);
-		ResourceBundle labels = ResourceBundle.getBundle("labels");
-		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
+		//ResourceBundle labels = ResourceBundle.getBundle("labels"); 
+		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		table = new JTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.usuario.titulos.usuario.USUARIO"),  

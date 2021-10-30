@@ -52,8 +52,6 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 
 	@Override
 	public void remove(Vivienda v) {
-		System.out.println("Hello there");
-		System.out.println("Hola peter");
 		// TODO Auto-generated method stub
 
 	}

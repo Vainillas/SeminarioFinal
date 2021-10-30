@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.modelo;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.List;
 
 import ar.edu.unrn.seminario.Helper.ConditionHelper;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
@@ -12,19 +13,24 @@ public class OrdenDeRetiro {
 	private PedidoDeRetiro pedidoAsociado;
 	private Recolector recolector;
 	private Date fechaOrden;
-	
-
 	private Estado estado;
 	private ArrayList<Visita>visitas;
-	
 	private int codigo;
 	
+	public OrdenDeRetiro(PedidoDeRetiro p, Recolector r, Date fechaActual, Estado estado, ArrayList<Visita> visitas) {
+		//validarDatos(p, r, fechaActual);
+		pedidoAsociado = p;
+		recolector = r;
+		fechaOrden = fechaActual;
+		this.estado=estado;
+		this.visitas=visitas;
+	}
 	public OrdenDeRetiro(PedidoDeRetiro p, Recolector r, Date fechaActual) {
 		//validarDatos(p, r, fechaActual);
 		pedidoAsociado = p;
 		recolector = r;
 		fechaOrden = fechaActual;
-		estado=new Estado();
+		estado=new Estado("pendiente");
 		visitas=new ArrayList<>();
 	}
 	
@@ -33,7 +39,7 @@ public class OrdenDeRetiro {
 		pedidoAsociado = p;
 		recolector = null;
 		fechaOrden = fechaActual;
-		estado=new Estado();
+		estado=new Estado("pendiente");
 		visitas=new ArrayList<>();
 	}
 	
@@ -77,11 +83,15 @@ public class OrdenDeRetiro {
 		return pedidoAsociado;
 	}
 	
-	
+	public void setEstado(Estado estado) {
+		this.estado = estado;
+	}
 	public Estado getEstado() {
 		return estado;
 	}
-	
+	public void setCodigo(int codigo) {
+		this.codigo=codigo;
+	}
 	public int getCodigo() {
 		return codigo;
 	}

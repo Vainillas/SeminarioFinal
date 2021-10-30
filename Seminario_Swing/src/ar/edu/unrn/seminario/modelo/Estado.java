@@ -2,8 +2,8 @@ package ar.edu.unrn.seminario.modelo;
 
 public class Estado {
 	private String estado;
-	public Estado() {
-		this.estado = "pendiente";
+	public Estado(String estado) {
+		this.estado = estado;
 
 	}
 	public boolean Pendiente() {

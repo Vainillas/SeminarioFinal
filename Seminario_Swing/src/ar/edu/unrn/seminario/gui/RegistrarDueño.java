@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
@@ -92,7 +93,7 @@ public class RegistrarDueño extends JFrame {
 		btn_aceptar.addActionListener((e)->{
 			try {
 				api.registrarDueño(this.tf_nombre.getText(),tf_apellido.getText(),tf_dni.getText());
-			} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e1) {
+			} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | AppException e1) {
 				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
 			
