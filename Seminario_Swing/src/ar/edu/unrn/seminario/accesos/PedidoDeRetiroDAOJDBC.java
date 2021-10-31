@@ -38,7 +38,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            statement.setInt(1, p.getVivienda().getID());
 	            statement.setString(2, p.getObservacion());
 	            
-	            if(p.getMaquinaPesada()) {
+	            if(p.getMaquinaPesada()) { 
 	            	statement.setInt(3, 1);
 	            }else {
 	            	statement.setInt(3, 0);
@@ -55,7 +55,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            
 	            Connection conn2 = ConnectionManager.getConnection();
 	            PreparedStatement statement2 = conn2.prepareStatement
-	                    ("INSERT INTO residuos_visita(codigo_pedido , nombre_residuo , cantidad) "
+	                    ("INSERT INTO residuos_pedido(codigo_pedido , nombre_residuo , cantidad) "
 	                            + "VALUES (?, ?, ?)");
 	            
 	            for(int i=0; i < p.getListResiduos().size() ; i++) {
@@ -121,7 +121,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 							ResultSet resultSetDireccion = statement4.executeQuery();
 							
 							if(resultSetDireccion.next()) {
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("usuario"));
+								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
 								direccion = new Direccion(resultSetDireccion.getString("calle"), Integer.toString(resultSetDireccion.getInt("altura")), Integer.toString(resultSetDireccion.getInt("codigo_postal")), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
 								vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
 							}
@@ -216,7 +216,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			            	
 							if(resultSetDireccion.next()) { 
 								
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("usuario"));
+								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
 								direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
 			            		vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
 			            		
@@ -273,7 +273,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
 	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
 
-				throw new AppException("Error al encontrar todos los Pedidos: ");
+				throw new AppException("Error al encontrar todos los Pedidos: "+ e.getMessage());
 	        } finally {
 	            ConnectionManager.disconnect();
 	        }

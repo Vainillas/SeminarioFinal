@@ -648,7 +648,7 @@ public class PersistenceApi implements IApi {
     				o.getFechaOrden(),
     				o.getEstado(),
     				o.getVisitas()));
-    	}
+    	} 
     	return ordenesDto;
     }
     
@@ -664,6 +664,7 @@ public class PersistenceApi implements IApi {
     	}
     	return o;
     }
+    
     public void actualizarOrdenDeRetiro(OrdenDeRetiro orden) throws AppException {
     	ordenDeRetiroDao.update(orden);
     }

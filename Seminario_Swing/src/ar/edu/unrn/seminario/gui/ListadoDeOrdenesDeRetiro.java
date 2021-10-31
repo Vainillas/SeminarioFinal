@@ -22,6 +22,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -102,7 +103,8 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	 * Create the frame.
 	 */
 	public ListadoDeOrdenesDeRetiro(IApi api) {
-		labels = ResourceBundle.getBundle("labels");
+		//labels = ResourceBundle.getBundle("labels");
+		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		setTitle(labels.getString("listado.de.pedidos.de.retiro.titulo"));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,7 +122,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		scrollPane.setBounds(252, 11, 548, 345);
 		panel.add(scrollPane);
-		ResourceBundle labels = ResourceBundle.getBundle("labels");
+		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
 		table = new JTable();
 		String[] titulosUsuario = { 
