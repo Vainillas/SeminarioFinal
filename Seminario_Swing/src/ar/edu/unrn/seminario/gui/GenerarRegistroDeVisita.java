@@ -85,7 +85,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					GenerarRegistroDeVisita frame = new GenerarRegistroDeVisita(api);
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					e.printStackTrace(); 
 				}
 			}
 		});

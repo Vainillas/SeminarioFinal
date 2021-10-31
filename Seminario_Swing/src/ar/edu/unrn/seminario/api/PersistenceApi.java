@@ -47,6 +47,7 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.Estado;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
@@ -430,10 +431,12 @@ public class PersistenceApi implements IApi {
 			dueñodto = new DueñoDTO(dueño.getNombre(),
 					dueño.getApellido(),
 					dueño.getDni(),
-					dueño.getCorreo());
+					dueño.getCorreo(),
+					dueño.getUsername());
 		}
 		return dueñodto;
 	}
+	
 	/*public DueñoDTO obtenerDueñoActivo() {
 		//this.userOnline.getEmail().equals()
 		
@@ -452,7 +455,7 @@ public class PersistenceApi implements IApi {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
-            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo()));
+            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo(), d.getUsername()));
         }
         return dtos;
     }
@@ -488,7 +491,7 @@ public class PersistenceApi implements IApi {
     	this.visitaDao.create(visita);
     	
     	if(!comprobarCantidadResiduos(codOrden)) {
-    		//this.ordenDeRetiroDao.update();
+    		actualizarEstadoOrden(codOrden, "concretado");
     	}
     }
     
@@ -499,21 +502,21 @@ public class PersistenceApi implements IApi {
     	
     	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
     	
-    	int i = 0;
+ 
     	for(Visita visita: listaVisitas){
 
-        	int j = 0;
+        	int i = 0;
     		for(Residuo residuo: visita.getResiduosExtraidos()){
     			
-    			listaSumaVisitas.set(i, listaSumaVisitas.get(j) + residuo.getCantidadKg());
+    			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
     			
-    			j++;
+    			i++;
     		}
-    		i++;
+ 
     	}
     	
     	Boolean rtado = false;
-    	
+    	int i;
     	for(i=0;i<listaResiduos.size();i++) {
     		if(listaResiduos.get(i).getCantidadKg() != listaSumaVisitas.get(i)) {
     			rtado = true;
@@ -521,6 +524,13 @@ public class PersistenceApi implements IApi {
     	}
     	
     	return rtado;
+    }
+    
+    public void actualizarEstadoOrden(int codOrden, String estado) throws AppException{
+    	OrdenDeRetiro orden = this.ordenDeRetiroDao.find(codOrden);
+    	Estado nuevoEstado = new Estado(estado);
+    	orden.setEstado(nuevoEstado);
+    	ordenDeRetiroDao.update(orden);
     }
     
     public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
@@ -551,6 +561,7 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
+    
     
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
@@ -645,7 +656,7 @@ public class PersistenceApi implements IApi {
     		ordenesDto.add(new OrdenDeRetiroDTO(o.getPedidoAsociado(),
     				o.getRecolector(),
     				o.getFechaOrden(),
-    				o.getEstado(),
+    				o.getEstado(), 
     				o.getVisitas()));
     	} 
     	return ordenesDto;

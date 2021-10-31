@@ -95,6 +95,8 @@ public interface IApi {
 	
 	DueñoDTO obtenerDueño(String text) throws AppException;
 
+	List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException;
+	
 	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
 
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
@@ -118,6 +120,8 @@ public interface IApi {
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
 
 	Usuario getUserOnline();
+	
+	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException;
 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException;
 	 
