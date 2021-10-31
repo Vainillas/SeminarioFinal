@@ -107,7 +107,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 			
 			TipoResiduo tipoResiduoVisita = null;
 			Residuo residuoVisita = null;
-           
+            
 			try {
 				Connection conn = ConnectionManager.getConnection();
 				PreparedStatement statement = conn.prepareStatement("SELECT * from ordenes");
@@ -253,21 +253,33 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 				Connection conn = ConnectionManager.getConnection();
 				PreparedStatement statement = conn.prepareStatement("SELECT * from ordenes");
 				ResultSet resultSetOrden = statement.executeQuery();
+				
+				System.out.println("ok 0");
+				
 				while(resultSetOrden.next()) {
-					statement = conn.prepareStatement("SELECT * FROM pedido p" + 
-							"WHERE p.codigo = ?");
-					statement.setInt(1, resultSetOrden.getInt("codigo"));
+					
+					statement = conn.prepareStatement("SELECT * FROM pedidos p WHERE p.codigo = ?");
+					
+					statement.setInt(1, resultSetOrden.getInt("codigoPedido"));
 					ResultSet resultSetPedido = statement.executeQuery();
+					
+					System.out.println("ok 1");
+					
 					if(resultSetPedido.next()) {
 						statement = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.codigo = ?");
 						statement.setInt(1, resultSetPedido.getInt("codigo_vivienda"));
 						ResultSet resultSetVivienda = statement.executeQuery();
+						
+						System.out.println("ok 2");
+						
 						if(resultSetVivienda.next()) {
 							Connection conn2 = ConnectionManager.getConnection();
 							PreparedStatement statement3 = conn2.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
 							statement3.setString(1, resultSetVivienda.getString("dni"));
 							ResultSet resultSetDueño = statement3.executeQuery();
-
+							
+							System.out.println("ok 3");
+							
 							if(resultSetDueño.next()) {
 
 								Connection conn3 = ConnectionManager.getConnection();
@@ -275,11 +287,16 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								statement4.setString(1, resultSetVivienda.getString("calle"));
 								statement4.setInt(2, resultSetVivienda.getInt("altura"));
 								ResultSet resultSetDireccion = statement4.executeQuery();
-
+								
+								System.out.println("ok 4");
+								
 								if(resultSetDireccion.next()) {
 									dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
 									direccion = new Direccion(resultSetDireccion.getString("calle"), Integer.toString(resultSetDireccion.getInt("altura")), Integer.toString(resultSetDireccion.getInt("codigo_postal")), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
 									vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
+									
+									System.out.println("ok 5");
+									
 								}
 							}
 						}
@@ -317,8 +334,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								resultSetPedido.getDate("fecha"),
 								vivienda, resultSetPedido.getInt("codigo"));
 	            	}
-					statement = conn.prepareStatement("SELECT * FROM recolectores r" + 
-							"WHERE r.dni = ?");
+					statement = conn.prepareStatement("SELECT * FROM recolectores r WHERE r.dni = ?");
 					statement.setString(1, resultSetOrden.getString("dniRecolector"));
 					ResultSet resultSetRecolector = statement.executeQuery();
 					if(resultSetRecolector.next()) {
