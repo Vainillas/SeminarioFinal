@@ -459,7 +459,6 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
-
     
 	public boolean existeDueño(String dni) throws AppException {
 		return dueñoDao.exists(dni);
