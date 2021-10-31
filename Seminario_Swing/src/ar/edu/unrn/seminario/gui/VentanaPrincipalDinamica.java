@@ -124,14 +124,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);
 		
-		JMenuItem mntmGenerarRegistroVisita = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.registro.visita")); //$NON-NLS-1$
-		mntmGenerarRegistroVisita.addActionListener((e)->{
-			GenerarRegistroDeVisita visita = new GenerarRegistroDeVisita(api);
-			visita.setVisible(true);
-			
-			
-		});
-		mnOrdenesPersonal.add(mntmGenerarRegistroVisita);
 		
 		JMenu MnDatosPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.personal"));
 		
@@ -146,7 +138,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenu mnConfiguracionPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.personal.configuracion"));
 		
 		mbPersonal.add(mnConfiguracionPersonal);
-		
 		JMenuItem mntmPantallaCompletaPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.completa"));
 		mntmPantallaCompletaPersonal.addActionListener((e)->{
 			this.setExtendedState(JFrame.MAXIMIZED_BOTH);	
@@ -155,7 +146,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 			
 		});
 		mnConfiguracionPersonal.add(mntmPantallaCompletaPersonal);
-		
 		mntmPantallaNormalPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.normal")); 
 		mntmPantallaNormalPersonal.addActionListener((e)->{
 			this.setExtendedState(JFrame.NORMAL);	
@@ -221,6 +211,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mntmAdmListadoOrdenesDeRetiros.addActionListener((e)->{
 			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api);
 			listado.setVisible(true);
+			
+			
 		});
 		mnOrdenesDeRetiroAdministrador.add(mntmAdmListadoOrdenesDeRetiros);
 		
@@ -234,6 +226,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenuItem mntmAdmGenerarRegistroVisita = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.registro.visita.administrador")); //$--$
 		mntmAdmGenerarRegistroVisita.addActionListener((e)->{
 			GenerarRegistroDeVisita registroVisita = new GenerarRegistroDeVisita(api);
+			registroVisita.setVisible(true);
 			
 			
 		});

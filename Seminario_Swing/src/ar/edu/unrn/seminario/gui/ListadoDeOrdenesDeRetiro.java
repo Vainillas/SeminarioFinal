@@ -127,8 +127,12 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		table = new JTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.fecha.orden"),  
+				
+				
+				labels.getString("listado.de.ordenes.de.retiro.titulos.codigo.orden"), 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.estado"), 
-				labels.getString("listado.de.ordenes.de.retiro.titulos.codigo.pedido.asociado"), 
+
+				labels.getString("listado.de.ordenes.de.retiro.titulos.codigo.pedido"), 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.dni.recolector"), 
 				
 						
@@ -144,12 +148,14 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		try {
 			ordenesDeRetiro = api.obtenerOrdenesDeRetiro();
 			for (OrdenDeRetiroDTO o : ordenesDeRetiro) {
-				modelo.addRow(new Object[] { o.getFechaOrden(),
+				modelo.addRow(new Object[] { 
+				 		o.getFechaOrden(),
+				 		o.getCodigo(),
 						o.getEstado().obtenerEstado(),
 						o.getPedidoAsociado().getCodigo(),
 						o.getRecolector().getDni(),
 					
-						});
+				});
 			}
 		} catch (AppException e3) {
 			JOptionPane.showMessageDialog(null, e3.getMessage(),"error",JOptionPane.ERROR_MESSAGE);

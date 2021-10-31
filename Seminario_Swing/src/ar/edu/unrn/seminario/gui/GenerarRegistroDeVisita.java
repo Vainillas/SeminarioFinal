@@ -8,9 +8,12 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
+import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
 
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
@@ -34,9 +37,13 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.Box;
 import javax.swing.JTree;
+import javax.swing.SpinnerListModel;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.SystemColor;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.LineBorder;
@@ -55,13 +62,10 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JTextPane tp_observacion;
 	private JLabel lb_observacion;
 	private JLabel lb_hora;
-	private JFormattedTextField ftf_hora;
 	private JLabel lb_dia;
-	private JFormattedTextField ftf_dia;
 	private JSlider slider_plastico;
 	private JLabel lb_slider_plastico;
 	private JLabel lb_mes;
-	private JFormattedTextField ftf_mes;
 	private JSlider slider_metal;
 	private JSlider slider_carton;
 	private JSlider slider_vidrio;
@@ -74,31 +78,14 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JButton btn_limpiar;
 	private ResourceBundle labels;
 	private JLabel lb_cantidad_residuos;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PersistenceApi api = new PersistenceApi();
-					GenerarRegistroDeVisita frame = new GenerarRegistroDeVisita(api);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
+
+
 	public GenerarRegistroDeVisita(IApi api) {
 		labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1066, 529);
+		setBounds(100, 100, 1193, 529);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
@@ -106,8 +93,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		 panel_ordenes_de_retiro = new JPanel();
 		 panel_ordenes_de_retiro.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel_ordenes_de_retiro.setBounds(550, 15, 479, 449);
+		panel_ordenes_de_retiro.setBounds(550, 46, 617, 433);
 		contentPane.add(panel_ordenes_de_retiro);
+		panel_ordenes_de_retiro.setLayout(new BorderLayout(0, 0));
 		
 		scrollPane = new JScrollPane();
 		scrollPane.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.controlShadow, SystemColor.controlShadow, SystemColor.controlShadow, SystemColor.controlShadow));
@@ -115,53 +103,54 @@ public class GenerarRegistroDeVisita extends JFrame {
 		String[] titulosDireccion = { 
 				/*"BARRIO","CALLE","ALTURA","CODIGO POSTAL","NOMBRE","APELLIDO","DNI"*/
 				
-				labels.getString("registro.de.visita.titulos.direccion.barrio"),
-					labels.getString("registro.de.visita.titulos.direccion.calle"),  
-					labels.getString("registro.de.visita.titulos.direccion.altura"), 
-					labels.getString("registro.de.visita.titulos.direccion.codigo.postal"), 
-					labels.getString("registro.de.visita.titulos.dueño.nombre"), 
-					labels.getString("registro.de.visita.titulos.dueño.apellido"), 
-					labels.getString("registro.de.visita.titulos.dueño.dni"), 
+					labels.getString("registro.de.visita.titulos.fecha.orden"),
+					labels.getString("registro.de.visita.titulos.codigo.orden"),
+					labels.getString("registro.de.visita.titulos.estado"),
+					
+					labels.getString("registro.de.visita.titulos.nombre.apellido.recolector"), 
+					labels.getString("registro.de.visita.titulos.dni.recolector"), 
+					labels.getString("registro.de.visita.titulos.codigo.pedido.de.retiro"), 
 			};	
 		
 		table = new JTable();
 		
-		/*table.addMouseListener(new MouseAdapter() {
+		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 
 				int fila = table.getColumnCount();
 				
-				domicilioSeleccionado = new ArrayList<String>();
+				ArrayList<String> ordenSeleccionada = new ArrayList<String>();
 				for (int i = 0; i < fila; i++) {
-					domicilioSeleccionado.add( (String) table.getValueAt(table.getSelectedRow(), i));
 					
+					ordenSeleccionada.add( (String) table.getValueAt(table.getSelectedRow(), i));
 				}
+				//OrdenDeRetiroDTO orden = api.obtenerOrdenDeRetiro
+				//PedidoDeRetiroDTO pedido = api.obtenerPe
 				
-				habilitarBotones(true);
 			}
-		});*/
+			
+		});
 		
 		table.setRowSelectionAllowed(true);//permitiendo seleccion de fila
 		table.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulosDireccion);
 		// Obtiene la lista de direcciones a mostrar
-		List<ViviendaDTO> viviendas= new ArrayList<ViviendaDTO>();	
+
 
 			try {
-				viviendas = api.obtenerViviendas();
-				
+				List<OrdenDeRetiroDTO > ordenes = api.obtenerOrdenesDeRetiro();				
 				// Agrega las direcciones de el dueño en el model
-				for (ViviendaDTO d : viviendas) {
-					modelo.addRow(new Object[] { d.getDireccion().getBarrio(), 
-							d.getDireccion().getCalle(), 
-							d.getDireccion().getAltura(),
-							d.getDireccion().getCodPostal(), 
-							d.getDueño().getNombre(),
-							d.getDueño().getApellido(),
-							d.getDueño().getDni()
+				for (OrdenDeRetiroDTO o : ordenes) {
+					modelo.addRow(new Object[] {
+							DateHelper.changeFormat(o.getFechaOrden()),
+							Integer.toString(o.getCodigo()),
+						 	o.getEstado().obtenerEstado(),
+							o.getRecolector().getNombre() +" "+  o.getRecolector().getApellido(),
+							o.getRecolector().getDni(),
+							Integer.toString(o.getPedidoAsociado().getCodigo())
+							
 					});
-					
 				}
 
 			} catch (Exception e2) {
@@ -195,17 +184,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lb_hora.setBounds(10, 11, 46, 14);
 		panel_visita.add(lb_hora);
 		
-		ftf_hora = new JFormattedTextField();
-		ftf_hora.setBounds(74, 8, 59, 20);
-		panel_visita.add(ftf_hora);
-		
 		 lb_dia = new JLabel(labels.getString("registro.de.visita.label.dia"));
 		lb_dia.setBounds(10, 48, 46, 14);
 		panel_visita.add(lb_dia);
-		
-		ftf_dia = new JFormattedTextField();
-		ftf_dia.setBounds(74, 45, 59, 17);
-		panel_visita.add(ftf_dia);
 		
 		slider_plastico = new JSlider();
 		slider_plastico.setValue(25);
@@ -216,7 +197,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		slider_plastico.setMinorTickSpacing(10);
 		slider_plastico.setBounds(258, 40, 262, 40);
 		panel_visita.add(slider_plastico);
-		
+		panel_visita.enableInputMethods(false);
 		lb_slider_plastico = new JLabel(labels.getString("registro.de.visita.label.plastico"));
 		lb_slider_plastico.setHorizontalAlignment(SwingConstants.TRAILING);
 		lb_slider_plastico.setHorizontalTextPosition(SwingConstants.LEADING);
@@ -226,10 +207,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lb_mes = new JLabel(labels.getString("registro.de.visita.label.mes"));
 		lb_mes.setBounds(10, 78, 46, 14);
 		panel_visita.add(lb_mes);
-		
-		ftf_mes = new JFormattedTextField();
-		ftf_mes.setBounds(74, 75, 59, 17);
-		panel_visita.add(ftf_mes);
 		
 		slider_metal = new JSlider();
 		slider_metal.setValue(25);
@@ -280,6 +257,30 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lb_cantidad_residuos.setBounds(217, 11, 303, 14);
 		panel_visita.add(lb_cantidad_residuos);
 		
+		JSpinner spinner_hora = new JSpinner();
+		SpinnerNumberModel maximo_hora = new SpinnerNumberModel();
+		maximo_hora.setMaximum(24);
+		maximo_hora.setMinimum(0);
+		spinner_hora.setModel(maximo_hora);
+		spinner_hora.setBounds(74, 8, 52, 20);
+		panel_visita.add(spinner_hora);
+		
+		
+		JSpinner spinner_dia = new JSpinner();
+		spinner_dia.setBounds(74, 45, 52, 20);
+		
+		panel_visita.add(spinner_dia);
+		SpinnerNumberModel maximo_dia = new SpinnerNumberModel();
+		maximo_dia.setMaximum(31);
+		maximo_dia.setMinimum(0);
+		spinner_dia.setModel(maximo_dia);
+		
+		final String [] numeros = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+		SpinnerModel maximo_mes = new SpinnerListModel(numeros);
+		JSpinner spinner_mes = new JSpinner(maximo_mes);
+		spinner_mes.setModel(maximo_mes);
+		spinner_mes.setBounds(74, 75, 52, 20);
+		panel_visita.add(spinner_mes);
 		panel_botones = new JPanel();
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_botones.setBounds(10, 409, 530, 55);
@@ -302,9 +303,21 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_botones.add(btn_limpiar);
 		
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
+		btn_registrar_visita.addActionListener((e)->{
+			//api.generar
+			
+			//JOptionPane.showMessageDialog(null, e.getMessage(),"Registro visita",JOptionPane.INFORMATION_MESSAGE);
+			setVisible(false);
+			dispose();
+		});
 		panel_botones.add(btn_registrar_visita);
 		
 		panel_botones.add(btn_cancelar);
+		
+		JLabel lbOrdenSeleccion = new JLabel(labels.getString("registro.de.visita.label.orden.seleccion"));
+		lbOrdenSeleccion.setHorizontalAlignment(SwingConstants.CENTER);
+		lbOrdenSeleccion.setBounds(754, 11, 241, 14);
+		contentPane.add(lbOrdenSeleccion);
 	}
 	private void reloadGrid() {
 		
