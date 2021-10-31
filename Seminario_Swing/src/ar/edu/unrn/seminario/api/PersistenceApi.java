@@ -202,6 +202,7 @@ public class PersistenceApi implements IApi {
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
 		this.viviendaDao.create(vivienda);
+		
 	}
 
 	@Override

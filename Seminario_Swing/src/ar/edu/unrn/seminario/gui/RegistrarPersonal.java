@@ -141,7 +141,7 @@ public class RegistrarPersonal extends JFrame {
 		panelDatos.add(lbApellido);
 		
 		lbTelefono = new JLabel(labels.getString("registrar.personal.label.telefono"));
-		lbTelefono.setBounds(44, 120, 46, 14);
+		lbTelefono.setBounds(44, 120, 110, 14);
 		panelDatos.add(lbTelefono);
 		
 		lbDni = new JLabel(labels.getString("registrar.personal.label.dni"));

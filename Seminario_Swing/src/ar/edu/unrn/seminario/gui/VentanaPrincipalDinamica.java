@@ -58,7 +58,9 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api) {
-		String rol = "ADMINISTRADOR";//api.obtenerRolUsuarioActivo();
+		String rol = "ADMINISTRADOR";
+		//String rol = api.obtenerRolUsuarioActivo();
+		
 		if(rol.equals("PERSONAL")) {
 			panelPersonal.setVisible(true);
 			panelDueño.setVisible(false);
@@ -228,6 +230,14 @@ public class VentanaPrincipalDinamica extends JFrame {
 			ordenDeRetiro.setVisible(true);
 			ordenDeRetiro.setLocationRelativeTo(null); 
 		});
+		
+		JMenuItem mntmAdmGenerarRegistroVisita = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.registro.visita.administrador")); //$--$
+		mntmAdmGenerarRegistroVisita.addActionListener((e)->{
+			GenerarRegistroDeVisita registroVisita = new GenerarRegistroDeVisita(api);
+			
+			
+		});
+		mnOrdenesDeRetiroAdministrador.add(mntmAdmGenerarRegistroVisita);
 		mnOrdenesDeRetiroAdministrador.add(mntmGenerarOrdenDeRetiroAdministrador);
 		
 		JMenu mnPedidosDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.pedidos.de.retiro.administrador"));
