@@ -1,56 +1,33 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
-
-import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.api.PersistenceApi;
-import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
-import ar.edu.unrn.seminario.dto.ViviendaDTO;
-import ar.edu.unrn.seminario.exceptions.AppException;
-
-import java.awt.ScrollPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
-import javax.swing.JTable;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
-import javax.swing.JToggleButton;
-import javax.swing.JTextField;
-import javax.swing.JFormattedTextField;
-import javax.swing.JLabel;
 import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.FlowLayout;
 import javax.swing.border.BevelBorder;
-import java.awt.Color;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.MatteBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import javax.swing.table.DefaultTableModel;
 
-public class ListadoDeOrdenesDeRetiro extends JFrame {
+import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
+import ar.edu.unrn.seminario.exceptions.AppException;
+
+public class ListadoDePedidosDeRetiro extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -81,27 +58,16 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	private JTextField tfFiltradoPorCodigoOrden;
 	private JRadioButton rdbtnNewRadioButton;
 	private JRadioButton rdbtnFiltradoPorCodigoOrden;
+
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PersistenceApi api = new PersistenceApi();
-					ListadoDeOrdenesDeRetiro frame = new ListadoDeOrdenesDeRetiro(api);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.
 	 */
-	public ListadoDeOrdenesDeRetiro(IApi api) {
+	public ListadoDePedidosDeRetiro(IApi api) {
 		labels = ResourceBundle.getBundle("labels");
 		setTitle(labels.getString("listado.de.pedidos.de.retiro.titulo"));
 		
@@ -307,7 +273,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		});
 		panel_botones.add(btnSalir);
 		
-
-		
 	}
+
 }

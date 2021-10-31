@@ -122,7 +122,7 @@ public class IniciarSesion extends JFrame {
 						//System.out.printf(textUsuario.getText() + String.valueOf(textPassword.getPassword() ))
 						//api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword()));
 							
-								VentanaPrincipal ventana = new VentanaPrincipal(api);
+								VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api);
 								ventana.setVisible(true);
 								dispose();
 						

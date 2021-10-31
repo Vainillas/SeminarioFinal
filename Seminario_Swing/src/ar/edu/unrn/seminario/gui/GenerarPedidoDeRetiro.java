@@ -40,6 +40,7 @@ import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
+import javax.swing.JScrollBar;
 
 
 public class GenerarPedidoDeRetiro extends JFrame {
@@ -80,7 +81,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	public GenerarPedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
-		
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1049, 368);
@@ -114,13 +114,17 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		JTextPane textObservacion = new JTextPane();
 		textObservacion.setForeground(Color.BLACK);
 		textObservacion.setBackground(SystemColor.textHighlightText);
-		textObservacion.setBounds(88, 90, 249, 106);
+		textObservacion.setBounds(39, 90, 288, 106);
 		panelDatos.add(textObservacion);
 		
 		JCheckBox boxCargaPesada = new JCheckBox(labels.getString("pedido.retiro.check.box.si.no"));
 		boxCargaPesada.setBackground(UIManager.getColor("window"));
 		boxCargaPesada.setBounds(224, 10, 81, 23);
 		panelDatos.add(boxCargaPesada);
+		
+		JScrollBar scrollBar = new JScrollBar();
+		scrollBar.setBounds(310, 120, 17, 48);
+		panelDatos.add(scrollBar);
 		
 
 		panelBotones = new JPanel();

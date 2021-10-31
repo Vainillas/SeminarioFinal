@@ -22,6 +22,8 @@ import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import javax.swing.BoxLayout;
 import java.awt.SystemColor;
+import java.util.ResourceBundle;
+
 import javax.swing.JButton;
 
 public class RegistrarDueño extends JFrame {
@@ -30,13 +32,13 @@ public class RegistrarDueño extends JFrame {
 	private JTextField tf_nombre;
 	private JTextField tf_apellido;
 	private JTextField tf_dni;
-
+	private ResourceBundle labels = ResourceBundle.getBundle("labels");
 
 
 
 
 	public RegistrarDueño(IApi api) {
-		setTitle("registro de dueño");
+		setTitle(labels.getString("registrar.dueño.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 367, 243);
 		contentPane = new JPanel();
@@ -51,7 +53,7 @@ public class RegistrarDueño extends JFrame {
 		contentPane.add(panel_registro);
 		panel_registro.setLayout(null);
 		
-		JLabel lb_nombre = new JLabel("New label");
+		JLabel lb_nombre = new JLabel(labels.getString("registrar.dueño.label.nombre"));
 		lb_nombre.setBounds(10, 11, 102, 14);
 		panel_registro.add(lb_nombre);
 		
@@ -60,7 +62,7 @@ public class RegistrarDueño extends JFrame {
 		panel_registro.add(tf_nombre);
 		tf_nombre.setColumns(10);
 		
-		JLabel lb_apellido = new JLabel("New label");
+		JLabel lb_apellido = new JLabel(labels.getString("registrar.dueño.label.apellido"));
 		lb_apellido.setBounds(10, 54, 102, 14);
 		panel_registro.add(lb_apellido);
 		
@@ -69,7 +71,7 @@ public class RegistrarDueño extends JFrame {
 		panel_registro.add(tf_apellido);
 		tf_apellido.setColumns(10);
 		
-		JLabel lb_dni = new JLabel("New label");
+		JLabel lb_dni = new JLabel(labels.getString("registrar.dueño.label.dni"));
 		lb_dni.setBounds(10, 96, 102, 14);
 		panel_registro.add(lb_dni);
 		
@@ -78,7 +80,7 @@ public class RegistrarDueño extends JFrame {
 		panel_registro.add(tf_dni);
 		tf_dni.setColumns(10);
 		
-		JButton btn_limpiar = new JButton("New button");
+		JButton btn_limpiar = new JButton(labels.getString("registrar.dueño.button.limpiar"));
 		btn_limpiar.addActionListener((e)->{
 			this.tf_apellido.setText("");
 			this.tf_dni.setText("");
@@ -86,10 +88,12 @@ public class RegistrarDueño extends JFrame {
 			
 			
 		});
+		
+		
 		btn_limpiar.setBounds(23, 136, 89, 23);
 		panel_registro.add(btn_limpiar);
 		
-		JButton btn_aceptar = new JButton("New button");
+		JButton btn_aceptar = new JButton(labels.getString("registrar.dueño.button.aceptar"));
 		btn_aceptar.addActionListener((e)->{
 			try {
 				api.registrarDueño(this.tf_nombre.getText(),tf_apellido.getText(),tf_dni.getText());
@@ -101,7 +105,7 @@ public class RegistrarDueño extends JFrame {
 		btn_aceptar.setBounds(122, 136, 89, 23);
 		panel_registro.add(btn_aceptar);
 		
-		JButton btn_cancelar = new JButton("New button");
+		JButton btn_cancelar = new JButton(labels.getString("registrar.dueño.button.cancelar"));
 		btn_cancelar.addActionListener((e)->{
 			this.setVisible(false);
 			dispose();

@@ -396,6 +396,7 @@ public class PersistenceApi implements IApi {
 				return -1;}
 
 		}
+		
 	}
 	public static class filtradoUsuarioCorreo implements Comparator<UsuarioDTO>{
 		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
@@ -412,6 +413,7 @@ public class PersistenceApi implements IApi {
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
 		.collect(Collectors.toList());
+		
 		return usuario;
 	}
 	
@@ -432,6 +434,19 @@ public class PersistenceApi implements IApi {
 		}
 		return dueñodto;
 	}
+	/*public DueñoDTO obtenerDueñoActivo() {
+		//this.userOnline.getEmail().equals()
+		
+		Dueño dueño = dueñoDao.find(dni);
+		DueñoDTO dueñodto = null;
+		if(dueño!=null) {
+			dueñodto = new DueñoDTO(dueño.getNombre(),
+					dueño.getApellido(),
+					dueño.getDni(),
+					dueño.getCorreo());
+		}
+		return dueñodto;
+	}*/
 	
     public List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
@@ -625,7 +640,6 @@ public class PersistenceApi implements IApi {
     
     public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro() throws AppException{
     	List<OrdenDeRetiroDTO> ordenesDto = new ArrayList<>();
-
     	List<OrdenDeRetiro> ordenes = ordenDeRetiroDao.findAll();
     	for (OrdenDeRetiro o : ordenes) {
     		ordenesDto.add(new OrdenDeRetiroDTO(o.getPedidoAsociado(),
@@ -702,10 +716,9 @@ public class PersistenceApi implements IApi {
 
 
 	@Override
-	public void registrarDueño(String nombre, String apellido, String dni) 
+	public void registrarDueño(String nombre, String apellido, String dni)
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
-		Dueño dueño = null;
-		dueño = new Dueño(nombre, apellido, dni,this.userOnline.getEmail(),this.userOnline.getUsuario());
+		Dueño dueño = new Dueño(nombre, apellido, dni, this.userOnline.getEmail(),this.userOnline.getUsuario());
 		
         this.dueñoDao.create(dueño);
         

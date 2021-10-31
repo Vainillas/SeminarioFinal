@@ -42,6 +42,7 @@ import java.awt.FlowLayout;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import java.awt.SystemColor;
+import java.awt.event.ActionListener;
 
 /*La pantalla de GenerarOrdenRetiro tiene que ser mas grande por el tema de que la observación puede 
  * ser de muchos renglones. 
@@ -92,10 +93,8 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		tablePedidos.addMouseListener(new MouseAdapter() {
 			
 			public void mouseClicked(MouseEvent e) {
-			
-				
 					codigoPedidoSeleccionado = (Integer) tablePedidos.getValueAt(tablePedidos.getSelectedRow(),5 );
-					System.out.println(codigoPedidoSeleccionado);
+				
 				
 			}
 		});
@@ -127,6 +126,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		
 		tablePedidos.setModel(modeloPedidos);
 		scrollPaneOrdenes.setViewportView(tablePedidos);
+		
 
 		JPanel panelRecolector = new JPanel();
 		panelRecolector.setBounds(520, 46, 526, 495);
@@ -174,6 +174,9 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		
 		scrollPaneRecolector.setViewportView(tableRecolector);
 		
+		//JButton btnLimpiarRecolector = new JButton("New button");
+		//panelRecolector.add(btnLimpiarRecolector, BorderLayout.SOUTH);
+		
 		
 		
 		
@@ -186,17 +189,19 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		panelBotones.setBounds(295, 542, 442, 44);
 		contentPane.add(panelBotones);
 		
-		JButton btnAceptar = new JButton("Generar Orden");
-		btnAceptar.addActionListener((e)->{
+		JButton btnGenerarOrden = new JButton("Generar Orden");
+
+		btnGenerarOrden.addActionListener((e)->{
 			try {
-				System.out.println(codigoPedidoSeleccionado);
+				
 				if(this.dniRecolectorSeleccionado!= null) {
 					api.generarOrdenDeRetiro(codigoPedidoSeleccionado, dniRecolectorSeleccionado);
+					
 				}
 				else {
 				api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
 				}
-				
+				JOptionPane.showMessageDialog(null,"Orden generada con exito","Mensaje",JOptionPane.INFORMATION_MESSAGE);
 				
 			} catch (AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -204,19 +209,19 @@ public class GenerarOrdenDeRetiro extends JFrame {
 			
 		});
 		panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		btnAceptar.setHorizontalAlignment(SwingConstants.LEADING);
-		btnAceptar.setVerticalAlignment(SwingConstants.TOP);
-		btnAceptar.setToolTipText("");
-		panelBotones.add(btnAceptar);
+		btnGenerarOrden.setHorizontalAlignment(SwingConstants.LEADING);
+		btnGenerarOrden.setVerticalAlignment(SwingConstants.TOP);
+		btnGenerarOrden.setToolTipText("");
+		panelBotones.add(btnGenerarOrden);
 		
-		JButton btnCancelar = new JButton("Cancelar Orden");
-		btnCancelar.addActionListener((e)->{
+		JButton btnCancelarOrden = new JButton("Cancelar Orden");
+		btnCancelarOrden.addActionListener((e)->{
 			setVisible(false);
 			dispose();
 		
 		});
-		btnCancelar.setHorizontalAlignment(SwingConstants.LEADING);
-		panelBotones.add(btnCancelar);
+		btnCancelarOrden.setHorizontalAlignment(SwingConstants.LEADING);
+		panelBotones.add(btnCancelarOrden);
 		
 		JLabel lbRecolector = new JLabel("Seleccionar recolector");
 		lbRecolector.setHorizontalAlignment(SwingConstants.CENTER);
@@ -229,6 +234,9 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		lblNewLabel.setBounds(97, 21, 268, 14);
 		contentPane.add(lblNewLabel);
 		
+		//JButton btnLimpiarOrden = new JButton("New button");
+
+		//panelOrdenesRetiro.add(btnLimpiarOrden, BorderLayout.SOUTH);
 
 	}
 }

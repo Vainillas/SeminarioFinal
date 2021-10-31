@@ -7,6 +7,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import ar.edu.unrn.seminario.api.IApi;
+
 public class ListadoDeDueños extends JFrame {
 
 	private JPanel contentPane;

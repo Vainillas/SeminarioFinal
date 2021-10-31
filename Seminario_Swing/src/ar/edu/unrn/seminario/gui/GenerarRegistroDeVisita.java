@@ -44,7 +44,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.SwingConstants;
 
-public class RegistroDeVisita extends JFrame {
+public class GenerarRegistroDeVisita extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -82,7 +82,7 @@ public class RegistroDeVisita extends JFrame {
 			public void run() {
 				try {
 					PersistenceApi api = new PersistenceApi();
-					RegistroDeVisita frame = new RegistroDeVisita(api);
+					GenerarRegistroDeVisita frame = new GenerarRegistroDeVisita(api);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -94,7 +94,7 @@ public class RegistroDeVisita extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RegistroDeVisita(IApi api) {
+	public GenerarRegistroDeVisita(IApi api) {
 		labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
