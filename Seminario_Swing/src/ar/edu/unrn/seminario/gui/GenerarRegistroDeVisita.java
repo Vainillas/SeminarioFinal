@@ -170,10 +170,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 					for(int i = 0; i<pedido.getListResiduos().size();i++) {
 						//pedido.getListResiduos().get(0).get
 						residuosSeleccionados.add(pedido.getListResiduos().get(i).getTipo().getNombre());
-						residuosSeleccionadosKg.add(pedido.getListResiduos().get(i).getTipo().getNombre());
-						
+						residuosSeleccionadosKg.add(String.valueOf(pedido.getListResiduos().get(i).getCantidadKg()));
+
 						if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Vidrio")) {
-							
 							slider_vidrio.setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
 							slider_vidrio.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);
 							lb_slider_vidrio.setVisible(true);
@@ -372,7 +371,12 @@ public class GenerarRegistroDeVisita extends JFrame {
 		maximo_dia.setMinimum(0);
 		spinner_dia.setModel(maximo_dia);
 		
-		final String [] numeros = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+		final String [] numeros;
+		for(int i=1;i<=10;i++) {
+			numeros[i] = Integer.toString(i);
+			
+		}
+		
 		SpinnerModel maximo_mes = new SpinnerListModel(numeros);
 		JSpinner spinner_mes = new JSpinner(maximo_mes);
 		spinner_mes.setModel(maximo_mes);
@@ -402,10 +406,14 @@ public class GenerarRegistroDeVisita extends JFrame {
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
 
-			
+			for(String s : residuosSeleccionadosKg) {
+				System.out.println("valores: "+ s);
+			}
+
 			//JOptionPane.showMessageDialog(null, e.getMessage(),"Registro visita",JOptionPane.INFORMATION_MESSAGE);
 			try {
 				api.registrarVisita(residuosSeleccionados, residuosSeleccionadosKg,this.descripcion,Integer.parseInt(codigoOrden));
+				
 			} catch (NumberFormatException | AppException e1) {
 				// TODO Bloque catch generado automáticamente
 			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -415,7 +423,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 			dispose();
 		});
 		
-		//api
 		panel_botones.add(btn_registrar_visita);
 		
 		panel_botones.add(btn_cancelar);

@@ -52,7 +52,7 @@ public class VisitaDAOJDBC implements VisitaDao{
 	            ResultSet clave = statement.getGeneratedKeys();
 	            clave.next();
 	            int codigoVisita = clave.getInt(1);
-	            clave.close();
+	            clave.close(); 
 	            
 	            Connection conn2 = ConnectionManager.getConnection();
 	            PreparedStatement statement2 = conn2.prepareStatement
