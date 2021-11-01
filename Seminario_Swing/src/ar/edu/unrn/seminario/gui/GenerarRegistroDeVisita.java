@@ -369,12 +369,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		maximo_dia.setMinimum(0);
 		spinner_dia.setModel(maximo_dia);
 		
-		final String [] numeros;
-		for(int i=1;i<=10;i++) {
-			numeros[i] = Integer.toString(i);
-			
-		}
-		
+		final String [] numeros = {"1","2","3","4","5","6","7","8","9","10","11","12"};
 		SpinnerModel maximo_mes = new SpinnerListModel(numeros);
 		JSpinner spinner_mes = new JSpinner(maximo_mes);
 		spinner_mes.setModel(maximo_mes);
