@@ -90,7 +90,7 @@ public class RegistroVivienda extends JFrame {
                 				dniIngresado.getText(),
                 				correoIngresado.getText());*/
             		//}
-            		String dni = api.obtenerDueño(api.getUserOnline().getUsuario()).getDni();
+            		String dni = api.obtenerDueñoActivo().getDni();
             		if(!api.existeVivienda(dni, calleIngresada.getText(), alturaIngresada.getText()) && !api.existeDireccion(calleIngresada.getText(), alturaIngresada.getText())) {
             			api.registrarVivienda(/*nombreIngresado.getText(),
                 				apellidoIngresado.getText(),

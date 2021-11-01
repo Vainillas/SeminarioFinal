@@ -28,6 +28,7 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.modelo.Persona;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.utilities.Predicate;
@@ -146,5 +147,7 @@ public interface IApi {
 	boolean existeDireccion(String calle, String altura) throws AppException;
 
 	boolean existeVivienda(String dni, String calle, String altura) throws AppException;
+
+	DueñoDTO obtenerDueñoActivo() throws AppException;
 
 }

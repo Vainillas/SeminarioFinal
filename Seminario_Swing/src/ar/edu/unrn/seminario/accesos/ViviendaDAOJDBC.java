@@ -282,10 +282,6 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 					exists = true;
 				}		
 			}
-			if(!exists) {
-				throw new AppException("Vivienda no encontrada");
-			}
-
 		} catch (SQLException e ) {
 			throw new AppException("Error al verificar la existencia de la vivienda");
 		}finally {

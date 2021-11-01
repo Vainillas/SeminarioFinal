@@ -162,9 +162,6 @@ public class DireccionDAOJDBC implements DireccionDao {
 					exists = true;
 				}		
 			}
-			if(!exists) {
-				throw new AppException("Dirección no encontrada");
-			}
 
 		} catch (SQLException e ) {
 			throw new AppException("Error al verificar la existencia de la dirección");
