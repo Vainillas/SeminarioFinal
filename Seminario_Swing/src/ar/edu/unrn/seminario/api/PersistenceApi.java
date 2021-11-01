@@ -62,6 +62,7 @@ import ar.edu.unrn.seminario.utilities.Filtro;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 
+
 public class PersistenceApi implements IApi {
 
 	private RolDao rolDao;
@@ -500,35 +501,47 @@ public class PersistenceApi implements IApi {
     	
     	this.visitaDao.create(visita);
     	
-    	if(this.ordenDeRetiroDao.find(codOrden).getVisitas().size() > 0) {
+    	if(this.ordenDeRetiroDao.find(codOrden).getVisitas().size() > 0 && !this.ordenDeRetiroDao.find(codOrden).getEstado().equals("en ejecucion")) {
+    		System.out.println("ok entre, y ahora");
     		actualizarEstadoOrden(codOrden, "en ejecucion");
     	}
     	
     	if(!comprobarCantidadResiduos(codOrden)) {
     		actualizarEstadoOrden(codOrden, "concretado");
     	}
+    	
     }
     
     public Boolean comprobarCantidadResiduos(int codOrden) throws AppException {
     	
     	ArrayList<Residuo> listaResiduos = this.ordenDeRetiroDao.find(codOrden).getPedidoAsociado().getListResiduos();
-    	ArrayList<Visita> listaVisitas = this.ordenDeRetiroDao.find(codOrden).getVisitas();
     	
+    	ArrayList<Visita> listaVisitas = this.ordenDeRetiroDao.find(codOrden).getVisitas();
+    	System.out.println("El codigo es :" + this.ordenDeRetiroDao.find(codOrden).getCodigo());
     	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
     	
- 
+    	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
+    	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
+    	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
+    	
+    	for(int j=0; j<listaResiduos.size(); j++) {
+    		listaSumaVisitas.add(0);
+    	}
+    	
     	for(Visita visita: listaVisitas){
 
         	int i = 0;
     		for(Residuo residuo: visita.getResiduosExtraidos()){
     			
     			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
-    			 
+    			
     			i++;
     		}
  
     	}
-    	
+    	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
+    	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
+    	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
     	Boolean rtado = false;
     	int i;
     	for(i=0;i<listaResiduos.size();i++) {

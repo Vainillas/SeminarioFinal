@@ -44,7 +44,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            	statement.setInt(3, 0);
 	            }
 	            statement.setDate(4, p.getFechaDelPedido());
-	            statement.executeUpdate(); 
+	            statement.executeUpdate();   
 	            
 	            
 	             

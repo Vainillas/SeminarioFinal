@@ -112,9 +112,8 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 				PreparedStatement statement = conn.prepareStatement("SELECT * from ordenes");
 				ResultSet resultSetOrden = statement.executeQuery();
 				if(resultSetOrden.next()) {
-					statement = conn.prepareStatement("SELECT * FROM pedido p" + 
-							"WHERE p.codigo = ?");
-					statement.setInt(1, resultSetOrden.getInt("codigoPedido"));
+					statement = conn.prepareStatement("SELECT * FROM pedidos p WHERE p.codigo = ?");
+					statement.setInt(1, resultSetOrden.getInt("codigoPedido")); 
 					ResultSet resultSetPedido = statement.executeQuery();
 					if(resultSetPedido.next()) {
 						statement = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.codigo = ?");
@@ -175,8 +174,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								resultSetPedido.getDate("fecha"),
 								vivienda, resultSetPedido.getInt("codigo"));
 	            	}
-					statement = conn.prepareStatement("SELECT * FROM recolectores r" + 
-							"WHERE r.dni = ?");
+					statement = conn.prepareStatement("SELECT * FROM recolectores r WHERE r.dni = ?");
 					statement.setString(1, resultSetOrden.getString("dniRecolector"));
 					ResultSet resultSetRecolector = statement.executeQuery();
 					if(resultSetRecolector.next()) {

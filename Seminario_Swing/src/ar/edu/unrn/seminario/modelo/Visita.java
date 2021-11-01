@@ -63,7 +63,7 @@ public class Visita {
 	
 
 	public int getCodOrden() {
-		return codOrden;
+		return codOrden; 
 	}
 
 	public void setCodOrden(int codOrden) {

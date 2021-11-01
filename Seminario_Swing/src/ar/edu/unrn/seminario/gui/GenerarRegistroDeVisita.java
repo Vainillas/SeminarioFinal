@@ -90,7 +90,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private ArrayList<String> residuosSeleccionados = new ArrayList<String>();
 	private ArrayList<String> residuosSeleccionadosKg = new ArrayList<String>();
 	private String codigoOrden;
-	private String descripcion;
+	private String descripcion;  
 	/**
 	 * Launch the application.
 	 */
@@ -155,7 +155,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					
 				}
 				descripcion = (String) table.getValueAt(table.getSelectedRow(), 4);
-				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 5);
+				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);
 				try {
 					
 					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));

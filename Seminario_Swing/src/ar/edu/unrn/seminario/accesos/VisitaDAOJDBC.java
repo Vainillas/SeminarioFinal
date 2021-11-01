@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,11 +34,12 @@ public class VisitaDAOJDBC implements VisitaDao{
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
 	                    ("INSERT INTO visitas(fecha, observacion, codigoOrden) "
-	                            + "VALUES (?, ?, ?)");
+	                            + "VALUES (?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 	            
 	            statement.setDate(1, visita.getFecha());
 	            
 	            statement.setString(2, visita.getObservacion());
+	            
 	            statement.setInt(3, visita.getCodOrden());
 	            
 	            int cantidad = statement.executeUpdate();
