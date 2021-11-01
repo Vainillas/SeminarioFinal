@@ -34,7 +34,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
 			} else {
-				throw new AppException("error al procesar consulta");
+				throw new AppException("error al procesar consulta"); 
 			}
 		} catch (SQLException  e) {
 			throw new AppException("error en la consulta");

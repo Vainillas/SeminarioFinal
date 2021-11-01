@@ -112,7 +112,8 @@ public interface IApi {
 	public String obtenerRolUsuarioActivo();
 	
 	List<RecolectorDTO> obtenerRecolectores() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
-
+	public PedidoDeRetiroDTO obtenerPedidoDeRetiro(int codigo) throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
+	
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
 
 	Usuario getUserOnline();

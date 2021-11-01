@@ -2,10 +2,7 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-import java.awt.Frame;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
-import java.awt.Panel;
+
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -23,15 +20,12 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JLabel;
-import javax.swing.JRadioButtonMenuItem;
+
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JButton;
-
 public class VentanaPrincipalDinamica extends JFrame {
-
+	private static final long serialVersionUID = 4771947449650351645L;
 	private JPanel contentPane;
 	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 	private JMenuItem mntmPantallaNormalPersonal;
@@ -58,9 +52,9 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api) {
-		String rol = "ADMINISTRADOR";
-		//String rol = api.obtenerRolUsuarioActivo();
-		
+		//String rol = "ADMINISTRADOR";
+		String rol = api.obtenerRolUsuarioActivo();
+
 		if(rol.equals("PERSONAL")) {
 			panelPersonal.setVisible(true);
 			panelDueño.setVisible(false);
@@ -390,8 +384,4 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnDueñoNoRegistrado.add(mntmRegistrarDueñoNoRegistrado);
 	}
 
-	private void mostrarPanelPersonal() {
-		// TODO Esbozo de método generado automáticamente
-		
-	}
 }

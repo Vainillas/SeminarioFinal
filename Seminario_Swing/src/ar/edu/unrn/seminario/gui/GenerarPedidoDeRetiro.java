@@ -252,11 +252,14 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		buttonFinalizar.setBounds(120, 11, 89, 23);
 		panelBotones.add(buttonFinalizar);
 		buttonFinalizar.addActionListener((e)->{
-			
+				//System.out.println(textField_Plastico.getText());
 				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
 				
 				 for(JRadioButton r : residuos) {
-	                    if(r.isSelected()) { 
+
+	                    if(r.isSelected()) {
+	                    	
+
 	                        residuosSeleccionados.add(r.getText());
 	                         
 	                }
@@ -270,9 +273,9 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	                    }
 	                    
 	                    
-	                }
+	                } 
 	               
-	                
+	                 
 					try {
 						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),domicilioSeleccionado);
 						
@@ -345,7 +348,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				List<ViviendaDTO> viviendas= new ArrayList<ViviendaDTO>();	
 		
 					try {
-						viviendas = api.obtenerViviendasDeUsuario();
+						viviendas = api.obtenerViviendas();
 						
 						// Agrega las direcciones de el dueño en el model
 						for (ViviendaDTO d : viviendas) {
