@@ -13,6 +13,7 @@ import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 
@@ -141,5 +142,36 @@ public class DireccionDAOJDBC implements DireccionDao {
 		ConnectionManager.disconnect();
 		}
 		return direcciones;
+	}
+
+
+	@Override
+	public boolean exists(String calle, String altura) throws AppException {
+		boolean exists = false;
+
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT d.calle, d.altura FROM dirección d WHERE d.calle = ? AND d.altura = ?");
+			statement.setString(1, calle);
+			statement.setString(2, altura);
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				if(rs.getString("calle").equals(calle) && rs.getInt("altura")== Integer.parseInt((altura))) {
+					exists = true;
+				}		
+			}
+			if(!exists) {
+				throw new AppException("Dirección no encontrada");
+			}
+
+		} catch (SQLException e ) {
+			throw new AppException("Error al verificar la existencia de la dirección");
+		}finally {
+			ConnectionManager.disconnect();
+		}
+		return exists;
+
 	}
 }

@@ -17,4 +17,6 @@ public interface DireccionDao {
 	Direccion find(String calle, Integer altura) throws AppException;
 
 	List<Direccion> findAll() throws AppException;
+
+	boolean exists(String calle, String altura) throws AppException;
 }

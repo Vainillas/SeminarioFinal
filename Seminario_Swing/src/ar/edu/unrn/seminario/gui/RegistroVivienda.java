@@ -11,6 +11,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 
 import javax.swing.JLabel;
@@ -89,13 +90,8 @@ public class RegistroVivienda extends JFrame {
                 				dniIngresado.getText(),
                 				correoIngresado.getText());*/
             		//}
-            		api.registrarDireccion(calleIngresada.getText(),
-            				alturaIngresada.getText(),
-            				codPostIngresado.getText(),
-            				latitudIngresada.getText(),
-            				longitudIngresada.getText(),
-            				barrioIngresado.getText());
-            		
+            		String dni = api.obtenerDueño(api.getUserOnline().getUsuario()).getDni();
+            		if(!api.existeVivienda(dni, calleIngresada.getText(), alturaIngresada.getText()) && !api.existeDireccion(calleIngresada.getText(), alturaIngresada.getText()))
             		api.registrarVivienda(/*nombreIngresado.getText(),
             				apellidoIngresado.getText(),
             				dniIngresado.getText(),
@@ -105,6 +101,13 @@ public class RegistroVivienda extends JFrame {
             				codPostIngresado.getText(),
             				longitudIngresada.getText(), 
             				latitudIngresada.getText(),
+            				barrioIngresado.getText());
+            		
+            		api.registrarDireccion(calleIngresada.getText(),
+            				alturaIngresada.getText(),
+            				codPostIngresado.getText(),
+            				latitudIngresada.getText(),
+            				longitudIngresada.getText(),
             				barrioIngresado.getText());
             		JOptionPane.showMessageDialog(null ,
             				labels.getString("registro.viviendas.mensaje.carga.correcta"));

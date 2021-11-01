@@ -89,11 +89,11 @@ public interface IApi {
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException;
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException;
 	
-	DueñoDTO obtenerDueño(String text) throws AppException;
+	DueñoDTO obtenerDueño(String dni) throws AppException;
 
 	List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException;
 	
-	DireccionDTO obtenerDireccion(String text, int num) throws AppException;
+	DireccionDTO obtenerDireccion(String calle, int num) throws AppException;
 
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException ;
@@ -107,7 +107,7 @@ public interface IApi {
 	
 	List<DireccionDTO> obtenerDirecciones() throws AppException;
 
-	void usuarioActivo(String text) throws AppException;
+	void usuarioActivo(String username) throws AppException;
 
 	public String obtenerRolUsuarioActivo();
 	
@@ -141,5 +141,9 @@ public interface IApi {
 	List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre() throws AppException;
 
 	List<ViviendaDTO> obtenerViviendasDeUsuario() throws AppException;
+
+	boolean existeDireccion(String calle, String altura) throws AppException;
+
+	boolean existeVivienda(String dni, String calle, String altura) throws AppException;
 
 }
