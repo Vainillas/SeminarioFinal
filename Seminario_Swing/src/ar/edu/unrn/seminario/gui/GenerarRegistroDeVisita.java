@@ -135,7 +135,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				
 					labels.getString("registro.de.visita.titulos.fecha.orden"),
 					labels.getString("registro.de.visita.titulos.codigo.orden"),
-					//labels.getString("registro.de.visita.titulos.estado"),
+					labels.getString("registro.de.visita.titulos.estado"),
 					
 					labels.getString("registro.de.visita.titulos.nombre.apellido.recolector"), 
 					labels.getString("registro.de.visita.titulos.dni.recolector"), 
@@ -156,40 +156,51 @@ public class GenerarRegistroDeVisita extends JFrame {
 					ordenSeleccionada.add( (String) table.getValueAt(table.getSelectedRow(), i));
 					
 				}
-				descripcion = (String) table.getValueAt(table.getSelectedRow(), 4);
+				descripcion = (String) table.getValueAt(table.getSelectedRow(), 6);
 				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);
+				System.out.println("codigo de orden: " + codigoOrden);
+				System.out.println("Descripcion: " + descripcion);
 				
 				try {
-					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(4)));
+					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
 					lb_slider_vidrio.setVisible(false);
-					slider_vidrio.setValue(0);
-					slider_vidrio.setVisible(false);		
+					slider_vidrio.setValue(0);slider_vidrio.setVisible(false);	
+					
 					lb_slider_metal.setVisible(false);
-					slider_metal.setVisible(false);
-					slider_metal.setValue(0);
+					slider_metal.setVisible(false);slider_metal.setValue(0);
+					
 					lb_slider_carton.setVisible(false);
-					slider_carton.setVisible(false);
-					slider_carton.setValue(0);
+					slider_carton.setVisible(false);slider_carton.setValue(0);
+					
 					lb_slider_plastico.setVisible(false);
-					slider_plastico.setVisible(false);
-					slider_plastico.setValue(0);
+					slider_plastico.setVisible(false);slider_plastico.setValue(0);
 					residuosSeleccionados.clear();
 					residuosSeleccionadosKg.clear();
+					String [] residuos = {"metal","carton","plastico","vidrio"};
+					JSlider [] sliders = {slider_metal,slider_carton,slider_plastico,slider_vidrio};
+					JLabel [] labels = {lb_slider_metal,lb_slider_carton,lb_slider_plastico,lb_slider_vidrio};
 					for(int i = 0; i<pedido.getListResiduos().size();i++) {
-						//pedido.getListResiduos().get(0).get
 						residuosSeleccionados.add(pedido.getListResiduos().get(i).getTipo().getNombre());
 						residuosSeleccionadosKg.add(String.valueOf(pedido.getListResiduos().get(i).getCantidadKg()));
-						System.out.println(residuosSeleccionados + "<- valor residuos seleccionados");
-						System.out.println(residuosSeleccionadosKg + "<- valor kilogramos residuos seleccionados");
+						/*for(int j=0;i<pedido.getListResiduos().size();i++) {
+							if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase(residuos[j]))
+							sliders[i].setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
+							sliders[i].setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);
+							labels[i].setVisible(true);
+							sliders[i].setVisible(true);
+						}*/
+					
+							
 
-						if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Vidrio")) {
+						
+						 if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Vidrio")) {
+							
 							slider_vidrio.setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
 							slider_vidrio.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);
 							lb_slider_vidrio.setVisible(true);
 							slider_vidrio.setVisible(true);
-							
 						}
-						if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Metal")) {
+						 if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Metal")) {
 							
 							slider_metal.setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
 							slider_metal.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);
@@ -211,11 +222,11 @@ public class GenerarRegistroDeVisita extends JFrame {
 							slider_plastico.setVisible(true);
 						}
 					}
+				}
 					
 					
 					
-					
-				} catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
+				 catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 						| DateNullException | AppException e) {
 					System.out.println(e.getMessage());
 					e.printStackTrace();
@@ -241,7 +252,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					modelo.addRow(new Object[] {
 							DateHelper.changeFormat(o.getFechaOrden()),
 							Integer.toString(o.getCodigo()),
-						 //	o.getEstado().obtenerEstado(),
+						 	o.getEstado().obtenerEstado(),
 							o.getRecolector().getNombre() +" "+  o.getRecolector().getApellido(),
 							o.getRecolector().getDni(),
 							Integer.toString(o.getPedidoAsociado().getCodigo()),
@@ -293,6 +304,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		slider_plastico.setMajorTickSpacing(5);
 		slider_plastico.setMinorTickSpacing(10);
 		slider_plastico.setBounds(258, 40, 262, 40);
+		slider_plastico.setVisible(false);
 		panel_visita.add(slider_plastico);
 		panel_visita.enableInputMethods(false);
 		lb_slider_plastico = new JLabel(labels.getString("registro.de.visita.label.plastico"));
@@ -424,14 +436,14 @@ public class GenerarRegistroDeVisita extends JFrame {
 				//No los valores que recuperas desde los sliders
 				
 				ArrayList <String>  cantResiduosRetirados = new ArrayList<String>();
-				
+				String [] residuos = {"metal","carton","plastico","vidrio"};
 				JSlider[] slider = {
 						slider_metal, 
 						slider_carton, 
 						slider_plastico,
 						slider_vidrio
 				};
-				String [] residuos = {"metal","carton","plastico","vidrio"};
+				
 				ArrayList<String> residuosSeleccionados = new ArrayList<String>();
 				int i = 0;
 				for(JSlider s : slider) {

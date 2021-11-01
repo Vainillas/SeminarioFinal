@@ -52,8 +52,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api) {
-		//String rol = "ADMINISTRADOR";
-		String rol = api.obtenerRolUsuarioActivo();
+		String rol = "ADMINISTRADOR";
+		//String rol = api.obtenerRolUsuarioActivo();
 
 		if(rol.equals("PERSONAL")) {
 			panelPersonal.setVisible(true);
