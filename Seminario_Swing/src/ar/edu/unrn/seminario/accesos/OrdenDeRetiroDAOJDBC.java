@@ -212,7 +212,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 							}
 						}
 						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduosVisita,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));
-						System.out.println("\nVisita toString en OrdenDeRetiroDAOJDBC: "+ visita.toString()); 
+						//System.out.println("\nVisita toString en OrdenDeRetiroDAOJDBC: "+ visita.toString()); 
 						listaVisitas.add(visita);
 					}
 					
