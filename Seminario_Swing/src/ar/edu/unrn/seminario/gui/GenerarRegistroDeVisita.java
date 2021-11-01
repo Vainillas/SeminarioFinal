@@ -322,7 +322,11 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
-			//api.generar
+			//ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden
+			ArrayList<String> listaResiduos = new ArrayList<String>();
+			ArrayList<String> listaResiduosKg = new ArrayList<String>();
+			
+			//api.registrarVisita(listaResiduos, listaResiduosKg,lb_observacion.getText(), this.codOrdenSeleccionada );
 			
 			//JOptionPane.showMessageDialog(null, e.getMessage(),"Registro visita",JOptionPane.INFORMATION_MESSAGE);
 			setVisible(false);

@@ -87,7 +87,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.info);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(null);
+		contentPane.setLayout(null); 
 		setContentPane(contentPane);
 		
 		

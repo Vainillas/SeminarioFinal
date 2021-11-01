@@ -102,7 +102,6 @@ public interface IApi {
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException ;
 
-
 	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
 	
 	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
@@ -112,7 +111,8 @@ public interface IApi {
 	List<DireccionDTO> obtenerDirecciones() throws AppException;
 
 	void usuarioActivo(String text) throws AppException;
-
+	
+	
 	public String obtenerRolUsuarioActivo();
 	
 	List<RecolectorDTO> obtenerRecolectores() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
@@ -133,7 +133,7 @@ public interface IApi {
 
 	void registrarDueño(String nombre, String apellido, String dni) 
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
-	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) 
+	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) 
 			throws AppException;
 	
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) throws AppException;

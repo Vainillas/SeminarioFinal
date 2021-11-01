@@ -188,12 +188,12 @@ public class PersistenceApi implements IApi {
 		if(usuarioDao.validateData(user)){
 			this.userOnline = usuarioDao.find(usuario); 
 		}
-		return usuarioDao.validateData(user);	
+		return usuarioDao.validateData(user); 	
 	}
 	
 	public Usuario getUserOnline(){
 		return this.userOnline;
-	}
+	} 
 	
 	public void registrarVivienda(/*String nombre, String apellido, String dni, String correo, */String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
