@@ -24,4 +24,6 @@ public interface ViviendaDao {
 	
 	List<Vivienda> findAll() throws AppException;
 
+	List<Vivienda> findByUser(String usuario) throws AppException;
+
 }

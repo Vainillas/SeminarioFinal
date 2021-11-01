@@ -206,5 +206,62 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		}
 		return viviendas;
 	}
+	public List<Vivienda> findByUser(String username) throws AppException {
+		List<Vivienda>viviendas = new ArrayList<>();
+		Vivienda vivienda=null;
+		Direccion direccion = null;
+		Dueño dueño = null;
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT v.dni, v.calle, v.altura, v.codigo FROM viviendas v JOIN propietarios p ON p.dni=v.dni WHERE p.username = ?");
+			statement.setString(1, username);
+			ResultSet resultSetViviendas = statement.executeQuery();
+			
+
+			while(resultSetViviendas.next()) {
+				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
+				statement2.setString(1, resultSetViviendas.getString("dni"));
+				ResultSet resultSetConstructor = statement2.executeQuery();
+				
+
+				
+
+				if(resultSetConstructor.next()) {
+
+
+					dueño = new Dueño(resultSetConstructor.getString("nombre"),
+							resultSetConstructor.getString("apellido"),
+							
+							resultSetConstructor.getString("dni"),
+							resultSetConstructor.getString("correo_electronico"),
+							resultSetConstructor.getString("username")
+							);
+				}
+				
+				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
+				statement2.setString(1,resultSetViviendas.getString("calle"));
+				statement2.setInt(2, resultSetViviendas.getInt("altura"));
+				resultSetConstructor=statement2.executeQuery();
+				if(resultSetConstructor.next()) {
+					
+					direccion = new Direccion(resultSetConstructor.getString("calle"), 
+							Integer.toString(resultSetConstructor.getInt("altura")), 
+							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
+							resultSetConstructor.getString("longitud"),
+							resultSetConstructor.getString("latitud"),
+							resultSetConstructor.getString("barrio"));
+				}
+				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
+				viviendas.add(vivienda);
+				
+			}
+		} catch (Exception  e) {
+			throw new AppException("Error al procesar la consulta: " + e.getMessage());
+			
+		}finally {
+		ConnectionManager.disconnect();
+		}
+		return viviendas;
+	}
 
 }

@@ -102,7 +102,8 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	public ListadoDeOrdenesDeRetiro(IApi api) {
 		//labels = ResourceBundle.getBundle("labels"); 
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
-		setTitle(labels.getString("listado.de.pedidos.de.retiro.titulo"));
+		setTitle(labels.getString("listado.de.pedidos.de.retiro.titulo")); //CAMBIAR: Estamos en Ordenes de Retiro, 
+																		//No pedidos de retiro
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 836, 464);

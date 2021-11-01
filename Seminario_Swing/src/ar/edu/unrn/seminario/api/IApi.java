@@ -54,11 +54,7 @@ public interface IApi {
 	
 	List<RolDTO> obtenerRoles() 
 			throws AppException;
-	
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException;
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException;
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException;
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException;
+
 	
 	
 	List<RolDTO> obtenerRolesActivos();
@@ -138,5 +134,12 @@ public interface IApi {
 	
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) throws AppException;
 	List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
+//ELIMINAR ESTOS
+	List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo() throws AppException;
+	List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException;
+	List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol() throws AppException;
+	List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre() throws AppException;
+
+	List<ViviendaDTO> obtenerViviendasDeUsuario() throws AppException;
 
 }
