@@ -500,7 +500,7 @@ public class PersistenceApi implements IApi {
     	
     	this.visitaDao.create(visita);
     	
-    	if(this.ordenDeRetiroDao.find(codOrden).getVisitas().size() > 0 && !this.ordenDeRetiroDao.find(codOrden).getEstado().equals("en ejecucion")) {
+    	if(this.ordenDeRetiroDao.find(codOrden).getVisitas().size() > 0 && !this.ordenDeRetiroDao.find(codOrden).getEstado().obtenerEstado().equals("en ejecucion")) {
     		System.out.println("ok entre, y ahora");
     		actualizarEstadoOrden(codOrden, "en ejecucion");
     	}
@@ -512,24 +512,22 @@ public class PersistenceApi implements IApi {
     }
     
     public Boolean comprobarCantidadResiduos(int codOrden) throws AppException {
-    	
+    	//Lista de los residuos del pedido de retiro asociado a la orden
     	ArrayList<Residuo> listaResiduos = this.ordenDeRetiroDao.find(codOrden).getPedidoAsociado().getListResiduos();
-    	
+    	//Lista de las visitas asociadas a la orden
     	ArrayList<Visita> listaVisitas = this.ordenDeRetiroDao.find(codOrden).getVisitas();
+    	//Lista del total de los kilogramos de cada residuo de todas las visitas
+    	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
     	
-    	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>(); //Suma los residuos de todas las visitas
-    	
-    	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
-    	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());  
-    	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
-    	
+    
     	for(int j=0; j<listaResiduos.size(); j++) {
     		listaSumaVisitas.add(0);
     	}
     	
     	for(Visita visita: listaVisitas){
-
+    		
         	int i = 0;
+        	
     		for(Residuo residuo: visita.getResiduosExtraidos()){
     			
     			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
@@ -540,12 +538,9 @@ public class PersistenceApi implements IApi {
     	}
     	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
     	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
-    	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
     	Boolean rtado = false;
     	int i;
-    	System.out.println("Lista de la Visita: " + listaVisitas.get(0).toString());
-    	System.out.println("Lista suma residuos: "+ listaResiduos.toString());
-    	System.out.println("Lista suma visitas: " +listaSumaVisitas.toString());
+
     	//Fijate que tienen lo mismo pero te lo carga al revés
     	//Onda la lista de suma visitas 
     	/*int j=listaResiduos.size() - 1;
@@ -563,7 +558,7 @@ public class PersistenceApi implements IApi {
     		}
     	}
     	
-    	return rtado;
+    	return rtado;  
     }
     
     public void actualizarEstadoOrden(int codOrden, String estado) throws AppException{

@@ -192,8 +192,8 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 					while(resultSetVisita.next()) {
 						ArrayList<Residuo> listaResiduosVisita = new ArrayList<Residuo>(); 
 						Connection conn2 = ConnectionManager.getConnection();
-						PreparedStatement statement2 = conn2.prepareStatement("SELECT * FROM residuos_visita rv ");
-						
+						PreparedStatement statement2 = conn2.prepareStatement("SELECT * FROM residuos_visita rv WHERE rv.codigo_visita = ?");
+						statement2.setInt(1, resultSetVisita.getInt("codigo"));
 						ResultSet resultSetResiduosVisita = statement2.executeQuery();
 						Connection conn3 = ConnectionManager.getConnection();
 
@@ -213,7 +213,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 							}
 						}
 						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduosVisita,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));
-						System.out.println("\nVisita toString en OrdenDeRetiroDAOJDBC: "+ visita.toString()); 
+						System.out.println("\nVisita toString en OrdenDeRetiroDAOJDBC (Comprobación Residuos Duplicados): "+ visita.toString()); 
 						listaVisitas.add(visita);
 					}
 					
