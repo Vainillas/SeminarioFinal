@@ -21,7 +21,7 @@ public class Dueño extends Persona {
 		if(ConditionHelper.IsIncorrectEmail(correoElectronico)) {throw new IncorrectEmailException ("Formato de email incorrecto.");}
 		
 		if(ConditionHelper.stringIsEmpty(correoElectronico)) {throw new DataEmptyException("Campo de Email vacío.");}
-		
+		if(ConditionHelper.stringIsNull(correoElectronico)) {throw  new DataEmptyException("Campo de Email vacío.");}
 		if(ConditionHelper.stringIsNull(correoElectronico)) {throw new StringNullException("Email nulo.");}
 	}
 

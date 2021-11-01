@@ -1,18 +1,24 @@
 package ar.edu.unrn.seminario.dto;
 
 import java.sql.Date;
+
 import java.util.ArrayList;
 
-import ar.edu.unrn.seminario.modelo.*;
 
+import ar.edu.unrn.seminario.modelo.Estado;
+import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.modelo.Recolector;
+import ar.edu.unrn.seminario.modelo.Visita;
 
-	
 public class OrdenDeRetiroDTO {
 	private PedidoDeRetiro pedidoAsociado;
 	private Recolector recolector;
 	private Date fechaOrden;
+	
+
 	private Estado estado;
 	private ArrayList<Visita>visitas;
+	
 	private int codigo;
 	
 	public OrdenDeRetiroDTO(PedidoDeRetiro p, Recolector r, Date fechaActual, Estado estado, ArrayList<Visita> visitas) {

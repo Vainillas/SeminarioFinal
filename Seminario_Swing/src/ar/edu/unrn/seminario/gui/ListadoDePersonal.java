@@ -87,6 +87,7 @@ public class ListadoDePersonal extends JFrame {
 								r.getNombre(),
 								r.getApellido(),
 								r.getTelefono(),
+								r.getDni(),
 								r.getEmail()
 					});
 				}

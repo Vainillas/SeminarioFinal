@@ -6,6 +6,7 @@ public class Estado {
 		this.estado = estado;
 
 	}
+	
 	public boolean Pendiente() {
 		boolean validacion = false;
 		if(!estado.equals("pendiente")) {
@@ -14,6 +15,7 @@ public class Estado {
 		}
 		return validacion;
 	}
+	
 	public boolean EnEjecucion() {
 		boolean validacion = false;
 		if(!estado.equals("en ejecucion")) {
@@ -22,9 +24,20 @@ public class Estado {
 		}
 		return validacion;
 	}
-	public String obtenerEstado() {
+	
+	public boolean Concretado() {
+		boolean validacion = false;
+		if(!estado.equals("concretado") && estado.equals("en ejecucion")) {
+			this.estado = "concretado";
+			validacion = true;
+		}
+		return validacion;
+	}
+	
+	public String obtenerEstado() { 
 		return this.estado;
 	}
+	
 	public boolean cancelar() {
 		boolean validacion = false;
 		if(!estado.equals("cancelado")) {

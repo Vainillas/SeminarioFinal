@@ -178,12 +178,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		menuItemOrdenDeRetiro.addActionListener( (e)->{ 
 			GenerarOrdenDeRetiro o = null;
-			try {
-				o = new GenerarOrdenDeRetiro(api);
-			} catch (DataEmptyException | StringNullException | IncorrectEmailException | AppException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} //Resolver AppException con un catch
+			o = new GenerarOrdenDeRetiro(api);
 			o.setVisible(true);
 			o.setLocationRelativeTo(null); 
 			

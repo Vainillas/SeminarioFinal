@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,6 +47,7 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.Estado;
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Recolector;
@@ -56,8 +58,8 @@ import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
-import utilities.Filtro;
-import utilities.Predicate;
+import ar.edu.unrn.seminario.utilities.Filtro;
+import ar.edu.unrn.seminario.utilities.Predicate;
 
 
 public class PersistenceApi implements IApi {
@@ -71,6 +73,7 @@ public class PersistenceApi implements IApi {
 	private TipoResiduoDao tipoResiduoDao;
 	private OrdenDeRetiroDao ordenDeRetiroDao;
 	private RecolectorDao recolectorDao;
+
 	private VisitaDao visitaDao;
 
 	private Usuario userOnline;
@@ -87,6 +90,7 @@ public class PersistenceApi implements IApi {
 		recolectorDao = new RecolectorDAOJDBC();
 		visitaDao = new VisitaDAOJDBC();
 	}
+
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
 		throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException {
 		Rol rol = rolDao.find(codigoRol);
@@ -199,6 +203,7 @@ public class PersistenceApi implements IApi {
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
 		this.viviendaDao.create(vivienda);
+		
 	}
 
 	@Override
@@ -393,6 +398,7 @@ public class PersistenceApi implements IApi {
 				return -1;}
 
 		}
+		
 	}
 	public static class filtradoUsuarioCorreo implements Comparator<UsuarioDTO>{
 		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
@@ -409,6 +415,7 @@ public class PersistenceApi implements IApi {
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
 		.collect(Collectors.toList());
+		
 		return usuario;
 	}
 	
@@ -425,16 +432,31 @@ public class PersistenceApi implements IApi {
 			dueñodto = new DueñoDTO(dueño.getNombre(),
 					dueño.getApellido(),
 					dueño.getDni(),
-					dueño.getCorreo());
+					dueño.getCorreo(),
+					dueño.getUsername());
 		}
 		return dueñodto;
 	}
+	
+	/*public DueñoDTO obtenerDueñoActivo() {
+		//this.userOnline.getEmail().equals()
+		
+		Dueño dueño = dueñoDao.find(dni);
+		DueñoDTO dueñodto = null;
+		if(dueño!=null) {
+			dueñodto = new DueñoDTO(dueño.getNombre(),
+					dueño.getApellido(),
+					dueño.getDni(),
+					dueño.getCorreo());
+		}
+		return dueñodto;
+	}*/
 	
     public List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
-            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo()));
+            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo(), d.getUsername()));
         }
         return dtos;
     }
@@ -470,7 +492,7 @@ public class PersistenceApi implements IApi {
     	this.visitaDao.create(visita);
     	
     	if(!comprobarCantidadResiduos(codOrden)) {
-    		//this.ordenDeRetiroDao.update();
+    		actualizarEstadoOrden(codOrden, "concretado");
     	}
     }
     
@@ -481,21 +503,21 @@ public class PersistenceApi implements IApi {
     	
     	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
     	
-    	int i = 0;
+ 
     	for(Visita visita: listaVisitas){
 
-        	int j = 0;
+        	int i = 0;
     		for(Residuo residuo: visita.getResiduosExtraidos()){
     			
-    			listaSumaVisitas.set(i, listaSumaVisitas.get(j) + residuo.getCantidadKg());
+    			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
     			
-    			j++;
+    			i++;
     		}
-    		i++;
+ 
     	}
     	
     	Boolean rtado = false;
-    	
+    	int i;
     	for(i=0;i<listaResiduos.size();i++) {
     		if(listaResiduos.get(i).getCantidadKg() != listaSumaVisitas.get(i)) {
     			rtado = true;
@@ -503,6 +525,13 @@ public class PersistenceApi implements IApi {
     	}
     	
     	return rtado;
+    }
+    
+    public void actualizarEstadoOrden(int codOrden, String estado) throws AppException{
+    	OrdenDeRetiro orden = this.ordenDeRetiroDao.find(codOrden);
+    	Estado nuevoEstado = new Estado(estado);
+    	orden.setEstado(nuevoEstado);
+    	ordenDeRetiroDao.update(orden);
     }
     
     public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
@@ -533,6 +562,7 @@ public class PersistenceApi implements IApi {
         }
         return dtos;
     }
+    
     
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
@@ -622,17 +652,17 @@ public class PersistenceApi implements IApi {
     
     public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro() throws AppException{
     	List<OrdenDeRetiroDTO> ordenesDto = new ArrayList<>();
-
     	List<OrdenDeRetiro> ordenes = ordenDeRetiroDao.findAll();
     	for (OrdenDeRetiro o : ordenes) {
     		ordenesDto.add(new OrdenDeRetiroDTO(o.getPedidoAsociado(),
     				o.getRecolector(),
     				o.getFechaOrden(),
-    				o.getEstado(),
+    				o.getEstado(), 
     				o.getVisitas()));
-    	}
+    	} 
     	return ordenesDto;
     }
+    
     public OrdenDeRetiroDTO obtenerOrdenDeRetiro(int codigo) throws AppException {
     	OrdenDeRetiroDTO o = null;
     	OrdenDeRetiro orden = ordenDeRetiroDao.find(codigo);
@@ -645,6 +675,7 @@ public class PersistenceApi implements IApi {
     	}
     	return o;
     }
+    
     public void actualizarOrdenDeRetiro(OrdenDeRetiro orden) throws AppException {
     	ordenDeRetiroDao.update(orden);
     }
@@ -693,6 +724,23 @@ public class PersistenceApi implements IApi {
 	public List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException{
 		return Filtro.filtrar(this.obtenerViviendas(), predicate);
 		
+		
+	}
+
+
+	@Override
+	public void registrarDueño(String nombre, String apellido, String dni)
+			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
+		Dueño dueño = new Dueño(nombre, apellido, dni, this.userOnline.getEmail(),this.userOnline.getUsuario());
+		
+        this.dueñoDao.create(dueño);
+        
+		
+	}
+
+	@Override
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate predicado) throws AppException {
+		return Filtro.filtrar(this.obtenerOrdenesDeRetiro(), predicado);
 		
 	}
 
