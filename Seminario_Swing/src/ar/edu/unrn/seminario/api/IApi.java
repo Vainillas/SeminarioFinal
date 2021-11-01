@@ -151,4 +151,6 @@ public interface IApi {
 
 	DueñoDTO obtenerDueñoActivo() throws AppException;
 
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
+
 }

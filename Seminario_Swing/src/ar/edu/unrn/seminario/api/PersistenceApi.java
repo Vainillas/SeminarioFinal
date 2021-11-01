@@ -676,6 +676,15 @@ public class PersistenceApi implements IApi {
         }
         return pedidosDto;
 	}
+	public List<PedidoDeRetiroDTO>obtenerPedidosDeRetiroSinOrden()throws AppException, Exception{
+		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
+		
+        List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findNoOrder();
+        for (PedidoDeRetiro d : pedidos) {
+            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda(), d.getCodigo() ));
+        }
+        return pedidosDto;
+	}
     
     public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException{
     	
