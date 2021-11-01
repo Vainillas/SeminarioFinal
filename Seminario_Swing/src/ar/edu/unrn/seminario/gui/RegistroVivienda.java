@@ -35,6 +35,7 @@ public class RegistroVivienda extends JFrame {
     private JTextField barrioIngresado;
     private JTextField longitudIngresada;
     public RegistroVivienda(IApi api){
+    	
     	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
     	setTitle(labels.getString("registro.viviendas.titulo"));
     	this.api=api;
@@ -82,13 +83,7 @@ public class RegistroVivienda extends JFrame {
         JButton botonAceptar = new JButton(labels.getString("registro.viviendas.button.aceptar"));
         botonAceptar.addActionListener((e)->{
             	try {
-            		//if(!api.existeDueño(dniIngresado.getText())) {//si el dueño no existe se procede a crear uno
-
-            			/*api.registrarDueño(nombreIngresado.getText(),
-                				apellidoIngresado.getText(),
-                				dniIngresado.getText(),
-                				correoIngresado.getText());*/
-            		//}
+            		
             		api.registrarDireccion(calleIngresada.getText(),
             				alturaIngresada.getText(),
             				codPostIngresado.getText(),
@@ -96,10 +91,7 @@ public class RegistroVivienda extends JFrame {
             				longitudIngresada.getText(),
             				barrioIngresado.getText());
             		
-            		api.registrarVivienda(/*nombreIngresado.getText(),
-            				apellidoIngresado.getText(),
-            				dniIngresado.getText(),
-            				correoIngresado.getText(),*/
+            		api.registrarVivienda(
             				calleIngresada.getText(),
             				alturaIngresada.getText(),
             				codPostIngresado.getText(),
@@ -110,7 +102,8 @@ public class RegistroVivienda extends JFrame {
             				labels.getString("registro.viviendas.mensaje.carga.correcta"));
                     setVisible (false);
                     dispose();
-            	} 
+                    
+            	}   
 				 catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("registro.viviendas.mensaje.error"), JOptionPane.ERROR_MESSAGE);
 				}

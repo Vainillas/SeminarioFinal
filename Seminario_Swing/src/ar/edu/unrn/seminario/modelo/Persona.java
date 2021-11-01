@@ -33,9 +33,10 @@ public class Persona {
 		return this.apellido;
 	}
 
-	public String getDni() {
+	public String getDni() { 
 		return this.dni;
-	}
+	} 
+	
 	public void setDni(String dni) {
 		this.dni=dni;
 	}

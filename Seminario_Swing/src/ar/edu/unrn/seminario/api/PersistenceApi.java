@@ -195,10 +195,9 @@ public class PersistenceApi implements IApi {
 		return this.userOnline;
 	} 
 	
-	public void registrarVivienda(/*String nombre, String apellido, String dni, String correo, */String calle, String altura,
+	public void registrarVivienda(String calle, String altura,
 			String codigoPostal, String latitud, String longitud, String barrio)
 			throws Exception {
-		//Dueño dueño = new Dueño(nombre,apellido,dni,correo);
 		Dueño dueño = dueñoDao.findByUser(this.userOnline.getUsuario());
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
@@ -483,7 +482,7 @@ public class PersistenceApi implements IApi {
     	
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
     	
-    	for(int i=0;i<residuosIngresados.size();i++){ 
+    	for(int i=0;i<residuosIngresados.size();i++){  
     		
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
@@ -524,7 +523,7 @@ public class PersistenceApi implements IApi {
     		for(Residuo residuo: visita.getResiduosExtraidos()){
     			
     			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
-    			
+    			 
     			i++;
     		}
  

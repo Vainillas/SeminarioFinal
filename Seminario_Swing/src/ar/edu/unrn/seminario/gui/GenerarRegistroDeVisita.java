@@ -19,6 +19,7 @@ import javax.swing.JTextPane;
 import javax.swing.JLabel;
 import javax.swing.JFormattedTextField;
 import javax.swing.JProgressBar;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JSeparator;
 import javax.swing.JList;
@@ -34,6 +35,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.Box;
 import javax.swing.JTree;
@@ -323,8 +325,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
 			//ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden
-			ArrayList<String> listaResiduos = new ArrayList<String>();
-			ArrayList<String> listaResiduosKg = new ArrayList<String>();
+			
+            
 			
 			//api.registrarVisita(listaResiduos, listaResiduosKg,lb_observacion.getText(), this.codOrdenSeleccionada );
 			

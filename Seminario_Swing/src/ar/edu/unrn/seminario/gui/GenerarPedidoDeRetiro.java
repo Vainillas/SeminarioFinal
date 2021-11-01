@@ -256,9 +256,9 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
 				
 				 for(JRadioButton r : residuos) {
-	                    if(r.isSelected()) {
+	                    if(r.isSelected()) { 
 	                        residuosSeleccionados.add(r.getText());
-	                        
+	                         
 	                }
 				 }
 				 
