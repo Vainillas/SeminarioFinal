@@ -90,7 +90,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private ArrayList<String> residuosSeleccionados = new ArrayList<String>();
 	private ArrayList<String> residuosSeleccionadosKg = new ArrayList<String>();
 	private String codigoOrden;
-	private String descripcionDni;  
+	private String descripcion;  
 	/**
 	 * Launch the application.
 	 */
@@ -140,6 +140,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 					labels.getString("registro.de.visita.titulos.nombre.apellido.recolector"), 
 					labels.getString("registro.de.visita.titulos.dni.recolector"), 
 					labels.getString("registro.de.visita.titulos.codigo.pedido.de.retiro"), 
+					labels.getString("registro.de.visita.titulos.descripcion.pedido"), 
+					
 			};	
 		
 		table = new JTable();
@@ -154,7 +156,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					ordenSeleccionada.add( (String) table.getValueAt(table.getSelectedRow(), i));
 					
 				}
-				descripcionDni = (String) table.getValueAt(table.getSelectedRow(), 4);
+				descripcion = (String) table.getValueAt(table.getSelectedRow(), 6);
 				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);
 				
 				try {
@@ -242,7 +244,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 						 	o.getEstado().obtenerEstado(),
 							o.getRecolector().getNombre() +" "+  o.getRecolector().getApellido(),
 							o.getRecolector().getDni(),
-							Integer.toString(o.getPedidoAsociado().getCodigo())
+							Integer.toString(o.getPedidoAsociado().getCodigo()),
+							o.getPedidoAsociado().getObservacion()
 							
 					});
 				}
@@ -443,7 +446,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				//Ojo con esto
 				//Fijate también que descripción es el DNI del recolector, no tiene nada que ver con la observación de la visita
 				
-				api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcionDni,Integer.parseInt(codigoOrden));
+				api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,Integer.parseInt(codigoOrden));
 				//api.registrarV
 			} catch (NumberFormatException | AppException e1) {
 				// TODO Bloque catch generado automáticamente
