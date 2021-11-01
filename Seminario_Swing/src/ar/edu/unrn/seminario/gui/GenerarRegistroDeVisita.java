@@ -288,7 +288,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.add(tp_observacion);
 		
 		lb_observacion = new JLabel(labels.getString("registro.de.visita.label.observacion"));
-		lb_observacion.setBounds(80, 127, 46, 14);
+		lb_observacion.setHorizontalAlignment(SwingConstants.CENTER);
+		lb_observacion.setBounds(32, 127, 142, 14);
 		panel_visita.add(lb_observacion);
 		
 		lb_hora = new JLabel(labels.getString("registro.de.visita.label.hora"));
@@ -381,25 +382,52 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		//Modelo de fecha y hora >
 		
-		JSpinner spinner_hora = new JSpinner();
-		SpinnerNumberModel maximo_hora = new SpinnerNumberModel();
-		maximo_hora.setMaximum(24);
-		maximo_hora.setMinimum(0);
+		ArrayList<String> numeros = new ArrayList<String>();
+		for(int i=1;i<=24;i++) {
+
+			String v = String.valueOf(i);
+			numeros.add(v);
+		}
+		
+		
+		SpinnerModel maximo_hora = new SpinnerListModel(numeros);
+		JSpinner spinner_hora = new JSpinner(maximo_hora);
+		spinner_hora.setModel(maximo_hora);
+		panel_visita.add(spinner_hora);
+		
+		//maximo_hora.setMaximum(24);
+		//maximo_hora.setMinimum(0);
 		spinner_hora.setModel(maximo_hora);
 		spinner_hora.setBounds(74, 8, 52, 20);
 		panel_visita.add(spinner_hora);
 		
 		
-		JSpinner spinner_dia = new JSpinner();
-		spinner_dia.setBounds(74, 45, 52, 20);
 		
-		panel_visita.add(spinner_dia);
-		SpinnerNumberModel maximo_dia = new SpinnerNumberModel();
-		maximo_dia.setMaximum(31);
-		maximo_dia.setMinimum(0);
+		
+		
+		
+		numeros = new ArrayList<String>();
+		for(int i=1;i<=31;i++) {
+
+			String v = String.valueOf(i);
+			numeros.add(v);
+		}
+		SpinnerModel maximo_dia = new SpinnerListModel(numeros);
+		JSpinner spinner_dia = new JSpinner(maximo_dia);
 		spinner_dia.setModel(maximo_dia);
+		panel_visita.add(spinner_dia);
+		spinner_dia.setBounds(74, 45, 52, 20);
+		//numeros.clear();
 		
-		final String [] numeros = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+		//maximo_dia.setMaximum(31);
+		//maximo_dia.setMinimum(0);
+		//spinner_dia.setModel(maximo_dia);
+		
+		 numeros = new ArrayList<String>();
+		for(int i=1;i<=12;i++) {
+			String v = String.valueOf(i);
+			numeros.add(v);
+		}
 		SpinnerModel maximo_mes = new SpinnerListModel(numeros);
 		JSpinner spinner_mes = new JSpinner(maximo_mes);
 		spinner_mes.setModel(maximo_mes);
