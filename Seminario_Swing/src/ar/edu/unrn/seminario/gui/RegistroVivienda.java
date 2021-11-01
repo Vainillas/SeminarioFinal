@@ -91,28 +91,31 @@ public class RegistroVivienda extends JFrame {
                 				correoIngresado.getText());*/
             		//}
             		String dni = api.obtenerDueño(api.getUserOnline().getUsuario()).getDni();
-            		if(!api.existeVivienda(dni, calleIngresada.getText(), alturaIngresada.getText()) && !api.existeDireccion(calleIngresada.getText(), alturaIngresada.getText()))
-            		api.registrarVivienda(/*nombreIngresado.getText(),
-            				apellidoIngresado.getText(),
-            				dniIngresado.getText(),
-            				correoIngresado.getText(),*/
-            				calleIngresada.getText(),
-            				alturaIngresada.getText(),
-            				codPostIngresado.getText(),
-            				longitudIngresada.getText(), 
-            				latitudIngresada.getText(),
-            				barrioIngresado.getText());
-            		
-            		api.registrarDireccion(calleIngresada.getText(),
-            				alturaIngresada.getText(),
-            				codPostIngresado.getText(),
-            				latitudIngresada.getText(),
-            				longitudIngresada.getText(),
-            				barrioIngresado.getText());
-            		JOptionPane.showMessageDialog(null ,
-            				labels.getString("registro.viviendas.mensaje.carga.correcta"));
-                    setVisible (false);
-                    dispose();
+            		if(!api.existeVivienda(dni, calleIngresada.getText(), alturaIngresada.getText()) && !api.existeDireccion(calleIngresada.getText(), alturaIngresada.getText())) {
+            			api.registrarVivienda(/*nombreIngresado.getText(),
+                				apellidoIngresado.getText(),
+                				dniIngresado.getText(),
+                				correoIngresado.getText(),*/
+                				calleIngresada.getText(),
+                				alturaIngresada.getText(),
+                				codPostIngresado.getText(),
+                				longitudIngresada.getText(), 
+                				latitudIngresada.getText(),
+                				barrioIngresado.getText());
+                		
+                		api.registrarDireccion(calleIngresada.getText(),
+                				alturaIngresada.getText(),
+                				codPostIngresado.getText(),
+                				latitudIngresada.getText(),
+                				longitudIngresada.getText(),
+                				barrioIngresado.getText());
+                		JOptionPane.showMessageDialog(null ,
+                				labels.getString("registro.viviendas.mensaje.carga.correcta"));
+                        setVisible (false);
+                        dispose();
+            		}
+            		else
+            			JOptionPane.showMessageDialog(null, labels.getString("registro.viviendas.mensaje.error"));
             	} 
 				 catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("registro.viviendas.mensaje.error"), JOptionPane.ERROR_MESSAGE);
