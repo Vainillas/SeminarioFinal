@@ -459,7 +459,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				//Fijate también que descripción es el DNI del recolector, no tiene nada que ver con la observación de la visita
 				
 				api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,Integer.parseInt(codigoOrden));
-				//api.registrarV
+				JOptionPane.showMessageDialog(null,"Registro de visita generado con exito!","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
 			} catch (NumberFormatException | AppException e1) {
 				// TODO Bloque catch generado automáticamente
 				System.out.println("entroo aca");
