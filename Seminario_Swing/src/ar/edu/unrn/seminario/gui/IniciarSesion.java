@@ -107,7 +107,7 @@ public class IniciarSesion extends JFrame {
 				dispose();
 			
 		});
-		buttonCancelar.setBounds(216, 18, 89, 23);
+		buttonCancelar.setBounds(216, 18, 89, 23); 
 		panelBotones.add(buttonCancelar);
 		
 		

@@ -100,7 +100,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	 * Create the frame.
 	 */
 	public ListadoDeOrdenesDeRetiro(IApi api) {
-		//labels = ResourceBundle.getBundle("labels");
+		//labels = ResourceBundle.getBundle("labels"); 
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		setTitle(labels.getString("listado.de.pedidos.de.retiro.titulo"));
 		
@@ -109,7 +109,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
+		setContentPane(contentPane); 
 		
 		panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
@@ -131,9 +131,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.codigo.pedido"), 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.dni.recolector"), 
-				
-						
-						
 						
 				};
 		

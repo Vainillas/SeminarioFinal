@@ -414,7 +414,7 @@ public class PersistenceApi implements IApi {
 	public List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador)throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
-		.collect(Collectors.toList());
+		.collect(Collectors.toList()); 
 		
 		return usuario;
 	}
@@ -472,7 +472,7 @@ public class PersistenceApi implements IApi {
     	
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
     	
-    	for(int i=0;i<residuosIngresados.size();i++){
+    	for(int i=0;i<residuosIngresados.size();i++){ 
     		
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
@@ -489,6 +489,10 @@ public class PersistenceApi implements IApi {
     	visita = new Visita(observacion, listResiduos, codOrden);
     	
     	this.visitaDao.create(visita);
+    	
+    	if(this.ordenDeRetiroDao.find(codOrden).getVisitas().size() > 0) {
+    		actualizarEstadoOrden(codOrden, "en ejecucion");
+    	}
     	
     	if(!comprobarCantidadResiduos(codOrden)) {
     		actualizarEstadoOrden(codOrden, "concretado");
@@ -624,7 +628,6 @@ public class PersistenceApi implements IApi {
         return pedidosDto;
 	}
     
-    
     public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException{
     	
     	java.util.Date fechaActualUtil = DateHelper.getDate();
@@ -636,6 +639,7 @@ public class PersistenceApi implements IApi {
     	
     	ordenDeRetiroDao.create(nuevaOrden);
     }
+     
     public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException{
 
     	

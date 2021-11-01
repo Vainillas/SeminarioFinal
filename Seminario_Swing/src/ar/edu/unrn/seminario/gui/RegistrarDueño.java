@@ -22,6 +22,7 @@ import java.awt.FlowLayout;
 import java.awt.CardLayout;
 import javax.swing.BoxLayout;
 import java.awt.SystemColor;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
@@ -32,13 +33,13 @@ public class RegistrarDueño extends JFrame {
 	private JTextField tf_nombre;
 	private JTextField tf_apellido;
 	private JTextField tf_dni;
-	private ResourceBundle labels = ResourceBundle.getBundle("labels");
+	private ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 
 
 
 
 	public RegistrarDueño(IApi api) {
-		setTitle(labels.getString("registrar.dueño.titulo"));
+		setTitle(labels.getString("registrar.dueño.titulo")); 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 367, 243);
 		contentPane = new JPanel();

@@ -27,7 +27,7 @@ public class OrdenDeRetiroDTO {
 		recolector = r;
 		fechaOrden = fechaActual;
 		this.estado=estado;
-		this.visitas=visitas;
+		this.visitas=visitas; 
 	}
 	
 	public OrdenDeRetiroDTO(PedidoDeRetiro p, Recolector r, Date fechaActual) {

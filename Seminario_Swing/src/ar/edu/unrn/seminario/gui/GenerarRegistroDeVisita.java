@@ -301,7 +301,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.add(spinner_mes);
 		panel_botones = new JPanel();
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel_botones.setBounds(10, 409, 530, 55);
+		panel_botones.setBounds(10, 409, 530, 55); 
 		contentPane.add(panel_botones);
 		
 		btn_cancelar = new JButton(labels.getString("registro.de.visita.label.cancelar"));
@@ -309,7 +309,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 			//JOptionPane.showMessageDialog(null,"adios","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
 			
 			setVisible(false);
-			dispose();
+			dispose(); 
 			
 			
 		});
@@ -337,8 +337,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lbOrdenSeleccion.setBounds(754, 11, 241, 14);
 		contentPane.add(lbOrdenSeleccion);
 	}
+	
 	private void reloadGrid() {
-		//..
-		
+		//..	
 	}
 }
