@@ -163,6 +163,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				
 				try {
 					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
+					
 					lb_slider_vidrio.setVisible(false);
 					slider_vidrio.setValue(0);slider_vidrio.setVisible(false);	
 					
@@ -249,6 +250,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				List<OrdenDeRetiroDTO > ordenes = api.obtenerOrdenesDeRetiro();				
 				// Agrega las direcciones de el dueño en el model <- Incorrecto
 				for (OrdenDeRetiroDTO o : ordenes) {
+					if(!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado")) {
 					modelo.addRow(new Object[] {
 							DateHelper.changeFormat(o.getFechaOrden()),
 							Integer.toString(o.getCodigo()),
@@ -259,6 +261,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 							o.getPedidoAsociado().getObservacion()
 							
 					});
+					}
 				}
 
 			} catch (Exception e2) {
