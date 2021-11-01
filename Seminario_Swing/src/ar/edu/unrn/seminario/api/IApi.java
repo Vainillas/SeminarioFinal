@@ -74,7 +74,7 @@ public interface IApi {
 	List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException; // recuperar todos los usuarios
 	
 	List<ViviendaDTO> obtenerViviendas() throws AppException;
-	List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
+
 	
 	void activarUsuario(String username) throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
@@ -121,7 +121,7 @@ public interface IApi {
 
 	Usuario getUserOnline();
 	
-	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException;
+	//void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException;
 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException;
 	 
@@ -133,5 +133,10 @@ public interface IApi {
 
 	void registrarDueño(String nombre, String apellido, String dni) 
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
-	 
+	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) 
+			throws AppException;
+	
+	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) throws AppException;
+	List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
+
 }

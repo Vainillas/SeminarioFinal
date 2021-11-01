@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.gui;
 
 
 import java.awt.event.MouseAdapter;
+
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,23 +21,24 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioCorreo;
-import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
+
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 
 import ar.edu.unrn.seminario.exceptions.StateException;
-import ar.edu.unrn.seminario.utilities.Filtro;
+
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
-import java.awt.event.ActionListener;
+
 import javax.swing.SwingConstants;
 
 public class ListadoDeUsuarios extends JFrame {
 
+
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel modelo;
@@ -49,8 +51,6 @@ public class ListadoDeUsuarios extends JFrame {
 	private JButton btnOrdenarPorRol;
 	private JButton btnOrdenarPorEstado;
 	private JLabel lbUsername;
-	private JTextField tfUsernameSeleccionado;
-	private JButton btnAceptar;
 	private JButton btnLimpiarFIltro;
 
 	public ListadoDeUsuarios(IApi api){
@@ -273,6 +273,7 @@ public class ListadoDeUsuarios extends JFrame {
 				} catch (AppException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
+				rdbtnAceptar.setSelected(false);
 			}
 		
 			

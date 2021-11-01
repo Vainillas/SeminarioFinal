@@ -58,7 +58,9 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api) {
-		String rol = "ADMINISTRADOR";//api.obtenerRolUsuarioActivo();
+		String rol = "ADMINISTRADOR";
+		//String rol = api.obtenerRolUsuarioActivo();
+		
 		if(rol.equals("PERSONAL")) {
 			panelPersonal.setVisible(true);
 			panelDueño.setVisible(false);
@@ -122,14 +124,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);
 		
-		JMenuItem mntmGenerarRegistroVisita = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.registro.visita")); //$NON-NLS-1$
-		mntmGenerarRegistroVisita.addActionListener((e)->{
-			GenerarRegistroDeVisita visita = new GenerarRegistroDeVisita(api);
-			visita.setVisible(true);
-			
-			
-		});
-		mnOrdenesPersonal.add(mntmGenerarRegistroVisita);
 		
 		JMenu MnDatosPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.personal"));
 		
@@ -144,7 +138,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenu mnConfiguracionPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.personal.configuracion"));
 		
 		mbPersonal.add(mnConfiguracionPersonal);
-		
 		JMenuItem mntmPantallaCompletaPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.completa"));
 		mntmPantallaCompletaPersonal.addActionListener((e)->{
 			this.setExtendedState(JFrame.MAXIMIZED_BOTH);	
@@ -153,7 +146,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 			
 		});
 		mnConfiguracionPersonal.add(mntmPantallaCompletaPersonal);
-		
 		mntmPantallaNormalPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.normal")); 
 		mntmPantallaNormalPersonal.addActionListener((e)->{
 			this.setExtendedState(JFrame.NORMAL);	
@@ -219,6 +211,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mntmAdmListadoOrdenesDeRetiros.addActionListener((e)->{
 			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api);
 			listado.setVisible(true);
+			
+			
 		});
 		mnOrdenesDeRetiroAdministrador.add(mntmAdmListadoOrdenesDeRetiros);
 		
@@ -228,12 +222,22 @@ public class VentanaPrincipalDinamica extends JFrame {
 			ordenDeRetiro.setVisible(true);
 			ordenDeRetiro.setLocationRelativeTo(null); 
 		});
+		
+		JMenuItem mntmAdmGenerarRegistroVisita = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.registro.visita.administrador")); //$--$
+		mntmAdmGenerarRegistroVisita.addActionListener((e)->{
+			GenerarRegistroDeVisita registroVisita = new GenerarRegistroDeVisita(api);
+			registroVisita.setVisible(true);
+			
+			
+		});
+		mnOrdenesDeRetiroAdministrador.add(mntmAdmGenerarRegistroVisita);
 		mnOrdenesDeRetiroAdministrador.add(mntmGenerarOrdenDeRetiroAdministrador);
 		
 		JMenu mnPedidosDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.pedidos.de.retiro.administrador"));
 		mbAdministrador.add(mnPedidosDeRetiroAdministrador);
 		
 		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.pedidos.de.retiro.administrador"));
+		mntmAdmListadoPedidosDeRetiros.setVisible(false);
 		mntmAdmListadoPedidosDeRetiros.addActionListener((e)->{
 			ListadoDePedidosDeRetiro listadoPedidos = new ListadoDePedidosDeRetiro(api);
 			listadoPedidos.setVisible(true);
@@ -312,6 +316,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		
+		//;api.existeDueño();
+		
 		JMenuBar mbDueño = new JMenuBar();
 		panelDueño.add(mbDueño, BorderLayout.NORTH);
 		
@@ -369,6 +375,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnPedidoDeRetiroDueño.add(mntmGenerarPedidoDeRetiroDueño);
 		
 		JPanel panelDueñoNoRegistrado = new JPanel();
+		panelDueñoNoRegistrado.setVisible(false);
 		panelDueñoNoRegistrado.setBounds(560, 262, 402, 204);
 		contentPane.add(panelDueñoNoRegistrado);
 		panelDueñoNoRegistrado.setLayout(new BorderLayout(0, 0));

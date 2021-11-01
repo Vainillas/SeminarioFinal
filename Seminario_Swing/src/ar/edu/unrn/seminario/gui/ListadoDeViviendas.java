@@ -1,10 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,7 +13,6 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.utilities.Predicate;
@@ -26,6 +22,7 @@ import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+@SuppressWarnings("serial")
 public class ListadoDeViviendas extends JFrame {
 	IApi api;
 	private JTable table;
@@ -35,11 +32,7 @@ public class ListadoDeViviendas extends JFrame {
 	private JPanel panel;
 	private JPanel panelOrdenamiento;
 	private JButton btnSalir;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton_2;
-	private JButton btnNewButton_3;
-	private JButton btnNewButton_4;
+
 	private JButton btnOrdenarPorBarrio;
 	private JButton btnOrdenarPorCodPostal;
 	private JButton btnOrdenarPorCodigo;
@@ -47,15 +40,13 @@ public class ListadoDeViviendas extends JFrame {
 	private JLabel lbOrdenarPor;
 	private JPanel panelFiltrado;
 	private JLabel lbFiltrarPor;
-	private JButton btnCalle_Altura;
+
 	private JTextField txCalle_Altura ;
 	private JLabel lbCalle_Altura;
 	private JLabel lbNombre_Apellido;
 	private JTextField txNombre_Apellido ;
 	private JLabel lbDni;
 	private JTextField txDni;
-	private JButton btnDni;
-	private JButton btnCodigo;
 	private JTextField txCodigo;
 	private JLabel lbCodigo;
 	private JButton btnLimpiarFiltro;
@@ -178,9 +169,8 @@ public class ListadoDeViviendas extends JFrame {
 		btnOrdenarPorNombreYApellido = new JButton(" NOMBRE Y APELLIDO");
 		btnOrdenarPorNombreYApellido.setBounds(15, 119, 203, 23);
 		btnOrdenarPorNombreYApellido.addActionListener((e)->{
-			this.reloadGrid("nombreApellido");
-
 			
+			this.reloadGrid("nombreApellido");
 			
 		});
 		panelOrdenamiento.add(btnOrdenarPorNombreYApellido);
@@ -195,7 +185,7 @@ public class ListadoDeViviendas extends JFrame {
 		contentPane.add(panelFiltrado);
 		panelFiltrado.setLayout(null);
 		
-		lbFiltrarPor = new JLabel("FIltrar Por:");
+		lbFiltrarPor = new JLabel("Filtrar Por:");
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(87, 5, 124, 14);
 		panelFiltrado.add(lbFiltrarPor);
@@ -206,18 +196,16 @@ public class ListadoDeViviendas extends JFrame {
 			if(rdbtnNombre_apellido.isSelected()) {
 					Predicate <ViviendaDTO> predicate =
 					(ViviendaDTO v)->v.getDueño().getNombre().contains(txNombre_Apellido.getText())
-					
 					|| v.getDueño().getApellido().contains(txNombre_Apellido.getText());
 					
 					try {
-						List<ViviendaDTO> v = api.obtenerViviendas(predicate);
-				
-						this.reloadGrid(v);
+						this.reloadGrid(api.obtenerViviendas(predicate));
 				
 					} catch (Exception e1) {
 						// TODO Bloque catch generado automáticamente
 						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 					}
+					rdbtnNombre_apellido.setSelected(false);	
 		}
 			
 		});
@@ -229,16 +217,15 @@ public class ListadoDeViviendas extends JFrame {
 				Predicate <ViviendaDTO> predicate =
 						(ViviendaDTO v)->v.getDireccion().getBarrio().contains(this.txCalle_Altura.getText())
 						||v.getDireccion().getCalle().contains(this.txCalle_Altura.getText());
-					
 						try {
-							List<ViviendaDTO> v = api.obtenerViviendas(predicate);
-							
-							this.reloadGrid(v);
+	
+							this.reloadGrid(api.obtenerViviendas(predicate));
 				
 						} catch (Exception e1) {
 							// TODO Bloque catch generado automáticamente
 							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 						}
+						rdbtnCalle_Altura.setSelected(false);			
 		}
 		});
 		rdbtnCalle_Altura.setBounds(228, 66, 25, 23);
@@ -281,12 +268,12 @@ public class ListadoDeViviendas extends JFrame {
 				Predicate <ViviendaDTO> predicate = (ViviendaDTO v)->v.getDueño().getDni().contains(txDni.getText());
 			
 				try {
-					List<ViviendaDTO> v = api.obtenerViviendas(predicate);
-					this.reloadGrid(v);
+					this.reloadGrid(api.obtenerViviendas(predicate));
 				
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
+				rdbtnDni.setSelected(false);
 		}
 		});
 		rdbtnDni.setBounds(228, 102, 25, 23);
@@ -303,6 +290,7 @@ public class ListadoDeViviendas extends JFrame {
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
+			rdbtnCodigo.setSelected(false);
 		}
 		
 			
@@ -329,6 +317,7 @@ public class ListadoDeViviendas extends JFrame {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 
 			}
+			
 			
 		});
 		btnLimpiarFiltro.setBounds(87, 188, 89, 23);

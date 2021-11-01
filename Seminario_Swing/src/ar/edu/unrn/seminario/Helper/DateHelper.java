@@ -24,6 +24,15 @@ public class DateHelper {
 		return formato.format(date);
 		
 	}
+	public static String getStringDate(Date date) {
+		calendarDate = Calendar.getInstance();
+		int day = date.getDate();
+		int month = date.getMonth();
+		int year = date.getYear();
+		return day+"/"+month+"/"+year;
+		
+		 
+	}
 	public static Date getDate() {
 		calendarDate=Calendar.getInstance();
 		 today = calendarDate.getTime();

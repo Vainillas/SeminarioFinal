@@ -201,8 +201,11 @@ public class GenerarOrdenDeRetiro extends JFrame {
 				else {
 				api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
 				}
-				JOptionPane.showMessageDialog(null,"Orden generada con exito","Mensaje",JOptionPane.INFORMATION_MESSAGE);
 				
+				JOptionPane.showMessageDialog(null,"Orden generada con exito","Mensaje",JOptionPane.INFORMATION_MESSAGE);
+				setVisible(false);
+				dispose();
+			
 			} catch (AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
