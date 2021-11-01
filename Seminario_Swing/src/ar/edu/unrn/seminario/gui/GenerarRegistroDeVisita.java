@@ -135,7 +135,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				
 					labels.getString("registro.de.visita.titulos.fecha.orden"),
 					labels.getString("registro.de.visita.titulos.codigo.orden"),
-					labels.getString("registro.de.visita.titulos.estado"),
+					//labels.getString("registro.de.visita.titulos.estado"),
 					
 					labels.getString("registro.de.visita.titulos.nombre.apellido.recolector"), 
 					labels.getString("registro.de.visita.titulos.dni.recolector"), 
@@ -241,7 +241,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					modelo.addRow(new Object[] {
 							DateHelper.changeFormat(o.getFechaOrden()),
 							Integer.toString(o.getCodigo()),
-						 	o.getEstado().obtenerEstado(),
+						 //	o.getEstado().obtenerEstado(),
 							o.getRecolector().getNombre() +" "+  o.getRecolector().getApellido(),
 							o.getRecolector().getDni(),
 							Integer.toString(o.getPedidoAsociado().getCodigo()),
