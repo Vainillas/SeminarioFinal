@@ -540,20 +540,9 @@ public class PersistenceApi implements IApi {
     	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
     	Boolean rtado = false;
     	int i;
-
-    	//Fijate que tienen lo mismo pero te lo carga al revés
-    	//Onda la lista de suma visitas 
-    	/*int j=listaResiduos.size() - 1;
-    	int intAux;
-    	for(i=0;i<listaSumaVisitas.size();i++) {
-    		intAux = listaSumaVisitas.get(i);
-    		listaSumaVisitas.set(i, listaSumaVisitas.get(j));
-    		listaSumaVisitas.set(j, intAux);
-    		j--;
-    	}*/
     	
     	for(i=0;i<listaResiduos.size();i++) {
-    		if(listaResiduos.get(i).getCantidadKg() != listaSumaVisitas.get(i)) {
+    		if(listaResiduos.get(i).getCantidadKg() >= listaSumaVisitas.get(i)) {// quizas cambiar a != en otro momento
     			rtado = true;
     		}
     	}
