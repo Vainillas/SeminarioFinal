@@ -25,6 +25,7 @@ public class Visita {
 		this.observacion=observacion;
 		residuosExtraidos = listaResiduos;
 		this.codOrden = codOrden;
+		this.codigo=codigo;
 		fecha = new Date(Calendar.getInstance().getTime().getTime());
 	}
 	
@@ -68,6 +69,12 @@ public class Visita {
 
 	public void setCodOrden(int codOrden) {
 		this.codOrden = codOrden;
+	}
+
+	@Override
+	public String toString() {
+		return "Visita [observacion=" + observacion + ", residuosExtraidos=" + residuosExtraidos + ", fecha=" + fecha
+				+ ", codOrden=" + codOrden + ", codigo=" + codigo + "]";
 	}
 
 }

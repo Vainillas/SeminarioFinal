@@ -156,6 +156,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				}
 				descripcion = (String) table.getValueAt(table.getSelectedRow(), 4);
 				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);
+				
 				try {
 					
 					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
@@ -167,10 +168,14 @@ public class GenerarRegistroDeVisita extends JFrame {
 					slider_carton.setVisible(false);
 					lb_slider_plastico.setVisible(false);
 					slider_plastico.setVisible(false);
+					residuosSeleccionados.clear();
+					residuosSeleccionadosKg.clear();
 					for(int i = 0; i<pedido.getListResiduos().size();i++) {
 						//pedido.getListResiduos().get(0).get
 						residuosSeleccionados.add(pedido.getListResiduos().get(i).getTipo().getNombre());
 						residuosSeleccionadosKg.add(String.valueOf(pedido.getListResiduos().get(i).getCantidadKg()));
+						System.out.println(residuosSeleccionados + "<- valor residuos seleccionados");
+						System.out.println(residuosSeleccionadosKg + "<- valor kilogramos residuos seleccionados");
 
 						if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Vidrio")) {
 							slider_vidrio.setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
@@ -207,7 +212,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					
 				} catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 						| DateNullException | AppException e) {
-					// TODO Bloque catch generado automáticamente
+					System.out.println(e.getMessage());
 					e.printStackTrace();
 				}
 				
@@ -219,13 +224,14 @@ public class GenerarRegistroDeVisita extends JFrame {
 		table.setRowSelectionAllowed(true);//permitiendo seleccion de fila
 		table.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
 		
-		modelo = new DefaultTableModel(new Object[][] {}, titulosDireccion);
-		// Obtiene la lista de direcciones a mostrar
+		modelo = new DefaultTableModel(new Object[][] {}, titulosDireccion); //Cambiale el nombre a las variables cuando 
+																			//Hagas copy-paste
+		// Obtiene la lista de direcciones a mostrar <- Acá lo mismo
 
-
+			//Obtiene las ordenes de retiro y las muestra en la tabla
 			try {
 				List<OrdenDeRetiroDTO > ordenes = api.obtenerOrdenesDeRetiro();				
-				// Agrega las direcciones de el dueño en el model
+				// Agrega las direcciones de el dueño en el model <- Incorrecto
 				for (OrdenDeRetiroDTO o : ordenes) {
 					modelo.addRow(new Object[] {
 							DateHelper.changeFormat(o.getFechaOrden()),
@@ -353,6 +359,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		panel_visita.add(lb_cantidad_residuos);
 		
+		//Modelo de fecha y hora >
+		
 		JSpinner spinner_hora = new JSpinner();
 		SpinnerNumberModel maximo_hora = new SpinnerNumberModel();
 		maximo_hora.setMaximum(24);
@@ -405,15 +413,18 @@ public class GenerarRegistroDeVisita extends JFrame {
 				System.out.println("valores: "+ s);
 			}
 
-			//JOptionPane.showMessageDialog(null, e.getMessage(),"Registro visita",JOptionPane.INFORMATION_MESSAGE);
-			try {
+			try { // ***************ERROR***************** 
+				//No deberías pasar residuosSeleccionados y residuosSeleccionadosKg
+				//Porque son los valores que recuperás desde la tabla 
+				//No los valores que recuperas desde los sliders
+				//Ojo con esto
+				//Fijate también que descripción es el DNI del recolector, no tiene nada que ver con la observación de la visita
 				api.registrarVisita(residuosSeleccionados, residuosSeleccionadosKg,this.descripcion,Integer.parseInt(codigoOrden));
 				
 			} catch (NumberFormatException | AppException e1) {
 				// TODO Bloque catch generado automáticamente
 			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
-			//api.registrarVisita(null, null, getName(),);
 			setVisible(false);
 			dispose();
 		});

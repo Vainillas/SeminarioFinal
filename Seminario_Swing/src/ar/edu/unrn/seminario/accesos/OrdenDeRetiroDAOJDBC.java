@@ -109,7 +109,8 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
             
 			try {
 				Connection conn = ConnectionManager.getConnection();
-				PreparedStatement statement = conn.prepareStatement("SELECT * from ordenes");
+				PreparedStatement statement = conn.prepareStatement("SELECT * from ordenes WHERE codigoOrden = ?");
+				statement.setInt(1, id);
 				ResultSet resultSetOrden = statement.executeQuery();
 				if(resultSetOrden.next()) {
 					statement = conn.prepareStatement("SELECT * FROM pedidos p WHERE p.codigo = ?");
@@ -174,9 +175,9 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								resultSetPedido.getDate("fecha"),
 								vivienda, resultSetPedido.getInt("codigo"));
 	            	}
-					statement = conn.prepareStatement("SELECT * FROM recolectores r WHERE r.dni = ?");
-					statement.setString(1, resultSetOrden.getString("dniRecolector"));
-					ResultSet resultSetRecolector = statement.executeQuery();
+					PreparedStatement statement7 = conn.prepareStatement("SELECT * FROM recolectores r WHERE r.dni = ?");
+					statement7.setString(1, resultSetOrden.getString("dniRecolector"));
+					ResultSet resultSetRecolector = statement7.executeQuery();
 					if(resultSetRecolector.next()) {
 						recolector = new Recolector(resultSetRecolector.getString("nombre"),
 								resultSetRecolector.getString("apellido"),
@@ -184,9 +185,9 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								resultSetRecolector.getString("email"),
 								resultSetRecolector.getString("telefono"));
 					}
-					statement = conn.prepareStatement("SELECT * FROM visitas v WHERE v.codigoOrden = ?");
-					statement.setInt(1, resultSetOrden.getInt("codigoOrden"));
-					ResultSet resultSetVisita = statement.executeQuery();
+					PreparedStatement statement8 = conn.prepareStatement("SELECT * FROM visitas v WHERE v.codigoOrden = ?");
+					statement8.setInt(1, resultSetOrden.getInt("codigoOrden"));
+					ResultSet resultSetVisita = statement8.executeQuery();
 					while(resultSetVisita.next()) {
 						ArrayList<Residuo> listaResiduosVisita = new ArrayList<Residuo>(); 
 						Connection conn2 = ConnectionManager.getConnection();
@@ -196,6 +197,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 						Connection conn3 = ConnectionManager.getConnection();
 
 						while(resultSetResiduosVisita.next()){
+							
 
 							PreparedStatement statement3 = conn3.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
 							statement3.setString(1, resultSetResiduosVisita.getString("nombre_residuo"));
@@ -203,11 +205,14 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 
 							if(resultSetTipoResiduo.next()) {
 								tipoResiduoVisita = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+								
 								residuoVisita = new Residuo(tipoResiduoVisita, resultSetResiduosVisita.getInt("cantidad"));
+								
 								listaResiduosVisita.add(residuoVisita);
 							}
 						}
 						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduosVisita,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));
+						System.out.println("\nVisita toString en OrdenDeRetiroDAOJDBC: "+ visita.toString()); 
 						listaVisitas.add(visita);
 					}
 					
@@ -332,7 +337,9 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 					statement = conn.prepareStatement("SELECT * FROM visitas v WHERE v.codigoOrden = ?");
 					statement.setInt(1, resultSetOrden.getInt("codigoOrden"));
 					ResultSet resultSetVisita = statement.executeQuery();
+					
 					while(resultSetVisita.next()) {
+						
 						ArrayList<Residuo> listaResiduosVisita = new ArrayList<Residuo>(); 
 						Connection conn2 = ConnectionManager.getConnection();
 						PreparedStatement statement2 = conn2.prepareStatement("SELECT * FROM residuos_visita rv ");
@@ -348,11 +355,14 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 
 							if(resultSetTipoResiduo.next()) {
 								tipoResiduoVisita = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
+								
 								residuoVisita = new Residuo(tipoResiduoVisita, resultSetResiduosVisita.getInt("cantidad"));
+								
 								listaResiduosVisita.add(residuoVisita);
 							}
 						}
 						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduosVisita,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));
+						
 						listaVisitas.add(visita);
 					}
 					
