@@ -661,7 +661,8 @@ public class PersistenceApi implements IApi {
     				o.getRecolector(),
     				o.getFechaOrden(),
     				o.getEstado(), 
-    				o.getVisitas()));
+    				o.getVisitas(),
+    				o.getCodigo()));
     	} 
     	return ordenesDto;
     }
@@ -670,11 +671,12 @@ public class PersistenceApi implements IApi {
     	OrdenDeRetiroDTO o = null;
     	OrdenDeRetiro orden = ordenDeRetiroDao.find(codigo);
     	if(orden!=null) {
-    		o = new OrdenDeRetiroDTO(o.getPedidoAsociado(),
-    				o.getRecolector(),
-    				o.getFechaOrden(),
-    				o.getEstado(),
-    				o.getVisitas());
+    		o = new OrdenDeRetiroDTO(orden.getPedidoAsociado(),
+    				orden.getRecolector(),
+    				orden.getFechaOrden(),
+    				orden.getEstado(),
+    				orden.getVisitas(),
+    				orden.getCodigo());
     	}
     	return o;
     }

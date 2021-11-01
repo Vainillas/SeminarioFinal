@@ -21,6 +21,16 @@ public class OrdenDeRetiroDTO {
 	
 	private int codigo;
 	
+	public OrdenDeRetiroDTO(PedidoDeRetiro p, Recolector r, Date fechaActual, Estado estado, ArrayList<Visita> visitas, int codigo) {
+		//validarDatos(p, r, fechaActual);
+		pedidoAsociado = p;
+		recolector = r;
+		fechaOrden = fechaActual;
+		this.estado=estado;
+		this.visitas=visitas;
+		this.codigo=codigo;
+	}
+	
 	public OrdenDeRetiroDTO(PedidoDeRetiro p, Recolector r, Date fechaActual, Estado estado, ArrayList<Visita> visitas) {
 		//validarDatos(p, r, fechaActual);
 		pedidoAsociado = p;
