@@ -23,30 +23,33 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
+import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
+import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 
 public class ListadoDePedidosDeRetiro extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel modelo;
-	private JTextField tfFiltradoPorDni;
-	private JTextField tfFiltradoPorEstado;
-	private JTextField tfFiltradoCodigoPedido;
-	private JTextField tfFiltradoVisita;
+	private JTextField tfFiltradoPoraAño;
+	private JTextField tfFiltradoPorDia;
+	private JTextField tfFiltradoPorMes;
+	private JTextField tfFiltradoCodigo;
 	private JPanel panel;
 	private JButton button;
 	private JPanel panel_filtrados;
-	private JLabel lbFiltradoPorDni;
-	private JRadioButton rdbtnFiltradoPorDni;
-	private JLabel lbFiltradorPorEstado;
-	private JRadioButton rdbtnFiltradoPoEstado;
-	private JLabel lbFiltradoCodigoPedido;
-	private JRadioButton rdbtnFiltradoCodigoPedido;
-	private JLabel lbFiltradoVisita;
-	private JRadioButton rdbtnFiltradoVisita;
+	private JLabel lbFiltradoPorAño;
+	private JRadioButton rdbtnFiltradoPorAño;
+	private JLabel lbFiltradoPorMes;
+	private JRadioButton rdbtnFiltradoPorMes;
+	private JLabel lbFiltradoPorDia;
+	private JRadioButton rdbtnFiltradoPorDia;
+	private JLabel lbFiltradorPorCodigo;
+	private JRadioButton rdbtnFiltradoPorCodigo;
 	private JPanel panel_ordenamientos;
 	private JLabel lbFiltrado;
 	private JLabel lbOrdenamiento;
@@ -54,10 +57,10 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 	private JButton btnSalir;
 	private JButton btnLimpiar;
 	private ResourceBundle labels;
-	private JLabel lbFiltradoPorCodigoOrden;
-	private JTextField tfFiltradoPorCodigoOrden;
+	private JLabel lbFiltradoPorObservacion;
+	private JTextField tfFiltradoPorObservacion;
 	private JRadioButton rdbtnNewRadioButton;
-	private JRadioButton rdbtnFiltradoPorCodigoOrden;
+	private JRadioButton rdbtnFiltradoPorObservacion;
 
 	/**
 	 * Launch the application.
@@ -91,9 +94,13 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		table = new JTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.fecha.orden"),  
+				
+				
+				labels.getString("listado.de.ordenes.de.retiro.titulos.codigo.orden"), 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.estado"), 
-				labels.getString("listado.de.ordenes.de.retiro.titulos.codigo.pedido.asociado"), 
-				labels.getString("listado.de.ordenes.de.retiro.titulos.dni.recolector"), 
+
+				labels.getString("listado.de.ordenes.de.retiro.titulos.codigo.pedido"), 
+				labels.getString("listado.de.ordenes.de.retiro.titulos.recolector.dni"), 
 				
 						
 						
@@ -107,15 +114,16 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		
 		try {
 			ordenesDeRetiro = api.obtenerOrdenesDeRetiro();
-			for (OrdenDeRetiroDTO o : ordenesDeRetiro) {
-				modelo.addRow(new Object[] { o.getFechaOrden(),
+			for (OrdenDeRetiroDTO o : ordenesDeRetiro) {				
+				modelo.addRow(new Object[] { 
+				 		o.getFechaOrden(),
 						o.getEstado().obtenerEstado(),
 						o.getPedidoAsociado().getCodigo(),
 						o.getRecolector().getDni(),
 					
-						});
+				});
 			}
-		} catch (AppException e3) {
+		} catch (Exception e3) {
 			JOptionPane.showMessageDialog(null, e3.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
 		
@@ -130,118 +138,118 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		panel_filtrados.setBounds(10, 35, 220, 148);
 		panel.add(panel_filtrados);
 		
-		lbFiltradoPorDni = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.dni"));
-		lbFiltradoPorDni.setBounds(30, 8, 71, 14);
-		lbFiltradoPorDni.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFiltradoPorAño = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.dni"));
+		lbFiltradoPorAño.setBounds(30, 8, 71, 14);
+		lbFiltradoPorAño.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		tfFiltradoPorDni = new JTextField();
-		tfFiltradoPorDni.setBounds(100, 5, 86, 20);
-		tfFiltradoPorDni.setHorizontalAlignment(SwingConstants.CENTER);
-		tfFiltradoPorDni.setColumns(10);
+		tfFiltradoPoraAño = new JTextField();
+		tfFiltradoPoraAño.setBounds(100, 5, 86, 20);
+		tfFiltradoPoraAño.setHorizontalAlignment(SwingConstants.CENTER);
+		tfFiltradoPoraAño.setColumns(10);
 		
-		rdbtnFiltradoPorDni = new JRadioButton("");
-		rdbtnFiltradoPorDni.addActionListener((e)->{
-			if(rdbtnFiltradoPorDni.isSelected()) {
+		rdbtnFiltradoPorAño = new JRadioButton("");
+		rdbtnFiltradoPorAño.addActionListener((e)->{
+			/*if(rdbtnFiltradoPorDni.isSelected()) {
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				o.getRecolector().getDni().contains(this.tfFiltradoPorDni.getText());
 				//List<OrdenDeRetiroDTO> ordenes = api.obtenerOrdenesDeRetiro(predicado);
-			}
+			}*/
 			
 			
 		});
-		rdbtnFiltradoPorDni.setBounds(190, 5, 21, 21);
+		rdbtnFiltradoPorAño.setBounds(190, 5, 21, 21);
 		
-		lbFiltradorPorEstado = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.estado"));
-		lbFiltradorPorEstado.setBounds(30, 31, 71, 14);
-		lbFiltradorPorEstado.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFiltradoPorMes = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.estado"));
+		lbFiltradoPorMes.setBounds(30, 31, 71, 14);
+		lbFiltradoPorMes.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		tfFiltradoPorEstado = new JTextField();
-		tfFiltradoPorEstado.setBounds(100, 35, 86, 20);
-		tfFiltradoPorEstado.setColumns(10);
+		tfFiltradoPorDia = new JTextField();
+		tfFiltradoPorDia.setBounds(100, 35, 86, 20);
+		tfFiltradoPorDia.setColumns(10);
 		
-		rdbtnFiltradoPoEstado = new JRadioButton("");
-		rdbtnFiltradoPoEstado.addActionListener((e)->{
-			if(rdbtnFiltradoPoEstado.isSelected()) {
+		rdbtnFiltradoPorMes = new JRadioButton("");
+		rdbtnFiltradoPorMes.addActionListener((e)->{
+			/*if(rdbtnFiltradoPoEstado.isSelected()) {
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				o.getEstado().obtenerEstado().contains(this.tfFiltradoPorEstado.getText());
 				//List<OrdenDeRetiroDTO> ordenes = api.obtenerOrdenesDeRetiro(predicado);
-			}
+			}*/
 			
 		});
-		rdbtnFiltradoPoEstado.setBounds(190, 29, 21, 21);
+		rdbtnFiltradoPorMes.setBounds(190, 29, 21, 21);
 		
-		lbFiltradoCodigoPedido = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.codigo.pedido"));
-		lbFiltradoCodigoPedido.setBounds(0, 63, 101, 14);
-		lbFiltradoCodigoPedido.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFiltradoPorDia = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.codigo.pedido"));
+		lbFiltradoPorDia.setBounds(0, 63, 101, 14);
+		lbFiltradoPorDia.setHorizontalAlignment(SwingConstants.CENTER);
 		
-		tfFiltradoCodigoPedido = new JTextField();
-		tfFiltradoCodigoPedido.setBounds(100, 60, 86, 20);
-		tfFiltradoCodigoPedido.setColumns(10);
+		tfFiltradoPorMes = new JTextField();
+		tfFiltradoPorMes.setBounds(100, 60, 86, 20);
+		tfFiltradoPorMes.setColumns(10);
 		
-		rdbtnFiltradoCodigoPedido = new JRadioButton("");
-		rdbtnFiltradoCodigoPedido.addActionListener((e)->{
-			if(rdbtnFiltradoCodigoPedido.isSelected()) {
+		rdbtnFiltradoPorDia = new JRadioButton("");
+		rdbtnFiltradoPorDia.addActionListener((e)->{
+			/*if(rdbtnFiltradoCodigoPedido.isSelected()) {
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				String.valueOf(o.getPedidoAsociado().getCodigo()).contains(this.tfFiltradoCodigoPedido.getText());
 				//List<OrdenDeRetiroDTO> ordenes = api.obtenerOrdenesDeRetiro(predicado);
-			}
+			}*/
 		});
-		rdbtnFiltradoCodigoPedido.setBounds(190, 57, 21, 21);
+		rdbtnFiltradoPorDia.setBounds(190, 57, 21, 21);
 		
-		lbFiltradoVisita = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.visita"));
-		lbFiltradoVisita.setHorizontalAlignment(SwingConstants.CENTER);
-		lbFiltradoVisita.setBounds(30, 86, 71, 14);
+		lbFiltradorPorCodigo = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.visita"));
+		lbFiltradorPorCodigo.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFiltradorPorCodigo.setBounds(30, 86, 71, 14);
 		
-		tfFiltradoVisita = new JTextField();
-		tfFiltradoVisita.setBounds(100, 85, 86, 20);
-		tfFiltradoVisita.setColumns(10);
+		tfFiltradoCodigo = new JTextField();
+		tfFiltradoCodigo.setBounds(100, 85, 86, 20);
+		tfFiltradoCodigo.setColumns(10);
 		
-		rdbtnFiltradoVisita = new JRadioButton("");
-		rdbtnFiltradoVisita.setBounds(190, 81, 21, 21);
+		rdbtnFiltradoPorCodigo = new JRadioButton("");
+		rdbtnFiltradoPorCodigo.setBounds(190, 81, 21, 21);
 		panel_filtrados.setLayout(null);
-		panel_filtrados.add(lbFiltradoPorDni);
-		panel_filtrados.add(tfFiltradoPorDni);
-		panel_filtrados.add(rdbtnFiltradoPorDni);
-		panel_filtrados.add(lbFiltradorPorEstado);
-		panel_filtrados.add(tfFiltradoPorEstado);
-		panel_filtrados.add(rdbtnFiltradoPoEstado);
-		panel_filtrados.add(lbFiltradoCodigoPedido);
-		panel_filtrados.add(tfFiltradoCodigoPedido);
-		panel_filtrados.add(rdbtnFiltradoCodigoPedido);
-		panel_filtrados.add(lbFiltradoVisita);
-		panel_filtrados.add(tfFiltradoVisita);
-		panel_filtrados.add(rdbtnFiltradoVisita);
+		panel_filtrados.add(lbFiltradoPorAño);
+		panel_filtrados.add(tfFiltradoPoraAño);
+		panel_filtrados.add(rdbtnFiltradoPorAño);
+		panel_filtrados.add(lbFiltradoPorMes);
+		panel_filtrados.add(tfFiltradoPorDia);
+		panel_filtrados.add(rdbtnFiltradoPorMes);
+		panel_filtrados.add(lbFiltradoPorDia);
+		panel_filtrados.add(tfFiltradoPorMes);
+		panel_filtrados.add(rdbtnFiltradoPorDia);
+		panel_filtrados.add(lbFiltradorPorCodigo);
+		panel_filtrados.add(tfFiltradoCodigo);
+		panel_filtrados.add(rdbtnFiltradoPorCodigo);
 		
-		lbFiltradoPorCodigoOrden = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.codigo.orden")); 
-		lbFiltradoPorCodigoOrden.setBounds(8, 111, 93, 14);
+		lbFiltradoPorObservacion = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.codigo")); 
+		lbFiltradoPorObservacion.setBounds(8, 111, 93, 14);
 		
-		panel_filtrados.add(lbFiltradoPorCodigoOrden);
+		panel_filtrados.add(lbFiltradoPorObservacion);
 		
-		rdbtnFiltradoPorCodigoOrden = new JRadioButton("");
-		rdbtnFiltradoPorCodigoOrden.addActionListener((e)->{
-			if(rdbtnFiltradoPorCodigoOrden.isSelected()) {
+		rdbtnFiltradoPorObservacion = new JRadioButton("");
+		rdbtnFiltradoPorObservacion.addActionListener((e)->{
+			if(rdbtnFiltradoPorObservacion.isSelected()) {
 				
-			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
+			/*Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				String.valueOf(o.getCodigo()).contains(this.tfFiltradoPorCodigoOrden.getText());
 				//List<OrdenDeRetiroDTO> ordenes = api.obtenerOrdenesDeRetiro(predicado);
+			}*/
 			}
-			
 		});
-		rdbtnFiltradoPorCodigoOrden.setBounds(190, 107, 21, 23);
-		panel_filtrados.add(rdbtnFiltradoPorCodigoOrden);
+		rdbtnFiltradoPorObservacion.setBounds(190, 107, 21, 23);
+		panel_filtrados.add(rdbtnFiltradoPorObservacion);
 		
-		tfFiltradoPorCodigoOrden = new JTextField();
-		tfFiltradoPorCodigoOrden.addActionListener((e)->{
+		tfFiltradoPorObservacion = new JTextField();
+		tfFiltradoPorObservacion.addActionListener((e)->{
 			
 			
 			
 		});
-		tfFiltradoPorCodigoOrden.setBounds(100, 110, 86, 20);
-		panel_filtrados.add(tfFiltradoPorCodigoOrden);
-		tfFiltradoPorCodigoOrden.setColumns(10);
+		tfFiltradoPorObservacion.setBounds(100, 110, 86, 20);
+		panel_filtrados.add(tfFiltradoPorObservacion);
+		tfFiltradoPorObservacion.setColumns(10);
 		
 		panel_ordenamientos = new JPanel();
 		panel_ordenamientos.setBounds(25, 219, 155, 106);

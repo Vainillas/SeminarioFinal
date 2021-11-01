@@ -203,6 +203,7 @@ public class PersistenceApi implements IApi {
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
 		this.viviendaDao.create(vivienda);
+		
 	}
 
 	@Override
@@ -733,6 +734,12 @@ public class PersistenceApi implements IApi {
 		
         this.dueñoDao.create(dueño);
         
+		
+	}
+
+	@Override
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate predicado) throws AppException {
+		return Filtro.filtrar(this.obtenerOrdenesDeRetiro(), predicado);
 		
 	}
 

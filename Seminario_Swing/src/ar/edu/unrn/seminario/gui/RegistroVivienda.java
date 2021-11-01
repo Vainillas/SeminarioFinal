@@ -95,6 +95,7 @@ public class RegistroVivienda extends JFrame {
             				latitudIngresada.getText(),
             				longitudIngresada.getText(),
             				barrioIngresado.getText());
+            		
             		api.registrarVivienda(/*nombreIngresado.getText(),
             				apellidoIngresado.getText(),
             				dniIngresado.getText(),
