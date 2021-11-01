@@ -21,5 +21,7 @@ public interface PedidoDeRetiroDao {
 		List<PedidoDeRetiro> findAll() throws AppException, IncorrectEmailException;
 
 		boolean exists(String dni) throws AppException;
+
+		List<PedidoDeRetiro> findByUser(String usuario) throws AppException, IncorrectEmailException;
 	
 }

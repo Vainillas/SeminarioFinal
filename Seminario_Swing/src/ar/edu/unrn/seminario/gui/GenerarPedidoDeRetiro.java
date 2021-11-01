@@ -345,7 +345,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				List<ViviendaDTO> viviendas= new ArrayList<ViviendaDTO>();	
 		
 					try {
-						viviendas = api.obtenerViviendas();
+						viviendas = api.obtenerViviendasDeUsuario();
 						
 						// Agrega las direcciones de el dueño en el model
 						for (ViviendaDTO d : viviendas) {

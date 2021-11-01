@@ -217,6 +217,16 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
+	public List<ViviendaDTO> obtenerViviendasDeUsuario() throws AppException {
+		List<ViviendaDTO> dtos = new ArrayList<>();
+		
+		List<Vivienda> viviendas = viviendaDao.findByUser(this.getUserOnline().getUsuario());
+		
+		for (Vivienda v : viviendas) {
+			dtos.add(new ViviendaDTO(v.getDireccion(),v.getDueño(),v.getID()));
+		}
+		return dtos;
+	}
 	
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
@@ -319,7 +329,7 @@ public class PersistenceApi implements IApi {
 		return vDTO;
 	}
 	
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{ //ELIMINAR LOS 4
 		//List<UsuarioDTO> usuario = Filtro.filtrar(this.obtenerUsuarios());
 		
 		List<UsuarioDTO> usuario = null;
@@ -438,19 +448,20 @@ public class PersistenceApi implements IApi {
 		return dueñodto;
 	}
 	
-	/*public DueñoDTO obtenerDueñoActivo() {
-		//this.userOnline.getEmail().equals()
+	public DueñoDTO obtenerDueñoActivo() throws AppException {
+		String username = this.userOnline.getUsuario();
 		
-		Dueño dueño = dueñoDao.find(dni);
+		Dueño dueño = dueñoDao.findByUser(username);
 		DueñoDTO dueñodto = null;
 		if(dueño!=null) {
 			dueñodto = new DueñoDTO(dueño.getNombre(),
 					dueño.getApellido(),
 					dueño.getDni(),
-					dueño.getCorreo());
+					dueño.getCorreo(),
+					dueño.getUsername());
 		}
 		return dueñodto;
-	}*/
+	}
 	
     public List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
@@ -624,6 +635,16 @@ public class PersistenceApi implements IApi {
         }
         return pedidosDto;
 	}
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() throws AppException, Exception {
+		
+		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
+		
+        List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findByUser(this.getUserOnline().getUsuario());
+        for (PedidoDeRetiro d : pedidos) {
+            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda(), d.getCodigo() ));
+        }
+        return pedidosDto;
+	}
     
     
     public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException{
@@ -746,7 +767,6 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-	
 
 
 

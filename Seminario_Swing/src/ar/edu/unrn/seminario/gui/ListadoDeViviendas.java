@@ -86,10 +86,11 @@ public class ListadoDeViviendas extends JFrame {
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 
-		// Obtiene la lista de usuarios a mostrar
+		// Obtiene la lista de viviendas a mostrar
 		List<ViviendaDTO> viviendas;
 		try {
 			viviendas = api.obtenerViviendas();
+			//viviendas = api.obtenerViviendasDeUsuario();    *Este método es funcional
 			for (ViviendaDTO v : viviendas) {
 				modelo.addRow(new Object[] { v.getDireccion().getBarrio(),
 							v.getDireccion().getCalle(),
