@@ -526,13 +526,13 @@ public class PersistenceApi implements IApi {
     	for(int j=0; j<listaResiduos.size(); j++) {
     		listaSumaVisitas.add(0);
     	}
-    	
+    	System.out.println("El Tamaño de la Lista de Suma Visitas después del for es de : " + listaSumaVisitas.size());
     	for(Visita visita: listaVisitas){
     		
         	int i = 0;
         	System.out.println("Visita numero "+i+" de la listaVisitas en comprobarCantResiduos: "+visita.getResiduosExtraidos().toString());
     		for(Residuo residuo: visita.getResiduosExtraidos()){
-    			
+    			System.out.println("Valor de i dentro del for Residuo residuo: " + i);
     			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
     			
     			i++;
@@ -541,7 +541,6 @@ public class PersistenceApi implements IApi {
     	}
     	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
     	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
-    	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
     	Boolean rtado = false;
     	int i;
     	System.out.println("Lista residuos: "+ listaResiduos.toString());
