@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement
 	                    ("INSERT INTO ordenes(codigoPedido, dniRecolector, fecha, estado) "
-	                            + "VALUES (?, ?, ?, ?)");
+	                            + "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 	            
 	            statement.setInt(1, o.getPedidoAsociado().getCodigo());
 	            if(o.getRecolector()!=null) {
@@ -208,7 +209,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								
 								residuoVisita = new Residuo(tipoResiduoVisita, resultSetResiduosVisita.getInt("cantidad"));
 								
-								listaResiduosVisita.add(residuoVisita);
+								listaResiduosVisita.add(residuoVisita);  
 							}
 						}
 						visita= new Visita(resultSetVisita.getString("observacion"), listaResiduosVisita,resultSetVisita.getInt("codigoOrden"),resultSetVisita.getInt("codigo"));

@@ -520,7 +520,7 @@ public class PersistenceApi implements IApi {
     	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>(); //Suma los residuos de todas las visitas
     	
     	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
-    	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
+    	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());  
     	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
     	
     	for(int j=0; j<listaResiduos.size(); j++) {
@@ -543,10 +543,20 @@ public class PersistenceApi implements IApi {
     	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
     	Boolean rtado = false;
     	int i;
+    	System.out.println("Lista de la Visita: " + listaVisitas.get(0).toString());
     	System.out.println("Lista suma residuos: "+ listaResiduos.toString());
     	System.out.println("Lista suma visitas: " +listaSumaVisitas.toString());
     	//Fijate que tienen lo mismo pero te lo carga al revés
     	//Onda la lista de suma visitas 
+    	/*int j=listaResiduos.size() - 1;
+    	int intAux;
+    	for(i=0;i<listaSumaVisitas.size();i++) {
+    		intAux = listaSumaVisitas.get(i);
+    		listaSumaVisitas.set(i, listaSumaVisitas.get(j));
+    		listaSumaVisitas.set(j, intAux);
+    		j--;
+    	}*/
+    	
     	for(i=0;i<listaResiduos.size();i++) {
     		if(listaResiduos.get(i).getCantidadKg() != listaSumaVisitas.get(i)) {
     			rtado = true;
