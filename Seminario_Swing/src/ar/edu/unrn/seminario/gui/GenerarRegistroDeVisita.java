@@ -156,11 +156,11 @@ public class GenerarRegistroDeVisita extends JFrame {
 					ordenSeleccionada.add( (String) table.getValueAt(table.getSelectedRow(), i));
 					
 				}
-				descripcion = (String) table.getValueAt(table.getSelectedRow(), 6);
+				descripcion = (String) table.getValueAt(table.getSelectedRow(), 4);
 				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);
 				
 				try {
-					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
+					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(4)));
 					lb_slider_vidrio.setVisible(false);
 					slider_vidrio.setValue(0);
 					slider_vidrio.setVisible(false);		
@@ -307,7 +307,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.add(lb_mes);
 		
 		slider_metal = new JSlider();
-		slider_metal.setValue(0);
+
 		slider_metal.setMaximum(50);
 		slider_metal.setPaintTicks(true);
 		slider_metal.setPaintLabels(true);
@@ -319,7 +319,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.add(slider_metal);
 		
 		slider_carton = new JSlider();
-		slider_carton.setValue(0);
+
 		slider_carton.setMaximum(50);
 		slider_carton.setMajorTickSpacing(5);
 		slider_carton.setPaintTicks(true);
@@ -329,7 +329,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.add(slider_carton);
 		
 		slider_vidrio = new JSlider();
-		slider_vidrio.setValue(0);
+
 		slider_vidrio.setMajorTickSpacing(5);
 		slider_vidrio.setPaintLabels(true);
 		slider_vidrio.setPaintTicks(true);
