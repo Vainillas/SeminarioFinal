@@ -26,4 +26,6 @@ public interface ViviendaDao {
 
 	List<Vivienda> findByUser(String usuario) throws AppException;
 
+	boolean exists(String dni, String calle, String altura) throws AppException;
+
 }

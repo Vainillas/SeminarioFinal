@@ -11,6 +11,7 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 
 import javax.swing.JLabel;
@@ -83,27 +84,42 @@ public class RegistroVivienda extends JFrame {
         JButton botonAceptar = new JButton(labels.getString("registro.viviendas.button.aceptar"));
         botonAceptar.addActionListener((e)->{
             	try {
-            		
-            		api.registrarDireccion(calleIngresada.getText(),
-            				alturaIngresada.getText(),
-            				codPostIngresado.getText(),
-            				latitudIngresada.getText(),
-            				longitudIngresada.getText(),
-            				barrioIngresado.getText());
-            		
-            		api.registrarVivienda(
-            				calleIngresada.getText(),
-            				alturaIngresada.getText(),
-            				codPostIngresado.getText(),
-            				longitudIngresada.getText(), 
-            				latitudIngresada.getText(),
-            				barrioIngresado.getText());
-            		JOptionPane.showMessageDialog(null ,
-            				labels.getString("registro.viviendas.mensaje.carga.correcta"));
-                    setVisible (false);
-                    dispose();
-                    
-            	}   
+
+            		//if(!api.existeDueño(dniIngresado.getText())) {//si el dueño no existe se procede a crear uno
+
+            			/*api.registrarDueño(nombreIngresado.getText(),
+                				apellidoIngresado.getText(),
+                				dniIngresado.getText(),
+                				correoIngresado.getText());*/
+            		//}
+            		String dni = api.obtenerDueñoActivo().getDni();
+            		if(!api.existeVivienda(dni, calleIngresada.getText(), alturaIngresada.getText()) && !api.existeDireccion(calleIngresada.getText(), alturaIngresada.getText())) {
+            			api.registrarVivienda(/*nombreIngresado.getText(),
+                				apellidoIngresado.getText(),
+                				dniIngresado.getText(),
+                				correoIngresado.getText(),*/
+                				calleIngresada.getText(),
+                				alturaIngresada.getText(),
+                				codPostIngresado.getText(),
+                				longitudIngresada.getText(), 
+                				latitudIngresada.getText(),
+                				barrioIngresado.getText());
+                		
+                		api.registrarDireccion(calleIngresada.getText(),
+                				alturaIngresada.getText(),
+                				codPostIngresado.getText(),
+                				latitudIngresada.getText(),
+                				longitudIngresada.getText(),
+                				barrioIngresado.getText());
+                		JOptionPane.showMessageDialog(null ,
+                				labels.getString("registro.viviendas.mensaje.carga.correcta"));
+                        setVisible (false);
+                        dispose();
+            		}
+            		else
+            			JOptionPane.showMessageDialog(null, labels.getString("registro.viviendas.mensaje.error"));
+            	} 
+
 				 catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(), labels.getString("registro.viviendas.mensaje.error"), JOptionPane.ERROR_MESSAGE);
 				}

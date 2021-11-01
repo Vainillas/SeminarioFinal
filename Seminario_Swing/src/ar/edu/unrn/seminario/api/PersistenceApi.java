@@ -795,6 +795,16 @@ public class PersistenceApi implements IApi {
 		
 	}
 
+	@Override
+	public boolean existeDireccion(String calle, String altura) throws AppException {
+		return direccionDao.exists(calle, altura);
+	}
+
+	@Override
+	public boolean existeVivienda(String dni, String calle, String altura) throws AppException {
+		return viviendaDao.exists(dni,calle,altura);
+	}
+
 
 
 

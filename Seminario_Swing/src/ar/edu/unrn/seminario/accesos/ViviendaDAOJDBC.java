@@ -264,4 +264,30 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		return viviendas;
 	}
 
+	@Override
+	public boolean exists(String dni, String calle, String altura) throws AppException {
+		boolean exists = false;
+
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT calle, altura, dni FROM viviendas WHERE calle = ? AND altura = ? AND dni = ?");
+			statement.setString(1, calle);
+			statement.setString(2, altura);
+			statement.setString(3, dni);
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				if(rs.getString("calle").equals(calle) && rs.getInt("altura")== Integer.parseInt((altura)) && rs.getString("dni").equals(dni)) {
+					exists = true;
+				}		
+			}
+		} catch (SQLException e ) {
+			throw new AppException("Error al verificar la existencia de la vivienda");
+		}finally {
+			ConnectionManager.disconnect();
+		}
+		return exists;
+	}
+
 }
