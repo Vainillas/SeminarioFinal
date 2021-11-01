@@ -625,6 +625,19 @@ public class PersistenceApi implements IApi {
 		this.pedidoDeRetiroDao.create(nuevoPedido);
 	
     }
+	public PedidoDeRetiroDTO obtenerPedidoDeRetiro(int codigo) throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException {
+		PedidoDeRetiroDTO pedidoDTO = null;
+		PedidoDeRetiro pedido= pedidoDeRetiroDao.find(codigo);
+		if(pedido!=null) {
+			pedidoDTO = new PedidoDeRetiroDTO(pedido.getObservacion(),
+					pedido.getMaquinaPesada(),
+					pedido.getListResiduos(),
+					pedido.getFechaDelPedido(),
+					pedido.getVivienda(),
+					pedido.getCodigo());
+		}
+		return pedidoDTO;
+	}
 	
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
