@@ -658,7 +658,8 @@ public class PersistenceApi implements IApi {
     				o.getRecolector(),
     				o.getFechaOrden(),
     				o.getEstado(), 
-    				o.getVisitas()));
+    				o.getVisitas(),
+    				o.getCodigo()));
     	} 
     	return ordenesDto;
     }
@@ -671,7 +672,8 @@ public class PersistenceApi implements IApi {
     				orden.getRecolector(),
     				orden.getFechaOrden(),
     				orden.getEstado(),
-    				orden.getVisitas());
+    				orden.getVisitas(),
+    				orden.getCodigo());
     	}
     	return o;
     }
