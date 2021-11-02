@@ -1,7 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
-
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -59,6 +59,7 @@ import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.edu.unrn.seminario.utilities.Filtro;
+import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 
@@ -780,8 +781,12 @@ public class PersistenceApi implements IApi {
 		
 		
 	}
-
-
+	@Override
+	public List<ViviendaDTO> obtenerViviendas(Comparator comparator) throws AppException {
+		 
+		return Filtro.filtrar(this.obtenerViviendas(), comparator);
+	}
+	
 	@Override
 	public void registrarDueño(String nombre, String apellido, String dni)
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
@@ -807,6 +812,12 @@ public class PersistenceApi implements IApi {
 	public boolean existeVivienda(String dni, String calle, String altura) throws AppException {
 		return viviendaDao.exists(dni,calle,altura);
 	}
+
+	public List<UsuarioDTO> obtenerUsuarios(Comparator comparator ) throws AppException{
+		return Filtro.filtrar(this.obtenerUsuarios(), comparator);
+		
+	}
+	
 
 
 

@@ -68,7 +68,8 @@ public class GenerarOrdenDeRetiro extends JFrame {
 
 	
 	public GenerarOrdenDeRetiro(IApi api){
-		setTitle("Orden de retiro");
+		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+		setTitle(labels.getString("generar.orden.retiro.titulo"));
 		this.api = api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1088, 625);
@@ -77,7 +78,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		setContentPane(contentPane);
-		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+		
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelOrdenesRetiro = new JPanel();
 		panelOrdenesRetiro.setBounds(10, 46, 500, 495);

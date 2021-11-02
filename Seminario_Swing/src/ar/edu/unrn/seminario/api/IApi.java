@@ -31,6 +31,7 @@ import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Persona;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
@@ -71,6 +72,9 @@ public interface IApi {
 	List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException; // recuperar todos los usuarios
 	
 	List<ViviendaDTO> obtenerViviendas() throws AppException;
+	
+	List<ViviendaDTO> obtenerViviendas(Comparator comparator ) throws AppException;
+	public List<UsuarioDTO> obtenerUsuarios(Comparator comparator ) throws AppException;
 
 	
 	void activarUsuario(String username) throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
