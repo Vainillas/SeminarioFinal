@@ -45,6 +45,7 @@ import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
+import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Estado;
@@ -666,8 +667,23 @@ public class PersistenceApi implements IApi {
 		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), comparator);
 	}
 
+	@Override
+	public List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) throws AppException, NotNumberException {
+		return Filtro.filtrar(this.obtenerDueños(), predicate);
+	}
+	
+	public List<DueñoDTO> obtenerDueños(Comparator<DueñoDTO> comparator) throws AppException, NotNumberException {
+		return Filtro.filtrar(this.obtenerDueños(), comparator);
+		
+		
+	}
 
 
+	public void agregarBeneficio(String descripcion, String puntajeConsumible) throws NotNullException, DataEmptyException, NotNumberException {
+		Beneficio beneficio = new Beneficio(descripcion, puntajeConsumible);
+		
+		
+	}
 
 
 
