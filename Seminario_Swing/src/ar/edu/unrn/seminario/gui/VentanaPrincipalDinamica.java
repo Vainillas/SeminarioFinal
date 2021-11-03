@@ -231,7 +231,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbAdministrador.add(mnPedidosDeRetiroAdministrador);
 		
 		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.pedidos.de.retiro.administrador"));
-		mntmAdmListadoPedidosDeRetiros.setVisible(false);
 		mntmAdmListadoPedidosDeRetiros.addActionListener((e)->{
 			ListadoDePedidosDeRetiro listadoPedidos = new ListadoDePedidosDeRetiro(api);
 			listadoPedidos.setVisible(true);

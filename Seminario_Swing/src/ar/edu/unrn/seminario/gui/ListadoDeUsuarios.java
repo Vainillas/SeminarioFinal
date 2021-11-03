@@ -335,46 +335,8 @@ public class ListadoDeUsuarios extends JFrame {
 		modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
 		}
 	}
-	
-	private void reloadGrid(String tipoOrdenamiento){
-		// Obtiene el model del table
-		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-		// Obtiene la lista de usuarios a mostrar
-		List<UsuarioDTO> usuarios;
-		try {
-			switch(tipoOrdenamiento) {
-		
-				case "username":
-					usuarios = api.obtenerUsuariosOrdenadosPorNombre();
-					break;
-				case "rol":
-						usuarios = api.obtenerUsuariosOrdenadosPorRol();
-						break;
-				case "correo":
-					usuarios = api.obtenerUsuariosOrdenadosPorCorreo();
-					break;
-				case "estado":
-					usuarios = api.obtenerUsuariosOrdenadosPorEstado();
-					break;
-				default:
-					usuarios = api.obtenerUsuarios();
-					break;
-					
-			}
-			modelo.setRowCount(0);
-			// Agrega los usuarios en el model
-			for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-			}
-		
-		}catch (AppException e) {
-			setVisible(false);
-			JOptionPane.showMessageDialog(null,e.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-		
-		
-			
-		}
-	}
+
+
 }
 
 

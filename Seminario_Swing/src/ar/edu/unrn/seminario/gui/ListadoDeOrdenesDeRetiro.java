@@ -79,6 +79,9 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	private JTextField tfFiltradoPorCodigoOrden;
 	private JRadioButton rdbtnNewRadioButton;
 	private JRadioButton rdbtnFiltradoPorCodigoOrden;
+	private JLabel lbOrdenarPorCodigoPedido;
+	private JLabel lbOrdenarPorCodigoOrden;
+	private JRadioButton rdbtnOrdenarPorCodigoOrden;
 	/**
 	 * Launch the application.
 	 */
@@ -156,7 +159,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_filtrados.setBounds(10, 35, 220, 148);
 		panel.add(panel_filtrados);
 		
-		lbFiltradoPorDni = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.dni"));
+		lbFiltradoPorDni = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.filtrado.por.dni"));
 		lbFiltradoPorDni.setBounds(0, 8, 101, 14);
 		lbFiltradoPorDni.setHorizontalAlignment(SwingConstants.CENTER);
 		
@@ -167,7 +170,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoPorDni = new JRadioButton("");
 		rdbtnFiltradoPorDni.addActionListener((e)->{
-			if(rdbtnFiltradoPorDni.isSelected()) {
+			
 			Predicate <OrdenDeRetiroDTO> predicate = (OrdenDeRetiroDTO o)->
 				o.getRecolector().getDni().contains(this.tfFiltradoPorDni.getText());
 				
@@ -176,15 +179,14 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				} catch (AppException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
-				
 				rdbtnFiltradoPorDni.setSelected(false);
-			}
+			
 			
 			
 		});
 		rdbtnFiltradoPorDni.setBounds(190, 5, 21, 21);
 		
-		lbFiltradorPorEstado = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.estado"));
+		lbFiltradorPorEstado = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.filtrado.por.estado"));
 		lbFiltradorPorEstado.setBounds(0, 31, 101, 14);
 		lbFiltradorPorEstado.setHorizontalAlignment(SwingConstants.CENTER);
 		
@@ -194,7 +196,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoPoEstado = new JRadioButton("");
 		rdbtnFiltradoPoEstado.addActionListener((e)->{
-			if(rdbtnFiltradoPoEstado.isSelected()) {
+		
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				o.getEstado().obtenerEstado().contains(this.tfFiltradoPorEstado.getText());
@@ -206,12 +208,12 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				}
 				rdbtnFiltradoPoEstado.setSelected(false);
 				
-			}
+			
 			
 		});
 		rdbtnFiltradoPoEstado.setBounds(190, 29, 21, 21);
 		
-		lbFiltradoCodigoPedido = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.por.codigo.pedido"));
+		lbFiltradoCodigoPedido = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.filtrado.por.codigo.pedido"));
 		lbFiltradoCodigoPedido.setBounds(0, 63, 101, 14);
 		lbFiltradoCodigoPedido.setHorizontalAlignment(SwingConstants.CENTER);
 		
@@ -221,7 +223,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoCodigoPedido = new JRadioButton("");
 		rdbtnFiltradoCodigoPedido.addActionListener((e)->{
-			if(rdbtnFiltradoCodigoPedido.isSelected()) {
+			
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				String.valueOf(o.getPedidoAsociado().getCodigo()).contains(this.tfFiltradoCodigoPedido.getText());
@@ -232,7 +234,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 
 				}
 				rdbtnFiltradoCodigoPedido.setSelected(false);
-			}
+			
 		});
 		rdbtnFiltradoCodigoPedido.setBounds(190, 57, 21, 21);
 		panel_filtrados.setLayout(null);
@@ -254,7 +256,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoPorCodigoOrden = new JRadioButton("");
 		rdbtnFiltradoPorCodigoOrden.addActionListener((e)->{
-			if(rdbtnFiltradoPorCodigoOrden.isSelected()) {
+			
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				String.valueOf(o.getCodigo()).contains(this.tfFiltradoPorCodigoOrden.getText());
@@ -265,7 +267,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 
 				}
 				rdbtnFiltradoPorCodigoOrden.setSelected(false);
-			}
+			
 			
 		});
 		rdbtnFiltradoPorCodigoOrden.setBounds(190, 85, 21, 23);
@@ -277,8 +279,36 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		tfFiltradoPorCodigoOrden.setColumns(10);
 		
 		panel_ordenamientos = new JPanel();
-		panel_ordenamientos.setBounds(25, 219, 155, 106);
+		panel_ordenamientos.setBounds(52, 219, 143, 137);
 		panel.add(panel_ordenamientos);
+		panel_ordenamientos.setLayout(null);
+		
+		JLabel lbOrdenarPorDni = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenar.por.dni")); 
+		lbOrdenarPorDni.setBounds(10, 8, 90, 14);
+		lbOrdenarPorDni.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_ordenamientos.add(lbOrdenarPorDni);
+		
+		JRadioButton rdbtnOrdenarPorDni = new JRadioButton("");
+		rdbtnOrdenarPorDni.setBounds(100, 5, 21, 21);
+		panel_ordenamientos.add(rdbtnOrdenarPorDni);
+		
+		lbOrdenarPorCodigoPedido = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenar.por.codigo.pedido")); 
+		lbOrdenarPorCodigoPedido.setHorizontalAlignment(SwingConstants.CENTER);
+		lbOrdenarPorCodigoPedido.setBounds(10, 34, 90, 14);
+		panel_ordenamientos.add(lbOrdenarPorCodigoPedido);
+		
+		JRadioButton rdbtnOrdenarPorCodigoPedido = new JRadioButton(""); 
+		rdbtnOrdenarPorCodigoPedido.setBounds(100, 31, 21, 21);
+		panel_ordenamientos.add(rdbtnOrdenarPorCodigoPedido);
+		
+		lbOrdenarPorCodigoOrden = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenar.por.codigo.orden")); 
+		lbOrdenarPorCodigoOrden.setHorizontalAlignment(SwingConstants.CENTER);
+		lbOrdenarPorCodigoOrden.setBounds(10, 60, 90, 14);
+		panel_ordenamientos.add(lbOrdenarPorCodigoOrden);
+		
+		rdbtnOrdenarPorCodigoOrden = new JRadioButton(""); 
+		rdbtnOrdenarPorCodigoOrden.setBounds(100, 57, 21, 21);
+		panel_ordenamientos.add(rdbtnOrdenarPorCodigoOrden);
 		
 		lbFiltrado = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado"));
 		lbFiltrado.setHorizontalAlignment(SwingConstants.CENTER);
@@ -287,7 +317,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		lbOrdenamiento = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.ordenamiento"));
 		lbOrdenamiento.setHorizontalAlignment(SwingConstants.CENTER);
-		lbOrdenamiento.setBounds(31, 194, 133, 14);
+		lbOrdenamiento.setBounds(52, 194, 143, 14);
 		panel.add(lbOrdenamiento);
 		
 		panel_botones = new JPanel();
@@ -325,6 +355,4 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	}
 			
 	}
-	
-	
 }

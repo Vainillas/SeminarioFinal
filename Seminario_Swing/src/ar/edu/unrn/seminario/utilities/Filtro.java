@@ -24,12 +24,6 @@ public class Filtro {
 		
 		Collections.sort(list,comparator);
 		
-			/*for(int i = 1 ; i< list.size()-1;i++) {
-				for(int j = 0;j<list.size();j++) {
-				if(comportamiento.execute(list.get(i), list.get(j))) {
-					resultado.add(list.get(i));
-				}
-			}*/
 			
 	//	}
 		
