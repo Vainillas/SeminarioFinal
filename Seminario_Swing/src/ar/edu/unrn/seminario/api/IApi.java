@@ -31,6 +31,7 @@ import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Persona;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
+import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
@@ -71,6 +72,9 @@ public interface IApi {
 	List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException; // recuperar todos los usuarios
 	
 	List<ViviendaDTO> obtenerViviendas() throws AppException;
+	
+	List<ViviendaDTO> obtenerViviendas(Comparator comparator ) throws AppException;
+	public List<UsuarioDTO> obtenerUsuarios(Comparator comparator ) throws AppException;
 
 	
 	void activarUsuario(String username) throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
@@ -82,13 +86,6 @@ public interface IApi {
 	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
 			String barrio) throws Exception;
 
-	List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws Exception;
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException;
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException;
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException;
-	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException;
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException;
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException;
 	
 	DueñoDTO obtenerDueño(String dni) throws AppException;
 
@@ -136,12 +133,8 @@ public interface IApi {
 			throws AppException;
 	
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) throws AppException;
+	
 	List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
-//ELIMINAR ESTOS
-	List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo() throws AppException;
-	List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException;
-	List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol() throws AppException;
-	List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre() throws AppException;
 
 	List<ViviendaDTO> obtenerViviendasDeUsuario() throws AppException;
 
@@ -150,5 +143,9 @@ public interface IApi {
 	boolean existeVivienda(String dni, String calle, String altura) throws AppException;
 
 	DueñoDTO obtenerDueñoActivo() throws AppException;
+
+	<T> List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Predicate <T> predicado) throws AppException, Exception;
+
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, Exception;
 
 }

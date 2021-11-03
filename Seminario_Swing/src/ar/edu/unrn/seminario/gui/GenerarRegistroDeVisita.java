@@ -113,7 +113,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 	public GenerarRegistroDeVisita(IApi api) {
 		labels = ResourceBundle.getBundle("labels",new Locale("es"));
-		
+		setTitle(labels.getString("registro.de.visita.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1193, 529);
 		contentPane = new JPanel();
@@ -158,8 +158,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				}
 				descripcion = (String) table.getValueAt(table.getSelectedRow(), 6);
 				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);
-				System.out.println("codigo de orden: " + codigoOrden);
-				System.out.println("Descripcion: " + descripcion);
+
 				
 				try {
 					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
@@ -216,7 +215,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 							slider_carton.setVisible(true);
 						}
 						if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Plástico")) {
-							//System.out.println("entrooooooooooo");
 							slider_plastico.setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
 							slider_plastico.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);  
 							lb_slider_plastico.setVisible(true);
@@ -229,8 +227,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 					
 				 catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 						| DateNullException | AppException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
+					
+					 JOptionPane.showMessageDialog(null, e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
@@ -288,14 +286,15 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.add(tp_observacion);
 		
 		lb_observacion = new JLabel(labels.getString("registro.de.visita.label.observacion"));
-		lb_observacion.setBounds(80, 127, 46, 14);
+		lb_observacion.setHorizontalAlignment(SwingConstants.CENTER);
+		lb_observacion.setBounds(32, 127, 142, 14);
 		panel_visita.add(lb_observacion);
 		
 		lb_hora = new JLabel(labels.getString("registro.de.visita.label.hora"));
 		lb_hora.setBounds(10, 11, 46, 14);
 		panel_visita.add(lb_hora);
 		
-		 lb_dia = new JLabel(labels.getString("registro.de.visita.label.dia"));
+		lb_dia = new JLabel(labels.getString("registro.de.visita.label.dia"));
 		lb_dia.setBounds(10, 48, 46, 14);
 		panel_visita.add(lb_dia);
 		
@@ -381,25 +380,52 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		//Modelo de fecha y hora >
 		
-		JSpinner spinner_hora = new JSpinner();
-		SpinnerNumberModel maximo_hora = new SpinnerNumberModel();
-		maximo_hora.setMaximum(24);
-		maximo_hora.setMinimum(0);
+		ArrayList<String> numeros = new ArrayList<String>();
+		for(int i=1;i<=24;i++) {
+
+			String v = String.valueOf(i);
+			numeros.add(v);
+		}
+		
+		
+		SpinnerModel maximo_hora = new SpinnerListModel(numeros);
+		JSpinner spinner_hora = new JSpinner(maximo_hora);
+		spinner_hora.setModel(maximo_hora);
+		panel_visita.add(spinner_hora);
+		
+		//maximo_hora.setMaximum(24);
+		//maximo_hora.setMinimum(0);
 		spinner_hora.setModel(maximo_hora);
 		spinner_hora.setBounds(74, 8, 52, 20);
 		panel_visita.add(spinner_hora);
 		
 		
-		JSpinner spinner_dia = new JSpinner();
-		spinner_dia.setBounds(74, 45, 52, 20);
 		
-		panel_visita.add(spinner_dia);
-		SpinnerNumberModel maximo_dia = new SpinnerNumberModel();
-		maximo_dia.setMaximum(31);
-		maximo_dia.setMinimum(0);
+		
+		
+		
+		numeros = new ArrayList<String>();
+		for(int i=1;i<=31;i++) {
+
+			String v = String.valueOf(i);
+			numeros.add(v);
+		}
+		SpinnerModel maximo_dia = new SpinnerListModel(numeros);
+		JSpinner spinner_dia = new JSpinner(maximo_dia);
 		spinner_dia.setModel(maximo_dia);
+		panel_visita.add(spinner_dia);
+		spinner_dia.setBounds(74, 45, 52, 20);
+		//numeros.clear();
 		
-		final String [] numeros = {"1","2","3","4","5","6","7","8","9","10","11","12"};
+		//maximo_dia.setMaximum(31);
+		//maximo_dia.setMinimum(0);
+		//spinner_dia.setModel(maximo_dia);
+		
+		 numeros = new ArrayList<String>();
+		for(int i=1;i<=12;i++) {
+			String v = String.valueOf(i);
+			numeros.add(v);
+		}
 		SpinnerModel maximo_mes = new SpinnerListModel(numeros);
 		JSpinner spinner_mes = new JSpinner(maximo_mes);
 		spinner_mes.setModel(maximo_mes);
@@ -429,9 +455,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
 
-			for(String s : residuosSeleccionadosKg) {
-				System.out.println("valores: "+ s);
-			}
+			
 
 			try { // ***************ERROR***************** 
 				//No deberías pasar residuosSeleccionados y residuosSeleccionadosKg
@@ -465,7 +489,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				JOptionPane.showMessageDialog(null,"Registro de visita generado con exito!","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
 			} catch (NumberFormatException | AppException e1) {
 				// TODO Bloque catch generado automáticamente
-				System.out.println("entroo aca");
+				
 			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
 			setVisible(false);

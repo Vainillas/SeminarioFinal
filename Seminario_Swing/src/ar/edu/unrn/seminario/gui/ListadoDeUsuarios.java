@@ -5,6 +5,7 @@ import java.awt.event.MouseAdapter;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -24,10 +25,11 @@ import ar.edu.unrn.seminario.api.IApi;
 
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
+import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 
 import ar.edu.unrn.seminario.exceptions.StateException;
-
+import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.JTextField;
@@ -68,6 +70,7 @@ public class ListadoDeUsuarios extends JFrame {
 		contentPane.add(scrollPane);
 		//ResourceBundle labels = ResourceBundle.getBundle("labels"); 
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
+		setTitle(labels.getString("listado.usuario.titulo"));
 		table = new JTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.usuario.titulos.usuario.USUARIO"),  
@@ -177,33 +180,22 @@ public class ListadoDeUsuarios extends JFrame {
 		btnOrdenarPorRol.setBounds(39, 25, 87, 23);
 		btnOrdenarPorRol.addActionListener((e)->{
 
-			reloadGrid("rol");
-
-			DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-			// Obtiene la lista de usuarios a mostrar
-			List<UsuarioDTO> usuario = null ;
-			reloadGrid("rol"); //Por qué en este hacés un reloadGrid al principio y en los otros no? 
+			Comparator <UsuarioDTO> comparator = (UsuarioDTO v1, UsuarioDTO v2)
+					->(v1.getRol().compareToIgnoreCase(v2.getRol())
+			);
+			
+			try {
+				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
+				this.reloadGrid(u);
+			} catch (AppException e1) {
+				// TODO Bloque catch generado automáticamente
+				e1.printStackTrace();
+			}
+			
 
 			
 
-		
-
-			try {	
-				filtradoUsuarioRol p = new filtradoUsuarioRol();
-				usuario = api.obtenerUsuariosOrdenados(p);
-				modelo.setRowCount(0);
-				
-				// Agrega los usuarios en el model
-				for (UsuarioDTO u : usuario) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-				}
-				
-				// Resetea el model
-				//reload(usuarios);
-			} catch (AppException e2) {
-				setVisible(false);
-				JOptionPane.showMessageDialog(null,e2.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-			}
+			
 
 			
 			
@@ -219,7 +211,17 @@ public class ListadoDeUsuarios extends JFrame {
 		btnOrdenarPorEstado = new JButton(labels.getString("listado.usuario.button.ordenar.por.estado")); 
 		btnOrdenarPorEstado.setBounds(39, 59, 87, 23);
 		btnOrdenarPorEstado.addActionListener((e)->{
-			reloadGrid("estado");
+			Comparator <UsuarioDTO> comparator = (UsuarioDTO v1, UsuarioDTO v2)
+					->(v1.getEstado().compareToIgnoreCase(v2.getEstado())
+			);
+			
+			try {
+				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
+				this.reloadGrid(u);
+			} catch (AppException e1) {
+				// TODO Bloque catch generado automáticamente
+				e1.printStackTrace();
+			}
 			
 			
 		});
@@ -228,13 +230,34 @@ public class ListadoDeUsuarios extends JFrame {
 		btnOrdenarPorNombre = new JButton(labels.getString("listado.usuario.button.ordenar.por.nombre")); //$NON-NLS-1$
 		btnOrdenarPorNombre.setBounds(39, 127, 87, 23);
 		btnOrdenarPorNombre.addActionListener((e)->{
-			reloadGrid("nombre");
+			Comparator <UsuarioDTO> comparator = (UsuarioDTO v1, UsuarioDTO v2)
+					->(v1.getUsername().compareToIgnoreCase(v2.getUsername())
+			);
+			
+			try {
+				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
+				this.reloadGrid(u);
+			} catch (AppException e1) {
+				// TODO Bloque catch generado automáticamente
+				e1.printStackTrace();
+			}
 		});
 		
 		btnOrdenarPorCorreo = new JButton(labels.getString("listado.usuario.button.ordenar.por.correo")); //$NON-NLS-1$
 		btnOrdenarPorCorreo.setBounds(39, 93, 87, 23);
 		btnOrdenarPorCorreo.addActionListener((e)->{
-			reloadGrid("correo");
+			Comparator <UsuarioDTO> comparator = (UsuarioDTO v1, UsuarioDTO v2)
+					->(v1.getEmail().compareToIgnoreCase(v2.getEmail())
+			);
+			
+			try {
+				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
+				this.reloadGrid(u);
+			} catch (AppException e1) {
+				// TODO Bloque catch generado automáticamente
+				e1.printStackTrace();
+			}
+
 			
 			
 		});
@@ -264,15 +287,15 @@ public class ListadoDeUsuarios extends JFrame {
 		JRadioButton rdbtnAceptar = new JRadioButton(""); 
 		rdbtnAceptar.addActionListener((e)->{
 			if(rdbtnAceptar.isSelected()) {
-				Predicate <UsuarioDTO> predicate = (UsuarioDTO usuario)->usuario.getUsername().contains((String)tfUsernameSeleccionado.getText());
-				
-				
+				Predicate <UsuarioDTO> predicate = 
+				(UsuarioDTO usuario)->usuario.getUsername().contains((String)tfUsernameSeleccionado.getText());	
 				try {
 					List<UsuarioDTO> us =api.obtenerUsuarios(predicate);
 					reloadGrid(us);
 				} catch (AppException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
+				
 				rdbtnAceptar.setSelected(false);
 			}
 		
@@ -312,46 +335,8 @@ public class ListadoDeUsuarios extends JFrame {
 		modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
 		}
 	}
-	
-	private void reloadGrid(String tipoOrdenamiento){
-		// Obtiene el model del table
-		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
-		// Obtiene la lista de usuarios a mostrar
-		List<UsuarioDTO> usuarios;
-		try {
-			switch(tipoOrdenamiento) {
-		
-				case "username":
-					usuarios = api.obtenerUsuariosOrdenadosPorNombre();
-					break;
-				case "rol":
-						usuarios = api.obtenerUsuariosOrdenadosPorRol();
-						break;
-				case "correo":
-					usuarios = api.obtenerUsuariosOrdenadosPorCorreo();
-					break;
-				case "estado":
-					usuarios = api.obtenerUsuariosOrdenadosPorEstado();
-					break;
-				default:
-					usuarios = api.obtenerUsuarios();
-					break;
-					
-			}
-			modelo.setRowCount(0);
-			// Agrega los usuarios en el model
-			for (UsuarioDTO u : usuarios) {
-			modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
-			}
-		
-		}catch (AppException e) {
-			setVisible(false);
-			JOptionPane.showMessageDialog(null,e.getMessage(), "error",JOptionPane.ERROR_MESSAGE);
-		
-		
-			
-		}
-	}
+
+
 }
 
 
