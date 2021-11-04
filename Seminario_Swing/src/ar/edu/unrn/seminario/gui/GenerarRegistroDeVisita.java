@@ -113,7 +113,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 	public GenerarRegistroDeVisita(IApi api) {
 		labels = ResourceBundle.getBundle("labels",new Locale("es"));
-		
+		setTitle(labels.getString("registro.de.visita.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1193, 529);
 		contentPane = new JPanel();
@@ -158,8 +158,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				}
 				descripcion = (String) table.getValueAt(table.getSelectedRow(), 6);
 				codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);
-				System.out.println("codigo de orden: " + codigoOrden);
-				System.out.println("Descripcion: " + descripcion);
+
 				
 				try {
 					PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
@@ -216,9 +215,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 							slider_carton.setVisible(true);
 						}
 						if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Plástico")) {
-							//System.out.println("entrooooooooooo");
 							slider_plastico.setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
-							slider_plastico.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);
+							slider_plastico.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);  
 							lb_slider_plastico.setVisible(true);
 							slider_plastico.setVisible(true);
 						}
@@ -229,8 +227,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 					
 				 catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 						| DateNullException | AppException e) {
-					System.out.println(e.getMessage());
-					e.printStackTrace();
+					
+					 JOptionPane.showMessageDialog(null, e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
@@ -296,7 +294,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lb_hora.setBounds(10, 11, 46, 14);
 		panel_visita.add(lb_hora);
 		
-		 lb_dia = new JLabel(labels.getString("registro.de.visita.label.dia"));
+		lb_dia = new JLabel(labels.getString("registro.de.visita.label.dia"));
 		lb_dia.setBounds(10, 48, 46, 14);
 		panel_visita.add(lb_dia);
 		
@@ -457,9 +455,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
 
-			for(String s : residuosSeleccionadosKg) {
-				System.out.println("valores: "+ s);
-			}
+			
 
 			try { // ***************ERROR***************** 
 				//No deberías pasar residuosSeleccionados y residuosSeleccionadosKg
@@ -493,7 +489,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				JOptionPane.showMessageDialog(null,"Registro de visita generado con exito!","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
 			} catch (NumberFormatException | AppException e1) {
 				// TODO Bloque catch generado automáticamente
-				System.out.println("entroo aca");
+				
 			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
 			setVisible(false);

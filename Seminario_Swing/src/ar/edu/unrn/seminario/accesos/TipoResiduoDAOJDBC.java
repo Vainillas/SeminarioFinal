@@ -17,7 +17,7 @@ public class TipoResiduoDAOJDBC implements TipoResiduoDao {
 	@Override
 	public void create(TipoResiduo r) throws AppException {
 		try {
-			Connection conn = ConnectionManager.getConnection();
+			Connection conn = ConnectionManager.getConnection(); 
 			PreparedStatement statement = conn
 					.prepareStatement("INSERT INTO residuos(nombre, puntaje) "
 							+ "VALUES (?, ?)");

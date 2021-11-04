@@ -51,7 +51,7 @@ public class ListadoDePersonal extends JFrame {
 	 * Create the frame.
 	 */
 	public ListadoDePersonal(IApi api) {
-		
+		setTitle("Listado Del Personal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 729, 470);
 		contentPane = new JPanel();
