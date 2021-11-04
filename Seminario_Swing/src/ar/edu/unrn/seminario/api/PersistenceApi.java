@@ -400,7 +400,7 @@ public class PersistenceApi implements IApi {
     
     public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
         Direccion direccion = null;
-		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
+		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);  
         this.direccionDao.create(direccion);
     }
     
@@ -427,6 +427,16 @@ public class PersistenceApi implements IApi {
         return dtos;
     }
     
+    public ArrayList<String> obtenerNombresResiduos() throws AppException{
+    	ArrayList<String> nombresResiduos = new ArrayList<>();
+		
+		List<TipoResiduo> tiposResiduos = tipoResiduoDao.findAll();
+		
+		for (TipoResiduo t : tiposResiduos) {
+			nombresResiduos.add(t.getNombre());
+		}
+		return nombresResiduos;
+    }
     
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
