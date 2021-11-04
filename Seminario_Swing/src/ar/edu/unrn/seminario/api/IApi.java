@@ -149,14 +149,14 @@ public interface IApi {
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) 
 			throws AppException;
 	
-<<<<<<< HEAD
-	<T> List<ViviendaDTO> obtenerViviendas(Predicate <T> predicate) 
+
+	List<ViviendaDTO> obtenerViviendas(Predicate predicate) 
 			throws AppException;
-=======
+
 	ArrayList<String> obtenerNombresResiduos() throws AppException;
 	
-	List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
->>>>>>> branch 'master' of https://github.com/Vainillas/SeminarioFinal.git
+	//List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
+
 
 	List<ViviendaDTO> obtenerViviendasDeUsuario() 
 			throws AppException;

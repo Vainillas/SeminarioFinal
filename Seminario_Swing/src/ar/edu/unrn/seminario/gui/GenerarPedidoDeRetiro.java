@@ -45,6 +45,9 @@ import javax.swing.JScrollBar;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
 
 
 public class GenerarPedidoDeRetiro extends JFrame {
@@ -68,8 +71,12 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	private JPanel panelViviendas;
 	private JTable table;
 	private JScrollPane scrollPane;
-	private JFormattedTextField formattedTextField;
-	private JLabel lbKg;
+	private JFormattedTextField ftfKg;
+	private JLabel lblNewLabel;
+	private JLabel lbTiposDeResiduos;
+	private JLabel lbCantidadKg;
+	private ArrayList<String > residuosSeleccionados = new ArrayList<String>();
+	private ArrayList<String > kgSeleccionados = new ArrayList<String>();
 	public static void main(String [] args) {
 		PersistenceApi api = new PersistenceApi();
 		GenerarPedidoDeRetiro p = new GenerarPedidoDeRetiro(api);
@@ -114,35 +121,31 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		boxCargaPesada.setBounds(224, 10, 81, 23);
 		panelDatos.add(boxCargaPesada);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(10, 90, 295, 108);
-		panelDatos.add(textArea);
+		JTextArea taObservacion = new JTextArea();
+		taObservacion.setBounds(10, 90, 295, 108);
+		panelDatos.add(taObservacion);
 		
 
 		panelBotones = new JPanel();
 		panelBotones.setBackground(SystemColor.info);
-		panelBotones.setBounds(20, 220, 358, 60);
+		panelBotones.setBounds(10, 235, 358, 46);
 		contentPane.add(panelBotones);
-		panelBotones.setLayout(null);
 		
 		buttonCancelar = new JButton(labels.getString("pedido.retiro.button.cancelar"));
+
 		buttonCancelar.addActionListener((e)->{
-				
-				int res = JOptionPane.showConfirmDialog(null, labels.getString("pedido.retiro.confirmar"),labels.getString("pedido.retiro.mensaje.informativo") , JOptionPane.YES_NO_OPTION);
-				if(res == JOptionPane.YES_OPTION) {
-					
-					setVisible(false);
-					dispose();
-				}
+				setVisible(false);
+				dispose();
+
 		});
-		buttonCancelar.setBounds(259, 11, 89, 23);
+		panelBotones.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		panelBotones.add(buttonCancelar);
 
 		
 		panelResiduos = new JPanel();
 		panelResiduos.setBackground(SystemColor.info);
 
-		panelResiduos.setBounds(345, 11, 284, 175);
+		panelResiduos.setBounds(336, 11, 293, 175);
 
 	
 
@@ -160,22 +163,17 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		panelResiduos.add(textFieldCodViv);
 		textFieldCodViv.setColumns(10);
 		
-		//JRadioButton [] residuos= {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
-		//JTextField [] residuosKg = {tfCantResiduoDinamico,textField_Plastico,textField_Metal,textField_Carton};
-		
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
-
-		buttonFinalizar.setBounds(120, 11, 89, 23);
 		panelBotones.add(buttonFinalizar);
 		buttonFinalizar.addActionListener((e)->{
-				//System.out.println(textField_Plastico.getText());
+				
 				
 				 
 	           
 	               
 	                 
 					try {
-						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), null,  null ,null ,domicilioSeleccionado);
+						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), this.residuosSeleccionados,  this.kgSeleccionados ,taObservacion.getText() ,domicilioSeleccionado);
 						
 						JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
@@ -193,29 +191,71 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		});
 
 		 lbResiduos = new JLabel(labels.getString("pedido.retiro.label.residuos")); 
-		lbResiduos.setBounds(0, 11, 115, 14);
+		 lbResiduos.setHorizontalAlignment(SwingConstants.CENTER);
+		lbResiduos.setBounds(6, 11, 263, 14);
 		panelResiduos.add(lbResiduos);
 		
 		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(6, 50, 78, 22);
+		comboBox.setBounds(8, 95, 78, 22);
+		try {
+			List<String> residuos = api.obtenerNombresResiduos();
+			for(String r : residuos) {
+				comboBox.addItem(r);
+			}
+		} catch (AppException e1) {
+			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+		}
+		
 		panelResiduos.add(comboBox);
-		comboBox.addItem("Plastico");
-		comboBox.addItem("Metal");
-		comboBox.addItem("Carton");
-		comboBox.addItem("Vidrio");
 		
-		formattedTextField = new JFormattedTextField();
-		formattedTextField.setBounds(116, 51, 64, 21);
-		panelResiduos.add(formattedTextField);
+		ftfKg = new JFormattedTextField(Integer.valueOf(0));
 		
-		lbKg = new JLabel(labels.getString("pedido.retiro.label.residuos.kg")); 
-		lbKg.setBounds(113, 11, 139, 17);
-		panelResiduos.add(lbKg);
+		ftfKg.setBounds(125, 96, 64, 21);
 		
+		panelResiduos.add(ftfKg);
 		JRadioButton rdbtnEnviarKg = new JRadioButton(labels.getString("pedido.retiro.button.aceptar.kg")); //$NON-NLS-1$
+		rdbtnEnviarKg.addActionListener((e)->{
+			rdbtnEnviarKg.setSelected(false);
+			if(!ftfKg.getValue().equals(0)) {
+
+				int res = JOptionPane.showConfirmDialog(null,("seguro que desea seleccionar "+ftfKg.getText()+" kg de "+ String.valueOf(comboBox.getSelectedItem()).toLowerCase())+"?","",JOptionPane.YES_NO_OPTION);
+				if(res == 0) {
+					
+					this.residuosSeleccionados.add((String)comboBox.getSelectedItem());
+					this.kgSeleccionados.add(String.valueOf(ftfKg.getValue()));
+					comboBox.removeItem(comboBox.getSelectedItem());
+					
+				}
+					ftfKg.setValue(null);
+				if(comboBox.getItemCount() == 0) {
+					rdbtnEnviarKg.setEnabled(false);
+					ftfKg.setEnabled(false);
+					comboBox.setEnabled(false);
+				}
+				
+			}
+			System.out.println();
+			
+		});
+		
 		rdbtnEnviarKg.setBackground(SystemColor.info);
-		rdbtnEnviarKg.setBounds(186, 50, 92, 23);
+		rdbtnEnviarKg.setBounds(195, 95, 92, 23);
 		panelResiduos.add(rdbtnEnviarKg);
+		
+		lblNewLabel = new JLabel(labels.getString("pedido.retiro.label.residuos.2")); //$NON-NLS-1$
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(6, 25, 254, 14);
+		panelResiduos.add(lblNewLabel);
+		
+		lbTiposDeResiduos = new JLabel(labels.getString("pedido.retiro.label.tipo.residuo")); //$NON-NLS-1$
+		lbTiposDeResiduos.setHorizontalAlignment(SwingConstants.CENTER);
+		lbTiposDeResiduos.setBounds(0, 64, 116, 20);
+		panelResiduos.add(lbTiposDeResiduos);
+		
+		lbCantidadKg = new JLabel(labels.getString("pedido.retiro.label.kg")); //$NON-NLS-1$
+		lbCantidadKg.setHorizontalAlignment(SwingConstants.CENTER);
+		lbCantidadKg.setBounds(103, 67, 111, 14);
+		panelResiduos.add(lbCantidadKg);
 		
 		panelViviendas = new JPanel();
 		panelViviendas.setBounds(639, 11, 411, 307);
@@ -291,14 +331,14 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		
 }
 	
-	private void cambiarVisibilidadKG() {
+	/*private void cambiarVisibilidadKG() {
 		if(this.mostrarKG == 0) {
 			lbKg.setVisible(false);
 		}
 		else {
 			lbKg.setVisible(true);
 		}
-	}
+	}*/
 	
 	private void cambiarVisibilidad(JRadioButton button) {
 		/*JTextField [] listaTextos = {tfCantResiduoDinamico, textField_Plastico,textField_Metal, textField_Carton};
