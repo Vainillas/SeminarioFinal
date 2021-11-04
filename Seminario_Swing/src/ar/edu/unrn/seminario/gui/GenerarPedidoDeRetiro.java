@@ -57,8 +57,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	 */
 	private static final long serialVersionUID = 7736390012295310754L;
 	private JPanel contentPane;
-	private Date fechaActual = DateHelper.getDate();
-	private IApi api = null;
 	private DefaultTableModel modelo;
 	private JPanel panelBotones;
 	private JButton buttonCancelar;
@@ -67,7 +65,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	private ArrayList<String> domicilioSeleccionado = null;
 	private JTextField textFieldCodViv;
 	private JLabel lbResiduos;
-	private int mostrarKG = 0;
 	private JPanel panelViviendas;
 	private JTable table;
 	private JScrollPane scrollPane;
@@ -84,7 +81,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	}
 	
 	public GenerarPedidoDeRetiro(IApi api) {
-		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -166,12 +162,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
 		panelBotones.add(buttonFinalizar);
 		buttonFinalizar.addActionListener((e)->{
-				
-				
-				 
-	           
-	               
-	                 
+
 					try {
 						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), this.residuosSeleccionados,  this.kgSeleccionados ,taObservacion.getText() ,domicilioSeleccionado);
 						
@@ -181,13 +172,10 @@ public class GenerarPedidoDeRetiro extends JFrame {
 						
 					} catch (AppException | DataEmptyException | NotNullException 
 							| StringNullException| DateNullException | NumberFormatException | KilogramEmptyException | NotNumberException e1) {
-						
-						
+
 						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
-						
+
 					}
-					
-				
 		});
 
 		 lbResiduos = new JLabel(labels.getString("pedido.retiro.label.residuos")); 
@@ -209,7 +197,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		panelResiduos.add(comboBox);
 		
 		ftfKg = new JFormattedTextField(Integer.valueOf(0));
-		
+		ftfKg.setValue(null);
 		ftfKg.setBounds(125, 96, 64, 21);
 		
 		panelResiduos.add(ftfKg);
@@ -234,7 +222,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				}
 				
 			}
-			System.out.println();
 			
 		});
 		
@@ -292,7 +279,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				habilitarBotones(true);
 			}
 		});
-		
 		table.setRowSelectionAllowed(true);//permitiendo seleccion de fila
 		table.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
 		
@@ -330,41 +316,6 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				
 		
 }
-	
-	/*private void cambiarVisibilidadKG() {
-		if(this.mostrarKG == 0) {
-			lbKg.setVisible(false);
-		}
-		else {
-			lbKg.setVisible(true);
-		}
-	}*/
-	
-	private void cambiarVisibilidad(JRadioButton button) {
-		/*JTextField [] listaTextos = {tfCantResiduoDinamico, textField_Plastico,textField_Metal, textField_Carton};
-		String [] nombresTextos = {"Vidrio","Plástico","Metal", "Cartón"};
-		boolean validacion = true;
-		int i = 0;
-		while(i < listaTextos.length && validacion) {
-			if(button.getText().equals(nombresTextos[i])) {
-				if(button.isSelected()) {
-					listaTextos[i].setVisible(true);
-					this.mostrarKG++;
-				}
-				else {
-					listaTextos[i].setVisible(false);
-					this.mostrarKG--;
-					
-				}
-			cambiarVisibilidadKG();
-			validacion = false;
-				
-			}
-		i++;
-		}*/
-		
-		
-	}
 	private void habilitarBotones(boolean b) {
 		//
 

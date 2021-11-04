@@ -107,7 +107,8 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.pedido"), 
 				labels.getString("listado.de.pedidos.de.retiro.titulos.requiere.maquinaria.pedido"), 
 				labels.getString("listado.de.pedidos.de.retiro.titulos.vivienda.pedido"), 
-				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.vivienda.pedido"), 	
+				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.vivienda.pedido"),
+				labels.getString("listado.de.pedidos.de.retiro.titulos.observacion")
 				};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulosUsuario);
@@ -147,8 +148,8 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 			rdbtn_filtrado_por_codigo_pedido.setSelected(false);
 			if(!tf_filtrado_por_codigo_pedido.getText().equals("")) {
 
-				
-			Predicate <PedidoDeRetiroDTO> predicado = (PedidoDeRetiroDTO p)->String.valueOf(p.getCodigo()).equals(tf_filtrado_por_codigo_pedido.getText());
+			Predicate <PedidoDeRetiroDTO> predicado = (PedidoDeRetiroDTO p)->
+			String.valueOf(p.getCodigo()).equals(tf_filtrado_por_codigo_pedido.getText());
 
 				try {
 
@@ -383,7 +384,8 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 			 		p.getCodigo(),
 			 		maquinaria,
 			 		p.getVivienda().getDireccion().getBarrio()+" "+p.getVivienda().getDireccion().getCalle()+" "+p.getVivienda().getDireccion().getAltura(),
-			 		p.getVivienda().getID()
+			 		p.getVivienda().getID(),
+			 		p.getObservacion()
 			 		
 				
 			});

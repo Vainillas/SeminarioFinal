@@ -185,4 +185,6 @@ public interface IApi {
 	public void agregarBeneficio(String descripcion, String puntajeConsumible) 
 			throws NotNullException, DataEmptyException, NotNumberException;
 
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException;
+
 }

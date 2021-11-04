@@ -23,6 +23,7 @@ import java.awt.ScrollPane;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -170,8 +171,9 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoPorDni = new JRadioButton("");
 		rdbtnFiltradoPorDni.addActionListener((e)->{
-			
-			Predicate <OrdenDeRetiroDTO> predicate = (OrdenDeRetiroDTO o)->
+			rdbtnFiltradoPorDni.setSelected(false);
+			if(!tfFiltradoPorDni.getText().equals("")) {
+				Predicate <OrdenDeRetiroDTO> predicate = (OrdenDeRetiroDTO o)->
 				o.getRecolector().getDni().contains(this.tfFiltradoPorDni.getText());
 				
 				try {
@@ -179,7 +181,9 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				} catch (AppException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
-				rdbtnFiltradoPorDni.setSelected(false);
+				
+			}
+			
 			
 			
 			
@@ -196,8 +200,10 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoPoEstado = new JRadioButton("");
 		rdbtnFiltradoPoEstado.addActionListener((e)->{
-		
-				
+			rdbtnFiltradoPoEstado.setSelected(false);
+			
+		if(!tfFiltradoPorEstado.getText().equals("")) {
+			
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				o.getEstado().obtenerEstado().contains(this.tfFiltradoPorEstado.getText());
 				try {
@@ -206,9 +212,8 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 
 				}
-				rdbtnFiltradoPoEstado.setSelected(false);
 				
-			
+		}
 			
 		});
 		rdbtnFiltradoPoEstado.setBounds(190, 29, 21, 21);
@@ -223,7 +228,8 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoCodigoPedido = new JRadioButton("");
 		rdbtnFiltradoCodigoPedido.addActionListener((e)->{
-			
+			rdbtnFiltradoCodigoPedido.setSelected(false);
+			if(!tfFiltradoCodigoPedido.getText().equals("")) {
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
 				String.valueOf(o.getPedidoAsociado().getCodigo()).contains(this.tfFiltradoCodigoPedido.getText());
@@ -233,8 +239,8 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 
 				}
-				rdbtnFiltradoCodigoPedido.setSelected(false);
-			
+				
+		}
 		});
 		rdbtnFiltradoCodigoPedido.setBounds(190, 57, 21, 21);
 		panel_filtrados.setLayout(null);
@@ -256,9 +262,11 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		rdbtnFiltradoPorCodigoOrden = new JRadioButton("");
 		rdbtnFiltradoPorCodigoOrden.addActionListener((e)->{
-			
+			rdbtnFiltradoPorCodigoOrden.setSelected(false);
+			if(!tfFiltradoPorCodigoOrden.getText().equals("")) {
 				
 			Predicate <OrdenDeRetiroDTO> predicado = (OrdenDeRetiroDTO o)->
+			
 				String.valueOf(o.getCodigo()).contains(this.tfFiltradoPorCodigoOrden.getText());
 				try {
 					this.reloadGrid(api.obtenerOrdenesDeRetiro(predicado));
@@ -266,9 +274,9 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 
 				}
-				rdbtnFiltradoPorCodigoOrden.setSelected(false);
-			
-			
+				
+		
+		}	
 		});
 		rdbtnFiltradoPorCodigoOrden.setBounds(190, 85, 21, 23);
 		panel_filtrados.add(rdbtnFiltradoPorCodigoOrden);
@@ -289,15 +297,39 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_ordenamientos.add(lbOrdenarPorDni);
 		
 		JRadioButton rdbtnOrdenarPorDni = new JRadioButton("");
+		rdbtnOrdenarPorDni.addActionListener((e)->{
+			rdbtnOrdenarPorDni.setSelected(false);
+			Comparator <OrdenDeRetiroDTO> comparator = (OrdenDeRetiroDTO o1, OrdenDeRetiroDTO o2)->
+			o1.getRecolector().getDni().compareToIgnoreCase(o2.getRecolector().getDni());
+			try {
+				reloadGrid(api.obtenerOrdenesDeRetiro(comparator));
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		
 		rdbtnOrdenarPorDni.setBounds(100, 5, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorDni);
 		
 		lbOrdenarPorCodigoPedido = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenar.por.codigo.pedido")); 
+		
 		lbOrdenarPorCodigoPedido.setHorizontalAlignment(SwingConstants.CENTER);
 		lbOrdenarPorCodigoPedido.setBounds(10, 34, 90, 14);
 		panel_ordenamientos.add(lbOrdenarPorCodigoPedido);
 		
 		JRadioButton rdbtnOrdenarPorCodigoPedido = new JRadioButton(""); 
+		rdbtnOrdenarPorCodigoPedido.addActionListener((e)->{
+			rdbtnOrdenarPorCodigoPedido.setSelected(false);
+			Comparator <OrdenDeRetiroDTO> comparator = (OrdenDeRetiroDTO o1, OrdenDeRetiroDTO o2)->
+			(String.valueOf(o1.getPedidoAsociado().getCodigo()).compareToIgnoreCase(String.valueOf(o2.getPedidoAsociado().getCodigo())));
+			
+			
+			try {
+				reloadGrid(api.obtenerOrdenesDeRetiro(comparator));
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
+		});
 		rdbtnOrdenarPorCodigoPedido.setBounds(100, 31, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorCodigoPedido);
 		
@@ -307,6 +339,11 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_ordenamientos.add(lbOrdenarPorCodigoOrden);
 		
 		rdbtnOrdenarPorCodigoOrden = new JRadioButton(""); 
+		rdbtnOrdenarPorCodigoOrden.addActionListener((e)->{
+			rdbtnOrdenarPorCodigoOrden.setSelected(false);
+			Comparator <OrdenDeRetiroDTO> comparator = (OrdenDeRetiroDTO o1, OrdenDeRetiroDTO o2)->
+			(String.valueOf(o1.getCodigo()).compareToIgnoreCase(String.valueOf(o2.getCodigo())));
+		});
 		rdbtnOrdenarPorCodigoOrden.setBounds(100, 57, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorCodigoOrden);
 		

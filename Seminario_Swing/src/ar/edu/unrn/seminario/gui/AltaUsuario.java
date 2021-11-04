@@ -98,7 +98,8 @@ public class AltaUsuario extends JFrame {
 						JOptionPane.showMessageDialog(null, labels.getString("alta.usuario.mensaje.informativo"), "Info", JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
-					} catch ( NotNullException | IncorrectEmailException | DataEmptyException | StringNullException | AppException  e1) {
+					} catch (
+				NotNullException | IncorrectEmailException | DataEmptyException | StringNullException | AppException  e1) {
 						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
 					}finally {
 						
