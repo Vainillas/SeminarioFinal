@@ -216,7 +216,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 						}
 						if(pedido.getListResiduos().get(i).getTipo().getNombre().equalsIgnoreCase("Plástico")) {
 							slider_plastico.setMaximum(pedido.getListResiduos().get(i).getCantidadKg());
-							slider_plastico.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);
+							slider_plastico.setValue(pedido.getListResiduos().get(i).getCantidadKg()/2);  
 							lb_slider_plastico.setVisible(true);
 							slider_plastico.setVisible(true);
 						}

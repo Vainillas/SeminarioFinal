@@ -362,20 +362,17 @@ public class PersistenceApi implements IApi {
     	//Lista del total de los kilogramos de cada residuo de todas las visitas
     	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
     	
-    	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
-    	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
-    	System.out.println("El Tamaño de la Lista de Suma Visitas es de : " + listaSumaVisitas.size());
-    	
+    
     	for(int j=0; j<listaResiduos.size(); j++) {
     		listaSumaVisitas.add(0);
     	}
-    	System.out.println("El Tamaño de la Lista de Suma Visitas después del for es de : " + listaSumaVisitas.size());
+    	
     	for(Visita visita: listaVisitas){
     		
         	int i = 0;
-        	System.out.println("Visita numero "+i+" de la listaVisitas en comprobarCantResiduos: "+visita.getResiduosExtraidos().toString());
+        	
     		for(Residuo residuo: visita.getResiduosExtraidos()){
-    			System.out.println("Valor de i dentro del for Residuo residuo: " + i);
+    			
     			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
     			
     			i++;
@@ -386,17 +383,14 @@ public class PersistenceApi implements IApi {
     	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
     	Boolean rtado = false;
     	int i;
-    	System.out.println("Lista residuos: "+ listaResiduos.toString());
-    	System.out.println("Lista suma visitas: " +listaSumaVisitas.toString());
-    	//Fijate que tienen lo mismo pero te lo carga al revés
-    	//Onda la lista de suma visitas 
+    	
     	for(i=0;i<listaResiduos.size();i++) {
-    		if(listaResiduos.get(i).getCantidadKg() != listaSumaVisitas.get(i)) {
+    		if(listaResiduos.get(i).getCantidadKg() >= listaSumaVisitas.get(i)) {// quizas cambiar a != en otro momento
     			rtado = true;
     		}
     	}
     	
-    	return rtado;
+    	return rtado;  
     }
     
     public void actualizarEstadoOrden(int codOrden, String estado) throws AppException{
@@ -408,7 +402,7 @@ public class PersistenceApi implements IApi {
     
     public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
         Direccion direccion = null;
-		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);
+		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);  
         this.direccionDao.create(direccion);
     }
     
@@ -433,8 +427,18 @@ public class PersistenceApi implements IApi {
             dtos.add(new DireccionDTO(d.getCalle(), d.getAltura(), d.getCodPostal(), d.getLatitud(), d.getLongitud(),d.getBarrio()));
         }
         return dtos;
-    }
+    }  
     
+    public ArrayList<String> obtenerNombresResiduos() throws AppException{ 
+    	ArrayList<String> nombresResiduos = new ArrayList<>();
+		
+		List<TipoResiduo> tiposResiduos = tipoResiduoDao.findAll();
+		
+		for (TipoResiduo t : tiposResiduos) {
+			nombresResiduos.add(t.getNombre());
+		}
+		return nombresResiduos;
+    }
     
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, 
