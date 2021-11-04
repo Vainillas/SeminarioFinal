@@ -21,7 +21,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
@@ -317,12 +317,13 @@ public class ListadoDeUsuarios extends JFrame {
 		// Obtiene el model del table
 		DefaultTableModel modelo = (DefaultTableModel) table.getModel();
 		// Obtiene la lista de usuarios a mostrar
+		filtradoUsuarioNombre f = new filtradoUsuarioNombre();
 		List<UsuarioDTO> usuarios;
 		try {
 			switch(tipoOrdenamiento) {
 		
 				case "username":
-					usuarios = api.obtenerUsuariosOrdenadosPorNombre();
+					usuarios = api.obtenerUsuariosOrdenados(f);
 					break;
 				case "rol":
 						usuarios = api.obtenerUsuariosOrdenadosPorRol();

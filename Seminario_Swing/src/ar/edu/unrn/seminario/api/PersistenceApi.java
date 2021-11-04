@@ -227,7 +227,7 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -235,7 +235,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -253,7 +253,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO = vDTO.stream()
@@ -269,7 +269,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO = vDTO.stream()
@@ -283,7 +283,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -297,7 +297,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	
 	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
@@ -312,7 +312,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException{
 		List<ViviendaDTO>vDTO = this.obtenerViviendas();
 		vDTO= vDTO.stream()
@@ -328,7 +328,7 @@ public class PersistenceApi implements IApi {
 				.collect(Collectors.toList());
 		return vDTO;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{ //ELIMINAR LOS 4
 		//List<UsuarioDTO> usuario = Filtro.filtrar(this.obtenerUsuarios());
 		
@@ -351,7 +351,7 @@ public class PersistenceApi implements IApi {
 	
 
 	
-
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		 usuario = usuario.stream().sorted((v1,v2)->{
@@ -365,7 +365,7 @@ public class PersistenceApi implements IApi {
 		.collect(Collectors.toList());
 	return usuario;
 	}
-	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		 usuario = usuario.stream().sorted((v1,v2)->{
@@ -376,7 +376,7 @@ public class PersistenceApi implements IApi {
 		})
 		.collect(Collectors.toList());
 	return usuario;
-	}
+	}//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
 		List<UsuarioDTO> usuario = this.obtenerUsuarios();
 		 usuario = usuario.stream().sorted((v1,v2)->{
