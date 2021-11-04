@@ -426,17 +426,17 @@ public class PersistenceApi implements IApi {
             dtos.add(new DireccionDTO(d.getCalle(), d.getAltura(), d.getCodPostal(), d.getLatitud(), d.getLongitud(),d.getBarrio()));
         }
         return dtos;
-    }
+    }  
     
-    public ArrayList<String> obtenerNombresResiduos() throws AppException{
-    	ArrayList<String> nombresResiduos = new ArrayList<>();
+    public ArrayList<String> obtenerNombresResiduos() throws AppException{ 
+    	ArrayList<String> listaNombresResiduos = new ArrayList<>();
 		
 		List<TipoResiduo> tiposResiduos = tipoResiduoDao.findAll();
 		
 		for (TipoResiduo t : tiposResiduos) {
-			nombresResiduos.add(t.getNombre());
+			listaNombresResiduos.add(t.getNombre());
 		}
-		return nombresResiduos;
+		return listaNombresResiduos;
     }
     
 	public void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados, ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
