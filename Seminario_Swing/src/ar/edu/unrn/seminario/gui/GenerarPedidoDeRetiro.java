@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
@@ -41,6 +42,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTable;
 import javax.swing.JScrollBar;
+import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
+import javax.swing.JTextArea;
 
 
 public class GenerarPedidoDeRetiro extends JFrame {
@@ -57,33 +61,27 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	private JButton buttonCancelar;
 	private JButton buttonFinalizar;
 	private JPanel panelResiduos;
-	private JTextField textField_Vidrio;
-	private JTextField textField_Plastico;
-	private JTextField textField_Metal;
-	private JTextField textField_Carton;
 	private ArrayList<String> domicilioSeleccionado = null;
 	private JTextField textFieldCodViv;
-
-
-	private JLabel lbKg;
 	private JLabel lbResiduos;
 	private int mostrarKG = 0;
 	private JPanel panelViviendas;
 	private JTable table;
 	private JScrollPane scrollPane;
-
-
-
-
-
-
-
+	private JFormattedTextField formattedTextField;
+	private JLabel lbKg;
+	public static void main(String [] args) {
+		PersistenceApi api = new PersistenceApi();
+		GenerarPedidoDeRetiro p = new GenerarPedidoDeRetiro(api);
+		p.setVisible(true);
+	}
+	
 	public GenerarPedidoDeRetiro(IApi api) {
 		this.api = api;
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1049, 368);
+		setBounds(100, 100, 1076, 368);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.info);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -98,7 +96,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(SystemColor.info);
 		panelDatos.setLayout(null);
-		panelDatos.setBounds(10, 11, 337, 196);
+		panelDatos.setBounds(10, 11, 325, 209);
 		contentPane.add(panelDatos);
 		
 		JLabel labelVehiculo = new JLabel(labels.getString("pedido.retiro.label.vehiculo"));
@@ -111,25 +109,19 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		labelObservacion.setBounds(10, 65, 175, 14);
 		panelDatos.add(labelObservacion);
 		
-		JTextPane textObservacion = new JTextPane();
-		textObservacion.setForeground(Color.BLACK);
-		textObservacion.setBackground(SystemColor.textHighlightText);
-		textObservacion.setBounds(39, 90, 288, 106);
-		panelDatos.add(textObservacion);
-		
 		JCheckBox boxCargaPesada = new JCheckBox(labels.getString("pedido.retiro.check.box.si.no"));
 		boxCargaPesada.setBackground(UIManager.getColor("window"));
 		boxCargaPesada.setBounds(224, 10, 81, 23);
 		panelDatos.add(boxCargaPesada);
 		
-		JScrollBar scrollBar = new JScrollBar();
-		scrollBar.setBounds(310, 120, 17, 48);
-		panelDatos.add(scrollBar);
+		JTextArea textArea = new JTextArea();
+		textArea.setBounds(10, 90, 295, 108);
+		panelDatos.add(textArea);
 		
 
 		panelBotones = new JPanel();
 		panelBotones.setBackground(SystemColor.info);
-		panelBotones.setBounds(10, 205, 358, 60);
+		panelBotones.setBounds(20, 220, 358, 60);
 		contentPane.add(panelBotones);
 		panelBotones.setLayout(null);
 		
@@ -150,92 +142,16 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		panelResiduos = new JPanel();
 		panelResiduos.setBackground(SystemColor.info);
 
-		panelResiduos.setBounds(357, 11, 252, 175);
+		panelResiduos.setBounds(345, 11, 284, 175);
 
 	
 
 		contentPane.add(panelResiduos);
 		panelResiduos.setLayout(null);
 		
-
-		JRadioButton radioButtonVidrio = new JRadioButton(labels.getString("pedido.retiro.radio.button.vidrio"));
-		radioButtonVidrio.addActionListener((e)-> {
-			
-			cambiarVisibilidad(radioButtonVidrio);
-			
-		});
-			
-		radioButtonVidrio.setBackground(UIManager.getColor("window"));
-		radioButtonVidrio.setBounds(6, 50, 81, 23);
-		panelResiduos.add(radioButtonVidrio);
-
-		
-		JRadioButton radioButtonPlastico = new JRadioButton(labels.getString("pedido.retiro.radio.button.plastico"));
-		radioButtonPlastico.addActionListener((e)-> {
-			
-			cambiarVisibilidad(radioButtonPlastico);
-				
-		});
-	
-		radioButtonPlastico.setBackground(UIManager.getColor("window"));
-		radioButtonPlastico.setBounds(6, 80, 81, 23);
-		panelResiduos.add(radioButtonPlastico);
-
-
-		JRadioButton radioButtonMetal = new JRadioButton(labels.getString("pedido.retiro.radio.button.metal"));
-		radioButtonMetal.addActionListener((e)-> {
-			
-			cambiarVisibilidad(radioButtonMetal);
-	
-		});
-		radioButtonMetal.setBackground(UIManager.getColor("window"));
-		radioButtonMetal.setBounds(6, 110, 81, 23);
-		panelResiduos.add(radioButtonMetal);
-		
-		JRadioButton radioButtonCarton = new JRadioButton(labels.getString("pedido.retiro.radio.button.carton"));
-		radioButtonCarton.addActionListener((e)-> {
-			
-			cambiarVisibilidad(radioButtonCarton);
-			
-		});
-		
-		radioButtonCarton.setBackground(UIManager.getColor("window"));
-		radioButtonCarton.setBounds(6, 140, 81, 23);
-		panelResiduos.add(radioButtonCarton);
-		
-
-		
-		
-		
-		textField_Vidrio = new JTextField("");
-		textField_Vidrio.setVisible(false);
-		textField_Vidrio.setBounds(130, 51, 86, 20);
-		panelResiduos.add(textField_Vidrio);
-		textField_Vidrio.setColumns(10);
-		
-		textField_Plastico = new JTextField("");
-		textField_Plastico.setBounds(130, 81, 86, 20);
-		textField_Plastico.setVisible(false);
-		panelResiduos.add(textField_Plastico);
-		textField_Plastico.setColumns(10);
-		
-		textField_Metal = new JTextField("");
-	
-		textField_Metal.setBounds(130, 111, 86, 20);
-		textField_Metal.setVisible(false);
-		panelResiduos.add(textField_Metal);
-		textField_Metal.setColumns(10);
-		
-		textField_Carton = new JTextField("");
-		textField_Carton.setVisible(false);
-		textField_Carton.setBounds(130, 141, 86, 20);
-		panelResiduos.add(textField_Carton);
-		textField_Carton.setColumns(10);
-		
 		JTextPane textPane = new JTextPane();
 		textPane.setFont(new Font("Tahoma", Font.PLAIN, 9));
 		textPane.setEditable(false);
-		textPane.setText("Codigo Vivienda"); //$NON-NLS-1$
 		textPane.setBounds(6, 176, 80, 10);
 		panelResiduos.add(textPane);
 		
@@ -244,8 +160,8 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		panelResiduos.add(textFieldCodViv);
 		textFieldCodViv.setColumns(10);
 		
-		JRadioButton [] residuos= {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
-		JTextField [] residuosKg = {textField_Vidrio,textField_Plastico,textField_Metal,textField_Carton};
+		//JRadioButton [] residuos= {radioButtonVidrio, radioButtonPlastico,radioButtonMetal,radioButtonCarton};
+		//JTextField [] residuosKg = {tfCantResiduoDinamico,textField_Plastico,textField_Metal,textField_Carton};
 		
 		buttonFinalizar = new JButton(labels.getString("pedido.retiro.button.finalizar"));
 
@@ -253,31 +169,13 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		panelBotones.add(buttonFinalizar);
 		buttonFinalizar.addActionListener((e)->{
 				//System.out.println(textField_Plastico.getText());
-				ArrayList <String> residuosSeleccionados = new ArrayList<String>();
 				
-				 for(JRadioButton r : residuos) {
-
-	                    if(r.isSelected()) {
-	                    	
-
-	                        residuosSeleccionados.add(r.getText());
-	                         
-	                }
-				 }
 				 
-	             ArrayList <String> residuosSeleccionadosKg = new ArrayList<String>();
-	             for(JTextField kg : residuosKg) {
-	                    if(!kg.getText().equals("")) {
-	                        residuosSeleccionadosKg.add(kg.getText());
-	   
-	                    }
-	                    
-	                    
-	                } 
+	           
 	               
 	                 
 					try {
-						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), residuosSeleccionados,  residuosSeleccionadosKg , textObservacion.getText(),domicilioSeleccionado);
+						api.generarPedidoDeRetiro(boxCargaPesada.isSelected(), null,  null ,null ,domicilioSeleccionado);
 						
 						JOptionPane.showMessageDialog(null, labels.getString("pedido.retiro.mensaje.exito"), labels.getString("pedido.retiro.mensaje.informativo"), JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
@@ -298,13 +196,29 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		lbResiduos.setBounds(0, 11, 115, 14);
 		panelResiduos.add(lbResiduos);
 		
-		 lbKg = new JLabel(labels.getString("pedido.retiro.label.residuos.kg"));
-		lbKg.setVisible(false);
-		lbKg.setBounds(116, 11, 136, 14);
+		JComboBox comboBox = new JComboBox();
+		comboBox.setBounds(6, 50, 78, 22);
+		panelResiduos.add(comboBox);
+		comboBox.addItem("Plastico");
+		comboBox.addItem("Metal");
+		comboBox.addItem("Carton");
+		comboBox.addItem("Vidrio");
+		
+		formattedTextField = new JFormattedTextField();
+		formattedTextField.setBounds(116, 51, 64, 21);
+		panelResiduos.add(formattedTextField);
+		
+		lbKg = new JLabel(labels.getString("pedido.retiro.label.residuos.kg")); 
+		lbKg.setBounds(113, 11, 139, 17);
 		panelResiduos.add(lbKg);
 		
+		JRadioButton rdbtnEnviarKg = new JRadioButton(labels.getString("pedido.retiro.button.aceptar.kg")); //$NON-NLS-1$
+		rdbtnEnviarKg.setBackground(SystemColor.info);
+		rdbtnEnviarKg.setBounds(186, 50, 92, 23);
+		panelResiduos.add(rdbtnEnviarKg);
+		
 		panelViviendas = new JPanel();
-		panelViviendas.setBounds(619, 11, 404, 307);
+		panelViviendas.setBounds(639, 11, 411, 307);
 		
 		contentPane.add(panelViviendas);
 		String[] titulosDireccion = { 
@@ -387,7 +301,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	}
 	
 	private void cambiarVisibilidad(JRadioButton button) {
-		JTextField [] listaTextos = {textField_Vidrio, textField_Plastico,textField_Metal, textField_Carton};
+		/*JTextField [] listaTextos = {tfCantResiduoDinamico, textField_Plastico,textField_Metal, textField_Carton};
 		String [] nombresTextos = {"Vidrio","Plástico","Metal", "Cartón"};
 		boolean validacion = true;
 		int i = 0;
@@ -407,7 +321,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				
 			}
 		i++;
-		}
+		}*/
 		
 		
 	}

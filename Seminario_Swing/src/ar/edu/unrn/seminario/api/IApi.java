@@ -3,12 +3,13 @@ package ar.edu.unrn.seminario.api;
 import java.sql.SQLException;
 
 
+
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.sql.Date;
+
 import java.util.List;
 
-import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioCorreo;
+
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
@@ -26,22 +27,16 @@ import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
-import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
-import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
-import ar.edu.unrn.seminario.modelo.Persona;
-import ar.edu.unrn.seminario.modelo.Rol;
+
 import ar.edu.unrn.seminario.modelo.Usuario;
-import ar.edu.unrn.seminario.utilities.OrderingPredicate;
+
 import ar.edu.unrn.seminario.utilities.Predicate;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
 public interface IApi {
 
-	
-	//void registrarVivienda(Direccion unaDireccion, String unDueño);
-	
-	void registrarVivienda(/*String nombre, String apellido, String dni, String correo,*/String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
+	void registrarVivienda(String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
@@ -62,96 +57,125 @@ public interface IApi {
 	List<RolDTO> obtenerRolesActivos();
 	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
 
-	RolDTO obtenerRolPorCodigo(Integer codigo) throws AppException; // recuperar el rol almacenado
+	RolDTO obtenerRolPorCodigo(Integer codigo) 
+			throws AppException; // recuperar el rol almacenado
 
-	void activarRol(Integer codigo); // recuperar el objeto Rol, implementar el comportamiento de estado.
+	public void activarRol(Integer codigo); // recuperar el objeto Rol, implementar el comportamiento de estado.
 
-	void desactivarRol(Integer codigo); // recuperar el objeto Rol, imp
+	public void desactivarRol(Integer codigo); // recuperar el objeto Rol, imp
 
-	List<UsuarioDTO> obtenerUsuarios() throws AppException; // recuperar todos los usuarios
-	List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException; // recuperar todos los usuarios
+	public List<UsuarioDTO> obtenerUsuarios() throws AppException;
+	public <T>List<UsuarioDTO> obtenerUsuarios(Predicate <T> predicate) 
+			throws AppException;
 	
-	List<ViviendaDTO> obtenerViviendas() throws AppException;
+	public List<ViviendaDTO> obtenerViviendas() throws AppException;
 	
-	List<ViviendaDTO> obtenerViviendas(Comparator comparator ) throws AppException;
-	public List<UsuarioDTO> obtenerUsuarios(Comparator comparator ) throws AppException;
+	public <T> List<ViviendaDTO> obtenerViviendas(Comparator<T> comparator ) throws AppException;
+	public <T>List<UsuarioDTO> obtenerUsuarios(Comparator <T> comparator ) 
+			throws AppException;
 
 	
-	void activarUsuario(String username) throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
+	void activarUsuario(String username) 
+			throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
-	void desactivarUsuario(String username) throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
+	void desactivarUsuario(String username) 
+			throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
-	void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception;
+	void registrarDueño(String nombre, String apellido, String dni, String correo, String username) 
+			throws Exception;
 
 	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
-			String barrio) throws Exception;
+			String barrio) 
+					throws Exception;
 
-	
-	DueñoDTO obtenerDueño(String dni) throws AppException;
+	DueñoDTO obtenerDueño(String dni) 
+			throws AppException;
 
-	List<DueñoDTO> obtenerDueños() throws AppException, NotNumberException;
+	List<DueñoDTO> obtenerDueños() 
+			throws AppException, NotNumberException;
 	
-	DireccionDTO obtenerDireccion(String calle, int num) throws AppException;
+	DireccionDTO obtenerDireccion(String calle, int num) 
+			throws AppException;
 
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
 		throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException ;
 
-	boolean existeUsuario(String usuario) throws NotRegisterException, AppException;
+	boolean existeUsuario(String usuario) 
+			throws NotRegisterException, AppException;
 	
-	boolean validarUsuario(String usuario, String password) throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
+	boolean validarUsuario(String usuario, String password) 
+			throws NotRegisterException, AppException, NotCorrectPasswordException, DataEmptyException, StringNullException, IncorrectEmailException ;
 	
-	boolean existeDueño(String dni) throws AppException;
+	boolean existeDueño(String dni) 
+			throws AppException;
 	
-	List<DireccionDTO> obtenerDirecciones() throws AppException;
+	List<DireccionDTO> obtenerDirecciones() 
+			throws AppException;
 
 
-	void usuarioActivo(String username) throws AppException;
+	void usuarioActivo(String username) 
+			throws AppException;
 
 
 	public String obtenerRolUsuarioActivo();
 	
-	List<RecolectorDTO> obtenerRecolectores() throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
-	public PedidoDeRetiroDTO obtenerPedidoDeRetiro(int codigo) throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
+	List<RecolectorDTO> obtenerRecolectores() 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
+	public PedidoDeRetiroDTO obtenerPedidoDeRetiro(int codigo) 
+			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
 	
-	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
+			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
 
 	Usuario getUserOnline();
-	
-	//void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException;
-
-	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException;
+	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
+			 throws AppException;
 	 
-	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) throws AppException;
+	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) 
+			 throws AppException;
 
-	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) throws AppException;
+	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) 
+			throws AppException;
 
-	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()throws AppException;
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()
+			throws AppException;
 
 	void registrarDueño(String nombre, String apellido, String dni) 
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
 	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) 
 			throws AppException;
 	
-	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) throws AppException;
+	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) 
+			throws AppException;
 	
-	List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
+	<T> List<ViviendaDTO> obtenerViviendas(Predicate <T> predicate) 
+			throws AppException;
 
-	List<ViviendaDTO> obtenerViviendasDeUsuario() throws AppException;
+	List<ViviendaDTO> obtenerViviendasDeUsuario() 
+			throws AppException;
 
-	boolean existeDireccion(String calle, String altura) throws AppException;
+	boolean existeDireccion(String calle, String altura) 
+			throws AppException;
 
-	boolean existeVivienda(String dni, String calle, String altura) throws AppException;
+	boolean existeVivienda(String dni, String calle, String altura) 
+			throws AppException;
 
-	DueñoDTO obtenerDueñoActivo() throws AppException;
+	DueñoDTO obtenerDueñoActivo() 
+			throws AppException;
 
-	<T> List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Predicate <T> predicado) throws AppException, Exception;
+	<T> List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Predicate <T> predicado) 
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, Exception;
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) 
+			throws AppException, Exception;
 
-	public List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) throws AppException, NotNumberException;
+	public List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) 
+			throws AppException, NotNumberException;
 
-	public List<DueñoDTO> obtenerDueños(Comparator<DueñoDTO> comparator) throws AppException, NotNumberException;
+	public List<DueñoDTO> obtenerDueños(Comparator<DueñoDTO> comparator) 
+			throws AppException, NotNumberException;
 
-	public void agregarBeneficio(String descripcion, String puntajeConsumible) throws NotNullException, DataEmptyException, NotNumberException;
+	public void agregarBeneficio(String descripcion, String puntajeConsumible) 
+			throws NotNullException, DataEmptyException, NotNumberException;
 
 }

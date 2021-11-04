@@ -1,7 +1,8 @@
 package ar.edu.unrn.seminario.api;
 
 import java.util.ArrayList;
-import java.util.Collections;
+
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -499,7 +500,8 @@ public class PersistenceApi implements IApi {
 		return pedidoDTO;
 	}
 	
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() throws AppException, Exception {
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
 		
         List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findAll();
@@ -612,18 +614,20 @@ public class PersistenceApi implements IApi {
 	        return recolectoresDTO;
 	}
 
-	@Override
-	public List<UsuarioDTO> obtenerUsuarios(Predicate predicate) throws AppException {
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public List<UsuarioDTO> obtenerUsuarios(Predicate  predicate) throws AppException {
 		return Filtro.filtrar(this.obtenerUsuarios(), predicate);	
 	}
 	
-	public List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException{
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	
+	public  List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException{
 		return Filtro.filtrar(this.obtenerViviendas(), predicate);
 		
 		
 	}
 	@Override
-	public List<ViviendaDTO> obtenerViviendas(Comparator comparator) throws AppException {
+	public <T>List<ViviendaDTO> obtenerViviendas(Comparator<T> comparator) throws AppException {
 		 
 		return Filtro.filtrar(this.obtenerViviendas(), comparator);
 	}
@@ -659,7 +663,8 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Predicate predicate) throws AppException, Exception {
+	public  List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Predicate  predicate) 
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
 		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate);
 		
 	}

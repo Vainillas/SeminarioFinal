@@ -91,6 +91,7 @@ public class ListadoDeDueños extends JFrame {
 
 				
 		};
+		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 			try {
 				reloadGrid(api.obtenerDueños());
@@ -102,7 +103,6 @@ public class ListadoDeDueños extends JFrame {
 			}
 		table.setModel(modelo);
 			
-
 		scrollPane.setViewportView(table);
 		
 		JButton btnVolverMenuPrincipal = new JButton(labels.getString("listado.de.dueños.button.volver.menu.principal")); 
