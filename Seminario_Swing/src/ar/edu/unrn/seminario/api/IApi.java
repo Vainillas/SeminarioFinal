@@ -151,4 +151,10 @@ public interface IApi {
 
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, Exception;
 
+	public List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) throws AppException, NotNumberException;
+
+	public List<DueñoDTO> obtenerDueños(Comparator<DueñoDTO> comparator) throws AppException, NotNumberException;
+
+	public void agregarBeneficio(String descripcion, String puntajeConsumible) throws NotNullException, DataEmptyException, NotNumberException;
+
 }

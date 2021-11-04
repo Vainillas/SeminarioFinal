@@ -127,12 +127,12 @@ public class DueñoDAOJDBC implements DueñoDao {
 				Dueño dueño = new Dueño(rs.getString("nombre"),
 						rs.getString("apellido"),
 						rs.getString("dni"),
-						rs.getString("correo electronico"),
+						rs.getString("correo_electronico"),
 						rs.getString("username"));
 				dueños.add(dueño);
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException e) {
-			System.out.println("Error al encontrar todos los dueños:" + e.toString());
+			throw new AppException("error de aplicacion");
 		} finally {
 			ConnectionManager.disconnect();
 		}
