@@ -21,8 +21,9 @@ import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
-
+import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.TipoResiduo;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
@@ -92,201 +93,143 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 			Vivienda vivienda = null;
 
 			Dueño dueño = null;
+			Usuario usuario = null;
+			Rol rol = null;
+			
 			Direccion direccion = null;
 
 			TipoResiduo tipoResiduo = null;
 			Residuo residuo = null;
+			
 
 			try {
 				Connection conn = ConnectionManager.getConnection();
-				PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p "+"WHERE p.codigo = ?");
+				PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p JOIN viviendas v ON v.codigo = p.codigo_vivienda "
+						+ "JOIN propietarios pr ON v.dni = pr.dni "
+						+ "JOIN dirección d ON v.calle = d.calle AND v.altura = d.altura "
+						+ "JOIN usuarios u ON pr.username = u.usuario "
+						+ "JOIN roles r ON u.rol = r.codigo "+"WHERE p.codigo = ?");
 				statement.setInt(1,codigo);
-				ResultSet resultSetPedido = statement.executeQuery();
-				if(resultSetPedido.next()) {
-					statement = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.codigo = ?");
-					statement.setInt(1, resultSetPedido.getInt("codigo_vivienda"));
-					ResultSet resultSetVivienda = statement.executeQuery();
-					if(resultSetVivienda.next()) {
-						Connection conn2 = ConnectionManager.getConnection();
-						PreparedStatement statement3 = conn2.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
-						statement3.setString(1, resultSetVivienda.getString("dni"));
-						ResultSet resultSetDueño = statement3.executeQuery();
-						
-						if(resultSetDueño.next()) {
+				ResultSet resultSetConsulta = statement.executeQuery();
+				if(resultSetConsulta.next()) {
+					rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+					usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+							resultSetConsulta.getString("u.contrasena"),
+							resultSetConsulta.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetConsulta.getString("pr.nombre") , resultSetConsulta.getString("pr.apellido") , resultSetConsulta.getString("pr.dni"), resultSetConsulta.getString("pr.correo_electronico"), usuario);
+					direccion = new Direccion(resultSetConsulta.getString("d.calle"), Integer.toString(resultSetConsulta.getInt("d.altura")), Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), resultSetConsulta.getString("d.longitud"), resultSetConsulta.getString("d.latitud"), resultSetConsulta.getString("d.barrio"));
+					vivienda = new Vivienda(direccion, dueño, resultSetConsulta.getInt("v.codigo"));
 
-							Connection conn3 = ConnectionManager.getConnection();
-							PreparedStatement statement4 = conn3.prepareStatement("SELECT * FROM dirección d WHERE d.calle = ? AND d.altura = ?");
-							statement4.setString(1, resultSetVivienda.getString("calle"));
-							statement4.setInt(2, resultSetVivienda.getInt("altura"));
-							ResultSet resultSetDireccion = statement4.executeQuery();
-							
-							if(resultSetDireccion.next()) {
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
-								direccion = new Direccion(resultSetDireccion.getString("calle"), Integer.toString(resultSetDireccion.getInt("altura")), Integer.toString(resultSetDireccion.getInt("codigo_postal")), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
-								vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
-							}
-						}
+					ArrayList<Residuo>listaResiduos = new ArrayList<>();
+					PreparedStatement statement5 = conn.prepareStatement("SELECT * FROM residuos_pedido rp "
+							+ "JOIN residuos r ON r.nombre = rp.nombre_residuo WHERE rp.codigo_pedido = ?");
+					statement5.setInt(1, resultSetConsulta.getInt("p.codigo"));
+					ResultSet resultSetResiduo = statement5.executeQuery();
+					while(resultSetResiduo.next()) {
+						tipoResiduo = new TipoResiduo(resultSetResiduo.getInt("r.puntaje"), resultSetResiduo.getString("r.nombre"));
+						residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("rp.cantidad"));
+						listaResiduos.add(residuo);
+
 					}
+
+
+					Boolean maq = false;
+					if(resultSetConsulta.getInt("p.carga") == 1) {
+						maq = true;
+					}
+					pedido = new PedidoDeRetiro(resultSetConsulta.getString("p.observacion"),
+							maq,
+							listaResiduos,
+							resultSetConsulta.getDate("p.fecha"),
+							vivienda, resultSetConsulta.getInt("p.codigo"));
 				}
+				
+			} catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException | NotNumberException | IncorrectEmailException  e) {
+				throw new AppException("error al encontrar Pedido"  + e.getMessage());
 
 
-							ArrayList<Residuo>listaResiduos = new ArrayList<>();
+			}  finally {
+				ConnectionManager.disconnect();
+			}
+			return pedido;
 
-
-							Connection conn4 = ConnectionManager.getConnection();
-
-							PreparedStatement statement5 = conn4.prepareStatement("SELECT * FROM residuos_pedido p WHERE p.codigo_pedido = ?");
-							statement5.setInt(1, resultSetPedido.getInt("codigo"));
-							ResultSet resultSetResiduo = statement5.executeQuery();
-
-							while(resultSetResiduo.next()) {
-
-								PreparedStatement statement6 = conn4.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
-								statement6.setString(1, resultSetResiduo.getString("nombre_residuo"));
-								ResultSet resultSetTipoResiduo = statement6.executeQuery();
-
-								if(resultSetTipoResiduo.next()) {
-									tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
-									residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
-									listaResiduos.add(residuo);
-								}
-
-							}
-
-
-							Boolean maq = false;
-							if(resultSetPedido.getInt("carga") == 1) {
-								maq = true;
-							}
-							pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
-									maq,
-									listaResiduos,
-									resultSetPedido.getDate("fecha"),
-									vivienda, resultSetPedido.getInt("codigo"));
-						} catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException | NotNumberException | IncorrectEmailException  e) {
-							throw new AppException("error al encontrar Pedido"  + e.getMessage());
-
-
-						}  finally {
-							ConnectionManager.disconnect();
-						}
-						return pedido;
-
-					}
-			
-		public List<PedidoDeRetiro> findAll() throws AppException, IncorrectEmailException{
-			
-			List<PedidoDeRetiro> pedidos = new ArrayList<>();
-			PedidoDeRetiro pedido = null;
-	        Vivienda vivienda = null;
-	        
-	        Dueño dueño = null;
-	        Direccion direccion = null;
-	        
-	        TipoResiduo tipoResiduo = null;
-    		Residuo residuo = null;
-	        
-	        try {
-	        	Connection conn = ConnectionManager.getConnection();
-	            PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p ");
-	            ResultSet resultSetPedido = statement.executeQuery();
-	            
-	            while(resultSetPedido.next()) {
-	            	conn = ConnectionManager.getConnection();
-	            	PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.codigo = ?");
-	            	statement2.setInt(1, resultSetPedido.getInt("codigo_vivienda"));
-	            	ResultSet resultSetVivienda = statement2.executeQuery();
-
-	            	
-            		
-	            	
-	            	if(resultSetVivienda.next()){
-	            		Connection conn2 = ConnectionManager.getConnection();
-		            	PreparedStatement statement3 = conn2.prepareStatement("SELECT * FROM propietarios d WHERE d.dni = ?");
-		            	statement3.setString(1, resultSetVivienda.getString("dni"));
-		            	ResultSet resultSetDueño = statement3.executeQuery();
-		            	
-	            		if(resultSetDueño.next()) {
-	            			
-							Connection conn3 = ConnectionManager.getConnection();
-			            	PreparedStatement statement4 = conn3.prepareStatement("SELECT * FROM dirección d WHERE d.calle = ? AND d.altura = ?");
-			            	statement4.setString(1, resultSetVivienda.getString("calle"));
-			            	statement4.setInt(2, resultSetVivienda.getInt("altura"));
-			            	ResultSet resultSetDireccion = statement4.executeQuery();
-			            	
-							if(resultSetDireccion.next()) { 
-								
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
-								direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
-			            		vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
-			            		
-			            		ArrayList<Residuo>listaResiduos = new ArrayList<>();
-				            	
-				            	Connection conn4 = ConnectionManager.getConnection();
-				            	
-				            	PreparedStatement statement5 = conn4.prepareStatement("SELECT * FROM residuos_pedido p WHERE p.codigo_pedido = ?");
-				            	statement5.setInt(1, resultSetPedido.getInt("codigo"));
-				            	ResultSet resultSetResiduo = statement5.executeQuery();
-				            	
-				            	while(resultSetResiduo.next()) {
-				            		
-				            		PreparedStatement statement6 = conn4.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
-					            	statement6.setString(1, resultSetResiduo.getString("nombre_residuo"));
-					            	ResultSet resultSetTipoResiduo = statement6.executeQuery();
-					            	
-					            	if(resultSetTipoResiduo.next()) {
-					            		tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
-					            		residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
-					            		listaResiduos.add(residuo);
-					            	}
-					        
-				            	}
-				            	
-				            	
-				            	Boolean maq = false;
-				            	if(resultSetPedido.getInt("carga") == 1) {
-				            		maq = true;
-				            	}
-				            	
-				            	pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
-				            			maq,
-				            			listaResiduos,
-				            			resultSetPedido.getDate("fecha"),
-				            			vivienda,
-				            			resultSetPedido.getInt("codigo"));
-				            			
-
-				            	pedidos.add(pedido);
-							}
-							
-	            		}
-
-
-	            	
-	            	
-	            }
-
-	            	
-
-	            	}} catch (AppException e) {
-
-
-	        } catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
-
-				throw new AppException("Error al encontrar todos los Pedidos: "+ e.getMessage());
-	        } finally {
-	            ConnectionManager.disconnect();
-	        }
-	        return pedidos;
 		}
-	       
-		public List<PedidoDeRetiro> findByUser(String username) throws AppException, IncorrectEmailException{
+
+		public List<PedidoDeRetiro> findAll() throws AppException, IncorrectEmailException{
 
 			List<PedidoDeRetiro> pedidos = new ArrayList<>();
 			PedidoDeRetiro pedido = null;
 			Vivienda vivienda = null;
 
 			Dueño dueño = null;
+			Usuario usuario = null;
+			Rol rol = null;
+
+			Direccion direccion = null;
+
+			TipoResiduo tipoResiduo = null;
+			Residuo residuo = null;
+			try {
+				Connection conn = ConnectionManager.getConnection();
+				PreparedStatement statement = conn.prepareStatement("SELECT DISTINCT * FROM pedidos p "
+						+ "JOIN viviendas v ON p.codigo_vivienda = v.codigo "
+						+ "JOIN propietarios pr ON v.dni = pr.dni "
+						+ "JOIN dirección d ON v.calle = d.calle AND v.altura = d.altura "
+						+ "JOIN usuarios u ON pr.username = u.usuario "
+						+ "JOIN roles r ON u.rol = r.codigo");
+				ResultSet resultSetConsulta = statement.executeQuery();
+				while(resultSetConsulta.next()) {
+					rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+					usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+							resultSetConsulta.getString("u.contrasena"),
+							resultSetConsulta.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetConsulta.getString("pr.nombre") , resultSetConsulta.getString("pr.apellido") , resultSetConsulta.getString("pr.dni"), resultSetConsulta.getString("pr.correo_electronico"), usuario);
+					direccion = new Direccion(resultSetConsulta.getString("d.calle"), Integer.toString(resultSetConsulta.getInt("d.altura")), Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), resultSetConsulta.getString("d.longitud"), resultSetConsulta.getString("d.latitud"), resultSetConsulta.getString("d.barrio"));
+					vivienda = new Vivienda(direccion, dueño, resultSetConsulta.getInt("v.codigo"));
+
+					ArrayList<Residuo>listaResiduos = new ArrayList<>();
+					PreparedStatement statement5 = conn.prepareStatement("SELECT * FROM residuos_pedido rp "
+							+ "JOIN residuos r ON r.nombre = rp.nombre_residuo WHERE rp.codigo_pedido = ?");
+					statement5.setInt(1, resultSetConsulta.getInt("p.codigo"));
+					ResultSet resultSetResiduo = statement5.executeQuery();
+					while(resultSetResiduo.next()) {
+						tipoResiduo = new TipoResiduo(resultSetResiduo.getInt("r.puntaje"), resultSetResiduo.getString("r.nombre"));
+						residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("rp.cantidad"));
+						listaResiduos.add(residuo);
+					}
+
+
+					Boolean maq = false;
+					if(resultSetConsulta.getInt("p.carga") == 1) {
+						maq = true;
+					}
+					pedido = new PedidoDeRetiro(resultSetConsulta.getString("p.observacion"),
+							maq,
+							listaResiduos,
+							resultSetConsulta.getDate("p.fecha"),
+							vivienda, resultSetConsulta.getInt("p.codigo"));
+					pedidos.add(pedido);
+				}
+			} catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
+
+				throw new AppException("Error al encontrar todos los Pedidos: "+ e.getMessage());
+			} finally {
+				ConnectionManager.disconnect();
+			}
+			return pedidos;
+		}
+	       
+		public List<PedidoDeRetiro> findByUser(String username) throws AppException, IncorrectEmailException{
+			List<PedidoDeRetiro> pedidos = new ArrayList<>();
+			PedidoDeRetiro pedido = null;
+			Vivienda vivienda = null;
+
+			Dueño dueño = null;
+			Usuario usuario = null;
+			Rol rol = null;
+
 			Direccion direccion = null;
 
 			TipoResiduo tipoResiduo = null;
@@ -294,101 +237,66 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 
 			try {
 				Connection conn = ConnectionManager.getConnection();
-				PreparedStatement statement = conn.prepareStatement("SELECT p.codigo_vivienda, p.observacion, p.carga, p.fecha, p.codigo FROM pedidos p JOIN viviendas v ON p.codigo_vivienda = v.codigo JOIN propietarios pr ON pr.dni = v.dni WHERE pr.username = ?  ");
+				PreparedStatement statement = conn.prepareStatement("SELECT * FROM pedidos p JOIN viviendas v ON v.codigo = p.codigo_vivienda "
+						+ "JOIN propietarios pr ON v.dni = pr.dni "
+						+ "JOIN dirección d ON v.calle = d.calle AND v.altura = d.altura "
+						+ "JOIN usuarios u ON pr.username = u.usuario "
+						+ "JOIN roles r ON u.rol = r.codigo WHERE pr.username = ?");
 				statement.setString(1, username);
-				ResultSet resultSetPedido = statement.executeQuery();
+				ResultSet resultSetConsulta = statement.executeQuery();
 
-				while(resultSetPedido.next()) {
-					conn = ConnectionManager.getConnection();
-					PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM viviendas v WHERE v.codigo = ?");
-					statement2.setInt(1, resultSetPedido.getInt("codigo_vivienda"));
-					ResultSet resultSetVivienda = statement2.executeQuery();
+				while(resultSetConsulta.next()) {
+					rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+					usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+							resultSetConsulta.getString("u.contrasena"),
+							resultSetConsulta.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetConsulta.getString("pr.nombre") , resultSetConsulta.getString("pr.apellido") , resultSetConsulta.getString("pr.dni"), resultSetConsulta.getString("pr.correo_electronico"), usuario);
+					direccion = new Direccion(resultSetConsulta.getString("d.calle"), Integer.toString(resultSetConsulta.getInt("d.altura")), Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), resultSetConsulta.getString("d.longitud"), resultSetConsulta.getString("d.latitud"), resultSetConsulta.getString("d.barrio"));
+					vivienda = new Vivienda(direccion, dueño, resultSetConsulta.getInt("v.codigo"));
 
-
-
-
-					if(resultSetVivienda.next()){
-						Connection conn2 = ConnectionManager.getConnection();
-						PreparedStatement statement3 = conn2.prepareStatement("SELECT * FROM propietarios d WHERE d.dni = ?");
-						statement3.setString(1, resultSetVivienda.getString("dni"));
-						ResultSet resultSetDueño = statement3.executeQuery();
-
-						if(resultSetDueño.next()) {
-
-							Connection conn3 = ConnectionManager.getConnection();
-							PreparedStatement statement4 = conn3.prepareStatement("SELECT * FROM dirección d WHERE d.calle = ? AND d.altura = ?");
-							statement4.setString(1, resultSetVivienda.getString("calle"));
-							statement4.setInt(2, resultSetVivienda.getInt("altura"));
-							ResultSet resultSetDireccion = statement4.executeQuery();
-
-							if(resultSetDireccion.next()) { 
-
-								dueño = new Dueño(resultSetDueño.getString("nombre") , resultSetDueño.getString("apellido") , resultSetDueño.getString("dni"), resultSetDueño.getString("correo_electronico"), resultSetDueño.getString("username"));
-								direccion = new Direccion(resultSetDireccion.getString("calle"), resultSetDireccion.getString("altura"), resultSetDireccion.getString("codigo_postal"), resultSetDireccion.getString("longitud"), resultSetDireccion.getString("latitud"), resultSetDireccion.getString("barrio"));
-								vivienda = new Vivienda(direccion, dueño, resultSetVivienda.getInt("codigo"));
-
-								ArrayList<Residuo>listaResiduos = new ArrayList<>();
-
-								Connection conn4 = ConnectionManager.getConnection();
-
-								PreparedStatement statement5 = conn4.prepareStatement("SELECT * FROM residuos_pedido p WHERE p.codigo_pedido = ?");
-								statement5.setInt(1, resultSetPedido.getInt("codigo"));
-								ResultSet resultSetResiduo = statement5.executeQuery();
-
-								while(resultSetResiduo.next()) {
-
-									PreparedStatement statement6 = conn4.prepareStatement("SELECT * FROM residuos r WHERE r.nombre = ?");
-									statement6.setString(1, resultSetResiduo.getString("nombre_residuo"));
-									ResultSet resultSetTipoResiduo = statement6.executeQuery();
-
-									if(resultSetTipoResiduo.next()) {
-										tipoResiduo = new TipoResiduo(resultSetTipoResiduo.getInt("puntaje"), resultSetTipoResiduo.getString("nombre"));
-										residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("cantidad"));
-										listaResiduos.add(residuo);
-									}
-
-								}
-
-
-								Boolean maq = false;
-								if(resultSetPedido.getInt("carga") == 1) {
-									maq = true;
-								}
-
-								pedido = new PedidoDeRetiro(resultSetPedido.getString("observacion"),
-										maq,
-										listaResiduos,
-										resultSetPedido.getDate("fecha"),
-										vivienda,
-										resultSetPedido.getInt("codigo"));
-
-
-								pedidos.add(pedido);
-							}
-
-						}
-
-
-
+					ArrayList<Residuo>listaResiduos = new ArrayList<>();
+					PreparedStatement statement5 = conn.prepareStatement("SELECT * FROM residuos_pedido rp "
+							+ "JOIN residuos r ON r.nombre = rp.nombre_residuo WHERE rp.codigo_pedido = ?");
+					statement5.setInt(1, resultSetConsulta.getInt("p.codigo"));
+					ResultSet resultSetResiduo = statement5.executeQuery();
+					while(resultSetResiduo.next()) {
+						tipoResiduo = new TipoResiduo(resultSetResiduo.getInt("r.puntaje"), resultSetResiduo.getString("r.nombre"));
+						residuo = new Residuo(tipoResiduo, resultSetResiduo.getInt("rp.cantidad"));
+						listaResiduos.add(residuo);
 
 					}
 
 
-
-				}} catch (AppException e) {
-
-
-				} catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
-
-					throw new AppException("Error al encontrar todos los Pedidos: "+ e.getMessage());
-				} finally {
-					ConnectionManager.disconnect();
+					Boolean maq = false;
+					if(resultSetConsulta.getInt("p.carga") == 1) {
+						maq = true;
+					}
+					pedido = new PedidoDeRetiro(resultSetConsulta.getString("p.observacion"),
+							maq,
+							listaResiduos,
+							resultSetConsulta.getDate("p.fecha"),
+							vivienda, resultSetConsulta.getInt("p.codigo"));
+					pedidos.add(pedido);
 				}
+			} catch (SQLException | DataEmptyException | NotNullException | StringNullException | DateNullException  | NotNumberException e   ) {
+
+				throw new AppException("Error al encontrar todos los Pedidos: "+ e.getMessage());
+			} finally {
+				ConnectionManager.disconnect();
+			}
 			return pedidos;
 		}
-
-		public boolean exists(String dni) {
+		@Override
+		public boolean exists(String dni) throws AppException {
+			// TODO Auto-generated method stub
 			return false;
+		}
+
+		@Override
+		public List<PedidoDeRetiro> findNoOrder() throws AppException, IncorrectEmailException {
+			// TODO Auto-generated method stub
+			return null;
 		}
 
 		

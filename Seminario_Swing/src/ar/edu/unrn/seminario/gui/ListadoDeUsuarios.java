@@ -22,7 +22,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-
+import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -335,7 +335,6 @@ public class ListadoDeUsuarios extends JFrame {
 		modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
 		}
 	}
-
 
 }
 

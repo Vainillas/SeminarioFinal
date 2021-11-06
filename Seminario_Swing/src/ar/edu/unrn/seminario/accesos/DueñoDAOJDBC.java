@@ -11,6 +11,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
@@ -34,7 +35,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 			statement.setString(2, d.getApellido());
 			statement.setString(3, d.getDni());
 			statement.setString(4, d.getCorreo());
-			statement.setString(5, d.getUsername());
+			statement.setString(5, d.getUser().getUsuario());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
@@ -72,19 +73,27 @@ public class DueñoDAOJDBC implements DueñoDao {
 	@Override
 	public Dueño find(String dni) throws AppException {
 		Dueño dueño = null;
+		Usuario usuario = null;
+		Rol rol = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p "+"WHERE p.dni = ?");
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p JOIN usuarios u ON p.username = u.usuario "
+					+ "JOIN rol r ON u.rol = r.codigo WHERE p.dni = ? ");
 			statement.setString(1,dni);
-			ResultSet resultSetDueño = statement.executeQuery();
-			if(resultSetDueño.next()) {
-				dueño= new Dueño(resultSetDueño.getString("nombre"),
-						resultSetDueño.getString("apellido"),
-						resultSetDueño.getString("dni"),
-						resultSetDueño.getString("correo_electronico"),
-						resultSetDueño.getString("username"));
+			ResultSet resultSetConsulta = statement.executeQuery();
+			if(resultSetConsulta.next()) {
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño= new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						usuario);
 			}
-		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e) {
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 			throw new AppException("Error al procesar consulta: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
@@ -94,19 +103,28 @@ public class DueñoDAOJDBC implements DueñoDao {
 	
 	public Dueño findByUser(String username) throws AppException {
 		Dueño dueño = null;
+		Usuario usuario = null;
+		Rol rol = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p "+"WHERE p.username = ?");
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p JOIN usuarios u ON p.username = u.usuario "
+					+ "JOIN rol r ON u.rol = r.codigo WHERE p.username = ? ");
 			statement.setString(1,username);
-			ResultSet resultSetDueño = statement.executeQuery();
-			if(resultSetDueño.next()) {
-				dueño= new Dueño(resultSetDueño.getString("nombre"),
-						resultSetDueño.getString("apellido"),
-						resultSetDueño.getString("dni"),
-						resultSetDueño.getString("correo_electronico"),
-						resultSetDueño.getString("username"));
+			ResultSet resultSetConsulta = statement.executeQuery();
+			if(resultSetConsulta.next()) {
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño= new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						usuario);
+			
 			}
-		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e) {
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 			throw new AppException("Error al procesar consulta: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
@@ -117,21 +135,29 @@ public class DueñoDAOJDBC implements DueñoDao {
 	@Override
 	public List<Dueño> findAll() throws AppException, NotNumberException {
 		List<Dueño> dueños = new ArrayList<Dueño>();
+		Dueño dueño = null;
+		Usuario usuario = null;
+		Rol rol = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			Statement statement = conn.createStatement();
-			ResultSet rs = statement.executeQuery(
-					"SELECT * from propietarios");
-
-			while (rs.next()) {
-				Dueño dueño = new Dueño(rs.getString("nombre"),
-						rs.getString("apellido"),
-						rs.getString("dni"),
-						rs.getString("correo_electronico"),
-						rs.getString("username"));
+			ResultSet resultSetConsulta = statement.executeQuery(
+					"SELECT * FROM propietarios p JOIN usuarios u ON p.username = u.usuario "
+							+ "JOIN rol r ON u.rol = r.codigo");
+			while (resultSetConsulta.next()) {
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño= new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						usuario);
 				dueños.add(dueño);
 			}
-		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException e) {
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNullException e) {
 			throw new AppException("error de aplicacion");
 		} finally {
 			ConnectionManager.disconnect();

@@ -11,10 +11,13 @@ import java.util.List;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Usuario;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class ViviendaDAOJDBC implements ViviendaDao {
@@ -61,38 +64,37 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
+		Usuario usuario = null;
+		Rol rol = null;
 		try {
 			Connection connection = ConnectionManager.getConnection();
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.codigo = ?");
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "
+					+ "JOIN propietarios p ON p.dni = v.dni "
+					+ "JOIN usuarios u ON u.usuario = p.username "
+					+ "JOIN dirección d ON v.calle = d.calle AND v.altura = d.altura "
+					+ "JOIN roles r ON r.codigo = u.rol"+"WHERE v.codigo = ?");
 			statement.setInt(1,codigo);
-			ResultSet resultSetViviendas = statement.executeQuery();
-			if(resultSetViviendas.next()) {
-				PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
-				statement2.setString(1, resultSetViviendas.getString("dni"));
-				ResultSet resultSetConstructor = statement2.executeQuery();
-				if(resultSetConstructor.next()) {
-					dueño = new Dueño(resultSetConstructor.getString("nombre"),
-							resultSetConstructor.getString("apellido"),
-							resultSetConstructor.getString("dni"),
-							resultSetConstructor.getString("correo_electronico"),
-							resultSetConstructor.getString("username")
-							);
+			ResultSet resultSetConsulta = statement.executeQuery();
+			if(resultSetConsulta.next()) {
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño= new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						usuario);
+				direccion = new Direccion(resultSetConsulta.getString("d.calle"), 
+						Integer.toString(resultSetConsulta.getInt("d.altura")), 
+						Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), 
+						resultSetConsulta.getString("d.longitud"),
+						resultSetConsulta.getString("d.latitud"),
+						resultSetConsulta.getString("d.barrio"));
 				}
-				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
-				statement2.setString(1,resultSetViviendas.getString("calle"));
-				statement2.setInt(2, resultSetViviendas.getInt("altura"));
-				resultSetConstructor=statement2.executeQuery();
-				if(resultSetConstructor.next()) {
-					direccion = new Direccion(resultSetConstructor.getString("calle"), 
-							Integer.toString(resultSetConstructor.getInt("altura")), 
-							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
-							resultSetConstructor.getString("longitud"),
-							resultSetConstructor.getString("latitud"),
-							resultSetConstructor.getString("barrio"));
-				}
-				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
-			}
-		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException | IncorrectEmailException e) {
+				vivienda= new Vivienda(direccion, dueño,resultSetConsulta.getInt("v.codigo"));
+		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException | IncorrectEmailException | NotNullException e) {
 			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
 		 
 		} finally {
@@ -107,38 +109,38 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
+		Usuario usuario = null;
+		Rol rol = null;
 		try {
 			Connection connection = ConnectionManager.getConnection();
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "+"WHERE v.calle = ?");
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM viviendas v "
+					+ "JOIN propietarios p ON p.dni = v.dni "
+					+ "JOIN dirección d ON d.calle = v.calle AND d.altura = v.altura "
+					+ "JOIN usuarios u ON u.usuario = p.username "
+					+ "JOIN roles r ON r.codigo = u.rol"+"WHERE v.calle = ? AND v.altura = ?");
 			statement.setString(1,calle);
-			ResultSet resultSetViviendas = statement.executeQuery();
-			if(resultSetViviendas.next()) {
-				PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
-				statement2.setString(1, resultSetViviendas.getString("dni"));
-				ResultSet resultSetConstructor = statement2.executeQuery();
-				if(resultSetConstructor.next()) {
-					dueño = new Dueño(resultSetConstructor.getString("nombre"),
-							resultSetConstructor.getString("apellido"),
-							resultSetConstructor.getString("dni"),
-							resultSetConstructor.getString("correo_electronico"),
-							resultSetConstructor.getString("username")
-							);
+			statement.setInt(2, Integer.parseInt(altura));
+			ResultSet resultSetConsulta = statement.executeQuery();
+			if(resultSetConsulta.next()) {
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño= new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						usuario);
+				direccion = new Direccion(resultSetConsulta.getString("d.calle"), 
+						Integer.toString(resultSetConsulta.getInt("d.altura")), 
+						Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), 
+						resultSetConsulta.getString("d.longitud"),
+						resultSetConsulta.getString("d.latitud"),
+						resultSetConsulta.getString("d.barrio"));
 				}
-				statement2 = connection.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
-				statement2.setString(1,resultSetViviendas.getString("calle"));
-				statement2.setInt(2, resultSetViviendas.getInt("altura"));
-				resultSetConstructor=statement2.executeQuery();
-				if(resultSetConstructor.next()) {
-					direccion = new Direccion(resultSetConstructor.getString("calle"), 
-							Integer.toString(resultSetConstructor.getInt("altura")), 
-							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
-							resultSetConstructor.getString("longitud"),
-							resultSetConstructor.getString("latitud"),
-							resultSetConstructor.getString("barrio"));
-				}
-				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
-			}
-		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException e) {
+				vivienda= new Vivienda(direccion, dueño,resultSetConsulta.getInt("v.codigo"));
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 
 			throw new AppException("Error al buscar una vivienda: ");
 		 
@@ -155,54 +157,43 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
+		Usuario usuario = null;
+		Rol rol = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM viviendas v");
-			ResultSet resultSetViviendas = statement.executeQuery();
-			
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM viviendas v "
+					+ "JOIN propietarios p ON p.dni = v.dni "
+					+ "JOIN dirección d ON d.calle = v.calle AND d.altura = v.altura "
+					+ "JOIN usuarios u ON u.usuario = p.username "
+					+ "JOIN roles r ON r.codigo = u.rol");
+			ResultSet resultSetConsulta = statement.executeQuery();			
 
-			while(resultSetViviendas.next()) {
-				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
-				statement2.setString(1, resultSetViviendas.getString("dni"));
-				ResultSet resultSetConstructor = statement2.executeQuery();
-				
-
-				
-
-				if(resultSetConstructor.next()) {
-
-
-					dueño = new Dueño(resultSetConstructor.getString("nombre"),
-							resultSetConstructor.getString("apellido"),
-							
-							resultSetConstructor.getString("dni"),
-							resultSetConstructor.getString("correo_electronico"),
-							resultSetConstructor.getString("username")
-							);
-				}
-				
-				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
-				statement2.setString(1,resultSetViviendas.getString("calle"));
-				statement2.setInt(2, resultSetViviendas.getInt("altura"));
-				resultSetConstructor=statement2.executeQuery();
-				if(resultSetConstructor.next()) {
-					
-					direccion = new Direccion(resultSetConstructor.getString("calle"), 
-							Integer.toString(resultSetConstructor.getInt("altura")), 
-							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
-							resultSetConstructor.getString("longitud"),
-							resultSetConstructor.getString("latitud"),
-							resultSetConstructor.getString("barrio"));
-				}
-				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
+			while(resultSetConsulta.next()) {
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño= new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						usuario);
+				direccion = new Direccion(resultSetConsulta.getString("d.calle"), 
+						Integer.toString(resultSetConsulta.getInt("d.altura")), 
+						Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), 
+						resultSetConsulta.getString("d.longitud"),
+						resultSetConsulta.getString("d.latitud"),
+						resultSetConsulta.getString("d.barrio"));
+				vivienda= new Vivienda(direccion, dueño,resultSetConsulta.getInt("v.codigo"));
 				viviendas.add(vivienda);
-				
+
 			}
 		} catch (Exception  e) {
 			throw new AppException("Error al procesar la consulta: " + e.getMessage());
-			
+
 		}finally {
-		ConnectionManager.disconnect();
+			ConnectionManager.disconnect();
 		}
 		return viviendas;
 	}
@@ -211,55 +202,45 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 		Vivienda vivienda=null;
 		Direccion direccion = null;
 		Dueño dueño = null;
+		Usuario usuario = null;
+		Rol rol = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT v.dni, v.calle, v.altura, v.codigo FROM viviendas v JOIN propietarios p ON p.dni=v.dni WHERE p.username = ?");
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM viviendas v "
+					+ "JOIN propietarios p ON p.dni = v.dni "
+					+ "JOIN dirección d ON d.calle = v.calle AND d.altura = v.altura "
+					+ "JOIN usuarios u ON u.usuario = p.username "
+					+ "JOIN roles r ON r.codigo = u.rol "
+					+ "WHERE p.username = ?");
 			statement.setString(1, username);
-			ResultSet resultSetViviendas = statement.executeQuery();
-			
+			ResultSet resultSetConsulta = statement.executeQuery();			
 
-			while(resultSetViviendas.next()) {
-				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM propietarios p WHERE p.dni = ?");
-				statement2.setString(1, resultSetViviendas.getString("dni"));
-				ResultSet resultSetConstructor = statement2.executeQuery();
-				
-
-				
-
-				if(resultSetConstructor.next()) {
-
-
-					dueño = new Dueño(resultSetConstructor.getString("nombre"),
-							resultSetConstructor.getString("apellido"),
-							
-							resultSetConstructor.getString("dni"),
-							resultSetConstructor.getString("correo_electronico"),
-							resultSetConstructor.getString("username")
-							);
-				}
-				
-				statement2 = conn.prepareStatement("SELECT * FROM dirección d WHERE d.calle= ? AND d.altura= ?");
-				statement2.setString(1,resultSetViviendas.getString("calle"));
-				statement2.setInt(2, resultSetViviendas.getInt("altura"));
-				resultSetConstructor=statement2.executeQuery();
-				if(resultSetConstructor.next()) {
-					
-					direccion = new Direccion(resultSetConstructor.getString("calle"), 
-							Integer.toString(resultSetConstructor.getInt("altura")), 
-							Integer.toString(resultSetConstructor.getInt("codigo_postal")), 
-							resultSetConstructor.getString("longitud"),
-							resultSetConstructor.getString("latitud"),
-							resultSetConstructor.getString("barrio"));
-				}
-				vivienda= new Vivienda(direccion, dueño,resultSetViviendas.getInt("codigo"));
+			while(resultSetConsulta.next()) {
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
+				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño= new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						usuario);
+				direccion = new Direccion(resultSetConsulta.getString("d.calle"), 
+						Integer.toString(resultSetConsulta.getInt("d.altura")), 
+						Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), 
+						resultSetConsulta.getString("d.longitud"),
+						resultSetConsulta.getString("d.latitud"),
+						resultSetConsulta.getString("d.barrio"));
+				vivienda= new Vivienda(direccion, dueño,resultSetConsulta.getInt("v.codigo"));
 				viviendas.add(vivienda);
-				
+
 			}
 		} catch (Exception  e) {
 			throw new AppException("Error al procesar la consulta: " + e.getMessage());
-			
+
 		}finally {
-		ConnectionManager.disconnect();
+			ConnectionManager.disconnect();
 		}
 		return viviendas;
 	}
