@@ -3,6 +3,8 @@ package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -39,8 +41,8 @@ public class ListadoDePersonal extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-								
-					ListadoDePersonal frame = new ListadoDePersonal(new PersistenceApi());
+				ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+					ListadoDePersonal frame = new ListadoDePersonal(new PersistenceApi(),labels );
 					frame.setVisible(true);
 
 			}
@@ -49,8 +51,9 @@ public class ListadoDePersonal extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param labels 
 	 */
-	public ListadoDePersonal(IApi api) {
+	public ListadoDePersonal(IApi api, ResourceBundle labels) {
 		setTitle("Listado Del Personal");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 729, 470);

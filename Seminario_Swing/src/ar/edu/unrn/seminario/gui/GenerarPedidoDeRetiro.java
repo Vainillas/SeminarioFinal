@@ -76,12 +76,13 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	private ArrayList<String > kgSeleccionados = new ArrayList<String>();
 	public static void main(String [] args) {
 		PersistenceApi api = new PersistenceApi();
-		GenerarPedidoDeRetiro p = new GenerarPedidoDeRetiro(api);
+		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
+		GenerarPedidoDeRetiro p = new GenerarPedidoDeRetiro(api,labels );
 		p.setVisible(true);
 	}
 	
-	public GenerarPedidoDeRetiro(IApi api) {
-		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
+	public GenerarPedidoDeRetiro(IApi api, ResourceBundle labels) {
+
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1076, 368);
@@ -199,13 +200,12 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		ftfKg = new JFormattedTextField(Integer.valueOf(0));
 		ftfKg.setValue(null);
 		ftfKg.setBounds(125, 96, 64, 21);
+		JButton btnEnviarKg = new JButton(labels.getString("pedido.retiro.button.enviar.kg")); 
+		btnEnviarKg.setBounds(199, 95, 89, 23);
+		panelResiduos.add(btnEnviarKg);
 		
 		panelResiduos.add(ftfKg);
-		JRadioButton rdbtnEnviarKg = new JRadioButton(labels.getString("pedido.retiro.button.aceptar.kg")); //$NON-NLS-1$
-		rdbtnEnviarKg.addActionListener((e)->{
-			rdbtnEnviarKg.setSelected(false);
-			if(!ftfKg.getValue().equals(0)) {
-
+		btnEnviarKg.addActionListener((e)->{
 				int res = JOptionPane.showConfirmDialog(null,("seguro que desea seleccionar "+ftfKg.getText()+" kg de "+ String.valueOf(comboBox.getSelectedItem()).toLowerCase())+"?","",JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					
@@ -216,18 +216,14 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				}
 					ftfKg.setValue(null);
 				if(comboBox.getItemCount() == 0) {
-					rdbtnEnviarKg.setEnabled(false);
+					btnEnviarKg.setEnabled(false);
 					ftfKg.setEnabled(false);
 					comboBox.setEnabled(false);
 				}
 				
-			}
+			
 			
 		});
-		
-		rdbtnEnviarKg.setBackground(SystemColor.info);
-		rdbtnEnviarKg.setBounds(195, 95, 92, 23);
-		panelResiduos.add(rdbtnEnviarKg);
 		
 		lblNewLabel = new JLabel(labels.getString("pedido.retiro.label.residuos.2")); //$NON-NLS-1$
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -243,6 +239,8 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		lbCantidadKg.setHorizontalAlignment(SwingConstants.CENTER);
 		lbCantidadKg.setBounds(103, 67, 111, 14);
 		panelResiduos.add(lbCantidadKg);
+		
+		
 		
 		panelViviendas = new JPanel();
 		panelViviendas.setBounds(639, 11, 411, 307);

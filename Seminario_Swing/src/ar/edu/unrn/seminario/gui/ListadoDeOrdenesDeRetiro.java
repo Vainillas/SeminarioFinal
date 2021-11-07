@@ -91,7 +91,8 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			public void run() {
 				try {
 					PersistenceApi api = new PersistenceApi();
-					ListadoDeOrdenesDeRetiro frame = new ListadoDeOrdenesDeRetiro(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels");
+					ListadoDeOrdenesDeRetiro frame = new ListadoDeOrdenesDeRetiro(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -102,10 +103,10 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param labels 
 	 */
-	public ListadoDeOrdenesDeRetiro(IApi api) {
-		//labels = ResourceBundle.getBundle("labels"); 
-		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
+	public ListadoDeOrdenesDeRetiro(IApi api, ResourceBundle labels) {
+
 		setTitle(labels.getString("listado.de.ordenes.de.retiro.titulo")); 
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

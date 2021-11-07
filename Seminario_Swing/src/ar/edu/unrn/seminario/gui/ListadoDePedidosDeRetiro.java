@@ -72,13 +72,13 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param labels 
 	 */
-	public ListadoDePedidosDeRetiro(IApi api) {
+	public ListadoDePedidosDeRetiro(IApi api, ResourceBundle labels) {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		labels = ResourceBundle.getBundle("labels");
 		setTitle(labels.getString("listado.de.pedidos.de.retiro.titulo"));
 		
 		panel = new JPanel();
@@ -99,7 +99,6 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		
 
 		
-		ResourceBundle labels = ResourceBundle.getBundle("labels");
 		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
 		table = new JTable();
 		String[] titulosUsuario = { 

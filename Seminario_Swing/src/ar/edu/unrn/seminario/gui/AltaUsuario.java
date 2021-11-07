@@ -37,8 +37,9 @@ public class AltaUsuario extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param labels 
 	 */
-	public AltaUsuario(IApi api) {
+	public AltaUsuario(IApi api, ResourceBundle labels) {
 
 		// Obtengo los roles
 		try {
@@ -47,7 +48,6 @@ public class AltaUsuario extends JFrame {
 			JOptionPane.showMessageDialog(null,e3.getMessage(),"error",2);
 		}
 		//labels = ResourceBundle.getBundle("labels");
-		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		setTitle(labels.getString("alta.usuario.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
