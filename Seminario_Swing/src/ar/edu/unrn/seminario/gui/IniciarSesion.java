@@ -118,9 +118,9 @@ public class IniciarSesion extends JFrame {
 				//System.out.println(textUsuario.getText());
 				try {
 					ResourceBundle l = ResourceBundle.getBundle("labels");
-						if(comboBoxIdioma.getItemAt(1).equals("INGLES")) {
+						if(comboBoxIdioma.getSelectedItem().equals("INGLES")) {
 							l = ResourceBundle.getBundle("labels",new Locale("en"));
-							
+							System.out.println("entro aca");
 						}
 						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword())) ;
 						api.usuarioActivo(textUsuario.getText());//sirve para mantener al usuario siempre
