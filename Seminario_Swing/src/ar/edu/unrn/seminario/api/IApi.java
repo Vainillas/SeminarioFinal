@@ -9,7 +9,7 @@ import java.util.Comparator;
 
 import java.util.List;
 
-
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
@@ -173,17 +173,21 @@ public interface IApi {
 	<T> List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Predicate <T> predicado) 
 			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) 
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) 
 			throws AppException, Exception;
 
-	public List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) 
+	List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) 
 			throws AppException, NotNumberException;
 
-	public List<DueñoDTO> obtenerDueños(Comparator<DueñoDTO> comparator) 
+	List<DueñoDTO> obtenerDueños(Comparator<DueñoDTO> comparator) 
 			throws AppException, NotNumberException;
 
-	public void agregarBeneficio(String descripcion, String puntajeConsumible) 
+	void agregarBeneficio(String descripcion, String puntajeConsumible) 
 			throws NotNullException, DataEmptyException, NotNumberException;
+
+	List<BeneficioDTO> obtenerBeneficios() throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
 

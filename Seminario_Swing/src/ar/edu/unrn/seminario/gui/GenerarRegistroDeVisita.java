@@ -98,8 +98,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 					PersistenceApi api = new PersistenceApi();
-					GenerarRegistroDeVisita frame = new GenerarRegistroDeVisita(api);
+					GenerarRegistroDeVisita frame = new GenerarRegistroDeVisita(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace(); 
@@ -111,8 +112,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 
 
-	public GenerarRegistroDeVisita(IApi api) {
-		labels = ResourceBundle.getBundle("labels",new Locale("es"));
+	public GenerarRegistroDeVisita(IApi api, ResourceBundle labels) {
+
 		setTitle(labels.getString("registro.de.visita.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1193, 529);

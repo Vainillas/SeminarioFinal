@@ -35,9 +35,9 @@ public class RegistroVivienda extends JFrame {
     private JTextField latitudIngresada;
     private JTextField barrioIngresado;
     private JTextField longitudIngresada;
-    public RegistroVivienda(IApi api){
+    public RegistroVivienda(IApi api, ResourceBundle labels){
     	
-    	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+
     	setTitle(labels.getString("registro.viviendas.titulo"));
     	this.api=api;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

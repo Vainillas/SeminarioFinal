@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
+import ar.edu.unrn.seminario.accesos.BeneficioDAOJDBC;
+import ar.edu.unrn.seminario.accesos.BeneficioDao;
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
@@ -28,6 +30,7 @@ import ar.edu.unrn.seminario.accesos.VisitaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.VisitaDao;
 import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
@@ -77,8 +80,8 @@ public class PersistenceApi implements IApi {
 	private TipoResiduoDao tipoResiduoDao;
 	private OrdenDeRetiroDao ordenDeRetiroDao;
 	private RecolectorDao recolectorDao;
-
-	private VisitaDao visitaDao;
+	private VisitaDao visitaDao; 
+	private BeneficioDao beneficioDao;
 
 	private Usuario userOnline;
 
@@ -93,6 +96,7 @@ public class PersistenceApi implements IApi {
 		ordenDeRetiroDao = new OrdenDeRetiroDAOJDBC();
 		recolectorDao = new RecolectorDAOJDBC();
 		visitaDao = new VisitaDAOJDBC();
+		beneficioDao = new BeneficioDAOJDBC();
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
@@ -594,7 +598,7 @@ public class PersistenceApi implements IApi {
     public ArrayList<String> obtenerNombresResiduos() throws AppException{ 
     	ArrayList<String> nombresResiduos = new ArrayList<>();
 		
-		List<TipoResiduo> tiposResiduos = tipoResiduoDao.findAll();
+		List<TipoResiduo> tiposResiduos = tipoResiduoDao.findAll();  
 		
 		for (TipoResiduo t : tiposResiduos) {
 			nombresResiduos.add(t.getNombre());
@@ -864,8 +868,18 @@ public class PersistenceApi implements IApi {
 		
 		
 	}
-
-
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException{
+		return Filtro.filtrar(this.obtenerOrdenesDeRetiro(), comparator);
+	}
+	
+	public List<BeneficioDTO> obtenerBeneficios() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		List<BeneficioDTO> beneficiosDto = new ArrayList<>();
+    	List<Beneficio> beneficios = beneficioDao.findAll();
+    	for (Beneficio b : beneficios) {
+    		beneficiosDto.add(new BeneficioDTO(b.getDescripcion(),b.getPuntajeConsumible()));
+    	} 
+    	return beneficiosDto;
+	}
 
 
 

@@ -24,7 +24,7 @@ public class DireccionDAOJDBC implements DireccionDao {
 		
 
 			Connection conn;
-			try {
+			try { 
 				conn = ConnectionManager.getConnection();
 				PreparedStatement statement = conn
 					.prepareStatement("INSERT INTO dirección(calle,altura,barrio,codigo_postal,latitud,longitud) "

@@ -67,8 +67,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 	private String dniRecolectorSeleccionado = null;
 
 	
-	public GenerarOrdenDeRetiro(IApi api){
-		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+	public GenerarOrdenDeRetiro(IApi api, ResourceBundle labels){
 		setTitle(labels.getString("generar.orden.retiro.titulo"));
 		this.api = api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

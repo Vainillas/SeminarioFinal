@@ -28,7 +28,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
 					.prepareStatement("INSERT INTO viviendas(calle,altura,dni) "
-							+ "VALUES (?, ?, ?)");
+							+ "VALUES (?, ?, ?)"); 
 			
 			statement.setString(1, v.getDireccion().getCalle());
 			statement.setString(2, v.getDireccion().getAltura());
@@ -95,7 +95,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				}
 				vivienda= new Vivienda(direccion, dueño,resultSetConsulta.getInt("v.codigo"));
 		} catch (SQLException | DataEmptyException | StringNullException | NotNumberException | IncorrectEmailException | NotNullException e) {
-			throw new AppException("Error al registrar una vivienda: "+e.getMessage());
+			throw new AppException("Error al buscar una vivienda: "+e.getMessage());
 		 
 		} finally {
 			
@@ -142,7 +142,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				vivienda= new Vivienda(direccion, dueño,resultSetConsulta.getInt("v.codigo"));
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 
-			throw new AppException("Error al buscar una vivienda: ");
+			throw new AppException("Error al buscar las viviendas: ");
 		 
 		} finally {
 		ConnectionManager.disconnect();

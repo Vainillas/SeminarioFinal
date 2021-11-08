@@ -36,7 +36,7 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	            PreparedStatement statement = conn.prepareStatement
 	                    ("INSERT INTO pedidos(codigo_vivienda,observacion,carga,fecha) "
 	                            + "VALUES (?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-	            statement.setInt(1, p.getVivienda().getID());
+	            statement.setInt(1, p.getVivienda().getID());  
 	            statement.setString(2, p.getObservacion());
 	            
 	            if(p.getMaquinaPesada()) { 
@@ -73,7 +73,6 @@ public class PedidoDeRetiroDAOJDBC implements PedidoDeRetiroDao{
 	        }  finally {
 	            ConnectionManager.disconnect();
 	        }
-
 		}
 
 		public void update(PedidoDeRetiro pedido) {

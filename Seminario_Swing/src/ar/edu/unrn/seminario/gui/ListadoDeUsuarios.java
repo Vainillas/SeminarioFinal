@@ -22,6 +22,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
+import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
 import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
@@ -55,7 +56,7 @@ public class ListadoDeUsuarios extends JFrame {
 	private JLabel lbUsername;
 	private JButton btnLimpiarFIltro;
 
-	public ListadoDeUsuarios(IApi api){
+	public ListadoDeUsuarios(IApi api, ResourceBundle labels){
 		this.api = api;
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -69,7 +70,6 @@ public class ListadoDeUsuarios extends JFrame {
 		scrollPane.setBounds(250, 5, 701, 312);
 		contentPane.add(scrollPane);
 		//ResourceBundle labels = ResourceBundle.getBundle("labels"); 
-		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 		setTitle(labels.getString("listado.usuario.titulo"));
 		table = new JTable();
 		String[] titulosUsuario = { 
