@@ -432,7 +432,7 @@ public class PersistenceApi implements IApi {
     public ArrayList<String> obtenerNombresResiduos() throws AppException{ 
     	ArrayList<String> nombresResiduos = new ArrayList<>();
 		
-		List<TipoResiduo> tiposResiduos = tipoResiduoDao.findAll();
+		List<TipoResiduo> tiposResiduos = tipoResiduoDao.findAll();  
 		
 		for (TipoResiduo t : tiposResiduos) {
 			nombresResiduos.add(t.getNombre());
