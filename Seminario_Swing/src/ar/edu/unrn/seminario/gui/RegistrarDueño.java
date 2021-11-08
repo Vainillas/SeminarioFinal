@@ -33,12 +33,10 @@ public class RegistrarDueño extends JFrame {
 	private JTextField tf_nombre;
 	private JTextField tf_apellido;
 	private JTextField tf_dni;
-	private ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
 
 
 
-
-	public RegistrarDueño(IApi api) {
+	public RegistrarDueño(IApi api, ResourceBundle labels) {
 		setTitle(labels.getString("registrar.dueño.titulo")); 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 367, 243);

@@ -8,14 +8,14 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class Dueño extends Persona {
 	private String correoElectronico;
-	private String userName;
+	private Usuario user;
 	
 	
-	public Dueño(String nombre, String apellido, String dni, String correoElectronico, String username) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
+	public Dueño(String nombre, String apellido, String dni, String correoElectronico, Usuario user) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		super(nombre, apellido, dni); 
 		validarDatos(correoElectronico);
 		this.correoElectronico = correoElectronico;
-		this.userName = username;
+		this.user = user;
 	}
 	
 	private void validarDatos (String correoElectronico) throws IncorrectEmailException, DataEmptyException, StringNullException {
@@ -38,11 +38,11 @@ public class Dueño extends Persona {
 		this.correoElectronico=correoElectronico;
 	}
 	
-	public String getUsername(){
-		return this.userName;
+	public Usuario getUser(){
+		return this.user;
 	}
 	
-	public void setUsername(String username) {
-		this.userName = username;
+	public void setUsername(Usuario user) {
+		this.user = user;
 	}
 }

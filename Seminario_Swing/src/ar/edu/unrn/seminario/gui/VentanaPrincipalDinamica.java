@@ -27,7 +27,6 @@ import java.awt.event.ActionEvent;
 public class VentanaPrincipalDinamica extends JFrame {
 	private static final long serialVersionUID = 4771947449650351645L;
 	private JPanel contentPane;
-	ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 	private JMenuItem mntmPantallaNormalPersonal;
 	private JPanel panelAdministrador = new JPanel();
 	private JPanel panelPersonal = new JPanel();
@@ -42,7 +41,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 			public void run() {
 				try {
 					PersistenceApi api = new PersistenceApi();
-					VentanaPrincipalDinamica frame = new VentanaPrincipalDinamica(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+					VentanaPrincipalDinamica frame = new VentanaPrincipalDinamica(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +51,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 	}
 	
-	public VentanaPrincipalDinamica(IApi api) {
+	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
 		String rol = "ADMINISTRADOR";
 		//String rol = api.obtenerRolUsuarioActivo();
 
@@ -75,7 +75,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
-		setBounds(100, 100, 1161, 533);
+		setBounds(100, 100, 1315, 533);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
@@ -97,14 +97,13 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		
 		
-		panelAdministrador.setBounds(560, 11, 565, 240);
+		panelAdministrador.setBounds(560, 11, 630, 240);
 		contentPane.setLayout(null);
 		contentPane.add(panelAdministrador);
 
 		panelPersonal.setBounds(10, 11, 540, 240);
 		contentPane.add(panelPersonal);
 		panelPersonal.setLayout(new BorderLayout(0, 0));
-		
 		JMenuBar mbPersonal = new JMenuBar();
 		panelPersonal.add(mbPersonal, BorderLayout.NORTH);
 		
@@ -113,7 +112,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.lista.ordenes"));
 		mntmPerListarOrdenesDeRetiro.addActionListener((e)->{
-			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api);
+			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api,labels);
 			listado.setVisible(true);
 		});
 		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);
@@ -162,7 +161,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmAdmListadoUsuario = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.usuarios"));
 		mntmAdmListadoUsuario.addActionListener((e)->{
-			ListadoDeUsuarios listUsuario = new ListadoDeUsuarios(api);
+			ListadoDeUsuarios listUsuario = new ListadoDeUsuarios(api, labels);
 			listUsuario.setVisible(true);
 			
 			
@@ -171,7 +170,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmAdmAltaUsuario = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.usuario.administrador")); 
 		mntmAdmAltaUsuario.addActionListener((e)->{
-			AltaUsuario usuario = new AltaUsuario(api);
+			AltaUsuario usuario = new AltaUsuario(api,labels);
 			usuario.setVisible(true);
 		});
 		mUsuariosAdministrador.add(mntmAdmAltaUsuario);
@@ -182,7 +181,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmiAdmListadoViviendas = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.viviendas.administrador"));
 		mntmiAdmListadoViviendas.addActionListener((e)->{
-			ListadoDeViviendas listadoViviendas = new ListadoDeViviendas(api);
+			ListadoDeViviendas listadoViviendas = new ListadoDeViviendas(api,labels);
 			listadoViviendas.setVisible(true);
 			
 		});
@@ -190,7 +189,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmRegistrarViviendaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.vivienda.administrador"));
 		mntmRegistrarViviendaAdministrador.addActionListener((e)->{
-			RegistroVivienda vivienda = new RegistroVivienda(api);
+			RegistroVivienda vivienda = new RegistroVivienda(api,labels);
 			vivienda.setVisible(true);
 			
 			
@@ -203,7 +202,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmAdmListadoOrdenesDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.ordenes.de.retiro.administrador"));
 		mntmAdmListadoOrdenesDeRetiros.addActionListener((e)->{
-			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api);
+			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api,labels);
 			listado.setVisible(true);
 			
 			
@@ -212,17 +211,16 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmGenerarOrdenDeRetiroAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.generar.orden.de.retiro.administrador")); 
 		mntmGenerarOrdenDeRetiroAdministrador.addActionListener((e)->{
-			GenerarOrdenDeRetiro ordenDeRetiro = new GenerarOrdenDeRetiro(api);
+			GenerarOrdenDeRetiro ordenDeRetiro = new GenerarOrdenDeRetiro(api,labels);
 			ordenDeRetiro.setVisible(true);
 			ordenDeRetiro.setLocationRelativeTo(null); 
 		});
 		
 		JMenuItem mntmAdmGenerarRegistroVisita = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.registro.visita.administrador")); //$--$
 		mntmAdmGenerarRegistroVisita.addActionListener((e)->{
-			GenerarRegistroDeVisita registroVisita = new GenerarRegistroDeVisita(api);
+			GenerarRegistroDeVisita registroVisita = new GenerarRegistroDeVisita(api,labels );
 			registroVisita.setVisible(true);
-			
-			
+
 		});
 		mnOrdenesDeRetiroAdministrador.add(mntmAdmGenerarRegistroVisita);
 		mnOrdenesDeRetiroAdministrador.add(mntmGenerarOrdenDeRetiroAdministrador);
@@ -232,7 +230,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.pedidos.de.retiro.administrador"));
 		mntmAdmListadoPedidosDeRetiros.addActionListener((e)->{
-			ListadoDePedidosDeRetiro listadoPedidos = new ListadoDePedidosDeRetiro(api);
+			ListadoDePedidosDeRetiro listadoPedidos = new ListadoDePedidosDeRetiro(api, labels);
 			listadoPedidos.setVisible(true);
 			
 		});
@@ -240,7 +238,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmGenerarPedidoDeRetiroAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.generar.pedido.de.retiro.administrador")); 
 		mntmGenerarPedidoDeRetiroAdministrador.addActionListener((e)->{
-			GenerarPedidoDeRetiro pedido = new GenerarPedidoDeRetiro(api);
+			GenerarPedidoDeRetiro pedido = new GenerarPedidoDeRetiro(api,labels);
 			pedido.setVisible(true);
 			
 		});
@@ -254,7 +252,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmRegistrarDueñoAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.registrar.dueño.administrador")); 
 		mntmRegistrarDueñoAdministrador.addActionListener((e)->{
-			RegistrarDueño registro =  new RegistrarDueño(api);
+			RegistrarDueño registro =  new RegistrarDueño(api,labels);
 			registro.setVisible(true);
 			
 		});
@@ -265,14 +263,14 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmAdmListadoPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.personal.administrador"));
 		mntmAdmListadoPersonal.addActionListener((e)->{
-			ListadoDePersonal listadoPersonal = new ListadoDePersonal(api);
+			ListadoDePersonal listadoPersonal = new ListadoDePersonal(api,labels);
 			listadoPersonal.setVisible(true);
 		});
 		mnPersonalAdministrador.add(mntmAdmListadoPersonal);
 		
 		JMenuItem mntmRegistrarPersonalAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.personal.administrador")); 
 		mntmRegistrarPersonalAdministrador.addActionListener((e)->{
-			RegistrarPersonal personalNuevo = new RegistrarPersonal(api);
+			RegistrarPersonal personalNuevo = new RegistrarPersonal(api,labels);
 			personalNuevo.setVisible(true);
 			});
 		
@@ -304,6 +302,15 @@ public class VentanaPrincipalDinamica extends JFrame {
 
 		mnConfiguracionAdministrador.add(mntmPantallaEstandar);
 		mnConfiguracionAdministrador.add(mntmPantallaCompletaAdmin);
+		
+		JMenu mnCampaña = new JMenu(labels.getString("ventana.principal.dinamica.menu.campaña")); 
+		mbAdministrador.add(mnCampaña);
+		
+		JMenuItem mntmListarCampañas = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.campaña")); //$NON-NLS-1$
+		mnCampaña.add(mntmListarCampañas);
+		
+		JMenuItem mntmGenerarCampaña = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
+		mnCampaña.add(mntmGenerarCampaña);
 		
 		panelDueño.setBounds(10, 262, 540, 240);
 		contentPane.add(panelDueño);
@@ -382,5 +389,4 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenuItem mntmRegistrarDueñoNoRegistrado = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.registrarse")); 
 		mnDueñoNoRegistrado.add(mntmRegistrarDueñoNoRegistrado);
 	}
-
 }

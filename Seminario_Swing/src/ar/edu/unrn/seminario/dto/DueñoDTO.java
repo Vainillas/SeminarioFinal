@@ -6,6 +6,7 @@ import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Persona;
+import ar.edu.unrn.seminario.modelo.Usuario;
 
 
 public class DueñoDTO  { 
@@ -14,14 +15,14 @@ private String nombre;
 private String apellido;
 private String dni;
 private String correoElectronico;
-private String username;
+private Usuario user;
 	
-	public DueñoDTO (String unNombre, String unApellido, String unDni, String unCorreoElectronico, String unUsername) {
+	public DueñoDTO (String unNombre, String unApellido, String unDni, String unCorreoElectronico, Usuario usuario) {
 		this.nombre = unNombre;
 		this.apellido = unApellido;
 		this.dni = unDni;
 		this.correoElectronico = unCorreoElectronico;
-		this.username = unUsername;
+		this.user = usuario;
 	}
 	
 	public String getNombre() {
@@ -56,11 +57,11 @@ private String username;
 		this.correoElectronico = correoElectronico;
 	}
 
-	public String getUsername() {
-		return username;
+	public Usuario getUser() {
+		return user;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUser(Usuario user) {
+		this.user = user;
 	}
 }

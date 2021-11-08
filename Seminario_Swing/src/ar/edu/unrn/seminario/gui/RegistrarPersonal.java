@@ -49,7 +49,8 @@ public class RegistrarPersonal extends JFrame {
 			public void run() {
 				try {
 					IApi api = new PersistenceApi();
-					RegistrarPersonal frame = new RegistrarPersonal(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels"); 
+					RegistrarPersonal frame = new RegistrarPersonal(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,11 +60,9 @@ public class RegistrarPersonal extends JFrame {
 	}
 
 
-	public RegistrarPersonal(IApi api) {
+	public RegistrarPersonal(IApi api, ResourceBundle labels) {
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
-		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		setBounds(100, 100, 450, 315);
 		setTitle(labels.getString("registrar.personal.titulo"));
 		panelPrincipal = new JPanel();

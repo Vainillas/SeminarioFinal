@@ -54,7 +54,7 @@ public class ListadoDeViviendas extends JFrame {
 	private JButton btnLimpiarFiltro;
 	private ResourceBundle labels = ResourceBundle.getBundle("labels");
 
-	public ListadoDeViviendas(IApi api){
+	public ListadoDeViviendas(IApi api, ResourceBundle labels){
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1151, 523);

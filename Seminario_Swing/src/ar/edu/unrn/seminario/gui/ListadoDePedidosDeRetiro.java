@@ -72,13 +72,13 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param labels 
 	 */
-	public ListadoDePedidosDeRetiro(IApi api) {
+	public ListadoDePedidosDeRetiro(IApi api, ResourceBundle labels) {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		labels = ResourceBundle.getBundle("labels");
 		setTitle(labels.getString("listado.de.pedidos.de.retiro.titulo"));
 		
 		panel = new JPanel();
@@ -99,7 +99,6 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		
 
 		
-		ResourceBundle labels = ResourceBundle.getBundle("labels");
 		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
 		table = new JTable();
 		String[] titulosUsuario = { 
@@ -107,7 +106,8 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.pedido"), 
 				labels.getString("listado.de.pedidos.de.retiro.titulos.requiere.maquinaria.pedido"), 
 				labels.getString("listado.de.pedidos.de.retiro.titulos.vivienda.pedido"), 
-				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.vivienda.pedido"), 	
+				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.vivienda.pedido"),
+				labels.getString("listado.de.pedidos.de.retiro.titulos.observacion")
 				};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulosUsuario);
@@ -147,8 +147,8 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 			rdbtn_filtrado_por_codigo_pedido.setSelected(false);
 			if(!tf_filtrado_por_codigo_pedido.getText().equals("")) {
 
-				
-			Predicate <PedidoDeRetiroDTO> predicado = (PedidoDeRetiroDTO p)->String.valueOf(p.getCodigo()).equals(tf_filtrado_por_codigo_pedido.getText());
+			Predicate <PedidoDeRetiroDTO> predicado = (PedidoDeRetiroDTO p)->
+			String.valueOf(p.getCodigo()).equals(tf_filtrado_por_codigo_pedido.getText());
 
 				try {
 
@@ -383,7 +383,8 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 			 		p.getCodigo(),
 			 		maquinaria,
 			 		p.getVivienda().getDireccion().getBarrio()+" "+p.getVivienda().getDireccion().getCalle()+" "+p.getVivienda().getDireccion().getAltura(),
-			 		p.getVivienda().getID()
+			 		p.getVivienda().getID(),
+			 		p.getObservacion()
 			 		
 				
 			});

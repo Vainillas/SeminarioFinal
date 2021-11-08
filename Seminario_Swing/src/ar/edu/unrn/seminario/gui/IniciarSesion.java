@@ -109,22 +109,24 @@ public class IniciarSesion extends JFrame {
 		});
 		buttonCancelar.setBounds(216, 18, 89, 23); 
 		panelBotones.add(buttonCancelar);
-		
+		comboBoxIdioma = new JComboBox();
+		comboBoxIdioma.addItem("ESPAÑOL");
+		comboBoxIdioma.addItem("INGLES");
 		
 		JButton buttonAceptar = new JButton(labels.getString("iniciar.sesion.button.aceptar"));
 		buttonAceptar.addActionListener((e)->{
 				//System.out.println(textUsuario.getText());
 				try {
-
+					ResourceBundle l = ResourceBundle.getBundle("labels");
+						if(comboBoxIdioma.getSelectedItem().equals("INGLES")) {
+							l = ResourceBundle.getBundle("labels",new Locale("en"));
+							System.out.println("entro aca");
+						}
 						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword())) ;
 						api.usuarioActivo(textUsuario.getText());//sirve para mantener al usuario siempre
-						
-						//System.out.printf(textUsuario.getText() + String.valueOf(textPassword.getPassword() ))
-						//api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword()));
-							
-								VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api);
-								ventana.setVisible(true);
-								dispose();
+						VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api,l);
+						ventana.setVisible(true);
+						dispose();
 						
 
 				}catch (DataEmptyException | IncorrectEmailException | AppException | NotCorrectPasswordException | StringNullException  e1) {
@@ -153,7 +155,7 @@ public class IniciarSesion extends JFrame {
 		
 		JButton buttonRegistrarse = new JButton(labels.getString("iniciar.sesion.label.registrarse"));
 		buttonRegistrarse.addActionListener((e)->{
-				AltaUsuario usuario = new AltaUsuario(api);
+				AltaUsuario usuario = new AltaUsuario(api,labels);
 				usuario.setVisible(true);
 				String idioma = (String) comboBoxIdioma.getSelectedItem();
 				
@@ -168,9 +170,7 @@ public class IniciarSesion extends JFrame {
 		panel.setBounds(20, 191, 181, 86);
 		contentPane.add(panel);
 		
-		comboBoxIdioma = new JComboBox();
-		comboBoxIdioma.addItem("ESPAÑOL");
-		comboBoxIdioma.addItem("INGLES");
+
 		
 		comboBoxIdioma.setBounds(58, 33, 113, 22);
 		panel.add(comboBoxIdioma);

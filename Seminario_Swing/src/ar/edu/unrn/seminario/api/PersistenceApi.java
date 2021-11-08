@@ -230,7 +230,167 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->v1.getID()-v2.getID())
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+					
+				String var1 = (v1.getDueño().getNombre()+ " " +  v1.getDueño().getApellido());
+				String var2 = (v2.getDueño().getNombre()+ " " + v2.getDueño().getApellido());
+				if(var1.compareToIgnoreCase(var2)>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO = vDTO.stream()
+				.sorted((v1,v2)->{
+					
+				if(v1.getDireccion().getCodPostal().compareToIgnoreCase(v2.getDireccion().getCodPostal())>0) 
+					return 1;
+			
+				else 
+					return -1;
+				})
+				
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO = vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getBarrio().compareToIgnoreCase(v2.getDireccion().getBarrio())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getAltura().compareToIgnoreCase(v2.getDireccion().getAltura())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
 	
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getCalle().compareToIgnoreCase(v2.getDireccion().getCalle())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+					String latLong1 = (v1.getDireccion().getLatitud() +" " +  v1.getDireccion().getLongitud());
+					String latLong2 = (v2.getDireccion().getLatitud() +" " + v2.getDireccion().getLongitud());
+					
+				if(latLong1.compareToIgnoreCase(latLong2)>0) 
+					return 1;
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{ //ELIMINAR LOS 4
+		//List<UsuarioDTO> usuario = Filtro.filtrar(this.obtenerUsuarios());
+		
+		List<UsuarioDTO> usuario = null;
+		
+		return usuario.stream().sorted((v1,v2)->{
+		if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
+
+			return 1;
+		}
+			
+		else {
+			return -1;}
+		
+		})
+		.collect(Collectors.toList());
+
+		//return usuario;
+	}
+	
+
+	
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		 usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getEmail().compareToIgnoreCase(v2.getEmail()) >= 0) {
+			
+			return 1;}
+		else {
+			return -1;
+		}
+		})
+		.collect(Collectors.toList());
+	return usuario;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		 usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getRol().compareToIgnoreCase(v2.getRol())>=0)
+			return 1;
+		else
+			return -1;
+		})
+		.collect(Collectors.toList());
+	return usuario;
+	}//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		 usuario = usuario.stream().sorted((v1,v2)->{
+		if(v1.getEstado().compareToIgnoreCase(v2.getEstado())>=0)
+			return 1;
+		else
+			return -1;
+		})
+		.collect(Collectors.toList());
+	return usuario;
+	}
 	
 	public static class filtradoUsuarioRol implements Comparator<UsuarioDTO>{
 		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
@@ -273,8 +433,10 @@ public class PersistenceApi implements IApi {
 	}
 	
     public void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception   {
+    	Usuario usuario = null;
+    	usuario = usuarioDao.find(username);
         Dueño dueño = null;
-		dueño = new Dueño(nombre, apellido, dni, correo, username);
+		dueño = new Dueño(nombre, apellido, dni, correo, usuario);
         this.dueñoDao.create(dueño);
     }
 	
@@ -286,7 +448,7 @@ public class PersistenceApi implements IApi {
 					dueño.getApellido(),
 					dueño.getDni(),
 					dueño.getCorreo(),
-					dueño.getUsername());
+					dueño.getUser());
 		}
 		return dueñodto;
 	}
@@ -301,7 +463,7 @@ public class PersistenceApi implements IApi {
 					dueño.getApellido(),
 					dueño.getDni(),
 					dueño.getCorreo(),
-					dueño.getUsername());
+					dueño.getUser());
 		}
 		return dueñodto;
 	}
@@ -310,7 +472,7 @@ public class PersistenceApi implements IApi {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
-            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo(), d.getUsername()));
+            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo(), d.getUser()));
         }
         return dtos;
     }
@@ -524,6 +686,15 @@ public class PersistenceApi implements IApi {
         }
         return pedidosDto;
 	}
+	public List<PedidoDeRetiroDTO>obtenerPedidosDeRetiroSinOrden()throws AppException, Exception{
+		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
+		
+        List<PedidoDeRetiro> pedidos = pedidoDeRetiroDao.findNoOrder();
+        for (PedidoDeRetiro d : pedidos) {
+            pedidosDto.add(new PedidoDeRetiroDTO(d.getObservacion(), d.getMaquinaPesada(), d.getListResiduos(),d.getFechaDelPedido(), d.getVivienda(), d.getCodigo() ));
+        }
+        return pedidosDto;
+	}
     
     public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) throws AppException{
     	
@@ -639,7 +810,7 @@ public class PersistenceApi implements IApi {
 	@Override
 	public void registrarDueño(String nombre, String apellido, String dni)
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
-		Dueño dueño = new Dueño(nombre, apellido, dni, this.userOnline.getEmail(),this.userOnline.getUsuario());
+		Dueño dueño = new Dueño(nombre, apellido, dni, this.userOnline.getEmail(),this.userOnline);
 		
         this.dueñoDao.create(dueño);
         
@@ -693,7 +864,9 @@ public class PersistenceApi implements IApi {
 		
 		
 	}
-
+	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException{
+		return Filtro.filtrar(this.obtenerOrdenesDeRetiro(), comparator);
+	}
 
 
 

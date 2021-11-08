@@ -221,7 +221,7 @@ public class ListadoDeDueños extends JFrame {
 		rdbtnFiltrarPorUsername.addActionListener((e)->{
 			rdbtnFiltrarPorUsername.setSelected(false);
 			if(!tfFiltrarPorUsername.getText().equals("")) {
-				Predicate <DueñoDTO> predicate = (DueñoDTO d)->d.getUsername().toLowerCase().contains(tfFiltrarPorUsername.getText().toLowerCase());
+				Predicate <DueñoDTO> predicate = (DueñoDTO d)->d.getUser().getUsuario().toLowerCase().contains(tfFiltrarPorUsername.getText().toLowerCase());
 				try {
 					reloadGrid(api.obtenerDueños(predicate));
 				} catch (AppException | NotNumberException e1) {
@@ -286,7 +286,7 @@ public class ListadoDeDueños extends JFrame {
 		rdbtnOrdenarPorUsername.addActionListener((e)->{
 			rdbtnOrdenarPorUsername.setSelected(false);
 			Comparator<DueñoDTO> comparator = (DueñoDTO d1, DueñoDTO d2)->
-					d1.getUsername().compareToIgnoreCase(d2.getUsername());
+					d1.getUser().getUsuario().compareToIgnoreCase(d2.getUser().getUsuario());
 					try {
 						reloadGrid(api.obtenerDueños(comparator));
 					} catch (AppException | NotNumberException e1) {
@@ -367,7 +367,7 @@ public class ListadoDeDueños extends JFrame {
 				 	
 				 	d.getDni(),
 				 	d.getCorreoElectronico(),
-				 	d.getUsername()
+				 	d.getUser().getUsuario()
 					
 				});
 	}
