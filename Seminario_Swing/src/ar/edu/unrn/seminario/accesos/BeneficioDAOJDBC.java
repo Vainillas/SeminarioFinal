@@ -54,11 +54,13 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM beneficios b "+"WHERE d.codigo = ?");
 			statement.setInt(1, codigo);
-			ResultSet resultSetDireccion = statement.executeQuery();
-			if(resultSetDireccion.next()) {
-				beneficio= new Beneficio(resultSetDireccion.getString("nombre_beneficio"), String.valueOf(resultSetDireccion.getInt("costo")));
+			ResultSet resultSetConsulta = statement.executeQuery();
+			if(resultSetConsulta.next()) {
+				beneficio= new Beneficio(resultSetConsulta.getString("nombre_beneficio"), 
+						String.valueOf(resultSetConsulta.getInt("costo")),
+						resultSetConsulta.getInt("codigo"));
 			}
-		} catch (SQLException | DataEmptyException | NotNumberException e) {
+		} catch (SQLException e) {
 			throw new AppException("Error al encontrar un beneficio: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
@@ -75,10 +77,11 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 					"SELECT * from beneficios");
 
 			while (ResultSetBeneficios.next()) {
-				Beneficio beneficio = new Beneficio(ResultSetBeneficios.getString("nombre_beneficio"),String.valueOf(ResultSetBeneficios.getString("costo")));
+				Beneficio beneficio = new Beneficio(ResultSetBeneficios.getString("nombre_beneficio"),String.valueOf(ResultSetBeneficios.getString("costo")),
+						ResultSetBeneficios.getInt("codigo"));
 				beneficios.add(beneficio);
 			}
-		} catch (SQLException | DataEmptyException | NotNumberException e) {
+		} catch (SQLException e) {
 			throw new AppException("Error al encontrar los beneficios: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
