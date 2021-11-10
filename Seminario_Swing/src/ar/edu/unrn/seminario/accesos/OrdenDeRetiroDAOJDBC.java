@@ -202,7 +202,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	        return orden;
 		}
 
-		public List<OrdenDeRetiro> findAll() throws AppException{ // AGREGAR LAS VISITAS
+		public List<OrdenDeRetiro> findAll() throws AppException{ 
 			List<OrdenDeRetiro> listaOrdenes = new ArrayList<>();
 			OrdenDeRetiro orden = null;
 	        PedidoDeRetiro pedido = null;

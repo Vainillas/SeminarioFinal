@@ -10,6 +10,12 @@ import java.util.stream.Collectors;
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.accesos.BeneficioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.BeneficioDao;
+import ar.edu.unrn.seminario.accesos.CanjeDAOJDBC;
+import ar.edu.unrn.seminario.accesos.CanjeDao;
+
+import ar.edu.unrn.seminario.accesos.CampañaDAOJDBC;
+import ar.edu.unrn.seminario.accesos.CampañaDao;
+
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
@@ -31,6 +37,8 @@ import ar.edu.unrn.seminario.accesos.VisitaDao;
 import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CampañaDTO;
+import ar.edu.unrn.seminario.dto.CanjeDTO;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
@@ -50,6 +58,9 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.modelo.Campaña;
+import ar.edu.unrn.seminario.modelo.Canje;
+import ar.edu.unrn.seminario.modelo.Catalogo;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Estado;
@@ -82,7 +93,10 @@ public class PersistenceApi implements IApi {
 	private RecolectorDao recolectorDao;
 	private VisitaDao visitaDao; 
 	private BeneficioDao beneficioDao;
+	private CanjeDao canjeDao;
+	private CampañaDao campañaDao;
 
+	
 	private Usuario userOnline;
 
 	public PersistenceApi() {
@@ -97,6 +111,8 @@ public class PersistenceApi implements IApi {
 		recolectorDao = new RecolectorDAOJDBC();
 		visitaDao = new VisitaDAOJDBC();
 		beneficioDao = new BeneficioDAOJDBC();
+		canjeDao = new CanjeDAOJDBC();
+		campañaDao = new CampañaDAOJDBC();
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
@@ -882,6 +898,56 @@ public class PersistenceApi implements IApi {
     	return beneficiosDto;
 	}
 
-
+	public void generarCampaña(ArrayList<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
+		
+		ArrayList<Beneficio> listaDeBeneficios = new ArrayList<Beneficio>();
+		for(Integer i: listaBeneficios) {
+			listaDeBeneficios.add(this.beneficioDao.find(i));
+		}
+		
+		Catalogo catalogo = new Catalogo(listaDeBeneficios);
+		
+		Campaña campaña = new Campaña(unNombre, catalogo, "Activa");
+		
+		this.campañaDao.create(campaña);
+		
+	}
+	
+	public void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException {
+		
+		Beneficio beneficio = this.beneficioDao.find(codBeneficio);
+		
+		Campaña campaña = this.campañaDao.find(codCampaña);
+		
+		Dueño dueño = this.dueñoDao.findByUser(this.userOnline.getUsuario());
+		
+		Canje canje = new Canje(beneficio, dueño, campaña);
+	}
+	
+	public List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		List<CanjeDTO> canjesDto = new ArrayList<>();
+    	List<Canje> canjes = canjeDao.findAll();
+    	for (Canje c : canjes) {
+    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
+    	} 
+    	return canjesDto;
+	}
+	
+	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		List<CampañaDTO> campañasDto = new ArrayList<>();
+    	List<Campaña> campañas = campañaDao.findAll();
+    	for (Campaña c : campañas) {
+    		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
+    	} 
+    	return campañasDto;
+	}
+	
+	public int calcularPuntaje(PedidoDeRetiro unPedido){
+		int sumaPuntos = 0;
+		for(Residuo r: unPedido.getListResiduos()){
+			sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
+		}
+		return sumaPuntos;
+	}
 
 }
