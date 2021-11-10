@@ -53,7 +53,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 	}
 
 	@Override
-	public void update(Dueño dueño) {
+	public void update(Dueño dueño) throws AppException {
 		try {
 			Connection conn = ConnectionManager.getConnection();
             PreparedStatement statement = conn.prepareStatement("UPDATE propietarios SET nombre = ?, apellido = ?, dni = ?, correo_electronico = ?, username = ?, puntaje = ?"
@@ -70,7 +70,6 @@ public class DueñoDAOJDBC implements DueñoDao {
         }  finally {
             ConnectionManager.disconnect();
         }
-
 	}
 
 	@Override
@@ -123,7 +122,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p JOIN usuarios u ON p.username = u.usuario "
-					+ "JOIN rol r ON u.rol = r.codigo WHERE p.username = ? ");
+					+ "JOIN roles r ON u.rol = r.codigo WHERE p.username = ? ");
 			statement.setString(1,username);
 			ResultSet resultSetConsulta = statement.executeQuery();
 			if(resultSetConsulta.next()) {
@@ -158,7 +157,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 			Statement statement = conn.createStatement();
 			ResultSet resultSetConsulta = statement.executeQuery(
 					"SELECT * FROM propietarios p JOIN usuarios u ON p.username = u.usuario "
-							+ "JOIN rol r ON u.rol = r.codigo");
+							+ "JOIN roles r ON u.rol = r.codigo");
 			while (resultSetConsulta.next()) {
 				rol = new Rol(resultSetConsulta.getInt("r.codigo"), resultSetConsulta.getString("r.nombre"));
 				usuario = new Usuario(resultSetConsulta.getString("u.usuario"),
@@ -173,7 +172,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 				dueños.add(dueño);
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNullException e) {
-			throw new AppException("error de aplicacion");
+			throw new AppException("Error al encontrar Dueños" + e.getMessage());
 		} finally {
 			ConnectionManager.disconnect();
 		}
@@ -197,7 +196,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 				}		
 			}
 		} catch (SQLException | AppException e ) {
-			throw new AppException("Error al verificar existencia: "+ e.getMessage());
+			throw new AppException("Error al verificar existencia: ");
 		}finally {
 			ConnectionManager.disconnect();
 		}

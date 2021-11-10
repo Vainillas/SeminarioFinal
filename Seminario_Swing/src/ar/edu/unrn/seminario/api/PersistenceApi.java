@@ -532,6 +532,9 @@ public class PersistenceApi implements IApi {
     	
     	if(!comprobarCantidadResiduos(codOrden)) {
     		actualizarEstadoOrden(codOrden, "concretado");
+    		OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
+    		int puntaje = calcularPuntaje(orden.getPedidoAsociado());
+    		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
     	}
     	
     }
@@ -952,6 +955,14 @@ public class PersistenceApi implements IApi {
 			sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
 		}
 		return sumaPuntos;
+	}
+	
+	public void sumarPuntos(Dueño dueño, int puntaje) throws AppException {
+		
+		dueño.sumarPuntos(puntaje);
+		
+		dueñoDao.update(dueño);
+		
 	}
 
 }

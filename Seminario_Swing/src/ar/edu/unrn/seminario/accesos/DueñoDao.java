@@ -10,7 +10,7 @@ import ar.edu.unrn.seminario.modelo.Rol;
 public interface DueñoDao {
 	void create(Dueño dueño) throws AppException;
 
-	void update(Dueño dueño);
+	void update(Dueño dueño) throws AppException;
 
 	void remove(String dni);
 
