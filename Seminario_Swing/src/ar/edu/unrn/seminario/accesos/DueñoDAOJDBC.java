@@ -13,13 +13,10 @@ import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
-import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
-import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
-import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class DueñoDAOJDBC implements DueñoDao {
 
@@ -93,7 +90,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p JOIN usuarios u ON p.username = u.usuario "
-					+ "JOIN rol r ON u.rol = r.codigo WHERE p.dni = ? ");
+					+ "JOIN roles r ON u.rol = r.codigo WHERE p.dni = ? ");
 			statement.setString(1,dni);
 			ResultSet resultSetConsulta = statement.executeQuery();
 			if(resultSetConsulta.next()) {
