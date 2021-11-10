@@ -9,13 +9,21 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 public class Dueño extends Persona {
 	private String correoElectronico;
 	private Usuario user;
-	
+	private int puntaje;
 	
 	public Dueño(String nombre, String apellido, String dni, String correoElectronico, Usuario user) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
 		super(nombre, apellido, dni); 
 		validarDatos(correoElectronico);
 		this.correoElectronico = correoElectronico;
 		this.user = user;
+	}
+	
+	public Dueño(String nombre, String apellido, String dni, String correoElectronico, Usuario user, int puntaje) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException {
+		super(nombre, apellido, dni); 
+		validarDatos(correoElectronico);
+		this.correoElectronico = correoElectronico;
+		this.user = user;
+		this.puntaje = puntaje;
 	}
 	
 	private void validarDatos (String correoElectronico) throws IncorrectEmailException, DataEmptyException, StringNullException {
@@ -44,5 +52,17 @@ public class Dueño extends Persona {
 	
 	public void setUsername(Usuario user) {
 		this.user = user;
+	}
+	
+	public void setPuntaje(int puntaje) {
+		this.puntaje = puntaje;
+	}
+	
+	public int getPuntaje() {
+		return this.puntaje;
+	}
+	
+	public void sumarPuntos(int unPuntaje) {
+		this.puntaje = this.puntaje + unPuntaje;
 	}
 }

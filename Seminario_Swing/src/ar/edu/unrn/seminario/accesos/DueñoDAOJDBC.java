@@ -54,7 +54,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 
 	@Override
 	public void update(Dueño dueño) {
-		// TODO Auto-generated method stub
+		
 
 	}
 
