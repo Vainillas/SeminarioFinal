@@ -28,14 +28,15 @@ public class DueñoDAOJDBC implements DueñoDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("INSERT INTO propietarios(nombre,apellido,dni,correo_electronico,username) "
-							+ "VALUES (?, ?, ?, ?, ?)");
+					.prepareStatement("INSERT INTO propietarios(nombre,apellido,dni,correo_electronico,username, puntaje) "
+							+ "VALUES (?, ?, ?, ?, ?, ?)");
 			
 			statement.setString(1, d.getNombre());
 			statement.setString(2, d.getApellido());
 			statement.setString(3, d.getDni());
 			statement.setString(4, d.getCorreo());
 			statement.setString(5, d.getUser().getUsuario());
+			statement.setInt(6, d.getPuntaje());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
@@ -105,7 +106,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						usuario);
+						usuario, resultSetConsulta.getInt("p.puntaje"));
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 			throw new AppException("Error al procesar consulta: " + e.getMessage());
@@ -135,7 +136,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						usuario);
+						usuario, resultSetConsulta.getInt("p.puntaje"));
 			
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
@@ -168,7 +169,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						usuario);
+						usuario, resultSetConsulta.getInt("p.puntaje"));
 				dueños.add(dueño);
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNullException e) {
