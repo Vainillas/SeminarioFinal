@@ -43,7 +43,8 @@ public class CampañaDAOJDBC implements CampañaDao{
 				PreparedStatement statement2 = conn.prepareStatement
 	                    ("INSERT INTO beneficios_campaña(cod_beneficio, cod_campaña) "
 	                    		+ "VALUES(?, ?)");
-				statement2.setInt(b.getCodigo(), codigoCampaña);
+				statement2.setInt(1, b.getCodigo());
+				statement2.setInt(2, codigoCampaña);
 				statement2.executeUpdate();
 			}
 			
