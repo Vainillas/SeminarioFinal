@@ -54,7 +54,22 @@ public class DueñoDAOJDBC implements DueñoDao {
 
 	@Override
 	public void update(Dueño dueño) {
-		// TODO Auto-generated method stub
+		try {
+			Connection conn = ConnectionManager.getConnection();
+            PreparedStatement statement = conn.prepareStatement("UPDATE propietarios SET nombre = ?, apellido = ?, dni = ?, correo_electronico = ?, username = ?, puntaje = ?"
+            		+ "WHERE dni = ?");
+            statement.setString(1, dueño.getNombre());
+            statement.setString(2, dueño.getApellido());
+            statement.setString(3, dueño.getDni());
+            statement.setString(4, dueño.getCorreo());
+            statement.setString(5, dueño.getUser().getUsuario());
+            statement.setInt(6, dueño.getPuntaje());
+            statement.executeUpdate();
+		}catch (SQLException e) {
+            throw new AppException("Error de SQL al actualizar el dueño: " + e.getMessage());
+        }  finally {
+            ConnectionManager.disconnect();
+        }
 
 	}
 
