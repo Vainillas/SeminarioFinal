@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 public class VentanaPrincipalDinamica extends JFrame {
 	private static final long serialVersionUID = 4771947449650351645L;
 	private JPanel contentPane;
@@ -82,7 +83,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		
 		
-		panelAdministrador.setBounds(560, 11, 758, 240);
+		panelAdministrador.setBounds(10, 11, 758, 240);
 		contentPane.setLayout(null);
 		contentPane.add(panelAdministrador);
 
@@ -139,6 +140,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnConfiguracionPersonal.add(mntmConfiguracionPersonal);
 		panelAdministrador.setLayout(new BorderLayout(0, 0));
 		JMenuBar mbAdministrador = new JMenuBar();
+		mbAdministrador.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
 		panelAdministrador.add(mbAdministrador, BorderLayout.NORTH);
 		
 		JMenu mUsuariosAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.usuarios.administrador"));
@@ -321,7 +323,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
 		
-		panelDueño.setBounds(10, 262, 540, 240);
+		panelDueño.setBounds(10, 11, 540, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		
