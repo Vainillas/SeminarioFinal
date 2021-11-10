@@ -22,8 +22,10 @@ import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
-public class CampañaDAOJDBC implements CampañaDao {
+public class CampañaDAOJDBC implements CampañaDao{
+
 	public void create(Campaña campaña) throws AppException{
+
 		Connection conn;
 		try { 
 			conn = ConnectionManager.getConnection();
@@ -38,9 +40,9 @@ public class CampañaDAOJDBC implements CampañaDao {
 			} else {
 				System.out.println("Error al actualizar");		
 				}
-		} catch (SQLException e) {
-			throw new AppException("Error al crear la campaña " + e.getMessage());
-		} finally {
+			} catch (SQLException e) {
+				throw new AppException("Error al crear la campaña " + e.getMessage());
+			} finally {
 			ConnectionManager.disconnect();
 			}
 	}

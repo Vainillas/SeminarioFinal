@@ -1,32 +1,22 @@
-package ar.edu.unrn.seminario.modelo;
+package ar.edu.unrn.seminario.dto;
 
 import java.sql.Date;
 
-public class Canje {
+import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.modelo.Campaña;
+import ar.edu.unrn.seminario.modelo.Dueño;
+
+public class CanjeDTO {
 	private Date fechaCanje;
 	private Beneficio beneficioCanjeado;
 	private Dueño dueñoCanjeador;
 	private Campaña campaña;
-	private int codigo;
-
 	
-	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña){
+	public CanjeDTO(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña){
 		//Date = fechaActual;
 		this.beneficioCanjeado = unBeneficio;
 		this.dueñoCanjeador = unDueño;
 		this.campaña = unaCampaña;
-	}
-	
-	public Canje(Beneficio unBeneficio, Dueño unDueño, Date fecha){
-		fechaCanje = fecha;
-		this.beneficioCanjeado = unBeneficio;
-		this.dueñoCanjeador = unDueño;
-	}
-	public Canje(Beneficio unBeneficio, Dueño unDueño, Date fecha, int codigo){
-		fechaCanje = fecha;
-		this.beneficioCanjeado = unBeneficio;
-		this.dueñoCanjeador = unDueño;
-		this.codigo = codigo;
 	}
 
 	public Date getFechaCanje() {
@@ -52,15 +42,8 @@ public class Canje {
 	public void setDueñoCanjeador(Dueño dueñoCanjeador) {
 		this.dueñoCanjeador = dueñoCanjeador;
 	}
-	public int getCodigo() {
-		return codigo;
-	}
-	public void setCodigo(int codigo) {
-		this.codigo = codigo;
-	}
 	
 	public Campaña getCampaña() {
 		return this.campaña;
 	}
-	
 }

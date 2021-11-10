@@ -1,8 +1,12 @@
-package ar.edu.unrn.seminario.modelo;
+package ar.edu.unrn.seminario.dto;
 
 import java.util.ArrayList;
 
-public class Campaña {
+import ar.edu.unrn.seminario.modelo.Canje;
+import ar.edu.unrn.seminario.modelo.Catalogo;
+import ar.edu.unrn.seminario.modelo.Dueño;
+
+public class CampañaDTO {
 	private String nombreCampaña;
 	private ArrayList<Dueño> listaBeneficiarios = null;
 	private ArrayList<Canje> listaCanjesEfectuados = null;
@@ -10,19 +14,17 @@ public class Campaña {
 	private String estado; //Esto no es un string
 	private int codigo;
 	
-	public Campaña(String nombre, Catalogo unCatalogo, String estado ){ //Checkear estado;
+	public CampañaDTO(String nombre, Catalogo unCatalogo, String estado ){ //Checkear estado;
 		nombreCampaña = nombre;
 		catalogo = unCatalogo;
 		this.estado=estado;
 	}
-	
-	public Campaña(String nombre, Catalogo unCatalogo, String estado, int codigo){ //Checkear estado;
+	public CampañaDTO(String nombre, Catalogo unCatalogo, String estado, int codigo){ //Checkear estado;
 		nombreCampaña = nombre;
 		catalogo = unCatalogo;
 		this.estado = estado;
 		this.codigo = codigo;
 	}
-	
 	public String getNombreCampaña() {
 		return nombreCampaña;
 	}
