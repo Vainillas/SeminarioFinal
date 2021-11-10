@@ -94,7 +94,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c "
 					+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
-					+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo) "
+					+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) "
 					+ "WHERE c.codigo = ?");
 			statement.setInt(1, codigo);
 			ResultSet resultSetConsulta = statement.executeQuery();
@@ -111,7 +111,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 			
 			//resultSetConsulta.close();
 			statement = conn.prepareStatement("SELECT * FROM campañas c "
-					+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+					+ "JOIN canjes ca ON (c.codigo = ca.codigo) "
 					+ "JOIN propietarios p ON (p.dni = ca.dni) "
 					+ "JOIN beneficios b ON (b.codigo = ca.cod_beneficio) "
 					+ "JOIN usuarios u ON (u.usuario = p.username) "
@@ -139,7 +139,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 			}
 			campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
 			statement = conn.prepareStatement("SELECT DISTINCT p.*,c.codigo, u.*, r.* FROM campañas c "
-					+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+					+ "JOIN canjes ca ON (c.codigo = ca.codigo) "
 					+ "JOIN propietarios p ON (p.dni = ca.dni) "
 					+ "JOIN usuarios u ON (u.usuario = p.username) "
 					+ "JOIN roles r ON (u.rol = r.codigo) "
@@ -190,7 +190,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c "
 					+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
-					+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo) ");
+					+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) ");
 			ResultSet resultSetConsulta = statement.executeQuery();
 			while(resultSetConsulta.next()) {
 				beneficio = new Beneficio(resultSetConsulta.getString("b.nombre_beneficio"),
@@ -205,7 +205,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 
 				//resultSetConsulta.close();
 				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM campañas c "
-						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN canjes ca ON (c.codigo = ca.codigo) "
 						+ "JOIN propietarios p ON (p.dni = ca.dni) "
 						+ "JOIN beneficios b ON (b.codigo = ca.cod_beneficio) "
 						+ "JOIN usuarios u ON (u.usuario = p.username) "
@@ -233,7 +233,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 				}
 				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
 				PreparedStatement statement3 = conn.prepareStatement("SELECT DISTINCT p.*,c.codigo, u.*, r.* FROM campañas c "
-						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN canjes ca ON (c.codigo = ca.codigo) "
 						+ "JOIN propietarios p ON (p.dni = ca.dni) "
 						+ "JOIN usuarios u ON (u.usuario = p.username) "
 						+ "JOIN roles r ON (u.rol = r.codigo) "
