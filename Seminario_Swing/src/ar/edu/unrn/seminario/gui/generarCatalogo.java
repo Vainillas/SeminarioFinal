@@ -28,6 +28,8 @@ import javax.swing.SwingConstants;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class generarCatalogo extends JFrame {
 
@@ -36,7 +38,7 @@ public class generarCatalogo extends JFrame {
 	private JTable tableBeneficiosAsociados;
 	private DefaultTableModel modeloBeneficiosNoAsociados;
 	private DefaultTableModel modeloBeneficiosAsociados;
-	
+	private List<BeneficioDTO> beneficio;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -71,7 +73,7 @@ public class generarCatalogo extends JFrame {
 		modeloBeneficiosAsociados = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficiosNoAsociados = new DefaultTableModel(new Object[][] {}, titulos);
 		try {
-			List<BeneficioDTO> beneficio = api.obtenerBeneficios();
+			beneficio = api.obtenerBeneficios();
 			for(BeneficioDTO b : beneficio) {
 				
 				modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible()});
@@ -106,6 +108,7 @@ public class generarCatalogo extends JFrame {
 				tableBeneficiosNoAsociados.setModel(modeloBeneficiosNoAsociados);
 			}
 		});
+		
 		scrollPaneBeneficiosAsociados.setViewportView(tableBeneficiosAsociados);
 		panelBeneficiosNoAsociados.setLayout(new BorderLayout(0, 0));
 		this.tableBeneficiosAsociados.setModel(this.modeloBeneficiosAsociados);
@@ -128,11 +131,44 @@ public class generarCatalogo extends JFrame {
 				
 			}
 		});
+		JButton btnGenerarCampaña = new JButton("GenerarCampa\u00F1a");
+		btnGenerarCampaña.addActionListener((e)->{
+			List<String> descripcion = null;
+			List<String>puntajeConsumible = null;
+			
+			if(this.tableBeneficiosAsociados.getRowCount()!=0) {
+				int res = JOptionPane.showConfirmDialog(null,"Seguro que desea crear la campaña con esos beneficios?","Confirmar envio", JOptionPane.YES_NO_OPTION);
+				if(res == 0) {
+					
+				
+					descripcion = new ArrayList<String>();
+					puntajeConsumible = new ArrayList<String>();
+				
+					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
+						descripcion.add( (String)tableBeneficiosAsociados.getValueAt(i,0 ));
+						puntajeConsumible.add( (String)tableBeneficiosAsociados.getValueAt(i, 1));
+						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
+						setVisible(false);
+						dispose();
+					}
+				}
+				//api.generarCampaña(descripcion,puntajeConsumible);
+				
+
+			}
+			
+			
+			
+			else {
+				JOptionPane.showMessageDialog(null,"debe seleccionar un beneficio","Error",JOptionPane.ERROR_MESSAGE);
+			}
+			
+		});
 		
 		tableBeneficiosNoAsociados.setModel(this.modeloBeneficiosNoAsociados);
 		scrollPaneBeneficioNoAsociado.setViewportView(tableBeneficiosNoAsociados);
 		
-		JLabel lbBeneficiosSinAsociar = new JLabel("beneficios sin Asociar");
+		JLabel lbBeneficiosSinAsociar = new JLabel("Beneficios Sin Asociar");
 		lbBeneficiosSinAsociar.setHorizontalAlignment(SwingConstants.CENTER);
 		lbBeneficiosSinAsociar.setBounds(141, 25, 168, 14);
 		contentPane.add(lbBeneficiosSinAsociar);
@@ -145,16 +181,47 @@ public class generarCatalogo extends JFrame {
 		JPanel panelBotones = new JPanel();
 		panelBotones.setBounds(422, 50, 140, 262);
 		contentPane.add(panelBotones);
+	
 		
-		JButton btnAgregarBeneficio = new JButton("AgregarBeneficio");
-		btnAgregarBeneficio.addActionListener((e)->{
-			if(btnAgregarBeneficio.isEnabled()) {
+		panelBotones.add(btnGenerarCampaña);
+		
+		JButton btnCancelar = new JButton("Cancelar");
+		btnCancelar.addActionListener((e)->{
+			setVisible(false);
+			dispose();
+		});
+		panelBotones.add(btnCancelar);
+		
+		JButton btnRemoverBeneficios = new JButton("Remover Beneficios");
+		btnRemoverBeneficios.addActionListener((e)->{
+			if(modeloBeneficiosNoAsociados.getRowCount()!= beneficio.size()) {
 				
-			}
+				this.modeloBeneficiosAsociados.setRowCount(0);
+				this.modeloBeneficiosNoAsociados.setRowCount(0);
+			
+				List<BeneficioDTO> beneficios;
+				
+				try {
+					beneficios = api.obtenerBeneficios();
+					
+					for(BeneficioDTO b : beneficios) {
+						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible()});
+					}
+					
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
+		}
+			
 			
 		});
+		panelBotones.add(btnRemoverBeneficios);
 		
-		panelBotones.add(btnAgregarBeneficio);
+		
+		JLabel lblNewLabel = new JLabel("Selecciones Los Beneficios Para La Campa\u00F1a");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(351, 11, 279, 14);
+		contentPane.add(lblNewLabel);
 		
 		
 		
