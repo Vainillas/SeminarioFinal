@@ -55,27 +55,12 @@ public class VentanaPrincipalDinamica extends JFrame {
 		String rol = "ADMINISTRADOR";
 		//String rol = api.obtenerRolUsuarioActivo();
 
-		if(rol.equals("PERSONAL")) {
-			panelPersonal.setVisible(true);
-			panelDueño.setVisible(false);
-			panelAdministrador.setVisible(false);
-		}
-		
-		if(rol.equals("ADMINISTRADOR")) {
-			panelAdministrador.setVisible(true);
-			panelPersonal.setVisible(false);
-			panelDueño.setVisible(false);
-		}
-		if(rol.equals("COMUNIDAD")) {
-			panelDueño.setVisible(true);
-			panelAdministrador.setVisible(false);
-			panelPersonal.setVisible(false);
-		}
+
 		
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
-		setBounds(100, 100, 1315, 533);
+		setBounds(100, 100, 1344, 533);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
@@ -97,7 +82,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		
 		
-		panelAdministrador.setBounds(560, 11, 630, 240);
+		panelAdministrador.setBounds(560, 11, 758, 240);
 		contentPane.setLayout(null);
 		contentPane.add(panelAdministrador);
 
@@ -248,6 +233,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbAdministrador.add(mnDueñoAdministrador);
 		
 		JMenuItem mntmAdmListadoDueños = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.dueños.administrador"));
+		mntmAdmListadoDueños.addActionListener((e)->{
+			ListadoDeDueños listado = new ListadoDeDueños(api,labels);
+			listado.setVisible(true);
+		});
 		mnDueñoAdministrador.add(mntmAdmListadoDueños);
 		
 		JMenuItem mntmRegistrarDueñoAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.registrar.dueño.administrador")); 
@@ -306,17 +295,35 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenu mnCampaña = new JMenu(labels.getString("ventana.principal.dinamica.menu.campaña")); 
 		mbAdministrador.add(mnCampaña);
 		
-		JMenuItem mntmListarCampañas = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.campaña")); //$NON-NLS-1$
-		mnCampaña.add(mntmListarCampañas);
-		
-		JMenuItem mntmGenerarCampaña = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
+		JMenuItem mntmGenerarCampaña = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.campaña")); //$NON-NLS-1$
+		mntmGenerarCampaña.addActionListener((e)->{
+			GenerarCampaña campaña = new GenerarCampaña(api,labels);
+			campaña.setVisible(true);
+			
+			
+			
+		});
 		mnCampaña.add(mntmGenerarCampaña);
+		
+		JMenuItem mntmListarCampañaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
+		
+		mnCampaña.add(mntmListarCampañaAdministrador);
+		
+		JMenu mnBeneficioAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.beneficio.administrador"));
+		mbAdministrador.add(mnBeneficioAdministrador);
+		
+		JMenuItem mntmGenerarBeneficioAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.beneficio.administrador"));
+		mntmGenerarBeneficioAdministrador.addActionListener((e)->{
+			GenerarBeneficio beneficio = new GenerarBeneficio(api,labels);
+			beneficio.setVisible(true);
+			
+		});
+		
+		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
 		
 		panelDueño.setBounds(10, 262, 540, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
-		
-		//;api.existeDueño();
 		
 		JMenuBar mbDueño = new JMenuBar();
 		panelDueño.add(mbDueño, BorderLayout.NORTH);
@@ -351,8 +358,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 			this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			mntmPantallaCompletaDueño.setVisible(false);
 			mntmPantallaEstandarDueño.setVisible(true);
-			
-			
 		});
 		
 		mntmPantallaEstandarDueño.addActionListener((e)->{
@@ -374,19 +379,35 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenuItem mntmGenerarPedidoDeRetiroDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.pedido.de.retiro.dueño")); //$NON-NLS-1$
 		mnPedidoDeRetiroDueño.add(mntmGenerarPedidoDeRetiroDueño);
 		
-		JPanel panelDueñoNoRegistrado = new JPanel();
-		panelDueñoNoRegistrado.setVisible(false);
-		panelDueñoNoRegistrado.setBounds(560, 262, 402, 204);
-		contentPane.add(panelDueñoNoRegistrado);
-		panelDueñoNoRegistrado.setLayout(new BorderLayout(0, 0));
+		JMenu mnDueñoNoRegistrado = new JMenu(labels.getString("ventana.principal.dinamica.menu.registrarse.dueño"));
+		mbDueño.add(mnDueñoNoRegistrado);
 		
-		JMenuBar mbDueñoNoRegistrado = new JMenuBar();
-		panelDueñoNoRegistrado.add(mbDueñoNoRegistrado, BorderLayout.NORTH);
+		JMenuItem mntmRegistrarDatosPersonales = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.registrar.datos.personales.dueño"));
+		mnDueñoNoRegistrado.add(mntmRegistrarDatosPersonales);
+		if(rol.equals("PERSONAL")) {
+			panelPersonal.setVisible(true);
+			panelDueño.setVisible(false);
+			panelAdministrador.setVisible(false);
+		}
 		
-		JMenu mnDueñoNoRegistrado = new JMenu(labels.getString("ventana.principal.dinamica.menu.registro")); 
-		mbDueñoNoRegistrado.add(mnDueñoNoRegistrado);
-		
-		JMenuItem mntmRegistrarDueñoNoRegistrado = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.registrarse")); 
-		mnDueñoNoRegistrado.add(mntmRegistrarDueñoNoRegistrado);
+		if(rol.equals("ADMINISTRADOR")) {
+			panelAdministrador.setVisible(true);
+			panelPersonal.setVisible(false);
+			panelDueño.setVisible(false);
+		}
+		if(rol.equals("COMUNIDAD")) {
+			//para solucionar lo de comunidad no registrado
+			/*if(api.usuarioRegistrado()) {
+				mnViviendasDueño.setVisible(false);
+				mnPedidoDeRetiroDueño.setVisible(false);
+				mnConfiguracionDueño.setVisible(false);
+				mnDueñoNoRegistrado.setVisible(true);
+				
+			}*/
+			panelDueño.setVisible(true);
+			panelAdministrador.setVisible(false);
+			panelPersonal.setVisible(false);
+		}
+	
 	}
 }

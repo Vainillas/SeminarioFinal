@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
@@ -24,8 +25,6 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JButton;
 
 public class GenerarBeneficio extends JFrame {
-	private ResourceBundle labels = ResourceBundle.getBundle("labels");
-	
 	private JPanel contentPane;
 	private List<String> puntaje = new ArrayList<String>();
 	private List<String> descripcion = new ArrayList<String>();
@@ -38,8 +37,8 @@ public class GenerarBeneficio extends JFrame {
 			public void run() {
 				try {
 					PersistenceApi api = new PersistenceApi();
-					
-					GenerarBeneficio frame = new GenerarBeneficio(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels");
+					GenerarBeneficio frame = new GenerarBeneficio(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -48,10 +47,7 @@ public class GenerarBeneficio extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
-	public GenerarBeneficio(IApi api) {
+	public GenerarBeneficio(IApi api, ResourceBundle labels) {
 		setTitle(labels.getString("generar.beneficio.titulo"));
 		
 		
@@ -105,9 +101,10 @@ public class GenerarBeneficio extends JFrame {
 		btnAceptar.addActionListener((e)->{
 			try {
 				api.agregarBeneficio(tpDescripcion.getText(),ftfPuntos.getText());
+				JOptionPane.showMessageDialog(null, "Beneficio Registrado Con Exito","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);
 				dispose();
-			} catch (NotNullException | DataEmptyException | NotNumberException e1) {
+			} catch (NotNullException | DataEmptyException | NotNumberException | AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				
 			}
@@ -123,4 +120,6 @@ public class GenerarBeneficio extends JFrame {
 		});
 		panel_2.add(btnCancelar);
 	}
+
+
 }
