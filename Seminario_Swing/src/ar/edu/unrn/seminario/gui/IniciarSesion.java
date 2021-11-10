@@ -117,7 +117,7 @@ public class IniciarSesion extends JFrame {
 		buttonAceptar.addActionListener((e)->{
 				//System.out.println(textUsuario.getText());
 				try {
-					ResourceBundle l = ResourceBundle.getBundle("labels");
+					ResourceBundle l = ResourceBundle.getBundle("labels", new Locale("es"));
 						if(comboBoxIdioma.getSelectedItem().equals("INGLES")) {
 							l = ResourceBundle.getBundle("labels",new Locale("en"));
 						}
