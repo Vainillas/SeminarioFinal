@@ -50,6 +50,8 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.modelo.Campaña;
+import ar.edu.unrn.seminario.modelo.Catalogo;
 import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Estado;
@@ -881,6 +883,19 @@ public class PersistenceApi implements IApi {
     	return beneficiosDto;
 	}
 
-
+	public void generarCampaña(ArrayList<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
+		
+		ArrayList<Beneficio> listaDeBeneficios = new ArrayList<Beneficio>();
+		for(Integer i: listaBeneficios) {
+			listaDeBeneficios.add(this.beneficioDao.find(i));
+		}
+		
+		Catalogo catalogo = new Catalogo(listaDeBeneficios);
+		
+		Campaña campaña = new Campaña(unNombre, catalogo);
+		
+		this.campañaDao.create(campaña);
+		
+	}
 
 }
