@@ -56,7 +56,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			statement.setInt(1, codigo);
 			ResultSet resultSetConsulta = statement.executeQuery();
 			if(resultSetConsulta.next()) {
-				beneficio= new Beneficio(resultSetConsulta.getString("nombre_beneficio"), 
+				beneficio= new Beneficio(resultSetConsulta.getString("nombre_beneficio"),  
 						String.valueOf(resultSetConsulta.getInt("costo")),
 						resultSetConsulta.getInt("codigo"));
 			}
