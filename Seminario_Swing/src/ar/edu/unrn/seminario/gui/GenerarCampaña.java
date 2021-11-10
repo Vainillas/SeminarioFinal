@@ -170,6 +170,7 @@ public class GenerarCampaña extends JFrame {
 						setVisible(false);
 						dispose();
 						try {
+							System.out.println("");
 							api.generarCampaña(codigo,tfnombreCampaña.getText());
 						} catch (AppException | NotNullException e1) {
 							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
