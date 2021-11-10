@@ -28,7 +28,7 @@ import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 
-public class ListarCampañas extends JFrame {
+public class ListadoDeCampañas extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -36,6 +36,7 @@ public class ListarCampañas extends JFrame {
 	IApi api;
 	JButton activarButton;
 	JButton desactivarButton;
+	private JButton btnNewButton;
 
 	/**
 	 * Launch the application.
@@ -45,7 +46,7 @@ public class ListarCampañas extends JFrame {
 			public void run() {
 				try {
 					PersistenceApi api = new PersistenceApi();
-					ListarCampañas frame = new ListarCampañas(api);
+					ListadoDeCampañas frame = new ListadoDeCampañas(api);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,7 +55,7 @@ public class ListarCampañas extends JFrame {
 		});
 	}
 
-	public ListarCampañas(IApi api) {
+	public ListadoDeCampañas(IApi api) {
 		this.api = api;
 		setTitle("Listar Campañas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,6 +64,13 @@ public class ListarCampañas extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		
+		btnNewButton = new JButton("Volver a Menu Principal");
+		btnNewButton.addActionListener((e)->{
+			setVisible(false);
+			dispose();
+		});
+		contentPane.add(btnNewButton, BorderLayout.SOUTH);
 
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);

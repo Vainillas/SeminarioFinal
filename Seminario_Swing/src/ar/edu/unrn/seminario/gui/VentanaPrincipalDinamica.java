@@ -308,6 +308,11 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnCampaña.add(mntmGenerarCampaña);
 		
 		JMenuItem mntmListarCampañaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
+		mntmListarCampañaAdministrador.addActionListener((e)->{
+			ListadoDeCampañas c = new ListadoDeCampañas(api);
+			c.setVisible(true);
+			
+		});
 		
 		mnCampaña.add(mntmListarCampañaAdministrador);
 		
