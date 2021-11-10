@@ -120,7 +120,6 @@ public class IniciarSesion extends JFrame {
 					ResourceBundle l = ResourceBundle.getBundle("labels");
 						if(comboBoxIdioma.getSelectedItem().equals("INGLES")) {
 							l = ResourceBundle.getBundle("labels",new Locale("en"));
-							System.out.println("entro aca");
 						}
 						api.validarUsuario(textUsuario.getText(), String.valueOf(textPassword.getPassword())) ;
 						api.usuarioActivo(textUsuario.getText());//sirve para mantener al usuario siempre
@@ -157,8 +156,12 @@ public class IniciarSesion extends JFrame {
 		buttonRegistrarse.addActionListener((e)->{
 				AltaUsuario usuario = new AltaUsuario(api,labels);
 				usuario.setVisible(true);
+				this.textPassword.setText("");
+				this.textUsuario.setText("");
+				
 				String idioma = (String) comboBoxIdioma.getSelectedItem();
 				
+			
 			
 		});
 		
