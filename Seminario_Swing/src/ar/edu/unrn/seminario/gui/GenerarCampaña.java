@@ -101,9 +101,11 @@ public class GenerarCampaña extends JFrame {
 		panelBeneficiosAsociados.add(scrollPaneBeneficiosAsociados, BorderLayout.CENTER);
 		
 		tableBeneficiosAsociados = new JTable();
+
 		tableBeneficiosAsociados.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+
 				String  descripcion = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),2 );
@@ -170,7 +172,6 @@ public class GenerarCampaña extends JFrame {
 						setVisible(false);
 						dispose();
 						try {
-							System.out.println("");
 							api.generarCampaña(codigo,tfnombreCampaña.getText());
 						} catch (AppException | NotNullException e1) {
 							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -254,18 +255,6 @@ public class GenerarCampaña extends JFrame {
 
 		
 
-	}
-	private void reloadGrid(List<BeneficioDTO> beneficio ) {
-		/*this.modeloBeneficiosSeleccionados.setRowCount(0);
-		
-			for (BeneficioDTO b : beneficio) {
-				this.modeloBeneficiosSeleccionados.addRow(new Object[] { 
-						"d",
-						
-					
-				});*/
-				
-			
 	}
 	}
 
