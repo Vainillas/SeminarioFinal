@@ -43,7 +43,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				// TODO: disparar Exception propia
 			}
 		} catch (SQLException e) {
-			throw new AppException("Error al crear el beneficio: " + e.getMessage());
+			throw new AppException("Error al crear el canje: " + e.getMessage());
 		} finally {
 			ConnectionManager.disconnect();
 			}
