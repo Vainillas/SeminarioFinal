@@ -31,6 +31,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class GenerarCampaña extends JFrame {
 
@@ -40,6 +41,7 @@ public class GenerarCampaña extends JFrame {
 	private DefaultTableModel modeloBeneficiosNoAsociados;
 	private DefaultTableModel modeloBeneficiosAsociados;
 	private List<BeneficioDTO> beneficio;
+	private JTextField tfnombreCampaña;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -65,7 +67,7 @@ public class GenerarCampaña extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JPanel panelBeneficiosNoAsociados = new JPanel();
-		panelBeneficiosNoAsociados.setBounds(10, 50, 402, 262);
+		panelBeneficiosNoAsociados.setBounds(10, 116, 402, 236);
 		contentPane.add(panelBeneficiosNoAsociados);
 		String [] titulos = {
 				"Descripcion",
@@ -80,7 +82,7 @@ public class GenerarCampaña extends JFrame {
 			beneficio = api.obtenerBeneficios();
 			for(BeneficioDTO b : beneficio) {
 				
-				modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible()});
+				modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e) {
 			
@@ -90,7 +92,7 @@ public class GenerarCampaña extends JFrame {
 		
 		
 		JPanel panelBeneficiosAsociados = new JPanel();
-		panelBeneficiosAsociados.setBounds(572, 50, 402, 262);
+		panelBeneficiosAsociados.setBounds(572, 116, 402, 236);
 		contentPane.add(panelBeneficiosAsociados);
 		
 		panelBeneficiosAsociados.setLayout(new BorderLayout(0, 0));
@@ -104,11 +106,13 @@ public class GenerarCampaña extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				String  descripcion = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
+				Integer codigo = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),2 );
+				
 				//tableBeneficiosNoAsociados.clearSelection();
 				
 				modeloBeneficiosAsociados.removeRow(tableBeneficiosAsociados.getSelectedRow());
 				
-				modeloBeneficiosNoAsociados.addRow(new Object[] {descripcion,puntaje});
+				modeloBeneficiosNoAsociados.addRow(new Object[] {descripcion,puntaje,codigo});
 				tableBeneficiosNoAsociados.setModel(modeloBeneficiosNoAsociados);
 			}
 		});
@@ -125,37 +129,52 @@ public class GenerarCampaña extends JFrame {
 			public void mouseClicked(MouseEvent e) {
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
-				//tableBeneficiosNoAsociados.clearSelection();
-				
+				Integer codigo = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),2 );		
 				modeloBeneficiosNoAsociados.removeRow(tableBeneficiosNoAsociados.getSelectedRow());
 				
-				modeloBeneficiosAsociados.addRow(new Object[] {descripcion,puntaje});
+				modeloBeneficiosAsociados.addRow(new Object[] {descripcion,puntaje,codigo});
 				tableBeneficiosAsociados.setModel(modeloBeneficiosAsociados);
-
+				
 				
 			}
 		});
+		JLabel lblNewLabel = new JLabel("Selecciones Los Beneficios Para La Campa\u00F1a");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(351, 11, 279, 14);
+		contentPane.add(lblNewLabel);
+		
+		JLabel lbNombreCampaña = new JLabel("Nombre de la campa\u00F1a:");
+		lbNombreCampaña.setBounds(10, 11, 140, 14);
+		contentPane.add(lbNombreCampaña);
+		
+		tfnombreCampaña = new JTextField();
+		tfnombreCampaña.setBounds(160, 8, 155, 20);
+		contentPane.add(tfnombreCampaña);
+		tfnombreCampaña.setColumns(10);
+		
 		JButton btnGenerarCampaña = new JButton("GenerarCampa\u00F1a");
 		btnGenerarCampaña.addActionListener((e)->{
-			List<String> descripcion = null;
-			List<String>puntajeConsumible = null;
+			List<Integer>codigo = null;
 			
 			if(this.tableBeneficiosAsociados.getRowCount()!=0) {
 				int res = JOptionPane.showConfirmDialog(null,"Seguro que desea crear la campaña con esos beneficios?","Confirmar envio", JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					
 				
-					descripcion = new ArrayList<String>();
-					puntajeConsumible = new ArrayList<String>();
+					
+					codigo = new ArrayList<Integer>();
 				
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
-						descripcion.add( (String)tableBeneficiosAsociados.getValueAt(i,0 ));
-						puntajeConsumible.add( (String)tableBeneficiosAsociados.getValueAt(i, 1));
-						
+						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
 						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
-						//api.generarCampaña(descripcion,puntajeConsumible);
+						try {
+							System.out.println("");
+							api.generarCampaña(codigo,tfnombreCampaña.getText());
+						} catch (AppException | NotNullException e1) {
+							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						}
 					}
 				}
 				
@@ -176,12 +195,12 @@ public class GenerarCampaña extends JFrame {
 		
 		JLabel lbBeneficiosSinAsociar = new JLabel("Beneficios Sin Asociar");
 		lbBeneficiosSinAsociar.setHorizontalAlignment(SwingConstants.CENTER);
-		lbBeneficiosSinAsociar.setBounds(141, 25, 168, 14);
+		lbBeneficiosSinAsociar.setBounds(130, 91, 168, 14);
 		contentPane.add(lbBeneficiosSinAsociar);
 		
 		JLabel lbBeneficiosAsociados = new JLabel("Beneficios Asociados ");
 		lbBeneficiosAsociados.setHorizontalAlignment(SwingConstants.CENTER);
-		lbBeneficiosAsociados.setBounds(678, 25, 199, 14);
+		lbBeneficiosAsociados.setBounds(687, 91, 199, 14);
 		contentPane.add(lbBeneficiosAsociados);
 		
 		JPanel panelBotones = new JPanel();
@@ -197,7 +216,7 @@ public class GenerarCampaña extends JFrame {
 			dispose();
 		});
 		panelBotones.add(btnCancelar);
-		
+
 		JButton btnRemoverBeneficios = new JButton("Remover Beneficios");
 		btnRemoverBeneficios.addActionListener((e)->{
 			if(modeloBeneficiosNoAsociados.getRowCount()!= beneficio.size()) {
@@ -224,10 +243,7 @@ public class GenerarCampaña extends JFrame {
 		panelBotones.add(btnRemoverBeneficios);
 		
 		
-		JLabel lblNewLabel = new JLabel("Selecciones Los Beneficios Para La Campa\u00F1a");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(351, 11, 279, 14);
-		contentPane.add(lblNewLabel);
+
 		
 		
 		

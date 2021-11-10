@@ -192,7 +192,7 @@ public interface IApi {
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
 	
-	void generarCampaña(ArrayList<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException;
+	void generarCampaña(List<Integer> codigo, String unNombre) throws AppException, NotNullException;
 	
 	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException;
 	
