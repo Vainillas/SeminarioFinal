@@ -10,29 +10,9 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.modelo.Campaña;
 
-public class CampañaDAOJDBC {
+public class CampañaDAOJDBC implements CampañaDao{
 	public void create(Campaña campaña) throws AppException{
-		Connection conn;
-		try { 
-			conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn
-				.prepareStatement("INSERT INTO campañas(nombre_beneficio,costo) "
-						+ "VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-
-			//tatement.setString(1, b.getDescripcion());
-			
-			int cantidad = statement.executeUpdate();
-			if (cantidad > 0) {
-				System.out.println("Modificando " + cantidad + " registros");
-			} else {
-				System.out.println("Error al actualizar");
-				// TODO: disparar Exception propia
-			}
-		} catch (SQLException e) {
-			throw new AppException("Error al crear la Campaña " + e.getMessage());
-		} finally {
-			ConnectionManager.disconnect();
-			}
+		
 	}
 
 	public void update(Campaña campaña) {
@@ -51,7 +31,7 @@ public class CampañaDAOJDBC {
 		return null;
 	}
 
-	boolean exists(int codigo) throws AppException{
+	public boolean exists(int codigo) throws AppException{
 		return false;
 	}
 }

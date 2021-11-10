@@ -13,5 +13,10 @@ public class Campaña {
 		nombreCampaña = nombre;
 		catalogo = unCatalogo;
 	}
+
+	public int getCodigo() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

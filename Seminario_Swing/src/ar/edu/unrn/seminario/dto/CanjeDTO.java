@@ -1,14 +1,18 @@
-package ar.edu.unrn.seminario.modelo;
+package ar.edu.unrn.seminario.dto;
 
 import java.sql.Date;
 
-public class Canje {
+import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.modelo.Campaña;
+import ar.edu.unrn.seminario.modelo.Dueño;
+
+public class CanjeDTO {
 	private Date fechaCanje;
 	private Beneficio beneficioCanjeado;
 	private Dueño dueñoCanjeador;
 	private Campaña campaña;
 	
-	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña){
+	public CanjeDTO(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña){
 		//Date = fechaActual;
 		this.beneficioCanjeado = unBeneficio;
 		this.dueñoCanjeador = unDueño;
@@ -42,5 +46,4 @@ public class Canje {
 	public Campaña getCampaña() {
 		return this.campaña;
 	}
-	
 }
