@@ -59,7 +59,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 				beneficio= new Beneficio(resultSetDireccion.getString("nombre_beneficio"), String.valueOf(resultSetDireccion.getInt("costo")));
 			}
 		} catch (SQLException | DataEmptyException | NotNumberException e) {
-			throw new AppException("Error al encontrar un Beneficio: " + e.getMessage());
+			throw new AppException("Error al encontrar un beneficio: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
 		}
@@ -79,7 +79,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 				beneficios.add(beneficio);
 			}
 		} catch (SQLException | DataEmptyException | NotNumberException e) {
-			throw new AppException("Error al encontrar las direcciones: " + e.getMessage());
+			throw new AppException("Error al encontrar los beneficios: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
 		}
