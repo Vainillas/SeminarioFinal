@@ -38,12 +38,13 @@ public class CampañaDAOJDBC implements CampañaDao{
 			ResultSet clave = statement.getGeneratedKeys();
 			clave.next();
 			int codigoCampaña = clave.getInt(1);
-			clave.close();
+			clave.close();  
 			for(Beneficio b : campaña.getCatalogo().getListaBeneficios()) {
 				PreparedStatement statement2 = conn.prepareStatement
 	                    ("INSERT INTO beneficios_campaña(cod_beneficio, cod_campaña) "
 	                    		+ "VALUES(?, ?)");
-				statement2.setInt(b.getCodigo(), codigoCampaña);
+				statement2.setInt(1, b.getCodigo());
+                statement2.setInt(2, codigoCampaña);
 				statement2.executeUpdate();
 			}
 			
