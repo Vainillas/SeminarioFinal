@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
@@ -100,11 +101,10 @@ public class GenerarBeneficio extends JFrame {
 		btnAceptar.addActionListener((e)->{
 			try {
 				api.agregarBeneficio(tpDescripcion.getText(),ftfPuntos.getText());
-
 				JOptionPane.showMessageDialog(null, "Beneficio Registrado Con Exito","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);
 				dispose();
-			} catch (NotNullException | DataEmptyException | NotNumberException e1) {
+			} catch (NotNullException | DataEmptyException | NotNumberException | AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				
 			}

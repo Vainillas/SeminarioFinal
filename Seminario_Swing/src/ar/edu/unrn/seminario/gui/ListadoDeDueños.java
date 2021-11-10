@@ -47,25 +47,11 @@ public class ListadoDeDueños extends JFrame {
 	private JTextField tfFiltrarPorDni;
 	private JTextField tfFiltrarPorCorreoElectronico;
 	private JTextField tfFiltrarPorUsername;
-	private ResourceBundle labels = ResourceBundle.getBundle("labels");
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					PersistenceApi api = new PersistenceApi();
-					ListadoDeDueños frame = new ListadoDeDueños(api);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public ListadoDeDueños(IApi api) {
+
+
+
+	public ListadoDeDueños(IApi api, ResourceBundle labels) {
 		
 		setTitle(labels.getString("listado.de.dueños.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
