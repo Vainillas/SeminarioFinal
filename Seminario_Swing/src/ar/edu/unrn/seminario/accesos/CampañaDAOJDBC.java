@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,11 +29,10 @@ public class CampañaDAOJDBC implements CampañaDao{
 		try { 
 			conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-				.prepareStatement("INSERT INTO campañas(nombre,codigo,estado) "
-						+ "VALUES (?, ?, ?)");
+				.prepareStatement("INSERT INTO campañas(nombre,estado) "
+						+ "VALUES (?, ?)");
 			statement.setString(1, campaña.getNombreCampaña());
-			statement.setInt(2, campaña.getCodigo());
-			statement.setString(3, campaña.getEstado());
+			statement.setString(2, campaña.getEstado());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
@@ -55,6 +53,7 @@ public class CampañaDAOJDBC implements CampañaDao{
             		+ "WHERE codigo = ?");
             statement.setString(1, campaña.getNombreCampaña());
             statement.setString(2, campaña.getEstado());
+            statement.setInt(3, campaña.getCodigo());
             statement.executeUpdate();
 		}catch (SQLException e) {
             throw new AppException("Error de SQL al actualizar campaña: " + e.getMessage());
@@ -109,6 +108,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 					+ "JOIN usuarios u ON (u.usuario = p.username) "
 					+ "JOIN roles r ON (u.rol = r.codigo) "
 					+ "WHERE c.codigo = ?");
+			statement.setInt(1, codigo);
 			ResultSet resultSetCanje = statement.executeQuery();
 			while(resultSetCanje.next()) {
 				rol = new Rol(resultSetCanje.getInt("r.codigo"),
@@ -125,7 +125,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 				beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 						String.valueOf(resultSetCanje.getInt("b.costo")),
 						resultSetCanje.getInt("b.codigo"));
-				canje = new Canje(beneficio, dueño, resultSetCanje.getDate("fecha"), resultSetCanje.getInt(codigo));
+				canje = new Canje(beneficio, dueño, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
 				listaCanjesEfectuados.add(canje);
 			}
 			campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
@@ -135,6 +135,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 					+ "JOIN usuarios u ON (u.usuario = p.username) "
 					+ "JOIN roles r ON (u.rol = r.codigo) "
 					+ "WHERE c.codigo = ?");
+			statement.setInt(1, codigo);
 			ResultSet resultSetBeneficiarios = statement.executeQuery();
 			while(resultSetBeneficiarios.next()) {
 				rol = new Rol(resultSetBeneficiarios.getInt("r.codigo"),
@@ -161,10 +162,115 @@ public class CampañaDAOJDBC implements CampañaDao{
 	}
 
 	public List<Campaña> findAll() throws AppException, NotNullException{
-		return null;
+		ArrayList<Campaña> listaCampañas = new ArrayList<>();
+		Campaña campaña = null;
+		Catalogo catalogo = null;
+		ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
+		Beneficio beneficio = null;
+		
+		ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
+		Canje canje = null;
+		Dueño dueño = null;
+		Usuario user = null;
+		Rol rol = null;
+		
+		ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
+		
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c "
+					+ "JOIN catalogo ca ON (c.codigo = ca.cod_campaña) "
+					+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo ");
+			ResultSet resultSetConsulta = statement.executeQuery();
+			while(resultSetConsulta.next()) {
+				beneficio = new Beneficio(resultSetConsulta.getString("b.nombre_beneficio"),
+						String.valueOf(resultSetConsulta.getInt("b.costo")),
+						resultSetConsulta.getInt("b.codigo"));
+				listaBeneficios.add(beneficio);
+
+				catalogo = new Catalogo(listaBeneficios);
+				campaña = new Campaña(resultSetConsulta.getString("c.nombre"),catalogo,
+						resultSetConsulta.getString("c.estado"),
+						resultSetConsulta.getInt("c.codigo"));
+
+				//resultSetConsulta.close();
+				PreparedStatement statement2 = conn.prepareStatement("SELECT * FROM campañas c "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN propietarios p ON (p.dni = ca.dni) "
+						+ "JOIN beneficios b ON (b.codigo = ca.cod_beneficio) "
+						+ "JOIN usuarios u ON (u.usuario = p.username) "
+						+ "JOIN roles r ON (u.rol = r.codigo) "
+						+ "WHERE c.codigo = ?");
+				statement2.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetCanje = statement2.executeQuery();
+				while(resultSetCanje.next()) {
+					rol = new Rol(resultSetCanje.getInt("r.codigo"),
+							resultSetCanje.getString("r.nombre"));
+					user = new Usuario(resultSetCanje.getString("u.usuario"),
+							resultSetCanje.getString("u.contrasena"),
+							resultSetCanje.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetCanje.getString("p.nombre"),
+							resultSetCanje.getString("p.apellido"),
+							resultSetCanje.getString("p.dni"),
+							resultSetCanje.getString("p.correo_electronico"),
+							user);
+					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
+							String.valueOf(resultSetCanje.getInt("b.costo")),
+							resultSetCanje.getInt("b.codigo"));
+					canje = new Canje(beneficio, dueño, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					listaCanjesEfectuados.add(canje);
+				}
+				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
+				PreparedStatement statement3 = conn.prepareStatement("SELECT DISTINCT p.*,c.codigo, u.*, r.* FROM campañas c "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN propietarios p ON (p.dni = ca.dni) "
+						+ "JOIN usuarios u ON (u.usuario = p.username) "
+						+ "JOIN roles r ON (u.rol = r.codigo) "
+						+ "WHERE c.codigo = ?");
+				statement3.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetBeneficiarios = statement3.executeQuery();
+				while(resultSetBeneficiarios.next()) {
+					rol = new Rol(resultSetBeneficiarios.getInt("r.codigo"),
+							resultSetBeneficiarios.getString("r.nombre"));
+					user = new Usuario(resultSetBeneficiarios.getString("u.usuario"),
+							resultSetBeneficiarios.getString("u.contrasena"),
+							resultSetBeneficiarios.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetBeneficiarios.getString("p.nombre"),
+							resultSetBeneficiarios.getString("p.apellido"),
+							resultSetBeneficiarios.getString("p.dni"),
+							resultSetBeneficiarios.getString("p.correo_electronico"),
+							user);
+					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
+					listaBeneficiarios.add(dueño);
+				}
+				campaña.setListaBeneficiarios(listaBeneficiarios);
+				listaCampañas.add(campaña);
+			}
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
+			throw new AppException("Error al obtener todas las campañas: " + e.getMessage());
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return listaCampañas;
 	}
 
 	public boolean exists(int codigo) throws AppException{
-		return false;
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c WHERE c.codigo = ?");
+			ResultSet resultSetConsulta = statement.executeQuery();
+			if(resultSetConsulta.next()) {
+				return true;
+			}
+			else
+				return false;
+		} catch (SQLException e) {
+			throw new AppException("Error al verificar existencia: " + e.getMessage());
+		} finally {
+		ConnectionManager.disconnect();
+		}
 	}
 }

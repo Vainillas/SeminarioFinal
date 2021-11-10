@@ -2,13 +2,25 @@ package ar.edu.unrn.seminario.accesos;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.modelo.Campaña;
 import ar.edu.unrn.seminario.modelo.Canje;
+import ar.edu.unrn.seminario.modelo.Catalogo;
+import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.Rol;
+import ar.edu.unrn.seminario.modelo.Usuario;
 
 public class CanjeDAOJDBC implements CanjeDao {
 	public void create(Canje canje) throws AppException{
@@ -31,7 +43,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				// TODO: disparar Exception propia
 			}
 		} catch (SQLException e) {
-			throw new AppException("Error al crear el Beneficio: " + e.getMessage());
+			throw new AppException("Error al crear el canje: " + e.getMessage());
 		} finally {
 			ConnectionManager.disconnect();
 			}
@@ -46,11 +58,277 @@ public class CanjeDAOJDBC implements CanjeDao {
 	}
 
 	public Canje find(int codigo) throws AppException, NotNullException{
-		return null;
+		Canje canjeObjetivo = null;
+		Beneficio beneficioCanjeado = null;
+		
+		Campaña campaña = null;
+		Catalogo catalogo = null;
+		ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
+		Beneficio beneficio = null;
+		
+		ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
+		Canje canje = null;
+		Dueño dueño = null;
+		Usuario user = null;
+		Rol rol = null;
+		
+		ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
+		
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM canje cje "
+					+ "JOIN beneficios b ON (b.codigo = cje.cod_beneficio) "
+					+ "JOIN propietarios p ON (p.dni = cje.dni) "
+					+ "JOIN usuarios u ON (u.usuario = p.username) "
+					+ "JOIN roles r ON (u.rol = r.codigo) "
+					+ "JOIN campañas c ON (c.codigo = cje.cod_campaña) "
+					+ "WHERE cje.codigo = ?");
+			statement.setInt(1, codigo);
+			ResultSet resultSetConsulta = statement.executeQuery();
+			if(resultSetConsulta.next()) {
+				
+				//RECUPERAR CANJE SIN CAMPAÑA:
+				beneficioCanjeado = new Beneficio(resultSetConsulta.getString("b.nombre_beneficio"),
+						String.valueOf(resultSetConsulta.getInt("b.costo")),
+						resultSetConsulta.getInt("b.codigo"));
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"),
+						resultSetConsulta.getString("r.nombre"));
+				user = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño = new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						user);
+				canjeObjetivo = new Canje(beneficioCanjeado, dueño, resultSetConsulta.getDate("cje.fecha"),
+						resultSetConsulta.getInt("cje.codigo"));
+				
+				
+				
+				//RECUPERAR CAMPAÑA:
+				
+				
+				statement = conn.prepareStatement("SELECT * FROM campañas c "
+						+ "JOIN catalogo ca ON (c.codigo = ca.cod_campaña) "
+						+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo "
+						+ "WHERE c.codigo = ?");
+				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetConsulta2 = statement.executeQuery();
+				while(resultSetConsulta.next()) {
+					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
+							String.valueOf(resultSetConsulta2.getInt("b.costo")),
+							resultSetConsulta2.getInt("b.codigo"));
+					listaBeneficios.add(beneficio);
+				}
+				catalogo = new Catalogo(listaBeneficios);
+				campaña = new Campaña(resultSetConsulta2.getString("c.nombre"),catalogo,
+						resultSetConsulta2.getString("c.estado"),
+						resultSetConsulta2.getInt("c.codigo"));
+				
+				//resultSetConsulta.close();
+				statement = conn.prepareStatement("SELECT * FROM campañas c "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN propietarios p ON (p.dni = ca.dni) "
+						+ "JOIN beneficios b ON (b.codigo = ca.cod_beneficio) "
+						+ "JOIN usuarios u ON (u.usuario = p.username) "
+						+ "JOIN roles r ON (u.rol = r.codigo) "
+						+ "WHERE c.codigo = ?");
+				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetCanje = statement.executeQuery();
+				while(resultSetCanje.next()) {
+					rol = new Rol(resultSetCanje.getInt("r.codigo"),
+							resultSetCanje.getString("r.nombre"));
+					user = new Usuario(resultSetCanje.getString("u.usuario"),
+							resultSetCanje.getString("u.contrasena"),
+							resultSetCanje.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetCanje.getString("p.nombre"),
+							resultSetCanje.getString("p.apellido"),
+							resultSetCanje.getString("p.dni"),
+							resultSetCanje.getString("p.correo_electronico"),
+							user);
+					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
+							String.valueOf(resultSetCanje.getInt("b.costo")),
+							resultSetCanje.getInt("b.codigo"));
+					canje = new Canje(beneficio, dueño, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					listaCanjesEfectuados.add(canje);
+				}
+				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
+				statement = conn.prepareStatement("SELECT DISTINCT p.*,c.codigo, u.*, r.* FROM campañas c "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN propietarios p ON (p.dni = ca.dni) "
+						+ "JOIN usuarios u ON (u.usuario = p.username) "
+						+ "JOIN roles r ON (u.rol = r.codigo) "
+						+ "WHERE c.codigo = ?");
+				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetBeneficiarios = statement.executeQuery();
+				while(resultSetBeneficiarios.next()) {
+					rol = new Rol(resultSetBeneficiarios.getInt("r.codigo"),
+							resultSetBeneficiarios.getString("r.nombre"));
+					user = new Usuario(resultSetBeneficiarios.getString("u.usuario"),
+							resultSetBeneficiarios.getString("u.contrasena"),
+							resultSetBeneficiarios.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetBeneficiarios.getString("p.nombre"),
+							resultSetBeneficiarios.getString("p.apellido"),
+							resultSetBeneficiarios.getString("p.dni"),
+							resultSetBeneficiarios.getString("p.correo_electronico"),
+							user);
+					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
+					listaBeneficiarios.add(dueño);
+				}
+				campaña.setListaBeneficiarios(listaBeneficiarios);
+				
+				
+				//Setear campaña al canje
+				canjeObjetivo.setCampaña(campaña);
+			}
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
+			throw new AppException("Error al buscar campaña: " + e.getMessage());
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return canjeObjetivo;
 	}
 
-	public List<Canje> findAll() throws AppException, NotNullException{
-		return null;
+	public List<Canje> findAll() throws AppException, NotNullException{ //Muy copypasteada, probar
+		ArrayList<Canje>listaCanjes = new ArrayList<>();
+		Canje canjeObjetivo = null;
+		Beneficio beneficioCanjeado = null;
+		
+		Campaña campaña = null;
+		Catalogo catalogo = null;
+		ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
+		Beneficio beneficio = null;
+		
+		ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
+		Canje canje = null;
+		Dueño dueño = null;
+		Usuario user = null;
+		Rol rol = null;
+		
+		ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
+		
+		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM canje cje "
+					+ "JOIN beneficios b ON (b.codigo = cje.cod_beneficio) "
+					+ "JOIN propietarios p ON (p.dni = cje.dni) "
+					+ "JOIN usuarios u ON (u.usuario = p.username) "
+					+ "JOIN roles r ON (u.rol = r.codigo) "
+					+ "JOIN campañas c ON (c.codigo = cje.cod_campaña) ");
+			ResultSet resultSetConsulta = statement.executeQuery();
+			while(resultSetConsulta.next()) {
+				
+				//RECUPERAR CANJE SIN CAMPAÑA:
+				beneficioCanjeado = new Beneficio(resultSetConsulta.getString("b.nombre_beneficio"),
+						String.valueOf(resultSetConsulta.getInt("b.costo")),
+						resultSetConsulta.getInt("b.codigo"));
+				rol = new Rol(resultSetConsulta.getInt("r.codigo"),
+						resultSetConsulta.getString("r.nombre"));
+				user = new Usuario(resultSetConsulta.getString("u.usuario"),
+						resultSetConsulta.getString("u.contrasena"),
+						resultSetConsulta.getString("u.email"),
+						rol);
+				dueño = new Dueño(resultSetConsulta.getString("p.nombre"),
+						resultSetConsulta.getString("p.apellido"),
+						resultSetConsulta.getString("p.dni"),
+						resultSetConsulta.getString("p.correo_electronico"),
+						user);
+				canjeObjetivo = new Canje(beneficioCanjeado, dueño, resultSetConsulta.getDate("cje.fecha"),
+						resultSetConsulta.getInt("cje.codigo"));
+				
+				
+				
+				//RECUPERAR CAMPAÑA:
+				
+				
+				statement = conn.prepareStatement("SELECT * FROM campañas c "
+						+ "JOIN catalogo ca ON (c.codigo = ca.cod_campaña) "
+						+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo "
+						+ "WHERE c.codigo = ?");
+				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetConsulta2 = statement.executeQuery();
+				while(resultSetConsulta.next()) {
+					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
+							String.valueOf(resultSetConsulta2.getInt("b.costo")),
+							resultSetConsulta2.getInt("b.codigo"));
+					listaBeneficios.add(beneficio);
+				}
+				catalogo = new Catalogo(listaBeneficios);
+				campaña = new Campaña(resultSetConsulta2.getString("c.nombre"),catalogo,
+						resultSetConsulta2.getString("c.estado"),
+						resultSetConsulta2.getInt("c.codigo"));
+				
+				//resultSetConsulta.close();
+				statement = conn.prepareStatement("SELECT * FROM campañas c "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN propietarios p ON (p.dni = ca.dni) "
+						+ "JOIN beneficios b ON (b.codigo = ca.cod_beneficio) "
+						+ "JOIN usuarios u ON (u.usuario = p.username) "
+						+ "JOIN roles r ON (u.rol = r.codigo) "
+						+ "WHERE c.codigo = ?");
+				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetCanje = statement.executeQuery();
+				while(resultSetCanje.next()) {
+					rol = new Rol(resultSetCanje.getInt("r.codigo"),
+							resultSetCanje.getString("r.nombre"));
+					user = new Usuario(resultSetCanje.getString("u.usuario"),
+							resultSetCanje.getString("u.contrasena"),
+							resultSetCanje.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetCanje.getString("p.nombre"),
+							resultSetCanje.getString("p.apellido"),
+							resultSetCanje.getString("p.dni"),
+							resultSetCanje.getString("p.correo_electronico"),
+							user);
+					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
+							String.valueOf(resultSetCanje.getInt("b.costo")),
+							resultSetCanje.getInt("b.codigo"));
+					canje = new Canje(beneficio, dueño, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					listaCanjesEfectuados.add(canje);
+				}
+				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
+				statement = conn.prepareStatement("SELECT DISTINCT p.*,c.codigo, u.*, r.* FROM campañas c "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN propietarios p ON (p.dni = ca.dni) "
+						+ "JOIN usuarios u ON (u.usuario = p.username) "
+						+ "JOIN roles r ON (u.rol = r.codigo) "
+						+ "WHERE c.codigo = ?");
+				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
+				ResultSet resultSetBeneficiarios = statement.executeQuery();
+				while(resultSetBeneficiarios.next()) {
+					rol = new Rol(resultSetBeneficiarios.getInt("r.codigo"),
+							resultSetBeneficiarios.getString("r.nombre"));
+					user = new Usuario(resultSetBeneficiarios.getString("u.usuario"),
+							resultSetBeneficiarios.getString("u.contrasena"),
+							resultSetBeneficiarios.getString("u.email"),
+							rol);
+					dueño = new Dueño(resultSetBeneficiarios.getString("p.nombre"),
+							resultSetBeneficiarios.getString("p.apellido"),
+							resultSetBeneficiarios.getString("p.dni"),
+							resultSetBeneficiarios.getString("p.correo_electronico"),
+							user);
+					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
+					listaBeneficiarios.add(dueño);
+				}
+				campaña.setListaBeneficiarios(listaBeneficiarios);
+				
+				
+				//Setear campaña al canje
+				canjeObjetivo.setCampaña(campaña);
+				listaCanjes.add(canje);
+			}
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
+			throw new AppException("Error al buscar campaña: " + e.getMessage());
+		} finally {
+		ConnectionManager.disconnect();
+		}
+		return listaCanjes;
 	}
 
 	public boolean exists(int codigo) throws AppException{

@@ -62,5 +62,9 @@ public class Canje {
 	public Campaña getCampaña() {
 		return this.campaña;
 	}
+
+	public void setCampaña(Campaña campaña) {
+		this.campaña = campaña;
+	}
 	
 }
