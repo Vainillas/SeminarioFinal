@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import java.awt.ScrollPane;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -31,7 +32,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class generarCatalogo extends JFrame {
+public class GenerarCatalogo extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tableBeneficiosNoAsociados;
@@ -44,7 +45,8 @@ public class generarCatalogo extends JFrame {
 			public void run() {
 				try {
 					IApi api = new PersistenceApi();
-					generarCatalogo frame = new generarCatalogo(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels");
+					GenerarCatalogo frame = new GenerarCatalogo(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -54,7 +56,7 @@ public class generarCatalogo extends JFrame {
 	}
 
 
-	public generarCatalogo(IApi api) {
+	public GenerarCatalogo(IApi api, ResourceBundle labels) {
 		setTitle("Generar Campaña");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 402);
@@ -67,7 +69,8 @@ public class generarCatalogo extends JFrame {
 		contentPane.add(panelBeneficiosNoAsociados);
 		String [] titulos = {
 				"Descripcion",
-				"Puntaje"
+				"Puntaje",
+				"Codigo"
 				
 		};
 		modeloBeneficiosAsociados = new DefaultTableModel(new Object[][] {}, titulos);
@@ -147,12 +150,14 @@ public class generarCatalogo extends JFrame {
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						descripcion.add( (String)tableBeneficiosAsociados.getValueAt(i,0 ));
 						puntajeConsumible.add( (String)tableBeneficiosAsociados.getValueAt(i, 1));
+						
 						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
+						//api.generarCampaña(descripcion,puntajeConsumible);
 					}
 				}
-				//api.generarCampaña(descripcion,puntajeConsumible);
+				
 				
 
 			}
@@ -203,7 +208,7 @@ public class generarCatalogo extends JFrame {
 				
 				try {
 					beneficios = api.obtenerBeneficios();
-					
+
 					for(BeneficioDTO b : beneficios) {
 						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible()});
 					}

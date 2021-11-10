@@ -75,7 +75,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
-		setBounds(100, 100, 1315, 533);
+		setBounds(100, 100, 1344, 533);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
@@ -97,7 +97,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		
 		
-		panelAdministrador.setBounds(560, 11, 630, 240);
+		panelAdministrador.setBounds(560, 11, 758, 240);
 		contentPane.setLayout(null);
 		contentPane.add(panelAdministrador);
 
@@ -312,6 +312,27 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenuItem mntmGenerarCampaña = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
 		mnCampaña.add(mntmGenerarCampaña);
 		
+		JMenu mnBeneficioAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.beneficio.administrador"));
+		mbAdministrador.add(mnBeneficioAdministrador);
+		
+		JMenuItem mntmGenerarBeneficioAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.beneficio.administrador"));
+		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
+		
+		JMenuItem mntmListarBeneficios = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.beneficios.administrador"));
+		mnBeneficioAdministrador.add(mntmListarBeneficios);
+		
+		JMenu mnCatalogo = new JMenu(labels.getString("ventana.principal.dinamica.menu.catalogo.administrador"));
+		mbAdministrador.add(mnCatalogo);
+		
+		JMenuItem mntmGenerarCatalogo = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.catalogo.administrador"));
+		mntmGenerarCatalogo.addActionListener((e)->{
+			GenerarCatalogo catalogo = new GenerarCatalogo(api,labels);
+			catalogo.setVisible(true);
+			
+			
+		});
+		mnCatalogo.add(mntmGenerarCatalogo);
+		
 		panelDueño.setBounds(10, 262, 540, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
@@ -351,8 +372,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 			this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 			mntmPantallaCompletaDueño.setVisible(false);
 			mntmPantallaEstandarDueño.setVisible(true);
-			
-			
 		});
 		
 		mntmPantallaEstandarDueño.addActionListener((e)->{
