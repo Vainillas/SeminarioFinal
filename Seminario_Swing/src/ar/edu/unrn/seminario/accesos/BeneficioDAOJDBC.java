@@ -45,7 +45,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 	}
 
 	public void remove() {
-		
+		 
 	}
 
 	public Beneficio find(int codigo) throws AppException, NotNullException{

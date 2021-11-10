@@ -19,12 +19,14 @@ public class CampañaDTO {
 		catalogo = unCatalogo;
 		this.estado=estado;
 	}
+	
 	public CampañaDTO(String nombre, Catalogo unCatalogo, String estado, int codigo){ //Checkear estado;
 		nombreCampaña = nombre;
 		catalogo = unCatalogo;
 		this.estado = estado;
 		this.codigo = codigo;
 	}
+	
 	public String getNombreCampaña() {
 		return nombreCampaña;
 	}

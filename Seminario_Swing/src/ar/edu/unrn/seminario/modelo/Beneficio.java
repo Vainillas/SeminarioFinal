@@ -47,7 +47,7 @@ public class Beneficio {
 	}
 	
 	public void setDescripcion(String nuevaDescripcion) {
-	this.descripcion = nuevaDescripcion;
+		this.descripcion = nuevaDescripcion;
 	}
 	
 	public int getCodigo() {
