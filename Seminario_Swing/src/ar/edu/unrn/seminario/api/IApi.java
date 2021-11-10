@@ -184,7 +184,7 @@ public interface IApi {
 			throws AppException, NotNumberException;
 
 	void agregarBeneficio(String descripcion, String puntajeConsumible) 
-			throws NotNullException, DataEmptyException, NotNumberException;
+			throws NotNullException, DataEmptyException, NotNumberException, AppException;
 
 	List<BeneficioDTO> obtenerBeneficios() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	

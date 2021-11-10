@@ -2,6 +2,8 @@ package ar.edu.unrn.seminario.modelo;
 
 import java.sql.Date;
 
+import ar.edu.unrn.seminario.Helper.DateHelper;
+
 public class Canje {
 	private Date fechaCanje;
 	private Beneficio beneficioCanjeado;
@@ -11,7 +13,9 @@ public class Canje {
 
 	
 	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña){
-		//Date = fechaActual;
+		java.util.Date fechaActualUtil = DateHelper.getDate();
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+		fechaCanje = fechaActual;
 		this.beneficioCanjeado = unBeneficio;
 		this.dueñoCanjeador = unDueño;
 		this.campaña = unaCampaña;
@@ -22,6 +26,7 @@ public class Canje {
 		this.beneficioCanjeado = unBeneficio;
 		this.dueñoCanjeador = unDueño;
 	}
+	
 	public Canje(Beneficio unBeneficio, Dueño unDueño, Date fecha, int codigo){
 		fechaCanje = fecha;
 		this.beneficioCanjeado = unBeneficio;
