@@ -882,6 +882,7 @@ public class PersistenceApi implements IApi {
 
 
 	public void agregarBeneficio(String descripcion, String puntajeConsumible) throws NotNullException, DataEmptyException, NotNumberException, AppException {
+		
 		Beneficio beneficio = new Beneficio(descripcion, puntajeConsumible);
 		
 		beneficioDao.create(beneficio);
