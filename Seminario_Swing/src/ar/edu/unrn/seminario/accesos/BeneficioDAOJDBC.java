@@ -32,7 +32,6 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 				System.out.println("Modificando " + cantidad + " registros");
 			} else {
 				System.out.println("Error al actualizar");
-				// TODO: disparar Exception propia
 			}
 		} catch (SQLException e) {
 			throw new AppException("Error al crear el Beneficio: " + e.getMessage());
@@ -53,7 +52,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		Beneficio beneficio = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM beneficios b"+"WHERE d.codigo = ?");
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM beneficios b "+"WHERE d.codigo = ?");
 			statement.setInt(1, codigo);
 			ResultSet resultSetDireccion = statement.executeQuery();
 			if(resultSetDireccion.next()) {

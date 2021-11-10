@@ -10,6 +10,8 @@ import java.util.stream.Collectors;
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.accesos.BeneficioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.BeneficioDao;
+import ar.edu.unrn.seminario.accesos.CampañaDAOJDBC;
+import ar.edu.unrn.seminario.accesos.CampañaDao;
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
@@ -84,7 +86,8 @@ public class PersistenceApi implements IApi {
 	private RecolectorDao recolectorDao;
 	private VisitaDao visitaDao; 
 	private BeneficioDao beneficioDao;
-
+	private CampañaDao campañaDao;
+	
 	private Usuario userOnline;
 
 	public PersistenceApi() {
@@ -99,6 +102,8 @@ public class PersistenceApi implements IApi {
 		recolectorDao = new RecolectorDAOJDBC();
 		visitaDao = new VisitaDAOJDBC();
 		beneficioDao = new BeneficioDAOJDBC();
+		campañaDao = new CampañaDAOJDBC();
+		
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 

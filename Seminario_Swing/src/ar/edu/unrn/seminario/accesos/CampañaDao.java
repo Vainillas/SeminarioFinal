@@ -10,7 +10,7 @@ import ar.edu.unrn.seminario.modelo.Campaña;
 public interface CampañaDao {
 	void create(Campaña campaña) throws AppException;
 
-	void update(Campaña campaña);
+	void update(Campaña campaña) throws AppException;
 
 	void remove();
 
