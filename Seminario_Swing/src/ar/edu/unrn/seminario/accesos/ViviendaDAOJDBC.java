@@ -72,7 +72,8 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 					+ "JOIN propietarios p ON p.dni = v.dni "
 					+ "JOIN usuarios u ON u.usuario = p.username "
 					+ "JOIN dirección d ON v.calle = d.calle AND v.altura = d.altura "
-					+ "JOIN roles r ON r.codigo = u.rol"+"WHERE v.codigo = ?");
+					+ "JOIN roles r ON r.codigo = u.rol"
+					+" WHERE v.codigo = ?");
 			statement.setInt(1,codigo);
 			ResultSet resultSetConsulta = statement.executeQuery();
 			if(resultSetConsulta.next()) {
@@ -117,7 +118,8 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 					+ "JOIN propietarios p ON p.dni = v.dni "
 					+ "JOIN dirección d ON d.calle = v.calle AND d.altura = v.altura "
 					+ "JOIN usuarios u ON u.usuario = p.username "
-					+ "JOIN roles r ON r.codigo = u.rol"+"WHERE v.calle = ? AND v.altura = ?");
+					+ "JOIN roles r ON r.codigo = u.rol "
+					+ "WHERE v.calle = ? AND v.altura = ?");
 			statement.setString(1,calle);
 			statement.setInt(2, Integer.parseInt(altura));
 			ResultSet resultSetConsulta = statement.executeQuery();
@@ -142,7 +144,7 @@ public class ViviendaDAOJDBC implements ViviendaDao {
 				vivienda= new Vivienda(direccion, dueño,resultSetConsulta.getInt("v.codigo"));
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 
-			throw new AppException("Error al buscar las viviendas: ");
+			throw new AppException("Error al buscar las viviendas: " + e.getMessage());
 		 
 		} finally {
 		ConnectionManager.disconnect();

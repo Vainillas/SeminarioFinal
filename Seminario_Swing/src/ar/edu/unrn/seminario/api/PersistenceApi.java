@@ -12,6 +12,10 @@ import ar.edu.unrn.seminario.accesos.BeneficioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.BeneficioDao;
 import ar.edu.unrn.seminario.accesos.CanjeDAOJDBC;
 import ar.edu.unrn.seminario.accesos.CanjeDao;
+
+import ar.edu.unrn.seminario.accesos.CampañaDAOJDBC;
+import ar.edu.unrn.seminario.accesos.CampañaDao;
+
 import ar.edu.unrn.seminario.accesos.DireccionDAOJDBC;
 import ar.edu.unrn.seminario.accesos.DireccionDao;
 import ar.edu.unrn.seminario.accesos.DueñoDAOJDBC;
@@ -33,6 +37,7 @@ import ar.edu.unrn.seminario.accesos.VisitaDao;
 import ar.edu.unrn.seminario.accesos.ViviendaDAOJDBC;
 import ar.edu.unrn.seminario.accesos.ViviendaDao;
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CampañaDTO;
 import ar.edu.unrn.seminario.dto.CanjeDTO;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
@@ -89,6 +94,8 @@ public class PersistenceApi implements IApi {
 	private VisitaDao visitaDao; 
 	private BeneficioDao beneficioDao;
 	private CanjeDao canjeDao;
+	private CampañaDao campañaDao;
+
 	
 	private Usuario userOnline;
 
@@ -105,6 +112,7 @@ public class PersistenceApi implements IApi {
 		visitaDao = new VisitaDAOJDBC();
 		beneficioDao = new BeneficioDAOJDBC();
 		canjeDao = new CanjeDAOJDBC();
+		campañaDao = new CampañaDAOJDBC();
 	}
 
 	public void registrarUsuario(String username, String password, String email, Integer codigoRol) 
@@ -899,7 +907,7 @@ public class PersistenceApi implements IApi {
 		
 		Catalogo catalogo = new Catalogo(listaDeBeneficios);
 		
-		Campaña campaña = new Campaña(unNombre, catalogo);
+		Campaña campaña = new Campaña(unNombre, catalogo, "Activa");
 		
 		this.campañaDao.create(campaña);
 		
@@ -923,6 +931,23 @@ public class PersistenceApi implements IApi {
     		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
     	} 
     	return canjesDto;
+	}
+	
+	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		List<CampañaDTO> campañasDto = new ArrayList<>();
+    	List<Campaña> campañas = campañaDao.findAll();
+    	for (Campaña c : campañas) {
+    		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
+    	} 
+    	return campañasDto;
+	}
+	
+	public int calcularPuntaje(PedidoDeRetiro unPedido){
+		int sumaPuntos = 0;
+		for(Residuo r: unPedido.getListResiduos()){
+			sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
+		}
+		return sumaPuntos;
 	}
 
 }

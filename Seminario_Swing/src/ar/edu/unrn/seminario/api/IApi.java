@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
+import ar.edu.unrn.seminario.dto.CanjeDTO;
 import ar.edu.unrn.seminario.dto.DireccionDTO;
 import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
@@ -190,5 +191,12 @@ public interface IApi {
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
+	
+	void generarCampaña(ArrayList<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException;
+	
+	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException;
+	
+	List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
 
 }
