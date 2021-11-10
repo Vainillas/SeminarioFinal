@@ -166,12 +166,12 @@ public class GenerarCampaña extends JFrame {
 				
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
-						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
-						setVisible(false);
-						dispose();
 						try {
 							System.out.println("");
 							api.generarCampaña(codigo,tfnombreCampaña.getText());
+							JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
+							setVisible(false);
+							dispose();
 						} catch (AppException | NotNullException e1) {
 							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 						}

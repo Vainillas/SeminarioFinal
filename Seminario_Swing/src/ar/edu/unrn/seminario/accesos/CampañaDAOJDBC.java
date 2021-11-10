@@ -28,7 +28,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 		Connection conn;
 		try { 
 			conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn
+			PreparedStatement statement = conn  
 				.prepareStatement("INSERT INTO campañas(nombre,estado) "
 						+ "VALUES (?, ?)");
 			statement.setString(1, campaña.getNombreCampaña());
