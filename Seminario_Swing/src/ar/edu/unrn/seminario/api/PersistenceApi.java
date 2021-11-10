@@ -900,12 +900,12 @@ public class PersistenceApi implements IApi {
 		List<BeneficioDTO> beneficiosDto = new ArrayList<>();
     	List<Beneficio> beneficios = beneficioDao.findAll();
     	for (Beneficio b : beneficios) {
-    		beneficiosDto.add(new BeneficioDTO(b.getDescripcion(),b.getPuntajeConsumible()));
+    		beneficiosDto.add(new BeneficioDTO(b.getDescripcion(),b.getPuntajeConsumible(), b.getCodigo()));
     	} 
     	return beneficiosDto;
 	}
 
-	public void generarCampaña(ArrayList<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
+	public void generarCampaña(List<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
 		
 		ArrayList<Beneficio> listaDeBeneficios = new ArrayList<Beneficio>();
 		for(Integer i: listaBeneficios) {
@@ -957,18 +957,13 @@ public class PersistenceApi implements IApi {
 		return sumaPuntos;
 	}
 	
-	public void sumarPuntos(Dueño dueño, int puntaje) throws AppException {
+	public void sumarPuntos(Dueño dueño, int puntaje) throws AppException {  
 		
 		dueño.sumarPuntos(puntaje);
 		
-		dueñoDao.update(dueño);
+		dueñoDao.update(dueño);       
 		
 	}
 
-	@Override
-	public void generarCampaña(List<Integer> codigo, String unNombre) throws AppException, NotNullException {
-		// TODO Esbozo de método generado automáticamente
-		
-	}
 
 }

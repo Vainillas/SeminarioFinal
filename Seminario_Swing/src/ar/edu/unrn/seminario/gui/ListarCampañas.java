@@ -56,7 +56,7 @@ public class ListarCampañas extends JFrame {
 
 	public ListarCampañas(IApi api) {
 		this.api = api;
-
+		setTitle("Listar Campañas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -98,12 +98,7 @@ public class ListarCampañas extends JFrame {
 			}
 		});
 
-		JPanel pnlBotonesOperaciones = new JPanel();
-		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		contentPane.add(pnlBotonesOperaciones, BorderLayout.SOUTH);
-		pnlBotonesOperaciones.add(desactivarButton);
-		pnlBotonesOperaciones.add(activarButton);
-		pnlBotonesOperaciones.add(cerrarButton);
+
 
 	}
 }

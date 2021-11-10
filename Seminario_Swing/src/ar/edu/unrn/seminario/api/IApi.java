@@ -189,11 +189,12 @@ public interface IApi {
 
 	List<BeneficioDTO> obtenerBeneficios() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	
-	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException;
+	List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
 	
 	void generarCampaña(List<Integer> codigo, String unNombre) throws AppException, NotNullException;
+	
 	
 	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException;
 	

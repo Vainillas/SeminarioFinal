@@ -52,11 +52,11 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 		Beneficio beneficio = null;
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM beneficios b "+"WHERE d.codigo = ?");
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM beneficios b "+"WHERE b.codigo = ?");
 			statement.setInt(1, codigo);
 			ResultSet resultSetConsulta = statement.executeQuery();
 			if(resultSetConsulta.next()) {
-				beneficio= new Beneficio(resultSetConsulta.getString("nombre_beneficio"), 
+				beneficio= new Beneficio(resultSetConsulta.getString("nombre_beneficio"),  
 						String.valueOf(resultSetConsulta.getInt("costo")),
 						resultSetConsulta.getInt("codigo"));
 			}

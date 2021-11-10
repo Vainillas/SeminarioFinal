@@ -9,4 +9,12 @@ public class Catalogo {
 	public Catalogo(ArrayList<Beneficio> listaDeBeneficios){
 		listaBeneficios = listaDeBeneficios;
 	}
+
+	public ArrayList<Beneficio> getListaBeneficios() {
+		return listaBeneficios;
+	}
+
+	public void setListaBeneficios(ArrayList<Beneficio> listaBeneficios) {
+		this.listaBeneficios = listaBeneficios;
+	}
 }

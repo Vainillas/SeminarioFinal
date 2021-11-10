@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,17 +29,25 @@ public class CampañaDAOJDBC implements CampañaDao{
 		Connection conn;
 		try { 
 			conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn
+			PreparedStatement statement = conn  
 				.prepareStatement("INSERT INTO campañas(nombre,estado) "
-						+ "VALUES (?, ?)");
+						+ "VALUES (?, ?)" ,Statement.RETURN_GENERATED_KEYS);
 			statement.setString(1, campaña.getNombreCampaña());
 			statement.setString(2, campaña.getEstado());
-			int cantidad = statement.executeUpdate();
-			if (cantidad > 0) {
-				System.out.println("Modificando " + cantidad + " registros");
-			} else {
-				System.out.println("Error al actualizar");		
-				}
+			statement.executeUpdate();
+			ResultSet clave = statement.getGeneratedKeys();
+			clave.next();
+			int codigoCampaña = clave.getInt(1);
+			clave.close();
+			for(Beneficio b : campaña.getCatalogo().getListaBeneficios()) {
+				PreparedStatement statement2 = conn.prepareStatement
+	                    ("INSERT INTO beneficios_campaña(cod_beneficio, cod_campaña) "
+	                    		+ "VALUES(?, ?)");
+				statement2.setInt(1, b.getCodigo());
+				statement2.setInt(2, codigoCampaña);
+				statement2.executeUpdate();
+			}
+			
 			} catch (SQLException e) {
 				throw new AppException("Error al crear la campaña " + e.getMessage());
 			} finally {
@@ -84,8 +93,8 @@ public class CampañaDAOJDBC implements CampañaDao{
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c "
-					+ "JOIN catalogo ca ON (c.codigo = ca.cod_campaña) "
-					+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo "
+					+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
+					+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo) "
 					+ "WHERE c.codigo = ?");
 			statement.setInt(1, codigo);
 			ResultSet resultSetConsulta = statement.executeQuery();
@@ -180,8 +189,8 @@ public class CampañaDAOJDBC implements CampañaDao{
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c "
-					+ "JOIN catalogo ca ON (c.codigo = ca.cod_campaña) "
-					+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo) ");
+					+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
+					+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) ");
 			ResultSet resultSetConsulta = statement.executeQuery();
 			while(resultSetConsulta.next()) {
 				beneficio = new Beneficio(resultSetConsulta.getString("b.nombre_beneficio"),
