@@ -104,7 +104,7 @@ public class GenerarCampaña extends JFrame {
 
 		tableBeneficiosAsociados.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 
 				String  descripcion = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
@@ -131,7 +131,7 @@ public class GenerarCampaña extends JFrame {
 		tableBeneficiosNoAsociados = new JTable();
 		tableBeneficiosNoAsociados.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
 				
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
@@ -208,7 +208,7 @@ public class GenerarCampaña extends JFrame {
 		contentPane.add(lbBeneficiosAsociados);
 		
 		JPanel panelBotones = new JPanel();
-		panelBotones.setBounds(422, 50, 140, 262);
+		panelBotones.setBounds(422, 116, 140, 133);
 		contentPane.add(panelBotones);
 	
 		

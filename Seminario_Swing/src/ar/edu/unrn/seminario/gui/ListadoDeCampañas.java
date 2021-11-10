@@ -70,8 +70,8 @@ public class ListadoDeCampañas extends JFrame {
 			setVisible(false);
 			dispose();
 		});
+		
 		contentPane.add(btnNewButton, BorderLayout.SOUTH);
-
 		JScrollPane scrollPane = new JScrollPane();
 		contentPane.add(scrollPane, BorderLayout.CENTER);
 
@@ -91,9 +91,6 @@ public class ListadoDeCampañas extends JFrame {
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
-		// Agrega los usuarios en el model
-	
-
 		table.setModel(modelo);
 
 		scrollPane.setViewportView(table);
