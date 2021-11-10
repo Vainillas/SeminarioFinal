@@ -868,6 +868,7 @@ public class PersistenceApi implements IApi {
 		
 		
 	}
+	
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException{
 		return Filtro.filtrar(this.obtenerOrdenesDeRetiro(), comparator);
 	}

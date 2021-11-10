@@ -306,32 +306,33 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenu mnCampaña = new JMenu(labels.getString("ventana.principal.dinamica.menu.campaña")); 
 		mbAdministrador.add(mnCampaña);
 		
-		JMenuItem mntmListarCampañas = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.campaña")); //$NON-NLS-1$
-		mnCampaña.add(mntmListarCampañas);
-		
-		JMenuItem mntmGenerarCampaña = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
+		JMenuItem mntmGenerarCampaña = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.campaña")); //$NON-NLS-1$
+		mntmGenerarCampaña.addActionListener((e)->{
+			GenerarCampaña campaña = new GenerarCampaña(api,labels);
+			campaña.setVisible(true);
+			
+			
+			
+		});
 		mnCampaña.add(mntmGenerarCampaña);
+		
+		JMenuItem mntmListarCampañaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
+		
+		mnCampaña.add(mntmListarCampañaAdministrador);
 		
 		JMenu mnBeneficioAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.beneficio.administrador"));
 		mbAdministrador.add(mnBeneficioAdministrador);
 		
 		JMenuItem mntmGenerarBeneficioAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.beneficio.administrador"));
+		mntmGenerarBeneficioAdministrador.addActionListener((e)->{
+			GenerarBeneficio beneficio = new GenerarBeneficio(api,labels);
+			beneficio.setVisible(true);
+			
+		});
 		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
 		
 		JMenuItem mntmListarBeneficios = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.beneficios.administrador"));
 		mnBeneficioAdministrador.add(mntmListarBeneficios);
-		
-		JMenu mnCatalogo = new JMenu(labels.getString("ventana.principal.dinamica.menu.catalogo.administrador"));
-		mbAdministrador.add(mnCatalogo);
-		
-		JMenuItem mntmGenerarCatalogo = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.catalogo.administrador"));
-		mntmGenerarCatalogo.addActionListener((e)->{
-			GenerarCatalogo catalogo = new GenerarCatalogo(api,labels);
-			catalogo.setVisible(true);
-			
-			
-		});
-		mnCatalogo.add(mntmGenerarCatalogo);
 		
 		panelDueño.setBounds(10, 262, 540, 240);
 		contentPane.add(panelDueño);

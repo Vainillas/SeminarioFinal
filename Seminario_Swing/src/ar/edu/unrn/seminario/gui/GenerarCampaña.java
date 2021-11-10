@@ -32,7 +32,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class GenerarCatalogo extends JFrame {
+public class GenerarCampaña extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tableBeneficiosNoAsociados;
@@ -46,7 +46,7 @@ public class GenerarCatalogo extends JFrame {
 				try {
 					IApi api = new PersistenceApi();
 					ResourceBundle labels = ResourceBundle.getBundle("labels");
-					GenerarCatalogo frame = new GenerarCatalogo(api,labels);
+					GenerarCampaña frame = new GenerarCampaña(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -56,7 +56,7 @@ public class GenerarCatalogo extends JFrame {
 	}
 
 
-	public GenerarCatalogo(IApi api, ResourceBundle labels) {
+	public GenerarCampaña(IApi api, ResourceBundle labels) {
 		setTitle("Generar Campaña");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 402);
@@ -73,6 +73,7 @@ public class GenerarCatalogo extends JFrame {
 				"Codigo"
 				
 		};
+		
 		modeloBeneficiosAsociados = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficiosNoAsociados = new DefaultTableModel(new Object[][] {}, titulos);
 		try {
@@ -216,7 +217,7 @@ public class GenerarCatalogo extends JFrame {
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
-		}
+			}
 			
 			
 		});
