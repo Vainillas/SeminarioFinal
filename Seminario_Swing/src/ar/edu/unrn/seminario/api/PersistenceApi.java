@@ -965,4 +965,10 @@ public class PersistenceApi implements IApi {
 		
 	}
 
+	@Override
+	public void generarCampaña(List<Integer> codigo, String unNombre) throws AppException, NotNullException {
+		// TODO Esbozo de método generado automáticamente
+		
+	}
+
 }
