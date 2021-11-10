@@ -957,7 +957,7 @@ public class PersistenceApi implements IApi {
 		return sumaPuntos;
 	}
 	
-	public void sumarPuntos(Dueño dueño, int puntaje) {
+	public void sumarPuntos(Dueño dueño, int puntaje) throws AppException {
 		
 		dueño.sumarPuntos(puntaje);
 		

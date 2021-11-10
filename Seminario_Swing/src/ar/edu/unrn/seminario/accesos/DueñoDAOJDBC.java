@@ -13,13 +13,10 @@ import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
-import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
-import ar.edu.unrn.seminario.modelo.Direccion;
 import ar.edu.unrn.seminario.modelo.Dueño;
 import ar.edu.unrn.seminario.modelo.Rol;
 import ar.edu.unrn.seminario.modelo.Usuario;
-import ar.edu.unrn.seminario.modelo.Vivienda;
 
 public class DueñoDAOJDBC implements DueñoDao {
 
@@ -28,14 +25,15 @@ public class DueñoDAOJDBC implements DueñoDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn
-					.prepareStatement("INSERT INTO propietarios(nombre,apellido,dni,correo_electronico,username) "
-							+ "VALUES (?, ?, ?, ?, ?)");
+					.prepareStatement("INSERT INTO propietarios(nombre,apellido,dni,correo_electronico,username, puntaje) "
+							+ "VALUES (?, ?, ?, ?, ?, ?)");
 			
 			statement.setString(1, d.getNombre());
 			statement.setString(2, d.getApellido());
 			statement.setString(3, d.getDni());
 			statement.setString(4, d.getCorreo());
 			statement.setString(5, d.getUser().getUsuario());
+			statement.setInt(6, d.getPuntaje());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
@@ -53,9 +51,23 @@ public class DueñoDAOJDBC implements DueñoDao {
 	}
 
 	@Override
-	public void update(Dueño dueño) {
-		
-
+	public void update(Dueño dueño) throws AppException {
+		try {
+			Connection conn = ConnectionManager.getConnection();
+            PreparedStatement statement = conn.prepareStatement("UPDATE propietarios SET nombre = ?, apellido = ?, dni = ?, correo_electronico = ?, username = ?, puntaje = ?"
+            		+ "WHERE dni = ?");
+            statement.setString(1, dueño.getNombre());
+            statement.setString(2, dueño.getApellido());
+            statement.setString(3, dueño.getDni());
+            statement.setString(4, dueño.getCorreo());
+            statement.setString(5, dueño.getUser().getUsuario());
+            statement.setInt(6, dueño.getPuntaje());
+            statement.executeUpdate();
+		}catch (SQLException e) {
+            throw new AppException("Error de SQL al actualizar el dueño: " + e.getMessage());
+        }  finally {
+            ConnectionManager.disconnect();
+        }
 	}
 
 	@Override
@@ -78,7 +90,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM propietarios p JOIN usuarios u ON p.username = u.usuario "
-					+ "JOIN rol r ON u.rol = r.codigo WHERE p.dni = ? ");
+					+ "JOIN roles r ON u.rol = r.codigo WHERE p.dni = ? ");
 			statement.setString(1,dni);
 			ResultSet resultSetConsulta = statement.executeQuery();
 			if(resultSetConsulta.next()) {
@@ -91,7 +103,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						usuario);
+						usuario, resultSetConsulta.getInt("p.puntaje"));
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 			throw new AppException("Error al procesar consulta: " + e.getMessage());
@@ -121,7 +133,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						usuario);
+						usuario, resultSetConsulta.getInt("p.puntaje"));
 			
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
@@ -154,7 +166,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						usuario);
+						usuario, resultSetConsulta.getInt("p.puntaje"));
 				dueños.add(dueño);
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNullException e) {
