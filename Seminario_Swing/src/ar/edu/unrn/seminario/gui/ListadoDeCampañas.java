@@ -23,14 +23,21 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
+import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.utilities.Predicate;
 
 import java.awt.FlowLayout;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.JRadioButton;
+import javax.swing.border.BevelBorder;
 
 public class ListadoDeCampañas extends JFrame {
 
@@ -47,10 +54,14 @@ public class ListadoDeCampañas extends JFrame {
 	private JButton cerrarButton;
 	private JPanel panelCampañas;
 	private JScrollPane scrollPaneCampañas;
-	private JTable table;
 	private JScrollPane scrollPaneBeneficios;
 	private JTable tableBeneficios;
-	
+	private JTextField tfEstado;
+	private JTextField tfCodigo;
+	private JTextField tfNombre;
+	private JTextField tfDescripcion;
+	private JTextField tfFiltrarBeneficioPorCodigo;
+	private JTextField tfFiltrarBeneficioPorPuntaje;
 	/**
 	 * Launch the application.
 	 */
@@ -72,12 +83,12 @@ public class ListadoDeCampañas extends JFrame {
 		this.api = api;
 		setTitle("Listar Campañas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1001, 409);
+		setBounds(100, 100, 1045, 409);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		btnVolver = new JButton("Volver a Menu Principal");
-		btnVolver.setBounds(5, 342, 679, 23);
+		btnVolver.setBounds(5, 342, 970, 23);
 		btnVolver.addActionListener((e)->{
 			setVisible(false);
 			dispose();
@@ -86,7 +97,7 @@ public class ListadoDeCampañas extends JFrame {
 		
 		contentPane.add(btnVolver);
 		panelBeneficios = new JPanel();
-		panelBeneficios.setBounds(356, 60, 326, 277);
+		panelBeneficios.setBounds(356, 60, 435, 277);
 		contentPane.add(panelBeneficios);
 		panelBeneficios.setLayout(new BorderLayout(0, 0));
 		
@@ -94,6 +105,7 @@ public class ListadoDeCampañas extends JFrame {
 		panelBeneficios.add(scrollPaneBeneficios, BorderLayout.CENTER);
 		
 		tableBeneficios = new JTable();
+		tableBeneficios.setCellSelectionEnabled(false);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		scrollPaneCampañas = new JScrollPane();
 		panelCampañas = new JPanel();
@@ -104,18 +116,25 @@ public class ListadoDeCampañas extends JFrame {
 		scrollPaneCampañas.setBounds(0, 0, 342, 280);
 		panelCampañas.add(scrollPaneCampañas);
 		tableCampañas = new JTable();
+		tableCampañas.setCellSelectionEnabled(false);
+		tableCampañas.setColumnSelectionAllowed(false);
+		tableCampañas.setRowSelectionAllowed(false);
+		
 
 		tableCampañas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Integer codigo = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),2 );
+				Integer codigo = null;
+
+
 				List<CampañaDTO> campa = null;
 				List<Beneficio> b = null;
 				try {
+					codigo = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),2 );
 					campa = api.obtenerCampañas();
 					for(CampañaDTO c : campa) {
 					if(codigo.equals(c.getCodigo())) {
-						//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio() lo saco
+						//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
 						b = c.getCatalogo().getListaBeneficios();
 						
 						break;
@@ -141,8 +160,10 @@ public class ListadoDeCampañas extends JFrame {
 				scrollPaneBeneficios.setViewportView(tableBeneficios);
 				
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-					// TODO Bloque catch generado automáticamente
-					e1.printStackTrace();
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
+				catch(java.lang.ClassCastException e1) {
+					
 				}
 				
 				
@@ -161,9 +182,8 @@ public class ListadoDeCampañas extends JFrame {
 		
 		try {
 			campaña = api.obtenerCampañas();
-			int i = 0;
+			System.out.println( campaña.size());
 			for (CampañaDTO c : campaña) {
-				
 				modeloCampaña.addRow(new Object[] { 
 						c.getNombreCampaña(),
 						c.getEstado(),
@@ -182,6 +202,216 @@ public class ListadoDeCampañas extends JFrame {
 		tableBeneficios.setModel(modeloBeneficio);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		
+		JLabel lbCampañas = new JLabel("campa\u00F1as");
+		lbCampañas.setHorizontalAlignment(SwingConstants.CENTER);
+		lbCampañas.setBounds(79, 35, 179, 14);
+		contentPane.add(lbCampañas);
+		
+		JLabel lbBeneficio = new JLabel("Beneficios De La campa\u00F1a Seleccionada");
+		lbBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
+		lbBeneficio.setBounds(453, 35, 243, 14);
+		contentPane.add(lbBeneficio);
+		
+		JPanel panelFiltradosCampaña = new JPanel();
+		panelFiltradosCampaña.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panelFiltradosCampaña.setBounds(801, 60, 218, 116);
+		contentPane.add(panelFiltradosCampaña);
+		panelFiltradosCampaña.setLayout(null);
+		
+		JLabel lbFiltrarPorNombre = new JLabel("Nombre :");
+		lbFiltrarPorNombre.setBounds(16, 8, 54, 14);
+		panelFiltradosCampaña.add(lbFiltrarPorNombre);
+		
+		tfNombre = new JTextField();
+		tfNombre.setBounds(80, 5, 86, 20);
+		panelFiltradosCampaña.add(tfNombre);
+		tfNombre.setColumns(10);
+		
+		JRadioButton rdbtnNombre = new JRadioButton("");
+		rdbtnNombre.addActionListener((e)->{
+			Predicate<CampañaDTO> predicado = (CampañaDTO c)->c.getNombreCampaña().contains(this.tfNombre.getText());
+			rdbtnNombre.setSelected(false);
+			try {
+				if(!this.tfNombre.getText().equals("")) {
+					
+					reloadGrid(api.obtenerCampañas(predicado));
+					
+				}
+				
+			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
+			
+			
+			
+			
+		});
+		rdbtnNombre.setBounds(170, 5, 21, 21);
+		panelFiltradosCampaña.add(rdbtnNombre);
+		
+		JLabel lblEstado = new JLabel("Estado:");
+		lblEstado.setBounds(19, 34, 51, 14);
+		panelFiltradosCampaña.add(lblEstado);
+		
+		tfEstado = new JTextField();
+		tfEstado.setBounds(80, 31, 86, 20);
+		panelFiltradosCampaña.add(tfEstado);
+		tfEstado.setColumns(10);
+		
+		JRadioButton rdbtnEstado = new JRadioButton("");
+		rdbtnEstado.addActionListener((e)->{
+			rdbtnEstado.setSelected(false);
+			if(!this.tfEstado.getText().equals("")) {
+				Predicate<CampañaDTO> predicate  = (CampañaDTO c)->c.getEstado().contains(this.tfEstado.getText());
+				try {
+				reloadGrid(api.obtenerCampañas(predicate));
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
+		});
+		rdbtnEstado.setBounds(170, 31, 21, 21);
+		panelFiltradosCampaña.add(rdbtnEstado);
+		
+		JLabel lblCodigo = new JLabel("Codigo:");
+		lblCodigo.setBounds(19, 60, 51, 14);
+		panelFiltradosCampaña.add(lblCodigo);
+		
+		tfCodigo = new JTextField();
+		tfCodigo.setBounds(80, 57, 86, 20);
+		tfCodigo.setColumns(10);
+		panelFiltradosCampaña.add(tfCodigo);
+		
+		JRadioButton rdbtnCodigoCampaña = new JRadioButton("");
+		rdbtnCodigoCampaña.addActionListener((e)->{
+		rdbtnCodigoCampaña.setSelected(false);
+			if(!this.tfCodigo.getText().equals("")) {
+				try {
+					Predicate <CampañaDTO> predicate = (CampañaDTO c)->c.getCodigo() == Integer.parseInt(this.tfCodigo.getText());
+				reloadGrid(api.obtenerCampañas(predicate));
+				}catch (AppException | NotNullException | DataEmptyException | NotNumberException  e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}catch(NumberFormatException e1) {
+					JOptionPane.showMessageDialog(null, "Debe introducir un codigo numerico","error",JOptionPane.ERROR_MESSAGE);
+				}
+		
+			}
+		});
+		rdbtnCodigoCampaña.setBounds(170, 57, 21, 21);
+		panelFiltradosCampaña.add(rdbtnCodigoCampaña);
+		
+		JButton btnLimpiarFiltroCampañas = new JButton("Limpiar Filtro");
+		btnLimpiarFiltroCampañas.addActionListener((e)->{
+			
+				try {
+					this.tfCodigo.setText("");
+					this.tfEstado.setText("");
+					this.tfNombre.setText("");
+					reloadGrid(api.obtenerCampañas());
+					
+				} 
+				catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
+			
+			
+		});
+	
+		btnLimpiarFiltroCampañas.setBounds(56, 85, 110, 23);
+		panelFiltradosCampaña.add(btnLimpiarFiltroCampañas);
+		
+		JLabel lbFiltrarPor = new JLabel("Filtrar Campa\u00F1a por:");
+		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFiltrarPor.setBounds(836, 35, 122, 14);
+		contentPane.add(lbFiltrarPor);
+		
+		JPanel panelFiltradosBeneficios = new JPanel();
+		panelFiltradosBeneficios.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panelFiltradosBeneficios.setBounds(801, 203, 218, 134);
+		contentPane.add(panelFiltradosBeneficios);
+		panelFiltradosBeneficios.setLayout(null);
+		
+		JLabel lbFiltradoPorDescripcion = new JLabel("Descripcion:");
+		lbFiltradoPorDescripcion.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbFiltradoPorDescripcion.setBounds(0, 8, 79, 14);
+		panelFiltradosBeneficios.add(lbFiltradoPorDescripcion);
+		
+		tfDescripcion = new JTextField();
+		tfDescripcion.setBounds(84, 5, 86, 20);
+		panelFiltradosBeneficios.add(tfDescripcion);
+		tfDescripcion.setColumns(10);
+		
+		JRadioButton rdbtnDescripcion = new JRadioButton("");
+		rdbtnDescripcion.addActionListener((e)->{
+			rdbtnDescripcion.setSelected(false);
+			if(!this.tfDescripcion.getText().equals("")) {
+				
+				if(this.tableCampañas.getSelectedRowCount() != 0 ) {
+					
+					Predicate <BeneficioDTO> predicado = (BeneficioDTO b)->b.getDescripcion().contains(this.tfDescripcion.getText());
+					try {
+						reloadGridBeneficio(api.obtenerBeneficios(predicado));
+					} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					}
+				}
+				
+				else {
+					JOptionPane.showMessageDialog(null, "Debe Seleccionar Una Campaña Antes De Filtrar Beneficios ","Error",JOptionPane.ERROR_MESSAGE);
+				}
+
+			}
+		});
+		rdbtnDescripcion.setBounds(175, 5, 21, 21);
+		panelFiltradosBeneficios.add(rdbtnDescripcion);
+		
+		JLabel lbFiltrarBeneficioPorCodigo = new JLabel("Codigo:");
+		lbFiltrarBeneficioPorCodigo.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbFiltrarBeneficioPorCodigo.setBounds(10, 34, 63, 14);
+		panelFiltradosBeneficios.add(lbFiltrarBeneficioPorCodigo);
+		
+		tfFiltrarBeneficioPorCodigo = new JTextField();
+		tfFiltrarBeneficioPorCodigo.setBounds(84, 31, 86, 20);
+		tfFiltrarBeneficioPorCodigo.setColumns(10);
+		panelFiltradosBeneficios.add(tfFiltrarBeneficioPorCodigo);
+		
+		JRadioButton rdbtnFiltrarBeneficioPorCodigo = new JRadioButton("");
+		rdbtnFiltrarBeneficioPorCodigo.setBounds(175, 31, 21, 21);
+		panelFiltradosBeneficios.add(rdbtnFiltrarBeneficioPorCodigo);
+		
+		JLabel lbFiltrarPorPuntaje = new JLabel("Puntaje:");
+		lbFiltrarPorPuntaje.setHorizontalAlignment(SwingConstants.TRAILING);
+		lbFiltrarPorPuntaje.setBounds(10, 60, 63, 14);
+		panelFiltradosBeneficios.add(lbFiltrarPorPuntaje);
+		
+		tfFiltrarBeneficioPorPuntaje = new JTextField();
+		tfFiltrarBeneficioPorPuntaje.setBounds(84, 57, 86, 20);
+		tfFiltrarBeneficioPorPuntaje.setColumns(10);
+		panelFiltradosBeneficios.add(tfFiltrarBeneficioPorPuntaje);
+		
+		JRadioButton rdbtnPuntaje = new JRadioButton("");
+		rdbtnPuntaje.setBounds(175, 57, 21, 21);
+		panelFiltradosBeneficios.add(rdbtnPuntaje);
+		
+		JButton btnLimpiarFIltroBeneficios = new JButton("Limpiar Filtro");
+		btnLimpiarFIltroBeneficios.addActionListener((e)->{
+			try {
+				reloadGridBeneficio(api.obtenerBeneficios());
+			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
+			
+			
+		});
+		btnLimpiarFIltroBeneficios.setBounds(56, 100, 114, 23);
+		panelFiltradosBeneficios.add(btnLimpiarFIltroBeneficios);
+		
+		JLabel lbFiltrarBeneficio = new JLabel("Filtrar Beneficio Por:");
+		lbFiltrarBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
+		lbFiltrarBeneficio.setBounds(822, 179, 179, 14);
+		contentPane.add(lbFiltrarBeneficio);
+		
 		
 		
 		
@@ -198,6 +428,32 @@ public class ListadoDeCampañas extends JFrame {
 
 
 
+	}
+	private void reloadGridBeneficio(List<BeneficioDTO> beneficio) {
+		this.modeloBeneficio.setRowCount(0);
+		for (BeneficioDTO b : beneficio) {
+			this.modeloBeneficio.addRow(new Object[] {
+				b.getDescripcion(),
+				b.getCodigo(),
+				b.getPuntajeConsumible()
+			});
+		}
+		
+	}
+
+	private void reloadGrid(List<CampañaDTO> campañaDTO) {
+		
+		this.modeloCampaña.setRowCount(0);
+		this.modeloBeneficio.setRowCount(0);
+		for (CampañaDTO c : campañaDTO) {
+			this.modeloCampaña.addRow(new Object[] {
+				c.getNombreCampaña(),
+				c.getEstado(),
+				c.getCodigo()
+			});
+		}
+
+		
 	}
 }
 

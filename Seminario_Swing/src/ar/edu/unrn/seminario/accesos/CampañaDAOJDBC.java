@@ -257,6 +257,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 				}
 				campaña.setListaBeneficiarios(listaBeneficiarios);
 				listaCampañas.add(campaña);
+				System.out.println("tamanio de las campas"+listaCampañas.size());
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
 			throw new AppException("Error al obtener todas las campañas: " + e.getMessage());
