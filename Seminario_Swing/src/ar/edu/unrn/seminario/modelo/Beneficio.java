@@ -30,8 +30,6 @@ public class Beneficio {
 		if(ConditionHelper.stringIsNull(puntajeConsumible)) {throw new NotNullException("Descripcion nula");}
 		
 		if(ConditionHelper.IsNotNumber(puntajeConsumible)) {throw new NotNumberException("El puntaje no es numerico");}
-		
-		
 	}
 	
 	public String getDescripcion() {

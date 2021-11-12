@@ -511,7 +511,6 @@ public class PersistenceApi implements IApi {
     		
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
-    		
     	}
 
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
@@ -526,7 +525,6 @@ public class PersistenceApi implements IApi {
     	this.visitaDao.create(visita);
     	
     	if(this.ordenDeRetiroDao.find(codOrden).getVisitas().size() > 0 && !this.ordenDeRetiroDao.find(codOrden).getEstado().obtenerEstado().equals("en ejecucion")) {
-    		System.out.println("ok entre, y ahora");
     		actualizarEstadoOrden(codOrden, "en ejecucion");
     	}
     	

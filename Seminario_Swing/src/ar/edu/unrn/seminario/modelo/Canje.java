@@ -8,13 +8,13 @@ public class Canje {
 	private Date fechaCanje;
 	private Beneficio beneficioCanjeado;
 	private Dueño dueñoCanjeador;
-	private Campaña campaña;
+	private Campaña campaña;//BORRAR ESTO 
 	private int codigo;
 
 	
 	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña){
 		java.util.Date fechaActualUtil = DateHelper.getDate();
-    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime()); //CAMBIAR  a DATE NORMAL
 		fechaCanje = fechaActual;
 		this.beneficioCanjeado = unBeneficio;
 		this.dueñoCanjeador = unDueño;

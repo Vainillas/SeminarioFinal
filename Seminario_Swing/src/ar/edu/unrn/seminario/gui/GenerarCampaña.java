@@ -101,9 +101,11 @@ public class GenerarCampaña extends JFrame {
 		panelBeneficiosAsociados.add(scrollPaneBeneficiosAsociados, BorderLayout.CENTER);
 		
 		tableBeneficiosAsociados = new JTable();
+
 		tableBeneficiosAsociados.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+
 				String  descripcion = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),2 );
@@ -114,6 +116,7 @@ public class GenerarCampaña extends JFrame {
 				
 				modeloBeneficiosNoAsociados.addRow(new Object[] {descripcion,puntaje,codigo});
 				tableBeneficiosNoAsociados.setModel(modeloBeneficiosNoAsociados);
+				tableBeneficiosAsociados.clearSelection();
 			}
 		});
 		
@@ -121,20 +124,22 @@ public class GenerarCampaña extends JFrame {
 		panelBeneficiosNoAsociados.setLayout(new BorderLayout(0, 0));
 		this.tableBeneficiosAsociados.setModel(this.modeloBeneficiosAsociados);
 		
+		
+		
 		JScrollPane scrollPaneBeneficioNoAsociado = new JScrollPane();
 		panelBeneficiosNoAsociados.add(scrollPaneBeneficioNoAsociado, BorderLayout.CENTER);
 		tableBeneficiosNoAsociados = new JTable();
 		tableBeneficiosNoAsociados.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),2 );		
 				modeloBeneficiosNoAsociados.removeRow(tableBeneficiosNoAsociados.getSelectedRow());
-				
 				modeloBeneficiosAsociados.addRow(new Object[] {descripcion,puntaje,codigo});
 				tableBeneficiosAsociados.setModel(modeloBeneficiosAsociados);
-				
+				tableBeneficiosNoAsociados.clearSelection();
 				
 			}
 		});
@@ -166,8 +171,8 @@ public class GenerarCampaña extends JFrame {
 				
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
-						try {
-							System.out.println("");
+					}
+						try { 
 							api.generarCampaña(codigo,tfnombreCampaña.getText());
 							JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
 							setVisible(false);
@@ -178,10 +183,6 @@ public class GenerarCampaña extends JFrame {
 					}
 				}
 				
-				
-
-			}
-			
 			
 			
 			else {
@@ -254,18 +255,6 @@ public class GenerarCampaña extends JFrame {
 
 		
 
-	}
-	private void reloadGrid(List<BeneficioDTO> beneficio ) {
-		/*this.modeloBeneficiosSeleccionados.setRowCount(0);
-		
-			for (BeneficioDTO b : beneficio) {
-				this.modeloBeneficiosSeleccionados.addRow(new Object[] { 
-						"d",
-						
-					
-				});*/
-				
-			
 	}
 	}
 
