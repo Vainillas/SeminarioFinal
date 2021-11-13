@@ -21,23 +21,36 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.modelo.Beneficio;
+
+import java.awt.FlowLayout;
 
 public class ListadoDeCampañas extends JFrame {
 
 	private JPanel contentPane;
+	private JTable tableCampañas;
+	private DefaultTableModel modeloCampaña;
+	private DefaultTableModel modeloBeneficio;
+	
+	private IApi api;
+	private JButton activarButton;
+	private JButton desactivarButton;
+	private JButton btnVolver;
+	private JPanel panelBeneficios;
+	private JButton cerrarButton;
+	private JPanel panelCampañas;
+	private JScrollPane scrollPaneCampañas;
 	private JTable table;
-	DefaultTableModel modelo;
-	IApi api;
-	JButton activarButton;
-	JButton desactivarButton;
-	private JButton btnNewButton;
-
+	private JScrollPane scrollPaneBeneficios;
+	private JTable tableBeneficios;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,46 +72,123 @@ public class ListadoDeCampañas extends JFrame {
 		this.api = api;
 		setTitle("Listar Campañas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 1001, 409);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		
-		btnNewButton = new JButton("Volver a Menu Principal");
-		btnNewButton.addActionListener((e)->{
+		btnVolver = new JButton("Volver a Menu Principal");
+		btnVolver.setBounds(5, 342, 679, 23);
+		btnVolver.addActionListener((e)->{
 			setVisible(false);
 			dispose();
 		});
-		contentPane.add(btnNewButton, BorderLayout.SOUTH);
+		contentPane.setLayout(null);
+		
+		contentPane.add(btnVolver);
+		panelBeneficios = new JPanel();
+		panelBeneficios.setBounds(356, 60, 326, 277);
+		contentPane.add(panelBeneficios);
+		panelBeneficios.setLayout(new BorderLayout(0, 0));
+		
+		scrollPaneBeneficios = new JScrollPane();
+		panelBeneficios.add(scrollPaneBeneficios, BorderLayout.CENTER);
+		
+		tableBeneficios = new JTable();
+		scrollPaneBeneficios.setViewportView(tableBeneficios);
+		scrollPaneCampañas = new JScrollPane();
+		panelCampañas = new JPanel();
+		panelCampañas.setBounds(5, 60, 342, 280);
+		contentPane.add(panelCampañas);
+		panelCampañas.setLayout(null);
+		
+		scrollPaneCampañas.setBounds(0, 0, 342, 280);
+		panelCampañas.add(scrollPaneCampañas);
+		tableCampañas = new JTable();
 
-		JScrollPane scrollPane = new JScrollPane();
-		contentPane.add(scrollPane, BorderLayout.CENTER);
-
-		table = new JTable();
+		tableCampañas.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				Integer codigo = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),2 );
+				List<CampañaDTO> campa = null;
+				List<Beneficio> b = null;
+				try {
+					campa = api.obtenerCampañas();
+					for(CampañaDTO c : campa) {
+					if(codigo.equals(c.getCodigo())) {
+						//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio() lo saco
+						b = c.getCatalogo().getListaBeneficios();
+						
+						break;
+					}
+					
+				}
+				modeloBeneficio.setRowCount(0);
+				
+				for(Beneficio bene : b) {
+					
+					modeloBeneficio.addRow(new Object[] {
+						
+						bene.getDescripcion(),
+						bene.getCodigo(),
+						bene.getPuntajeConsumible()
+						
+					});
+					
+					
+				}
+				
+				tableBeneficios.setModel(modeloBeneficio);
+				scrollPaneBeneficios.setViewportView(tableBeneficios);
+				
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					// TODO Bloque catch generado automáticamente
+					e1.printStackTrace();
+				}
+				
+				
+				
+			}
+		});
+		String [] titulosBeneficios = {"DESCRIPCION","CODIGO","PUNTAJE CONSUMIBLE "};
 		String[] titulos = { "NOMBRE", "ESTADO","CODIGO"};
 
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-
+		modeloCampaña = new DefaultTableModel(new Object[][] {}, titulos);
+		modeloBeneficio = new DefaultTableModel(new Object[][] {},titulosBeneficios);
+		
+		
 		// Obtiene la lista de usuarios a mostrar
 		List<CampañaDTO> campaña;
+		
 		try {
 			campaña = api.obtenerCampañas();
+			int i = 0;
 			for (CampañaDTO c : campaña) {
-				modelo.addRow(new Object[] { c.getNombreCampaña(),c.getEstado(),c.getCodigo() });
 				
+				modeloCampaña.addRow(new Object[] { 
+						c.getNombreCampaña(),
+						c.getEstado(),
+						c.getCodigo() 
+						});
+				
+
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 		}
-		// Agrega los usuarios en el model
-	
+		
 
-		table.setModel(modelo);
+		tableCampañas.setModel(modeloCampaña);
+		scrollPaneCampañas.setViewportView(tableCampañas);
+		tableBeneficios.setModel(modeloBeneficio);
+		scrollPaneBeneficios.setViewportView(tableBeneficios);
+		
+		
+		
+		
+		
 
-		scrollPane.setViewportView(table);
 
-		JButton cerrarButton = new JButton("Cerrar");
+		cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);

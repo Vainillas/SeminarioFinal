@@ -941,6 +941,9 @@ public class PersistenceApi implements IApi {
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
 		List<CampañaDTO> campañasDto = new ArrayList<>();
     	List<Campaña> campañas = campañaDao.findAll();
+    	
+    	System.out.println("El tamaño de Campañas es de: " + campañas.size());
+    	
     	for (Campaña c : campañas) {
     		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
     	} 
