@@ -194,11 +194,15 @@ public interface IApi {
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
 	
 	void generarCampaña(List<Integer> codigo, String unNombre) throws AppException, NotNullException;
-	List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	
 	
 	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException;
 	
 	List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 
+	List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
+	List<BeneficioDTO> obtenerBeneficios(Predicate<BeneficioDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
 
 }

@@ -61,7 +61,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
-		setBounds(100, 100, 1344, 533);
+		setBounds(100, 100, 813, 303);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
@@ -308,6 +308,11 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnCampaña.add(mntmGenerarCampaña);
 		
 		JMenuItem mntmListarCampañaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
+		mntmListarCampañaAdministrador.addActionListener((e)->{
+			ListadoDeCampañas c = new ListadoDeCampañas(api);
+			c.setVisible(true);
+			
+		});
 		
 		mnCampaña.add(mntmListarCampañaAdministrador);
 		

@@ -61,13 +61,13 @@ public class GenerarCampaña extends JFrame {
 	public GenerarCampaña(IApi api, ResourceBundle labels) {
 		setTitle("Generar Campaña");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 402);
+		setBounds(100, 100, 1000, 349);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		JPanel panelBeneficiosNoAsociados = new JPanel();
-		panelBeneficiosNoAsociados.setBounds(10, 116, 402, 236);
+		panelBeneficiosNoAsociados.setBounds(10, 60, 402, 236);
 		contentPane.add(panelBeneficiosNoAsociados);
 		String [] titulos = {
 				"Descripcion",
@@ -92,7 +92,7 @@ public class GenerarCampaña extends JFrame {
 		
 		
 		JPanel panelBeneficiosAsociados = new JPanel();
-		panelBeneficiosAsociados.setBounds(572, 116, 402, 236);
+		panelBeneficiosAsociados.setBounds(572, 60, 402, 236);
 		contentPane.add(panelBeneficiosAsociados);
 		
 		panelBeneficiosAsociados.setLayout(new BorderLayout(0, 0));
@@ -101,9 +101,11 @@ public class GenerarCampaña extends JFrame {
 		panelBeneficiosAsociados.add(scrollPaneBeneficiosAsociados, BorderLayout.CENTER);
 		
 		tableBeneficiosAsociados = new JTable();
+
 		tableBeneficiosAsociados.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
+
 				String  descripcion = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),2 );
@@ -114,6 +116,7 @@ public class GenerarCampaña extends JFrame {
 				
 				modeloBeneficiosNoAsociados.addRow(new Object[] {descripcion,puntaje,codigo});
 				tableBeneficiosNoAsociados.setModel(modeloBeneficiosNoAsociados);
+				tableBeneficiosAsociados.clearSelection();
 			}
 		});
 		
@@ -121,26 +124,28 @@ public class GenerarCampaña extends JFrame {
 		panelBeneficiosNoAsociados.setLayout(new BorderLayout(0, 0));
 		this.tableBeneficiosAsociados.setModel(this.modeloBeneficiosAsociados);
 		
+		
+		
 		JScrollPane scrollPaneBeneficioNoAsociado = new JScrollPane();
 		panelBeneficiosNoAsociados.add(scrollPaneBeneficioNoAsociado, BorderLayout.CENTER);
 		tableBeneficiosNoAsociados = new JTable();
 		tableBeneficiosNoAsociados.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mousePressed(MouseEvent e) {
+				
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
 				String puntaje = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),2 );		
 				modeloBeneficiosNoAsociados.removeRow(tableBeneficiosNoAsociados.getSelectedRow());
-				
 				modeloBeneficiosAsociados.addRow(new Object[] {descripcion,puntaje,codigo});
 				tableBeneficiosAsociados.setModel(modeloBeneficiosAsociados);
-				
+				tableBeneficiosNoAsociados.clearSelection();
 				
 			}
 		});
 		JLabel lblNewLabel = new JLabel("Selecciones Los Beneficios Para La Campa\u00F1a");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel.setBounds(351, 11, 279, 14);
+		lblNewLabel.setBounds(355, 30, 279, 14);
 		contentPane.add(lblNewLabel);
 		
 		JLabel lbNombreCampaña = new JLabel("Nombre de la campa\u00F1a:");
@@ -155,53 +160,47 @@ public class GenerarCampaña extends JFrame {
 		JButton btnGenerarCampaña = new JButton("GenerarCampa\u00F1a");
 		btnGenerarCampaña.addActionListener((e)->{
 			List<Integer>codigo = null;
-			
+
 			if(this.tableBeneficiosAsociados.getRowCount()!=0) {
 				int res = JOptionPane.showConfirmDialog(null,"Seguro que desea crear la campaña con esos beneficios?","Confirmar envio", JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
-					
-				
-					
 					codigo = new ArrayList<Integer>();
-				
+
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
 					}
-						try {
-							System.out.println("");
-							api.generarCampaña(codigo,tfnombreCampaña.getText());
-							JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
-							setVisible(false);
-							dispose();
-						} catch (AppException | NotNullException e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
-						}
+					try {
+						api.generarCampaña(codigo,tfnombreCampaña.getText());
+						System.out.println("eeeeo");
+						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
+						setVisible(false);
+						dispose();
+					} catch (AppException | NotNullException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 					}
 				}
-			
-			
-			
-			else {
-				JOptionPane.showMessageDialog(null,"debe seleccionar un beneficio","Error",JOptionPane.ERROR_MESSAGE);
-			}
-			
-		});
-		
+				else {
+					JOptionPane.showMessageDialog(null,"debe seleccionar un beneficio","Error",JOptionPane.ERROR_MESSAGE);
+				}
+
+			}});
+
 		tableBeneficiosNoAsociados.setModel(this.modeloBeneficiosNoAsociados);
 		scrollPaneBeneficioNoAsociado.setViewportView(tableBeneficiosNoAsociados);
 		
 		JLabel lbBeneficiosSinAsociar = new JLabel("Beneficios Sin Asociar");
 		lbBeneficiosSinAsociar.setHorizontalAlignment(SwingConstants.CENTER);
-		lbBeneficiosSinAsociar.setBounds(130, 91, 168, 14);
+		lbBeneficiosSinAsociar.setBounds(130, 40, 168, 14);
 		contentPane.add(lbBeneficiosSinAsociar);
 		
 		JLabel lbBeneficiosAsociados = new JLabel("Beneficios Asociados ");
 		lbBeneficiosAsociados.setHorizontalAlignment(SwingConstants.CENTER);
-		lbBeneficiosAsociados.setBounds(687, 91, 199, 14);
+		lbBeneficiosAsociados.setBounds(687, 40, 199, 14);
 		contentPane.add(lbBeneficiosAsociados);
 		
 		JPanel panelBotones = new JPanel();
-		panelBotones.setBounds(422, 50, 140, 262);
+		panelBotones.setBounds(417, 120, 150, 133);
 		contentPane.add(panelBotones);
 	
 		
@@ -251,18 +250,6 @@ public class GenerarCampaña extends JFrame {
 
 		
 
-	}
-	private void reloadGrid(List<BeneficioDTO> beneficio ) {
-		/*this.modeloBeneficiosSeleccionados.setRowCount(0);
-		
-			for (BeneficioDTO b : beneficio) {
-				this.modeloBeneficiosSeleccionados.addRow(new Object[] { 
-						"d",
-						
-					
-				});*/
-				
-			
 	}
 	}
 
