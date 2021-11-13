@@ -953,6 +953,13 @@ public class PersistenceApi implements IApi {
     	return campañasDto;
 	}
 	
+	public CampañaDTO obtenerCampañaPorCodigo(int codigo) throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		CampañaDTO campañaDto = null;
+    	Campaña campaña = campañaDao.find(codigo);
+    		campañaDto = new CampañaDTO(campaña.getNombreCampaña(), campaña.getCatalogo(),campaña.getEstado(), campaña.getCodigo());
+    	return campañaDto;
+	}
+	
 	public int calcularPuntaje(PedidoDeRetiro unPedido){
 		int sumaPuntos = 0;
 		for(Residuo r: unPedido.getListResiduos()){

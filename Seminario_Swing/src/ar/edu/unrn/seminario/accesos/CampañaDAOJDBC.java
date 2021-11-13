@@ -194,9 +194,6 @@ public class CampañaDAOJDBC implements CampañaDao{
 		
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			/*PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c "
-					+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
-					+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) ");*/
 			PreparedStatement statement = conn.prepareStatement("SELECT * FROM campañas c");
 			ResultSet resultSetConsulta = statement.executeQuery();
 			while(resultSetConsulta.next()) {
