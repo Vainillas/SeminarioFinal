@@ -165,11 +165,13 @@ public class GenerarCampaña extends JFrame {
 				int res = JOptionPane.showConfirmDialog(null,"Seguro que desea crear la campaña con esos beneficios?","Confirmar envio", JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					codigo = new ArrayList<Integer>();
-
+					
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
 					}
+					System.out.println("cantidad de beneficios asociados"+codigo.size());
 					try {
+						
 						api.generarCampaña(codigo,tfnombreCampaña.getText());
 						System.out.println("eeeeo");
 						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);

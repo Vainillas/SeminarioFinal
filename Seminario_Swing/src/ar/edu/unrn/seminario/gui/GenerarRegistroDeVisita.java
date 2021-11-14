@@ -210,7 +210,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 							validacion = true;
 						}
 					}
-
 					if(!validacion ) {
 						
 						residuosSeleccionados.add((String)comboBoxResiduosDinamico.getSelectedItem());
@@ -232,7 +231,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 		slider_Dinamico.setMinorTickSpacing(10);
 		slider_Dinamico.setBounds(258, 40, 262, 40);
 		slider_Dinamico.setEnabled(false);
-		
 		table.setRowSelectionAllowed(true);
 		table.setColumnSelectionAllowed(false);
 		

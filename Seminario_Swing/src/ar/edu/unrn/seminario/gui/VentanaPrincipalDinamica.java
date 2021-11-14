@@ -328,7 +328,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
 		
-		panelDueño.setBounds(20, 271, 540, 240);
+		panelDueño.setBounds(20, 271, 588, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		
@@ -396,6 +396,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnCanjearPuntosDueño);
 		
 		JMenuItem mntmCanjearPuntosDueño = new JMenuItem("Canjear Mis Puntos");
+		mntmCanjearPuntosDueño.addActionListener((e)->{
+			
+			
+		});
 		mnCanjearPuntosDueño.add(mntmCanjearPuntosDueño);
 		if(rol.equals("PERSONAL")) {
 			panelPersonal.setVisible(true);

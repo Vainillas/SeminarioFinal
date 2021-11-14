@@ -1,7 +1,6 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
-
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,20 +10,22 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.EtchedBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
-import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
@@ -32,14 +33,7 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import javax.swing.border.BevelBorder;
-
-public class ListadoDeCampañas extends JFrame {
+public class CanjearPuntos extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tableCampañas;
@@ -62,6 +56,7 @@ public class ListadoDeCampañas extends JFrame {
 	private JTextField tfDescripcion;
 	private JTextField tfFiltrarBeneficioPorCodigo;
 	private JTextField tfFiltrarBeneficioPorPuntaje;
+
 	/**
 	 * Launch the application.
 	 */
@@ -69,8 +64,8 @@ public class ListadoDeCampañas extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PersistenceApi api = new PersistenceApi();
-					ListadoDeCampañas frame = new ListadoDeCampañas(api);
+					IApi api = new PersistenceApi();
+					CanjearPuntos frame = new CanjearPuntos(api);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -79,7 +74,10 @@ public class ListadoDeCampañas extends JFrame {
 		});
 	}
 
-	public ListadoDeCampañas(IApi api) {
+	/**
+	 * Create the frame.
+	 */
+	public CanjearPuntos(IApi api) {
 		this.api = api;
 		setTitle("Listar Campañas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -120,45 +118,44 @@ public class ListadoDeCampañas extends JFrame {
 		tableCampañas.setColumnSelectionAllowed(false);
 		tableCampañas.setRowSelectionAllowed(false);
 		
+
 		tableCampañas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Integer codigo = null;
-				modeloBeneficio.setRowCount(0);
+
+
 				List<CampañaDTO> campa = null;
 				List<Beneficio> b = null;
 				try {
 					codigo = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),2 );
-					
 					campa = api.obtenerCampañas();
-					
-					System.out.println("cantidad" + campa.get(0).getCatalogo().getListaBeneficios().size());
 					for(CampañaDTO c : campa) {
-						if(codigo.equals(c.getCodigo())) {
-							System.out.println(codigo == c.getCodigo());
-							System.out.println(codigo +"  "+ c.getCodigo());
+					if(codigo.equals(c.getCodigo())) {
+						//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
+						b = c.getCatalogo().getListaBeneficios();
 						
-							//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
-							b = c.getCatalogo().getListaBeneficios();
-							break;
-						}
+						break;
+					}
 					
-					}
-					for(Beneficio bene : b) {
-						
-						modeloBeneficio.addRow(new Object[] {
-							
-							bene.getDescripcion(),
-							bene.getCodigo(),
-							bene.getPuntajeConsumible()
-							
-						});
-						
-						
-					}
+				}
+				modeloBeneficio.setRowCount(0);
 				
-				//tableBeneficios.setModel(modeloBeneficio);
-				//scrollPaneBeneficios.setViewportView(tableBeneficios);
+				for(Beneficio bene : b) {
+					
+					modeloBeneficio.addRow(new Object[] {
+						
+						bene.getDescripcion(),
+						bene.getCodigo(),
+						bene.getPuntajeConsumible()
+						
+					});
+					
+					
+				}
+				
+				tableBeneficios.setModel(modeloBeneficio);
+				scrollPaneBeneficios.setViewportView(tableBeneficios);
 				
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -182,7 +179,9 @@ public class ListadoDeCampañas extends JFrame {
 		List<CampañaDTO> campaña;
 		
 		try {
+			
 			campaña = api.obtenerCampañas();
+			
 			for (CampañaDTO c : campaña) {
 				modeloCampaña.addRow(new Object[] { 
 						c.getNombreCampaña(),
@@ -442,7 +441,6 @@ public class ListadoDeCampañas extends JFrame {
 	}
 
 	private void reloadGrid(List<CampañaDTO> campañaDTO) {
-		System.out.println("cantidad de bene"+ this.tableBeneficios.getRowCount());
 		
 		this.modeloCampaña.setRowCount(0);
 		this.modeloBeneficio.setRowCount(0);
