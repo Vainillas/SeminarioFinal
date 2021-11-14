@@ -53,7 +53,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
-		String rol = "COMUNIDAD";
+		String rol = "ADMINISTRADOR";
 		//String rol = api.obtenerRolUsuarioActivo();
 
 

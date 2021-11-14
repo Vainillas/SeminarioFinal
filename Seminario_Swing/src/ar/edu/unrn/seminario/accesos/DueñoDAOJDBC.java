@@ -54,7 +54,7 @@ public class DueñoDAOJDBC implements DueñoDao {
 	public void update(Dueño dueño) throws AppException {
 		try {
 			Connection conn = ConnectionManager.getConnection();
-            PreparedStatement statement = conn.prepareStatement("UPDATE propietarios SET nombre = ?, apellido = ?, dni = ?, correo_electronico = ?, username = ?, puntaje = ?"
+            PreparedStatement statement = conn.prepareStatement("UPDATE propietarios SET nombre = ?, apellido = ?, dni = ?, correo_electronico = ?, username = ?, puntaje = ? "
             		+ "WHERE dni = ?");
             statement.setString(1, dueño.getNombre());
             statement.setString(2, dueño.getApellido());
@@ -62,6 +62,7 @@ public class DueñoDAOJDBC implements DueñoDao {
             statement.setString(4, dueño.getCorreo());
             statement.setString(5, dueño.getUser().getUsuario());
             statement.setInt(6, dueño.getPuntaje());
+            statement.setString(7, dueño.getDni());
             statement.executeUpdate();
 		}catch (SQLException e) {
             throw new AppException("Error de SQL al actualizar el dueño: " + e.getMessage());

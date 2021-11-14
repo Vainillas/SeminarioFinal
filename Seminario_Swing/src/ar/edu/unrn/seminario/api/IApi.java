@@ -29,7 +29,8 @@ import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
-
+import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Usuario;
 
 import ar.edu.unrn.seminario.utilities.Predicate;
@@ -81,7 +82,7 @@ public interface IApi {
 			throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username) 
-			throws StateException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
+			throws StateException, AppException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void registrarDueño(String nombre, String apellido, String dni, String correo, String username) 
 			throws Exception;
@@ -157,7 +158,6 @@ public interface IApi {
 
 	ArrayList<String> obtenerNombresResiduos() throws AppException;
 	
-	//List<ViviendaDTO> obtenerViviendas(Predicate predicate) throws AppException;
 
 
 	List<ViviendaDTO> obtenerViviendasDeUsuario() 
@@ -200,9 +200,12 @@ public interface IApi {
 	
 	List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException;
-
+	CampañaDTO obtenerCampañaPorCodigo(int codigo) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	int calcularPuntaje(PedidoDeRetiro unPedido);
+	void sumarPuntos(Dueño dueño, int puntaje) throws AppException;
 	List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	
 
 	List<BeneficioDTO> obtenerBeneficios(Predicate<BeneficioDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
-
+	
 }

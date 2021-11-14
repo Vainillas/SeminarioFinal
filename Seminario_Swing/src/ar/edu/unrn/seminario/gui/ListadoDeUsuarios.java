@@ -144,7 +144,7 @@ public class ListadoDeUsuarios extends JFrame {
 					try {
 						api.desactivarUsuario(username);
 						//reloadGrid(null);
-					} catch (StateException e1) {
+					} catch (StateException | AppException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), 
 								labels.getString("listado.usuario.mensaje.error"), 
 								JOptionPane.ERROR_MESSAGE);

@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.swing.JTextField;
-
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.accesos.BeneficioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.BeneficioDao;
@@ -77,7 +75,6 @@ import ar.edu.unrn.seminario.modelo.UsuarioIngreso;
 import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.edu.unrn.seminario.utilities.Filtro;
-import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 
@@ -191,9 +188,8 @@ public class PersistenceApi implements IApi {
 		this.usuarioDao.activate(username);
 	}
 
-	public void desactivarUsuario(String username) {
-		// TODO Auto-generated method stub
-
+	public void desactivarUsuario(String username) throws AppException {
+		this.usuarioDao.deactivate(username);
 	}
 	
 	public void usuarioActivo(String username) throws AppException {
@@ -354,65 +350,6 @@ public class PersistenceApi implements IApi {
 		return vDTO;
 	}
 	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorNombre()throws AppException{ //ELIMINAR LOS 4
-		//List<UsuarioDTO> usuario = Filtro.filtrar(this.obtenerUsuarios());
-		
-		List<UsuarioDTO> usuario = null;
-		
-		return usuario.stream().sorted((v1,v2)->{
-		if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
-
-			return 1;
-		}
-			
-		else {
-			return -1;}
-		
-		})
-		.collect(Collectors.toList());
-
-		//return usuario;
-	}
-	
-
-	
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorCorreo()throws AppException{
-		List<UsuarioDTO> usuario = this.obtenerUsuarios();
-		 usuario = usuario.stream().sorted((v1,v2)->{
-		if(v1.getEmail().compareToIgnoreCase(v2.getEmail()) >= 0) {
-			
-			return 1;}
-		else {
-			return -1;
-		}
-		})
-		.collect(Collectors.toList());
-	return usuario;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorRol()throws AppException{
-		List<UsuarioDTO> usuario = this.obtenerUsuarios();
-		 usuario = usuario.stream().sorted((v1,v2)->{
-		if(v1.getRol().compareToIgnoreCase(v2.getRol())>=0)
-			return 1;
-		else
-			return -1;
-		})
-		.collect(Collectors.toList());
-	return usuario;
-	}//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<UsuarioDTO> obtenerUsuariosOrdenadosPorEstado() throws AppException{
-		List<UsuarioDTO> usuario = this.obtenerUsuarios();
-		 usuario = usuario.stream().sorted((v1,v2)->{
-		if(v1.getEstado().compareToIgnoreCase(v2.getEstado())>=0)
-			return 1;
-		else
-			return -1;
-		})
-		.collect(Collectors.toList());
-	return usuario;
-	}
 	
 	public static class filtradoUsuarioRol implements Comparator<UsuarioDTO>{
 		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
@@ -503,32 +440,49 @@ public class PersistenceApi implements IApi {
 		return dueñoDao.exists(dni);
 	}
 
- 
+
     public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException, NotNullException{
-    	Visita visita = null;
+    	Visita visita = null; //Inicializo visita en null
     	
-    	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>();
+    	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>(); //Inicializo la lista de tipo de residuos
     	
     	for(int i=0;i<residuosIngresados.size();i++){  
-    		
+    		//Por cada tipo de residuo ingresado creo una instancia y la agrego a la lista
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
     		
     	}
-
+    	//Ordeno la lista
+    	listaTipos.sort((TipoResiduo t1, TipoResiduo t2)->t1.getNombre().compareTo(t2.getNombre()));
+    	//Creo una lista de residuos
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
-    	
+    	//Instancio los residuos con el tipo de residuo que instancié antes y le meto la cantidad
     	for(int i=0;i<residuosIngresadosKg.size();i++){
     		Residuo r = new Residuo(listaTipos.get(i), Integer.parseInt(residuosIngresadosKg.get(i)));
     		listResiduos.add(r);
     	}
     	
-    	visita = new Visita(observacion, listResiduos, codOrden);
+    	//INICIO DE COMPROBACIÓN PARA EL CAPPEO//
+    	OrdenDeRetiro ordenComprobacion = this.ordenDeRetiroDao.find(codOrden);
+    	visita = new Visita(observacion, listResiduos, codOrden); //Creo la visita
+    	if(comprobarExcedenteResiduos(ordenComprobacion, visita)) {
+    		throw new AppException("Se ingresaron mas residuos de lo debido.");
+    	}
+    	//FIN DE COMPROBACIÓN PARA EL CAPPEO
+    	
+    	
+    	
+    	
+    	
+    	
+    	
+    	//Subo la visita a la bd
     	
     	this.visitaDao.create(visita);
     	
-    	if(this.ordenDeRetiroDao.find(codOrden).getVisitas().size() > 0 && !this.ordenDeRetiroDao.find(codOrden).getEstado().obtenerEstado().equals("en ejecucion")) {
-    		System.out.println("ok entre, y ahora");
+    	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
+    	
+    	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals("en ejecucion")) {
     		actualizarEstadoOrden(codOrden, "en ejecucion");
     	}
     	
@@ -540,43 +494,95 @@ public class PersistenceApi implements IApi {
     	}
     	
     }
-    
-    public Boolean comprobarCantidadResiduos(int codOrden) throws AppException {
-    	//Lista de los residuos del pedido de retiro asociado a la orden
-    	ArrayList<Residuo> listaResiduos = this.ordenDeRetiroDao.find(codOrden).getPedidoAsociado().getListResiduos();
-    	//Lista de las visitas asociadas a la orden
-    	ArrayList<Visita> listaVisitas = this.ordenDeRetiroDao.find(codOrden).getVisitas();
-    	//Lista del total de los kilogramos de cada residuo de todas las visitas
-    	ArrayList<Integer> listaSumaVisitas = new ArrayList<Integer>();
+    public boolean comprobarExcedenteResiduos(OrdenDeRetiro ordenAComprobar, Visita visitaNueva) {
+    	boolean excedido = false;
+    	ArrayList<Visita> visitas= ordenAComprobar.getVisitas();
+    	visitas.add(visitaNueva);
+    	ArrayList<Residuo> listaResiduos = ordenAComprobar.getPedidoAsociado().getListResiduos();
     	
-    
+    	ArrayList<Residuo> listaSumaVisitas = new ArrayList<Residuo>();
     	for(int j=0; j<listaResiduos.size(); j++) {
-    		listaSumaVisitas.add(0);
+    		listaSumaVisitas.add(new Residuo(listaResiduos.get(j).getTipo(), 0));
+    	}
+    	for(Visita visita: visitas){
+    		for(Residuo residuo: visita.getResiduosExtraidos()){
+    			for(int c = 0; c<listaSumaVisitas.size(); c++ ) {
+    				if(listaSumaVisitas.get(c).getTipo().equals(residuo.getTipo())) {
+    					listaSumaVisitas.set(c, new Residuo(listaSumaVisitas.get(c).getTipo(), listaSumaVisitas.get(c).getCantidadKg() + residuo.getCantidadKg()));
+    				}
+    			}
+    		}
+    	}
+    	int i;
+    	
+    	for(i=0;i<listaResiduos.size();i++) {
+    		if(listaResiduos.get(i).getCantidadKg() < listaSumaVisitas.get(i).getCantidadKg()) {// quizas cambiar a != en otro momento
+    			//Si alguna cantidad de un residuo especifico en la lista de residuos del pedido
+    			//es mayor o igual a la cantidad de ese mismo residuo en el total de la lista de visitas
+    			// el resultado pasa a ser verdadero
+    			
+    			excedido = true;
+    		}
     	}
     	
+    	
+    	return excedido;
+    }
+    
+    public Boolean comprobarCantidadResiduos(int codOrden) throws AppException {
+    	
+    	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
+    	
+    	//Lista de los residuos del pedido de retiro asociado a la orden
+    	ArrayList<Residuo> listaResiduos = ordenCorrespondiente.getPedidoAsociado().getListResiduos();
+    	//System.out.println("Lista Residuos de comprobarCantidadResiduos: "+ listaResiduos);
+    	//Lista de las visitas asociadas a la orden
+    	ArrayList<Visita> listaVisitas = ordenCorrespondiente.getVisitas();
+    	//System.out.println("Lista Visitas de comprobarCantidadResiduos: "+ listaVisitas);
+    	//Lista del total de los kilogramos de cada residuo de todas las visitas
+    	ArrayList<Residuo> listaSumaVisitas = new ArrayList<Residuo>();
+    	for(int j=0; j<listaResiduos.size(); j++) {
+    		listaSumaVisitas.add(new Residuo(listaResiduos.get(j).getTipo(), 0));
+    	}
+    	//System.out.println("Lista SumaVisitas de comprobarCantidadResiduos después del primer for: "+ listaSumaVisitas);
+    	
     	for(Visita visita: listaVisitas){
-    		
-        	int i = 0;
-        	
     		for(Residuo residuo: visita.getResiduosExtraidos()){
-    			
-    			listaSumaVisitas.set(i, listaSumaVisitas.get(i) + residuo.getCantidadKg());
-    			
-    			i++;
+    			//A listaSumaVisitas se le setea en la posición i, el valor que tenía previamente
+    			//mas la cantidad de kilogramos del residuo de la visita actual
+    			//System.out.println("Información del residuo a agregar: " + residuo.toString());
+    			for(int c = 0; c<listaSumaVisitas.size(); c++ ) {
+    				//Implementación con listaSumaVisitas con Residuos en vez de Integer
+    				//System.out.println("Información del residuo "+ c + " en listaSuma visitas: " + listaSumaVisitas.get(c).toString());
+    				if(listaSumaVisitas.get(c).getTipo().equals(residuo.getTipo())) {
+    					//System.out.println("Información del tipoResiduo de listaSumaVisitas "+ c + " después de entrar al if: " +listaSumaVisitas.get(c).getTipo());
+    					//System.out.println("Información del tipoResiduo del residuo "+ c + " después de entrar al if: " +residuo.getTipo());
+    					listaSumaVisitas.set(c, new Residuo(listaSumaVisitas.get(c).getTipo(), listaSumaVisitas.get(c).getCantidadKg() + residuo.getCantidadKg()));
+    				}
+    			}
     		}
  
     	}
-    	System.out.println("El tamaño de la lista de Residuos es : " + listaResiduos.size());
-    	System.out.println("El Tamaño de la Lista de Visitas es de : " + listaVisitas.size());
+    	//System.out.println("El tamaño de la lista de Residuos en comprobarCantidadResiduos es : " + listaResiduos.size());
+    	//System.out.println("El Tamaño de la Lista de Visitas en comprobarCantidadResiduos es de : " + listaVisitas.size());
+    	//System.out.println("Lista SumaVisitas de comprobarCantidadResiduos después del segundo for: "+ listaSumaVisitas);
+    	
+    	
     	Boolean rtado = false;
     	int i;
     	
     	for(i=0;i<listaResiduos.size();i++) {
-    		if(listaResiduos.get(i).getCantidadKg() >= listaSumaVisitas.get(i)) {// quizas cambiar a != en otro momento
+    		//System.out.println("Residuo Numero "+ i +"de la listaResiduos en sección Boolean de comprobarCantidadResiduos: "+ listaResiduos.get(i));
+    		//System.out.println("Residuo Numero "+ i +"de la listaSumaVisitas en sección Boolean de comprobarCantidadResiduos: "+ listaSumaVisitas.get(i));
+    		if(listaResiduos.get(i).getCantidadKg() > listaSumaVisitas.get(i).getCantidadKg()) {// quizas cambiar a != en otro momento
+    			//Si alguna cantidad de un residuo especifico en la lista de residuos del pedido
+    			//es mayor o igual a la cantidad de ese mismo residuo en el total de la lista de visitas
+    			// el resultado pasa a ser verdadero
+    			
     			rtado = true;
     		}
     	}
-    	
+    	//System.out.println("El valor del booleano en comprobarCantidadResiduos es de: "+ rtado);
     	return rtado;  
     }
     
@@ -797,14 +803,6 @@ public class PersistenceApi implements IApi {
 	//}
 	
 	
-
-	public List<DireccionDTO> obtenerDireccionesDeDueño() throws AppException {
-		
-		// TODO Esbozo de método generado automáticamente
-		return null;
-	}
-
-	
 	@Override
 	public List<RecolectorDTO> obtenerRecolectores() 
 			throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
@@ -907,20 +905,7 @@ public class PersistenceApi implements IApi {
     	return beneficiosDto;
 	}
 
-	public void generarCampaña(List<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
-		
-		ArrayList<Beneficio> listaDeBeneficios = new ArrayList<Beneficio>();
-		for(Integer i: listaBeneficios) {
-			listaDeBeneficios.add(this.beneficioDao.find(i));
-		}
-		
-		Catalogo catalogo = new Catalogo(listaDeBeneficios);
-		
-		Campaña campaña = new Campaña(unNombre, catalogo, "Activa");
-		
-		this.campañaDao.create(campaña);
-		
-	}
+
 	
 	public void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException {
 		
@@ -931,6 +916,8 @@ public class PersistenceApi implements IApi {
 		Dueño dueño = this.dueñoDao.findByUser(this.userOnline.getUsuario());
 		
 		Canje canje = new Canje(beneficio, dueño, campaña);
+		
+		canjeDao.create(canje);
 	}
 	
 	public List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException{
@@ -940,17 +927,6 @@ public class PersistenceApi implements IApi {
     		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
     	} 
     	return canjesDto;
-	}
-	
-	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
-		List<CampañaDTO> campañasDto = new ArrayList<>();
-    	List<Campaña> campañas = campañaDao.findAll();
-    	System.out.println(campañas.size());
-    	for (Campaña c : campañas) {
-    		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
-    	} 
-    	System.out.println(campañasDto.size());
-    	return campañasDto;
 	}
 	
 	public int calcularPuntaje(PedidoDeRetiro unPedido){
@@ -968,7 +944,38 @@ public class PersistenceApi implements IApi {
 		dueñoDao.update(dueño);       
 		
 	}
-
+	public void generarCampaña(List<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
+		
+		ArrayList<Beneficio> listaDeBeneficios = new ArrayList<Beneficio>();
+		for(Integer i: listaBeneficios) {
+			listaDeBeneficios.add(this.beneficioDao.find(i));
+		}
+		
+		Catalogo catalogo = new Catalogo(listaDeBeneficios);
+		
+		Campaña campaña = new Campaña(unNombre, catalogo, "Activa");
+		
+		this.campañaDao.create(campaña);
+		
+	}
+	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		List<CampañaDTO> campañasDto = new ArrayList<>();
+    	List<Campaña> campañas = campañaDao.findAll();
+    	System.out.println(campañas.size());
+    	for (Campaña c : campañas) {
+    		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
+    	} 
+    	System.out.println(campañasDto.size());
+    	return campañasDto;
+	}
+	
+	public CampañaDTO obtenerCampañaPorCodigo(int codigo) throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		CampañaDTO campañaDto = null;
+    	Campaña campaña = campañaDao.find(codigo);
+    		campañaDto = new CampañaDTO(campaña.getNombreCampaña(), campaña.getCatalogo(),campaña.getEstado(), campaña.getCodigo());
+    	return campañaDto;
+	}
+	
 	public List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException{
 		return Filtro.filtrar(this.obtenerCampañas(), predicado);
 		

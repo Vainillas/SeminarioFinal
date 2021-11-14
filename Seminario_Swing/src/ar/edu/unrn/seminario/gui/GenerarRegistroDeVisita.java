@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -20,7 +21,11 @@ import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+
+
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.JTextPane;
 import javax.swing.JLabel;
@@ -234,9 +239,15 @@ public class GenerarRegistroDeVisita extends JFrame {
 		modelo = new DefaultTableModel(new Object[][] {}, titulosDireccion);
 
 			try {
+
 				List<OrdenDeRetiroDTO > ordenes = api.obtenerOrdenesDeRetiro();				
+
+				Predicate <OrdenDeRetiroDTO> predicate = (OrdenDeRetiroDTO o)->
+				!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado");
+				ordenes = api.obtenerOrdenesDeRetiro(predicate);				
+				// Agrega las direcciones de el dueño en el model <- Incorrecto
 				for (OrdenDeRetiroDTO o : ordenes) {
-					if(!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado")) {
+					//if(!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado")) {
 					modelo.addRow(new Object[] {
 							DateHelper.changeFormat(o.getFechaOrden()),
 							Integer.toString(o.getCodigo()),
@@ -247,7 +258,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 							o.getPedidoAsociado().getObservacion()
 							
 					});
-					}
+					//}
 				}
 
 			} catch (Exception e2) {
