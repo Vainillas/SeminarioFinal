@@ -180,16 +180,14 @@ public class CampañaDAOJDBC implements CampañaDao{
 		ArrayList<Campaña> listaCampañas = new ArrayList<>();
 		Campaña campaña = null;
 		Catalogo catalogo = null;
-		ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
 		Beneficio beneficio = null;
 		
-		ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
 		Canje canje = null;
 		Dueño dueño = null;
 		Usuario user = null;
 		Rol rol = null;
 		
-		ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
+
 		
 		
 		try {
@@ -199,15 +197,17 @@ public class CampañaDAOJDBC implements CampañaDao{
 			while(resultSetConsulta.next()) {
 				statement = conn.prepareStatement("SELECT * FROM campañas c "
 						+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
-						+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) ");
+						+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) "
+						+ "WHERE c.codigo = ?");
+				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetListaBeneficios = statement.executeQuery();
+				ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
 				while(resultSetListaBeneficios.next()) {
 					beneficio = new Beneficio(resultSetListaBeneficios.getString("b.nombre_beneficio"),
 							String.valueOf(resultSetListaBeneficios.getInt("b.costo")),
 							resultSetListaBeneficios.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
-
 				catalogo = new Catalogo(listaBeneficios);
 				campaña = new Campaña(resultSetConsulta.getString("c.nombre"),catalogo,
 						resultSetConsulta.getString("c.estado"),
@@ -223,6 +223,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 						+ "WHERE c.codigo = ?");
 				statement2.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetCanje = statement2.executeQuery();
+				ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
 				while(resultSetCanje.next()) {
 					rol = new Rol(resultSetCanje.getInt("r.codigo"),
 							resultSetCanje.getString("r.nombre"));
@@ -250,6 +251,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 						+ "WHERE c.codigo = ?");
 				statement3.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetBeneficiarios = statement3.executeQuery();
+				ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
 				while(resultSetBeneficiarios.next()) {
 					rol = new Rol(resultSetBeneficiarios.getInt("r.codigo"),
 							resultSetBeneficiarios.getString("r.nombre"));
