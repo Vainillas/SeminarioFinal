@@ -29,10 +29,12 @@ import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.modelo.Dueño;
+import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.modelo.Usuario;
-
+import ar.edu.unrn.seminario.modelo.Visita;
 import ar.edu.unrn.seminario.utilities.Predicate;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
@@ -203,6 +205,10 @@ public interface IApi {
 	CampañaDTO obtenerCampañaPorCodigo(int codigo) throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	int calcularPuntaje(PedidoDeRetiro unPedido);
 	void sumarPuntos(Dueño dueño, int puntaje) throws AppException;
+	List<ResiduoDTO> devolverResiduosRestantes(int codOrden) throws AppException;
+	Boolean comprobarCantidadResiduos(int codOrden) throws AppException;
+	boolean comprobarExcedenteResiduos(OrdenDeRetiro ordenAComprobar, Visita visitaNueva);
+	
 	List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	
 
