@@ -85,7 +85,8 @@ public interface IApi {
 
 	void desactivarUsuario(String username) 
 			throws StateException, AppException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
-
+	boolean existeDueñoRegistrado() throws AppException;
+	
 	void registrarDueño(String nombre, String apellido, String dni, String correo, String username) 
 			throws Exception;
 
