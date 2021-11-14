@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.swing.JTextField;
+
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.accesos.BeneficioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.BeneficioDao;
@@ -941,12 +943,13 @@ public class PersistenceApi implements IApi {
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
 		List<CampañaDTO> campañasDto = new ArrayList<>();
     	List<Campaña> campañas = campañaDao.findAll();
-    	
-    	System.out.println("El tamaño de Campañas es de: " + campañas.size());
-    	
+
+    	System.out.println(campañas.size());
+
     	for (Campaña c : campañas) {
     		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
     	} 
+    	System.out.println(campañasDto.size());
     	return campañasDto;
 	}
 	
@@ -966,5 +969,12 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-
+	public List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		return Filtro.filtrar(this.obtenerCampañas(), predicado);
+		
+	}
+	public List<BeneficioDTO> obtenerBeneficios(Predicate<BeneficioDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		return Filtro.filtrar(this.obtenerBeneficios(), predicado);
+		
+	}
 }
