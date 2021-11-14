@@ -95,7 +95,15 @@ public class RegistrarDueño extends JFrame {
 		JButton btn_aceptar = new JButton(labels.getString("registrar.dueño.button.aceptar"));
 		btn_aceptar.addActionListener((e)->{
 			try {
+				System.out.println(this.tf_nombre.getText());
+				System.out.println(tf_apellido.getText());
+				System.out.println(tf_dni.getText());
+				
 				api.registrarDueño(this.tf_nombre.getText(),tf_apellido.getText(),tf_dni.getText());
+				VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api,labels);
+				ventana.setVisible(true);
+				setVisible(false);
+				dispose();
 			} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | AppException e1) {
 				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}

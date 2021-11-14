@@ -869,7 +869,7 @@ public class PersistenceApi implements IApi {
 	public void registrarDueño(String nombre, String apellido, String dni)
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
 		Dueño dueño = new Dueño(nombre, apellido, dni, this.userOnline.getEmail(),this.userOnline);
-		
+		System.out.println(dueño.toString());
         this.dueñoDao.create(dueño);
         
 		

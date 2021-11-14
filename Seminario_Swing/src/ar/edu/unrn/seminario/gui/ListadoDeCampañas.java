@@ -131,18 +131,12 @@ public class ListadoDeCampañas extends JFrame {
 					codigo = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),2 );
 					
 					campa = api.obtenerCampañas();
-					
-					System.out.println("cantidad" + campa.get(0).getCatalogo().getListaBeneficios().size());
 					for(CampañaDTO c : campa) {
 						if(codigo.equals(c.getCodigo())) {
-							System.out.println(codigo == c.getCodigo());
-							System.out.println(codigo +"  "+ c.getCodigo());
-						
 							//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
 							b = c.getCatalogo().getListaBeneficios();
 							break;
 						}
-					
 					}
 					for(Beneficio bene : b) {
 						
@@ -156,9 +150,6 @@ public class ListadoDeCampañas extends JFrame {
 						
 						
 					}
-				
-				//tableBeneficios.setModel(modeloBeneficio);
-				//scrollPaneBeneficios.setViewportView(tableBeneficios);
 				
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);

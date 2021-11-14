@@ -53,7 +53,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
-		String rol = "ADMINISTRADOR";
+		String rol = "COMUNIDAD";
 		//String rol = api.obtenerRolUsuarioActivo();
 
 
@@ -390,6 +390,14 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnDueñoNoRegistrado);
 		
 		JMenuItem mntmRegistrarDatosPersonales = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.registrar.datos.personales.dueño"));
+		mntmRegistrarDatosPersonales.addActionListener((e)->{
+			RegistrarDueño d = new RegistrarDueño(api, labels);
+			d.setVisible(true);
+			setVisible(false);
+			dispose();
+			
+			
+		});
 		mnDueñoNoRegistrado.add(mntmRegistrarDatosPersonales);
 		
 		JMenu mnCanjearPuntosDueño = new JMenu("Canje De Puntos");
@@ -412,13 +420,20 @@ public class VentanaPrincipalDinamica extends JFrame {
 			panelPersonal.setVisible(false);
 			panelDueño.setVisible(false);
 		}
+		
 		if(rol.equals("COMUNIDAD")) {
+			/*mnViviendasDueño.setVisible(false);
+			mnPedidoDeRetiroDueño.setVisible(false);
+			mnConfiguracionDueño.setVisible(false);
+			mnDueñoNoRegistrado.setVisible(true);
+			mnCanjearPuntosDueño.setVisible(false);*/
 			//para solucionar lo de comunidad no registrado
-			/*if(api.usuarioRegistrado()) {
+			/*if(!api.usuarioRegistrado()) {
 				mnViviendasDueño.setVisible(false);
 				mnPedidoDeRetiroDueño.setVisible(false);
 				mnConfiguracionDueño.setVisible(false);
 				mnDueñoNoRegistrado.setVisible(true);
+				
 				
 			}*/
 			panelDueño.setVisible(true);
