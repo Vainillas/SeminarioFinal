@@ -422,11 +422,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		}
 		
 		if(rol.equals("COMUNIDAD")) {
-			/*mnViviendasDueño.setVisible(false);
-			mnPedidoDeRetiroDueño.setVisible(false);
-			mnConfiguracionDueño.setVisible(false);
-			mnDueñoNoRegistrado.setVisible(true);
-			mnCanjearPuntosDueño.setVisible(false);*/
 			//para solucionar lo de comunidad no registrado
 			/*if(!api.usuarioRegistrado()) {
 				mnViviendasDueño.setVisible(false);

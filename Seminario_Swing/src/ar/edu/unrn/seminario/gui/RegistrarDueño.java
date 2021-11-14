@@ -114,6 +114,9 @@ public class RegistrarDueño extends JFrame {
 		
 		JButton btn_cancelar = new JButton(labels.getString("registrar.dueño.button.cancelar"));
 		btn_cancelar.addActionListener((e)->{
+			VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api,labels);
+			ventana.setVisible(true);
+			
 			this.setVisible(false);
 			dispose();
 			

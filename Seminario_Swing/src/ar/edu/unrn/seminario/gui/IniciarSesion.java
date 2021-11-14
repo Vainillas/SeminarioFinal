@@ -37,9 +37,6 @@ public class IniciarSesion extends JFrame {
 	private IApi api;
 	private JPanel panelNoRegistrado;
 	private JComboBox comboBoxIdioma;
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {

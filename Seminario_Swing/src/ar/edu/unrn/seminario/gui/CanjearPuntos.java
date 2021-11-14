@@ -52,8 +52,9 @@ public class CanjearPuntos extends JFrame {
 	private JScrollPane scrollPaneCampañas;
 	private JScrollPane scrollPaneBeneficios;
 	private JTable tableBeneficios;
-	private JTextField textField;
-
+	private JTextField tfPuntosDelDueño;
+	private int codCampaña;
+	private int codBeneficio;
 	/**
 	 * Launch the application.
 	 */
@@ -100,7 +101,26 @@ public class CanjearPuntos extends JFrame {
 		panelBeneficios.add(scrollPaneBeneficios, BorderLayout.CENTER);
 		
 		tableBeneficios = new JTable();
-		tableBeneficios.setCellSelectionEnabled(false);
+		tableBeneficios.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					CampañaDTO c = api.obtenerCampañaPorCodigo(codCampaña);
+					for(Beneficio b :c.getCatalogo().getListaBeneficios() ) {
+						if(tableBeneficios.getValueAt(tableBeneficios.getSelectedColumn(), 0).equals(b.getDescripcion())) {
+							codBeneficio = b.getCodigo();
+							break;
+						}
+					}
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+	
+					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}
+				
+			}
+		});
+		
+		//tableBeneficios.setCellSelectionEnabled(false);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		scrollPaneCampañas = new JScrollPane();
 		panelCampañas = new JPanel();
@@ -112,7 +132,7 @@ public class CanjearPuntos extends JFrame {
 		panelCampañas.add(scrollPaneCampañas);
 		tableCampañas = new JTable();
 		tableCampañas.setCellSelectionEnabled(false);
-		tableCampañas.setColumnSelectionAllowed(false);
+		//tableCampañas.setColumnSelectionAllowed(false);
 		tableCampañas.setRowSelectionAllowed(false);
 		
 
@@ -129,28 +149,21 @@ public class CanjearPuntos extends JFrame {
 					campa = api.obtenerCampañas();
 					for(CampañaDTO c : campa) {
 					if(nombreCam.equals(c.getNombreCampaña())) {
-						//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
 						b = c.getCatalogo().getListaBeneficios();
 						break;
 					}
+					codCampaña = c.getCodigo();
 				}
 				modeloBeneficio.setRowCount(0);
 				
 				for(Beneficio bene : b) {
-					
 					modeloBeneficio.addRow(new Object[] {
-						
+							
 						bene.getDescripcion(),
 						bene.getPuntajeConsumible()
-						
 					});
-					
-					
+
 				}
-				
-				tableBeneficios.setModel(modeloBeneficio);
-				scrollPaneBeneficios.setViewportView(tableBeneficios);
-				
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
@@ -208,21 +221,46 @@ public class CanjearPuntos extends JFrame {
 		lbMisPuntos.setBounds(813, 26, 110, 23);
 		contentPane.add(lbMisPuntos);
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setBackground(Color.WHITE);
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textField.setForeground(Color.BLACK);
-		textField.setText("50 puntos");
-		textField.setBounds(849, 60, 94, 26);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		tfPuntosDelDueño = new JTextField();
+		tfPuntosDelDueño.setEditable(false);
+		tfPuntosDelDueño.setBackground(Color.WHITE);
+		tfPuntosDelDueño.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		tfPuntosDelDueño.setForeground(Color.BLACK);
+		//tfPuntosDelDueño.setText( "55");
+		try {
+			tfPuntosDelDueño.setText(String.valueOf(api.obtenerDueñoActivo().getPuntaje()));
+			
+		} catch (AppException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+		}
+		tfPuntosDelDueño.setBounds(849, 60, 94, 26);
+		contentPane.add(tfPuntosDelDueño);
+		tfPuntosDelDueño.setColumns(10);
 		
 		JButton btnCanjearPuntos = new JButton("Canjear Puntos");
 		btnCanjearPuntos.addActionListener((e)->{
+			
 			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow())) {
 				
-				JOptionPane.showMessageDialog(null,"Todo Sukistrukis","bien",JOptionPane.INFORMATION_MESSAGE);
+				
+				try {
+					
+					api.generarCanje(codBeneficio, codCampaña);
+					int res = JOptionPane.showConfirmDialog(null,"Desea Canjear otro Beneficio?","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE );
+					if(res == 0 ) {
+						
+					}
+					else {
+						setVisible(false);
+						dispose();
+						
+					}
+					JOptionPane.showMessageDialog(null,"Todo Sukistrukis,mañana lo termino xd","bien",JOptionPane.INFORMATION_MESSAGE);
+					
+				} catch (AppException | NotNullException e1) {
+					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				}
+				
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"Debe seleccionar Un Beneficio","Error",JOptionPane.ERROR_MESSAGE);
