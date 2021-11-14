@@ -52,6 +52,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
 import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
@@ -950,12 +951,15 @@ public class PersistenceApi implements IApi {
 
 
 	
-	public void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException {
+	public void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException, InsuficientPointsException {
 		
 		Beneficio beneficio = this.beneficioDao.find(codBeneficio);
 		
 		Campaña campaña = this.campañaDao.find(codCampaña);
-		
+		//OJOOOO
+		/*******FALTA QUE AL DUEñO SE LE DESCUENTEN LOS PUNTOS
+		 *CUANDO GENERA UN CANJE, EN NINGUN MOMENTO SE ESTA HACIENDO
+		 */
 		Dueño dueño = this.dueñoDao.findByUser(this.userOnline.getUsuario());
 		
 		Canje canje = new Canje(beneficio, dueño, campaña);

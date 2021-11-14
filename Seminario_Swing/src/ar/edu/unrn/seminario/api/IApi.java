@@ -24,6 +24,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
 import ar.edu.unrn.seminario.exceptions.KilogramEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
@@ -199,7 +200,7 @@ public interface IApi {
 	void generarCampaña(List<Integer> codigo, String unNombre) throws AppException, NotNullException;
 	
 	
-	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException;
+	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException, InsuficientPointsException;
 	
 	List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException;

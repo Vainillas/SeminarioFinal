@@ -53,7 +53,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
-		String rol = "COMUNIDAD";
+		String rol = "ADMINISTRADOR	";
 		//String rol = api.obtenerRolUsuarioActivo();
 
 
@@ -341,11 +341,11 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenuItem mntmListarViviendasDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.viviendas.dueño"));
 		mnViviendasDueño.add(mntmListarViviendasDueño);
 		
-		JMenu menuDatosDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.dueño"));
-		mbDueño.add(menuDatosDueño);
+		JMenu mnDatosDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.dueño"));
+		mbDueño.add(mnDatosDueño);
 		
 		JMenuItem mntmDatosDelDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.datos.del.dueño"));
-		menuDatosDueño.add(mntmDatosDelDueño);
+		mnDatosDueño.add(mntmDatosDelDueño);
 		
 		JMenu mnConfiguracionDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.configuracion.dueño"));
 		mbDueño.add(mnConfiguracionDueño);
@@ -404,7 +404,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnCanjearPuntosDueño);
 		
 		JMenuItem mntmCanjearPuntosDueño = new JMenuItem("Canjear Mis Puntos");
+
 		mntmCanjearPuntosDueño.addActionListener((e)->{
+			CanjearPuntos canje = new CanjearPuntos(api);
+			canje.setVisible(true);
 			
 			
 		});
@@ -423,14 +426,18 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		if(rol.equals("COMUNIDAD")) {
 			//para solucionar lo de comunidad no registrado
-			/*if(!api.usuarioRegistrado()) {
-				mnViviendasDueño.setVisible(false);
-				mnPedidoDeRetiroDueño.setVisible(false);
-				mnConfiguracionDueño.setVisible(false);
-				mnDueñoNoRegistrado.setVisible(true);
-				
-				
-			}*/
+			try {
+				if(!api.existeDueñoRegistrado()) {
+					mnViviendasDueño.setVisible(false);
+					mnPedidoDeRetiroDueño.setVisible(false);
+					mnConfiguracionDueño.setVisible(false);
+					mnDueñoNoRegistrado.setVisible(true);
+					mnCanjearPuntosDueño.setVisible(false);
+					mnDatosDueño.setVisible(false);
+				}
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			}
 			panelDueño.setVisible(true);
 			panelAdministrador.setVisible(false);
 			panelPersonal.setVisible(false);

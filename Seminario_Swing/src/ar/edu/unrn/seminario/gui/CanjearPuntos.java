@@ -28,6 +28,7 @@ import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CampañaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
@@ -109,6 +110,7 @@ public class CanjearPuntos extends JFrame {
 					for(Beneficio b :c.getCatalogo().getListaBeneficios() ) {
 						if(tableBeneficios.getValueAt(tableBeneficios.getSelectedColumn(), 0).equals(b.getDescripcion())) {
 							codBeneficio = b.getCodigo();
+							
 							break;
 						}
 					}
@@ -153,6 +155,8 @@ public class CanjearPuntos extends JFrame {
 						break;
 					}
 					codCampaña = c.getCodigo();
+					
+					
 				}
 				modeloBeneficio.setRowCount(0);
 				
@@ -226,7 +230,6 @@ public class CanjearPuntos extends JFrame {
 		tfPuntosDelDueño.setBackground(Color.WHITE);
 		tfPuntosDelDueño.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		tfPuntosDelDueño.setForeground(Color.BLACK);
-		//tfPuntosDelDueño.setText( "55");
 		try {
 			tfPuntosDelDueño.setText(String.valueOf(api.obtenerDueñoActivo().getPuntaje()));
 			
@@ -241,13 +244,14 @@ public class CanjearPuntos extends JFrame {
 		btnCanjearPuntos.addActionListener((e)->{
 			
 			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow())) {
-				
-				
+
 				try {
 					
 					api.generarCanje(codBeneficio, codCampaña);
-					int res = JOptionPane.showConfirmDialog(null,"Desea Canjear otro Beneficio?","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE );
+					int res = JOptionPane.showConfirmDialog(null,"Desea Canjear otro Beneficio?","Mensaje Informativo",JOptionPane.YES_NO_OPTION );
 					if(res == 0 ) {
+						tfPuntosDelDueño.setText((String.valueOf(api.obtenerDueñoActivo().getPuntaje())));
+						
 						
 					}
 					else {
@@ -255,9 +259,9 @@ public class CanjearPuntos extends JFrame {
 						dispose();
 						
 					}
-					JOptionPane.showMessageDialog(null,"Todo Sukistrukis,mañana lo termino xd","bien",JOptionPane.INFORMATION_MESSAGE);
 					
-				} catch (AppException | NotNullException e1) {
+					
+				} catch (AppException | NotNullException | InsuficientPointsException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 				}
 				
