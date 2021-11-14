@@ -197,10 +197,18 @@ public class PersistenceApi implements IApi {
 		userOnline = usuarioDao.find(username);
 		//usuarioDao.activate(username);
 	}
+	public boolean existeDueñoRegistrado() throws AppException{
+		boolean existe = false;
+		if(dueñoDao.existsByUser(this.userOnline.getUsuario()))
+			existe = true;
+		return existe;
+		
+	}
 	
 	public String obtenerRolUsuarioActivo() {
 		return userOnline.getRol().getNombre();
 	}
+	
 	
 	public boolean existeUsuario(String usuario) throws NotRegisterException, AppException {
 		return usuarioDao.exists(usuario);
@@ -408,7 +416,8 @@ public class PersistenceApi implements IApi {
 					dueño.getApellido(),
 					dueño.getDni(),
 					dueño.getCorreo(),
-					dueño.getUser());
+					dueño.getUser(),
+					dueño.getPuntaje());
 		}
 		return dueñodto;
 	}
@@ -423,7 +432,8 @@ public class PersistenceApi implements IApi {
 					dueño.getApellido(),
 					dueño.getDni(),
 					dueño.getCorreo(),
-					dueño.getUser());
+					dueño.getUser(),
+					dueño.getPuntaje());
 		}
 		return dueñodto;
 	}
@@ -432,7 +442,7 @@ public class PersistenceApi implements IApi {
         List<DueñoDTO> dtos = new ArrayList<DueñoDTO>();
         List<Dueño> dueños = dueñoDao.findAll();
         for (Dueño d : dueños) {
-            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo(), d.getUser()));
+            dtos.add(new DueñoDTO(d.getNombre(), d.getApellido(), d.getDni(), d.getCorreo(), d.getUser(),d.getPuntaje()));
         }
         return dtos;
     }

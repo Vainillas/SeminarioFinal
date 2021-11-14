@@ -202,5 +202,27 @@ public class DueñoDAOJDBC implements DueñoDao {
 		return exists;
 
 	}
+	public boolean existsByUser(String username) throws AppException {
+		boolean exists = false;
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"SELECT p.username " + " FROM propietarios p" + " WHERE p.username = ?");
+			statement.setString(1, username);
+			ResultSet rs = statement.executeQuery();
+
+			if (rs.next()) {
+				if(rs.getString("p.username").equals(username)) {
+					exists = true;
+				}		
+			}
+		} catch (SQLException | AppException e ) {
+			throw new AppException("Error al verificar existencia: " );
+		}finally {
+			ConnectionManager.disconnect();
+		}
+		return exists;
+
+	}
 
 }
