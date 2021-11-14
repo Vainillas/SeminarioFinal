@@ -119,22 +119,20 @@ public class CanjearPuntos extends JFrame {
 		tableCampañas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Integer codigo = null;
+				String nombreCam = null;
 
 
 				List<CampañaDTO> campa = null;
 				List<Beneficio> b = null;
 				try {
-					codigo = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),2 );
+					nombreCam = (String)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),0 );
 					campa = api.obtenerCampañas();
 					for(CampañaDTO c : campa) {
-					if(codigo.equals(c.getCodigo())) {
+					if(nombreCam.equals(c.getNombreCampaña())) {
 						//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
 						b = c.getCatalogo().getListaBeneficios();
-						
 						break;
 					}
-					
 				}
 				modeloBeneficio.setRowCount(0);
 				
@@ -143,7 +141,6 @@ public class CanjearPuntos extends JFrame {
 					modeloBeneficio.addRow(new Object[] {
 						
 						bene.getDescripcion(),
-						bene.getCodigo(),
 						bene.getPuntajeConsumible()
 						
 					});
@@ -165,8 +162,8 @@ public class CanjearPuntos extends JFrame {
 				
 			}
 		});
-		String [] titulosBeneficios = {"DESCRIPCION","CODIGO","PUNTAJE CONSUMIBLE "};
-		String[] titulos = { "NOMBRE", "ESTADO","CODIGO"};
+		String [] titulosBeneficios = {"DESCRIPCION","PUNTAJE CONSUMIBLE "};
+		String[] titulos = { "NOMBRE"};
 
 		modeloCampaña = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficio = new DefaultTableModel(new Object[][] {},titulosBeneficios);
@@ -182,8 +179,6 @@ public class CanjearPuntos extends JFrame {
 			for (CampañaDTO c : campaña) {
 				modeloCampaña.addRow(new Object[] { 
 						c.getNombreCampaña(),
-						c.getEstado(),
-						c.getCodigo() 
 						});
 				
 
@@ -198,29 +193,43 @@ public class CanjearPuntos extends JFrame {
 		tableBeneficios.setModel(modeloBeneficio);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		
-		JLabel lbCampañas = new JLabel("campa\u00F1as");
+		JLabel lbCampañas = new JLabel("Indique la Campa\u00F1a");
 		lbCampañas.setHorizontalAlignment(SwingConstants.CENTER);
-		lbCampañas.setBounds(79, 35, 179, 14);
+		lbCampañas.setBounds(29, 35, 302, 14);
 		contentPane.add(lbCampañas);
 		
-		JLabel lbBeneficio = new JLabel("Beneficios De La campa\u00F1a Seleccionada");
+		JLabel lbBeneficio = new JLabel("Indique el Beneficio Que Quiere Canjear");
 		lbBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		lbBeneficio.setBounds(453, 35, 243, 14);
 		contentPane.add(lbBeneficio);
 		
 		JLabel lbMisPuntos = new JLabel("Mis Puntos:");
-		lbMisPuntos.setBounds(813, 35, 99, 14);
+		lbMisPuntos.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lbMisPuntos.setBounds(813, 26, 110, 23);
 		contentPane.add(lbMisPuntos);
 		
 		textField = new JTextField();
-		textField.setBackground(Color.ORANGE);
+		textField.setEditable(false);
+		textField.setBackground(Color.WHITE);
 		textField.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		textField.setForeground(Color.RED);
+		textField.setForeground(Color.BLACK);
 		textField.setText("50 puntos");
-		textField.setEnabled(false);
-		textField.setBounds(837, 54, 86, 20);
+		textField.setBounds(849, 60, 94, 26);
 		contentPane.add(textField);
 		textField.setColumns(10);
+		
+		JButton btnCanjearPuntos = new JButton("Canjear Puntos");
+		btnCanjearPuntos.addActionListener((e)->{
+			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow())) {
+				
+				JOptionPane.showMessageDialog(null,"Todo Sukistrukis","bien",JOptionPane.INFORMATION_MESSAGE);
+			}
+			else {
+				JOptionPane.showMessageDialog(null,"Debe seleccionar Un Beneficio","Error",JOptionPane.ERROR_MESSAGE);
+			}
+		});
+		btnCanjearPuntos.setBounds(809, 97, 151, 23);
+		contentPane.add(btnCanjearPuntos);
 		
 		
 		
@@ -244,7 +253,6 @@ public class CanjearPuntos extends JFrame {
 		for (BeneficioDTO b : beneficio) {
 			this.modeloBeneficio.addRow(new Object[] {
 				b.getDescripcion(),
-				b.getCodigo(),
 				b.getPuntajeConsumible()
 			});
 		}
@@ -258,8 +266,6 @@ public class CanjearPuntos extends JFrame {
 		for (CampañaDTO c : campañaDTO) {
 			this.modeloCampaña.addRow(new Object[] {
 				c.getNombreCampaña(),
-				c.getEstado(),
-				c.getCodigo()
 			});
 		}
 
