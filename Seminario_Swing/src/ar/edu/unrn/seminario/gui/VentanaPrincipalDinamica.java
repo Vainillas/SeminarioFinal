@@ -46,14 +46,14 @@ public class VentanaPrincipalDinamica extends JFrame {
 					VentanaPrincipalDinamica frame = new VentanaPrincipalDinamica(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
 	}
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
-		String rol = "ADMINISTRADOR";
+		String rol = "COMUNIDAD";
 		//String rol = api.obtenerRolUsuarioActivo();
 
 
@@ -61,7 +61,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
-		setBounds(100, 100, 813, 303);
+		setBounds(100, 100, 813, 561);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
@@ -328,7 +328,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
 		
-		panelDueño.setBounds(10, 11, 540, 240);
+		panelDueño.setBounds(20, 271, 540, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		
@@ -391,6 +391,12 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmRegistrarDatosPersonales = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.registrar.datos.personales.dueño"));
 		mnDueñoNoRegistrado.add(mntmRegistrarDatosPersonales);
+		
+		JMenu mnCanjearPuntosDueño = new JMenu("Canje De Puntos");
+		mbDueño.add(mnCanjearPuntosDueño);
+		
+		JMenuItem mntmCanjearPuntosDueño = new JMenuItem("Canjear Mis Puntos");
+		mnCanjearPuntosDueño.add(mntmCanjearPuntosDueño);
 		if(rol.equals("PERSONAL")) {
 			panelPersonal.setVisible(true);
 			panelDueño.setVisible(false);

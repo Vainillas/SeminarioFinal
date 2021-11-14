@@ -4,6 +4,9 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import ar.edu.unrn.seminario.Helper.ConditionHelper;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+
 public class Visita {
 	private String observacion;
 	private ArrayList<Residuo>residuosExtraidos;
@@ -14,21 +17,33 @@ public class Visita {
 	
 	
 
-	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden) {
+	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden)throws NotNullException {
+		System.out.println(" verificacion"+observacion);
 		this.observacion=observacion;
 		residuosExtraidos = listaResiduos;
 		this.codOrden = codOrden;
 		fecha = new Date(Calendar.getInstance().getTime().getTime());
 	}
 	
-	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden, int codigo) {
+	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden, int codigo)throws NotNullException {
 		this.observacion=observacion;
 		residuosExtraidos = listaResiduos;
 		this.codOrden = codOrden;
 		this.codigo=codigo;
 		fecha = new Date(Calendar.getInstance().getTime().getTime());
 	}
-	
+	public void ValidarDatos(String observacion,ArrayList<Residuo> listaResiduos ) throws NotNullException {
+		if(ConditionHelper.stringIsEmpty(observacion)) { 
+			System.out.println("entro");	
+			throw new NotNullException("Descripcion vacia");}
+		if(ConditionHelper.stringIsNull(observacion)) {
+			System.out.println("entro");
+			throw new NotNullException("Descripcion vacia");}
+		
+		if(ConditionHelper.IsNull(listaResiduos)) {throw new NotNullException("lista de residuos nula");}
+		
+		
+	}
 	public int getCodigo() {
 		return codigo;
 	}

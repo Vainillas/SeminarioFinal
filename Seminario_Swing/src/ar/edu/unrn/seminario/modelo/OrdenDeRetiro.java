@@ -97,6 +97,7 @@ public class OrdenDeRetiro {
 	public void setEstado(Estado estado) {
 		this.estado = estado;
 	}
+	
 	public Estado getEstado() {
 		return estado;
 	}

@@ -146,7 +146,7 @@ public interface IApi {
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
 	
 	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) 
-			throws AppException;
+			throws AppException, NotNullException;
 	
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) 
 			throws AppException;
