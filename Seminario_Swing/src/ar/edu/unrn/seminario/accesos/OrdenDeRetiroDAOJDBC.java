@@ -183,7 +183,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 								listaResiduosVisita.add(residuoVisita);  
 							}
 						visita = new Visita(resultSetVisita.getString("v.observacion"), listaResiduosVisita,resultSetVisita.getInt("v.codigoOrden"),resultSetVisita.getInt("v.codigo"));
-						System.out.println("\nVisita toString en OrdenDeRetiroDAOJDBC (Comprobación Residuos Duplicados): "+ visita.toString()); 
+						//System.out.println("\nVisita toString en OrdenDeRetiroDAOJDBC (Comprobación Residuos Duplicados): "+ visita.toString()); 
 						listaVisitas.add(visita);
 						}
 					estado = new Estado(resultSetConsulta.getString("estado"));

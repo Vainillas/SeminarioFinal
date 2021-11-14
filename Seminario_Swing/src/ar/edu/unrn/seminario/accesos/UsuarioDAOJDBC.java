@@ -128,7 +128,7 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 		try {
 			Connection conn = ConnectionManager.getConnection();
 			PreparedStatement statement = conn.prepareStatement(
-					"SELECT u.usuario,  u.contrasena, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol "
+					"SELECT u.usuario,  u.contrasena, u.email, u.activo, r.codigo as codigo_rol, r.nombre as nombre_rol "
 							+ " FROM usuarios u JOIN roles r ON (u.rol = r.codigo) " + " WHERE u.usuario = ?");
 
 			statement.setString(1, username);
@@ -136,13 +136,13 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			if (rs.next()) {
 				Rol rol = new Rol(rs.getInt("codigo_rol"), rs.getString("nombre_rol"));
 				usuario = new Usuario(rs.getString("usuario"), rs.getString("contrasena"),
-						rs.getString("email"), rol);
+						rs.getString("email"), rol, rs.getInt("activo"));
 			}
 
 		} catch (SQLException | NotNullException | IncorrectEmailException | DataEmptyException | StringNullException e) {
 			//System.out.println(e.getMessage());
 			
-			throw new AppException("error al procesa consulta");
+			throw new AppException("error al procesa consulta" + e.getMessage());
 		}finally {
 			ConnectionManager.disconnect();
 		}
@@ -158,14 +158,14 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 			Connection conn = ConnectionManager.getConnection();
 			Statement statement = conn.createStatement();
 			ResultSet rs = statement.executeQuery(
-					"SELECT u.usuario,  u.contrasena, u.email, r.codigo as codigo_rol, r.nombre as nombre_rol  "
+					"SELECT u.usuario,  u.contrasena, u.email, u.activo, r.codigo as codigo_rol, r.nombre as nombre_rol  "
 							+ "FROM usuarios u JOIN roles r ON (u.rol = r.codigo) ");
 
 			while (rs.next()) {
 				
 				Rol rol = new Rol(rs.getInt("codigo_rol"), rs.getString("nombre_rol"));
 				Usuario usuario = new Usuario(rs.getString("usuario"), rs.getString("contrasena"),
-					rs.getString("email"), rol);
+					rs.getString("email"), rol, rs.getInt("activo"));
 
 				usuarios.add(usuario);
 			}
@@ -181,8 +181,32 @@ public class UsuarioDAOJDBC implements UsuarioDao {
 	}
 	@Override
 	public void activate(String username) throws AppException {
-		// TODO Esbozo de método generado automáticamente
-		
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"UPDATE usuarios u SET u.activo = 1" + " WHERE u.usuario = ?");
+			statement.setString(1, username);
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new AppException("Error al activar usuario.");
+		}finally {
+			ConnectionManager.disconnect();
+		}
+	}
+	public void deactivate(String username) throws AppException {
+		try {
+			Connection conn = ConnectionManager.getConnection();
+			PreparedStatement statement = conn.prepareStatement(
+					"UPDATE usuarios u SET u.activo = 0" + " WHERE u.usuario = ?");
+			statement.setString(1, username);
+			statement.executeUpdate();
+
+		} catch (SQLException e) {
+			throw new AppException("Error al activar usuario.");
+		}finally {
+			ConnectionManager.disconnect();
+		}
 	}
 
 

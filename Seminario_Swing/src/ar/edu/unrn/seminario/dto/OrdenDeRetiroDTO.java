@@ -12,7 +12,7 @@ import ar.edu.unrn.seminario.modelo.Visita;
 
 public class OrdenDeRetiroDTO {
 	private PedidoDeRetiro pedidoAsociado;
-	private Recolector recolector;
+	private Recolector recolector = null;
 	private Date fechaOrden;
 	
 
