@@ -44,6 +44,7 @@ import ar.edu.unrn.seminario.dto.DueñoDTO;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
+import ar.edu.unrn.seminario.dto.ResiduoDTO;
 import ar.edu.unrn.seminario.dto.RolDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
@@ -584,6 +585,38 @@ public class PersistenceApi implements IApi {
     	}
     	//System.out.println("El valor del booleano en comprobarCantidadResiduos es de: "+ rtado);
     	return rtado;  
+    }
+    public List<ResiduoDTO> devolverResiduosRestantes(int codOrden) throws AppException{
+    	OrdenDeRetiro orden = this.ordenDeRetiroDao.find(codOrden);
+    	ArrayList<Visita> visitas= orden.getVisitas();
+    	ArrayList<Residuo> listaResiduos = orden.getPedidoAsociado().getListResiduos();
+    	ArrayList<Residuo> listaSumaVisitas = new ArrayList<Residuo>();
+    	ArrayList<ResiduoDTO> listaResiduosRestantesDTO = new ArrayList<ResiduoDTO>();
+    	for(int j=0; j<listaResiduos.size(); j++) {
+    		listaSumaVisitas.add(new Residuo(listaResiduos.get(j).getTipo(), 0));
+    	}
+    	for(Visita visita: visitas){
+    		for(Residuo residuo: visita.getResiduosExtraidos()){
+    			for(int c = 0; c<listaSumaVisitas.size(); c++ ) {
+    				if(listaSumaVisitas.get(c).getTipo().equals(residuo.getTipo())) {
+    					listaSumaVisitas.set(c, new Residuo(listaSumaVisitas.get(c).getTipo(), listaSumaVisitas.get(c).getCantidadKg() + residuo.getCantidadKg()));
+    				}
+    			}
+    		}
+    	}
+    	int i;
+
+    	for(i=0;i<listaResiduos.size();i++) {
+    		int cantidad = listaResiduos.get(i).getCantidadKg() - listaSumaVisitas.get(i).getCantidadKg();
+    		ResiduoDTO residuoDTO = null;
+    		if(cantidad >=0) {
+    			residuoDTO = new ResiduoDTO(listaSumaVisitas.get(i).getTipo(), cantidad);
+    		}
+    		else
+    			residuoDTO = new ResiduoDTO(listaSumaVisitas.get(i).getTipo(), 0);
+    		listaResiduosRestantesDTO.add(residuoDTO);
+    	}
+    	return listaResiduosRestantesDTO;
     }
     
     public void actualizarEstadoOrden(int codOrden, String estado) throws AppException{

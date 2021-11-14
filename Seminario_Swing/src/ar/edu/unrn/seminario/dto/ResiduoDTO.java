@@ -1,26 +1,39 @@
 package ar.edu.unrn.seminario.dto;
 
+import ar.edu.unrn.seminario.modelo.TipoResiduo;
+
 public class ResiduoDTO {
-	private Integer valor;
-	private String nombre;
-	public ResiduoDTO(Integer valor, String nombre) {
-		this.valor=valor;
-		this.nombre = nombre;
+	private TipoResiduo tipo;
+	private int cantidadKg;
+	
+	public ResiduoDTO(TipoResiduo tipo, int cantidadKg) {
+		this.tipo = tipo;
+		this.cantidadKg = cantidadKg;
 		
 	}
-	public String getNombre() {
-		return nombre;
-	}
-	public int getValor() {
-		return valor;
+
+
+
+	public TipoResiduo getTipo() {
+		return tipo;
 	}
 
-	public void setValor(int valor) {
-		this.valor = valor;
+	public void setTipo(TipoResiduo tipo) {
+		this.tipo = tipo;
 	}
 
+	public int getCantidadKg() {
+		return cantidadKg;
+	}
+
+	public void setCantidadKg(int cantidadKg) {
+		this.cantidadKg = cantidadKg;
+	}
+
+
+
+	@Override
 	public String toString() {
-		return "nombre:" + this.nombre+
-				"valor: "+ this.valor;
+		return "Residuo [tipo=" + tipo + ", cantidadKg=" + cantidadKg + "]";
 	}
 }
