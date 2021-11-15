@@ -194,13 +194,12 @@ public class GenerarRegistroDeVisita extends JFrame {
 				
 			}
 		});
+		
 		slider_Dinamico = new JSlider();
 		slider_Dinamico.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				boolean validacion = false;
-
-					
 					for(int i = 0 ;i<residuosSeleccionados.size();i++) {
 						String s = (String)comboBoxResiduosDinamico.getSelectedItem();
 						String itemSeleccionado = residuosSeleccionados.get(i);

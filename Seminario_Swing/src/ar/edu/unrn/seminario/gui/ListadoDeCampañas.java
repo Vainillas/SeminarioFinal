@@ -343,7 +343,8 @@ public class ListadoDeCampañas extends JFrame {
 				
 				if(this.tableCampañas.getSelectedRowCount() != 0 ) {
 					
-					Predicate <BeneficioDTO> predicado = (BeneficioDTO b)->b.getDescripcion().toLowerCase().contains(this.tfDescripcion.getText().toLowerCase());
+					Predicate <BeneficioDTO> predicado = (BeneficioDTO b)->
+					b.getDescripcion().toLowerCase().contains(this.tfDescripcion.getText().toLowerCase());
 					try {
 						reloadGridBeneficio(api.obtenerBeneficios(predicado));
 					} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {

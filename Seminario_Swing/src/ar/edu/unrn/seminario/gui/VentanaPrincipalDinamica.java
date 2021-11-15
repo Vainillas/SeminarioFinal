@@ -55,9 +55,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
 		String rol = "ADMINISTRADOR	";
 		//String rol = api.obtenerRolUsuarioActivo();
-
-
-		
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
@@ -328,7 +325,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
 		
-		panelDueño.setBounds(20, 271, 588, 240);
+		panelDueño.setBounds(10, 11, 588, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		

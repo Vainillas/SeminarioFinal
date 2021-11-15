@@ -15,18 +15,12 @@ public class Filtro {
 				resultado.add(t);
 			}
 		}
-		//System.out.println(resultado.size());
 		return resultado;
 	}
+	
 	public static <T> List <T> filtrar(List <T> list , Comparator comparator){
-		List <T> resultado = new ArrayList<>();
-		//resultado = Collections.sort(list,comparator );
-		
+		List <T> resultado = new ArrayList<>();		
 		Collections.sort(list,comparator);
-		
-			
-	//	}
-		
 		return list;
 	}
 
