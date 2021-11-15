@@ -58,4 +58,10 @@ public class Beneficio {
 		this.codigo = codigo;
 	}
 
+	@Override
+	public String toString() {
+		return "Beneficio [descripcion=" + descripcion + ", puntajeConsumible=" + puntajeConsumible + ", codigo="
+				+ codigo + "]";
+	}
+
 }

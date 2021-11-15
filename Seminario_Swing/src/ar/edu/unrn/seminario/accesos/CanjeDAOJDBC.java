@@ -11,6 +11,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
@@ -117,16 +118,16 @@ public class CanjeDAOJDBC implements CanjeDao {
 						+ "WHERE c.codigo = ?");
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetConsulta2 = statement.executeQuery();
-				while(resultSetConsulta.next()) {
+				while(resultSetConsulta2.next()) {
 					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
 							String.valueOf(resultSetConsulta2.getInt("b.costo")),
 							resultSetConsulta2.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
 				catalogo = new Catalogo(listaBeneficios);
-				campaña = new Campaña(resultSetConsulta2.getString("c.nombre"),catalogo,
-						resultSetConsulta2.getString("c.estado"),
-						resultSetConsulta2.getInt("c.codigo"));
+				campaña = new Campaña(resultSetConsulta.getString("c.nombre"),catalogo,
+						resultSetConsulta.getString("c.estado"),
+						resultSetConsulta.getInt("c.codigo"));
 				
 				//resultSetConsulta.close();
 				statement = conn.prepareStatement("SELECT * FROM campañas c "
@@ -153,7 +154,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							String.valueOf(resultSetCanje.getInt("b.costo")),
 							resultSetCanje.getInt("b.codigo"));
-					canje = new Canje(beneficio, dueño, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
 				}
 				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
@@ -186,8 +187,8 @@ public class CanjeDAOJDBC implements CanjeDao {
 				//Setear campaña al canje
 				canjeObjetivo.setCampaña(campaña);
 			}
-		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
-			throw new AppException("Error al buscar campaña: " + e.getMessage());
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException | InsuficientPointsException e) {
+			throw new AppException("Error al buscar canje: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
 		}
@@ -215,7 +216,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 		
 		try {
 			Connection conn = ConnectionManager.getConnection();
-			PreparedStatement statement = conn.prepareStatement("SELECT * FROM canje cje "
+			PreparedStatement statement = conn.prepareStatement("SELECT * FROM canjes cje "
 					+ "JOIN beneficios b ON (b.codigo = cje.cod_beneficio) "
 					+ "JOIN propietarios p ON (p.dni = cje.dni) "
 					+ "JOIN usuarios u ON (u.usuario = p.username) "
@@ -248,25 +249,25 @@ public class CanjeDAOJDBC implements CanjeDao {
 				
 				
 				statement = conn.prepareStatement("SELECT * FROM campañas c "
-						+ "JOIN catalogo ca ON (c.codigo = ca.cod_campaña) "
-						+ "JOIN beneficio b ON (ca.cod_beneficio = b.codigo "
+						+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
+						+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) "
 						+ "WHERE c.codigo = ?");
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetConsulta2 = statement.executeQuery();
-				while(resultSetConsulta.next()) {
+				while(resultSetConsulta2.next()) {
 					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
 							String.valueOf(resultSetConsulta2.getInt("b.costo")),
 							resultSetConsulta2.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
 				catalogo = new Catalogo(listaBeneficios);
-				campaña = new Campaña(resultSetConsulta2.getString("c.nombre"),catalogo,
-						resultSetConsulta2.getString("c.estado"),
-						resultSetConsulta2.getInt("c.codigo"));
+				campaña = new Campaña(resultSetConsulta.getString("c.nombre"),catalogo,
+						resultSetConsulta.getString("c.estado"),
+						resultSetConsulta.getInt("c.codigo"));
 				
-				//resultSetConsulta.close();
+				
 				statement = conn.prepareStatement("SELECT * FROM campañas c "
-						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod_campaña) "
 						+ "JOIN propietarios p ON (p.dni = ca.dni) "
 						+ "JOIN beneficios b ON (b.codigo = ca.cod_beneficio) "
 						+ "JOIN usuarios u ON (u.usuario = p.username) "
@@ -289,12 +290,12 @@ public class CanjeDAOJDBC implements CanjeDao {
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							String.valueOf(resultSetCanje.getInt("b.costo")),
 							resultSetCanje.getInt("b.codigo"));
-					canje = new Canje(beneficio, dueño, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
 				}
 				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
 				statement = conn.prepareStatement("SELECT DISTINCT p.*,c.codigo, u.*, r.* FROM campañas c "
-						+ "JOIN canjes ca ON (c.codigo = ca.cod) "
+						+ "JOIN canjes ca ON (c.codigo = ca.cod_campaña) "
 						+ "JOIN propietarios p ON (p.dni = ca.dni) "
 						+ "JOIN usuarios u ON (u.usuario = p.username) "
 						+ "JOIN roles r ON (u.rol = r.codigo) "
@@ -318,13 +319,12 @@ public class CanjeDAOJDBC implements CanjeDao {
 				}
 				campaña.setListaBeneficiarios(listaBeneficiarios);
 				
-				
 				//Setear campaña al canje
 				canjeObjetivo.setCampaña(campaña);
 				listaCanjes.add(canje);
 			}
-		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException e) {
-			throw new AppException("Error al buscar campaña: " + e.getMessage());
+		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException | InsuficientPointsException e) {
+			throw new AppException("Error al buscar todos los canjes: " + e.getMessage());
 		} finally {
 		ConnectionManager.disconnect();
 		}
