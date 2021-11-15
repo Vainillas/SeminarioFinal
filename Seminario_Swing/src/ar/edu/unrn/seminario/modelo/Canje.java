@@ -43,12 +43,14 @@ public class Canje {
 		this.dueñoCanjeador = unDueño;
 		this.campaña = unaCampaña;
 		
-		
+		System.out.println("puntaje del dueño" + unDueño.getPuntaje());
+		System.out.println("puntaje consumible" + unBeneficio.getPuntajeConsumible());
 		validarDatos(unDueño.getPuntaje(),unBeneficio.getPuntajeConsumible());
 	}
 	
 	
 	private void validarDatos(int puntajeDelDueño, int puntajeConsumible) throws InsuficientPointsException {
+
 		if(puntajeDelDueño<=puntajeConsumible) {throw new InsuficientPointsException("no cuentas con la cantidad de puntos suficientes Para el Beneficio Asignado");}
 		
 		

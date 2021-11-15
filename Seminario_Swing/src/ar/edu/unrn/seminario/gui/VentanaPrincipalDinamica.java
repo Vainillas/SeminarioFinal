@@ -329,6 +329,9 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnViviendasDueño);
 		
 		JMenuItem mntmListarViviendasDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.viviendas.dueño"));
+		mntmListarViviendasDueño.addActionListener((e)->{
+			
+		});
 		mnViviendasDueño.add(mntmListarViviendasDueño);
 		
 		JMenu mnDatosDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.dueño"));
@@ -371,9 +374,18 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnPedidoDeRetiroDueño);
 		
 		JMenuItem mntmListarPedidosDeRetiroDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.pedido.de.retiro.dueño")); 
+		mntmListarPedidosDeRetiroDueño.addActionListener((e)->{
+			
+			
+		});
+		
 		mnPedidoDeRetiroDueño.add(mntmListarPedidosDeRetiroDueño);
 		
 		JMenuItem mntmGenerarPedidoDeRetiroDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.pedido.de.retiro.dueño")); //$NON-NLS-1$
+		mntmGenerarPedidoDeRetiroDueño.addActionListener((e)->{
+			
+			
+		});
 		mnPedidoDeRetiroDueño.add(mntmGenerarPedidoDeRetiroDueño);
 		
 		JMenu mnDueñoNoRegistrado = new JMenu(labels.getString("ventana.principal.dinamica.menu.registrarse.dueño"));
@@ -395,6 +407,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmCanjearPuntos = new JMenuItem("Canjear Mis Puntos");
 		mntmCanjearPuntos.addActionListener((e)->{
+			
 			CanjearPuntos canje = new CanjearPuntos(api);
 			canje.setVisible(true);
 			
