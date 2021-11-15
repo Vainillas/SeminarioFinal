@@ -244,7 +244,7 @@ public class CanjearPuntos extends JFrame {
 		btnCanjearPuntos.addActionListener((e)->{
 			
 			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow())) {
-
+				
 				try {
 					
 					api.generarCanje(codBeneficio, codCampaña);

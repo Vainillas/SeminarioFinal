@@ -53,8 +53,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
-		String rol = "ADMINISTRADOR	";
-		//String rol = api.obtenerRolUsuarioActivo();
+		//String rol = "ADMINISTRADOR	";
+		String rol = api.obtenerRolUsuarioActivo();
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		List<RolDTO> roles = null;
@@ -68,15 +68,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 		} catch (AppException e) {
 			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("ventana.principal.dinamica.mensaje.error"),JOptionPane.ERROR_MESSAGE);
 		}
-		if(roles.get(0).getNombre().equals("PERSONAL")) {
-			//mostrarPanelPersonal();
-		}
-		if(roles.get(0).getNombre().equals("COMUNIDAD")) {
-			//mostrarPanelComunidad();
-		}
-		if(roles.get(0).getNombre().equals("PERSONAL")) {
-			//mostrarPanelPersonal();
-		}
+		
+		
 		
 		
 		
@@ -325,7 +318,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
 		
-		panelDueño.setBounds(10, 11, 588, 240);
+		panelDueño.setBounds(10, 300, 588, 240);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		
@@ -400,6 +393,14 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenu mnCanjearPuntosDueño = new JMenu("Canje De Puntos");
 		mbDueño.add(mnCanjearPuntosDueño);
 		
+		JMenuItem mntmCanjearPuntos = new JMenuItem("Canjear Mis Puntos");
+		mntmCanjearPuntos.addActionListener((e)->{
+			CanjearPuntos canje = new CanjearPuntos(api);
+			canje.setVisible(true);
+			
+		});
+		mnCanjearPuntosDueño.add(mntmCanjearPuntos);
+		
 		JMenuItem mntmCanjearPuntosDueño = new JMenuItem("Canjear Mis Puntos");
 
 		mntmCanjearPuntosDueño.addActionListener((e)->{
@@ -408,21 +409,17 @@ public class VentanaPrincipalDinamica extends JFrame {
 			
 			
 		});
-		mnCanjearPuntosDueño.add(mntmCanjearPuntosDueño);
-		if(rol.equals("PERSONAL")) {
+		switch(rol) {
+		case "PERSONAL":
 			panelPersonal.setVisible(true);
 			panelDueño.setVisible(false);
 			panelAdministrador.setVisible(false);
-		}
 		
-		if(rol.equals("ADMINISTRADOR")) {
+		case "ADMINISTRADOR":
 			panelAdministrador.setVisible(true);
 			panelPersonal.setVisible(false);
 			panelDueño.setVisible(false);
-		}
-		
-		if(rol.equals("COMUNIDAD")) {
-			//para solucionar lo de comunidad no registrado
+		case "COMUNIDAD":
 			try {
 				if(!api.existeDueñoRegistrado()) {
 					mnViviendasDueño.setVisible(false);
@@ -439,6 +436,9 @@ public class VentanaPrincipalDinamica extends JFrame {
 			panelAdministrador.setVisible(false);
 			panelPersonal.setVisible(false);
 		}
+		
+			
+			
 	
 	}
 }
