@@ -91,7 +91,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				
 				//RECUPERAR CANJE SIN CAMPAÑA:
 				beneficioCanjeado = new Beneficio(resultSetConsulta.getString("b.nombre_beneficio"),
-						String.valueOf(resultSetConsulta.getInt("b.costo")),
+						resultSetConsulta.getInt("b.costo"),
 						resultSetConsulta.getInt("b.codigo"));
 				rol = new Rol(resultSetConsulta.getInt("r.codigo"),
 						resultSetConsulta.getString("r.nombre"));
@@ -120,7 +120,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				ResultSet resultSetConsulta2 = statement.executeQuery();
 				while(resultSetConsulta2.next()) {
 					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetConsulta2.getInt("b.costo")),
+							resultSetConsulta2.getInt("b.costo"),
 							resultSetConsulta2.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
@@ -152,7 +152,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetCanje.getString("p.correo_electronico"),
 							user);
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetCanje.getInt("b.costo")),
+							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
 					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
@@ -227,7 +227,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				
 				//RECUPERAR CANJE SIN CAMPAÑA:
 				beneficioCanjeado = new Beneficio(resultSetConsulta.getString("b.nombre_beneficio"),
-						String.valueOf(resultSetConsulta.getInt("b.costo")),
+						resultSetConsulta.getInt("b.costo"),
 						resultSetConsulta.getInt("b.codigo"));
 				rol = new Rol(resultSetConsulta.getInt("r.codigo"),
 						resultSetConsulta.getString("r.nombre"));
@@ -256,7 +256,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				ResultSet resultSetConsulta2 = statement.executeQuery();
 				while(resultSetConsulta2.next()) {
 					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetConsulta2.getInt("b.costo")),
+							resultSetConsulta2.getInt("b.costo"),
 							resultSetConsulta2.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
@@ -288,7 +288,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetCanje.getString("p.correo_electronico"),
 							user);
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetCanje.getInt("b.costo")),
+							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
 					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);

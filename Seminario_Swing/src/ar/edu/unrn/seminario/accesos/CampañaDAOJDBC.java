@@ -106,7 +106,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 				ResultSet resultSetListaBeneficios = statement.executeQuery();
 				while(resultSetListaBeneficios.next()) {
 					beneficio = new Beneficio(resultSetListaBeneficios.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetListaBeneficios.getInt("b.costo")),
+							resultSetListaBeneficios.getInt("b.costo"),
 							resultSetListaBeneficios.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
@@ -138,7 +138,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 							resultSetCanje.getString("p.correo_electronico"),
 							user);
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetCanje.getInt("b.costo")),
+							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
 					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
@@ -205,7 +205,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 				ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
 				while(resultSetListaBeneficios.next()) {
 					beneficio = new Beneficio(resultSetListaBeneficios.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetListaBeneficios.getInt("b.costo")),
+							resultSetListaBeneficios.getInt("b.costo"),
 							resultSetListaBeneficios.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
@@ -239,7 +239,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 							resultSetCanje.getString("p.correo_electronico"),
 							user);
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
-							String.valueOf(resultSetCanje.getInt("b.costo")),
+							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
 					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
