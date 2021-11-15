@@ -17,4 +17,9 @@ public class Catalogo {
 	public void setListaBeneficios(ArrayList<Beneficio> listaBeneficios) {
 		this.listaBeneficios = listaBeneficios;
 	}
+
+	@Override
+	public String toString() {
+		return "Catalogo [listaBeneficios=" + listaBeneficios + "]";
+	}
 }

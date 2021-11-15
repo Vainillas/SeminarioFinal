@@ -59,5 +59,12 @@ public class Campaña {
 	public void setCodigo(int codigo) {
 		this.codigo = codigo;
 	}
+
+	@Override
+	public String toString() {
+		return "Campaña [nombreCampaña=" + nombreCampaña + ", listaBeneficiarios=" + listaBeneficiarios
+				+ ", listaCanjesEfectuados=" + listaCanjesEfectuados + ", catalogo=" + catalogo + ", estado=" + estado
+				+ ", codigo=" + codigo + "]";
+	}
 	
 }

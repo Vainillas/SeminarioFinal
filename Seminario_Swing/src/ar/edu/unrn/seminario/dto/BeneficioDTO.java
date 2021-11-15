@@ -7,16 +7,16 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 
 public class BeneficioDTO {
 	private String descripcion;
-	private String puntajeConsumible;
+	private int puntajeConsumible;
 	private int codigo;
 
-	public BeneficioDTO(String descripcion, String puntajeConsumible) {
-		
+	public BeneficioDTO(String descripcion, int puntajeConsumible) {
+
 		this.descripcion = descripcion;
 		this.puntajeConsumible = puntajeConsumible;
 	}
 	
-	public BeneficioDTO(String descripcion, String puntajeConsumible, int codigoBeneficio){
+	public BeneficioDTO(String descripcion, int puntajeConsumible, int codigoBeneficio){
 		this.descripcion = descripcion;
 		this.puntajeConsumible = puntajeConsumible;
 		this.codigo = codigoBeneficio;
@@ -28,11 +28,11 @@ public class BeneficioDTO {
 		return this.descripcion;
 	}
 	
-	public String getPuntajeConsumible() {
+	public int getPuntajeConsumible() {
 		return this.puntajeConsumible;
 	}
 	
-	public void setPuntajeConsumible(String nuevoPuntaje) {
+	public void setPuntajeConsumible(int nuevoPuntaje) {
 		this.puntajeConsumible = nuevoPuntaje;
 	}
 	

@@ -958,15 +958,16 @@ public class PersistenceApi implements IApi {
 		Beneficio beneficio = this.beneficioDao.find(codBeneficio);
 		
 		Campaña campaña = this.campañaDao.find(codCampaña);
-		//OJOOOO
-		/*******FALTA QUE AL DUEñO SE LE DESCUENTEN LOS PUNTOS
-		 *CUANDO GENERA UN CANJE, EN NINGUN MOMENTO SE ESTA HACIENDO
-		 */
+		
 		Dueño dueño = this.dueñoDao.findByUser(this.userOnline.getUsuario());
 		
 		Canje canje = new Canje(beneficio, dueño, campaña);
 		
 		canjeDao.create(canje);
+		int puntajeNuevo = dueño.getPuntaje() - canje.getBeneficioCanjeado().getPuntajeConsumible();
+		dueño.setPuntaje(puntajeNuevo);
+		dueñoDao.update(dueño);
+		
 	}
 	
 	public List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException{

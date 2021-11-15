@@ -13,6 +13,28 @@ public class Canje {
 	private int codigo;
 
 	
+	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña, Date fecha, int codigo) throws  InsuficientPointsException{
+		fechaCanje = fecha;
+		this.beneficioCanjeado = unBeneficio;
+		this.dueñoCanjeador = unDueño;
+		this.campaña = unaCampaña;
+		this.codigo = codigo;
+		
+		
+		//validarDatos(unDueño.getPuntaje(),Integer.parseInt(unBeneficio.getPuntajeConsumible()));
+	}
+	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña, int codigo) throws  InsuficientPointsException{
+		java.util.Date fechaActualUtil = DateHelper.getDate();
+    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+		fechaCanje = fechaActual;
+		this.beneficioCanjeado = unBeneficio;
+		this.dueñoCanjeador = unDueño;
+		this.campaña = unaCampaña;
+		this.codigo = codigo;
+		
+		
+		//validarDatos(unDueño.getPuntaje(),Integer.parseInt(unBeneficio.getPuntajeConsumible()));
+	}
 	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña) throws  InsuficientPointsException{
 		java.util.Date fechaActualUtil = DateHelper.getDate();
     	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
@@ -25,17 +47,12 @@ public class Canje {
 		validarDatos(unDueño.getPuntaje(),Integer.parseInt(unBeneficio.getPuntajeConsumible()));
 	}
 	
+	
 	private void validarDatos(int puntajeDelDueño, int puntajeConsumible) throws InsuficientPointsException {
 		if(puntajeDelDueño<puntajeConsumible) {throw new InsuficientPointsException("no cuentas con la cantidad de puntos suficientes Para el Beneficio Asignado");}
 		
 		
 	}
-	public Canje(Beneficio unBeneficio, Dueño unDueño, Date fecha){
-		fechaCanje = fecha;
-		this.beneficioCanjeado = unBeneficio;
-		this.dueñoCanjeador = unDueño;
-	}
-	
 	public Canje(Beneficio unBeneficio, Dueño unDueño, Date fecha, int codigo){
 		fechaCanje = fecha;
 		this.beneficioCanjeado = unBeneficio;
@@ -79,6 +96,12 @@ public class Canje {
 
 	public void setCampaña(Campaña campaña) {
 		this.campaña = campaña;
+	}
+
+	@Override
+	public String toString() {
+		return "Canje [fechaCanje=" + fechaCanje + ", beneficioCanjeado=" + beneficioCanjeado + ", dueñoCanjeador="
+				+ dueñoCanjeador + ", campaña=" + campaña.getNombreCampaña() +" codigocampaña: "+ campaña.getCodigo() + ", codigo canje=" + codigo + "]";
 	}
 	
 }

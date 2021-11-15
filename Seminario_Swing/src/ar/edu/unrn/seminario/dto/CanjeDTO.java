@@ -74,4 +74,10 @@ public class CanjeDTO {
 	public void setCampaña(Campaña campaña) {
 		this.campaña = campaña;
 	}
+
+	@Override
+	public String toString() {
+		return "CanjeDTO [fechaCanje=" + fechaCanje + ", beneficioCanjeado=" + beneficioCanjeado + ", dueñoCanjeador="
+				+ dueñoCanjeador + ", campaña=" + campaña + ", codigo=" + codigo + "]";
+	}
 }
