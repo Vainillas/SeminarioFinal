@@ -470,8 +470,10 @@ public class PersistenceApi implements IApi {
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	//Instancio los residuos con el tipo de residuo que instancié antes y le meto la cantidad
     	for(int i=0;i<residuosIngresadosKg.size();i++){
+    		
     		Residuo r = new Residuo(listaTipos.get(i), Integer.parseInt(residuosIngresadosKg.get(i)));
     		listResiduos.add(r);
+    	
     	}
     	
     	//INICIO DE COMPROBACIÓN PARA EL CAPPEO//
@@ -479,8 +481,9 @@ public class PersistenceApi implements IApi {
     	visita = new Visita(observacion, listResiduos, codOrden); //Creo la visita
     	if(comprobarExcedenteResiduos(ordenComprobacion, visita)) {
     		throw new AppException("Se ingresaron mas residuos de lo debido.");
+    		
     	}
-    	//FIN DE COMPROBACIÓN PARA EL CAPPEO
+
     	
     	
     	
@@ -488,7 +491,6 @@ public class PersistenceApi implements IApi {
     	
     	
     	
-    	//Subo la visita a la bd
     	
     	this.visitaDao.create(visita);
     	
@@ -1030,5 +1032,10 @@ public class PersistenceApi implements IApi {
 	public List<BeneficioDTO> obtenerBeneficios(Predicate<BeneficioDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException{
 		return Filtro.filtrar(this.obtenerBeneficios(), predicado);
 		
+	}
+
+	@Override
+	public List<CanjeDTO> obtenerCanjes(Predicate<CanjeDTO> predicate) throws AppException, NotNullException, DataEmptyException, NotNumberException {
+		return Filtro.filtrar(this.obtenerCanjes(),predicate);
 	}
 }

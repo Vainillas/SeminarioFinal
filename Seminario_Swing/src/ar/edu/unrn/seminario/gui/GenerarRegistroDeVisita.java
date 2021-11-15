@@ -210,7 +210,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 						}
 					}
 					if(!validacion ) {
-						
 						residuosSeleccionados.add((String)comboBoxResiduosDinamico.getSelectedItem());
 						cantResiduosRetirados.add(String.valueOf(slider_Dinamico.getValue()) );
 					}
@@ -370,9 +369,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 			System.out.println(this.residuosSeleccionados.toString());
 			try { 
 				this.descripcion = this.tp_observacion.getText();
-				System.out.println("descripcion:"+descripcion);
 				this.codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);		
-				System.out.println(codigoOrden);
 				
 					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,Integer.parseInt(codigoOrden));
 				 
@@ -384,6 +381,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
+			
 			catch(java.lang.ArrayIndexOutOfBoundsException e1) {
 				JOptionPane.showMessageDialog(null, "Debe Seleccionar Un Pedido De Retiro","error",JOptionPane.ERROR_MESSAGE);
 			}
