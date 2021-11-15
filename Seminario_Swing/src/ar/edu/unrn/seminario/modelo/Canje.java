@@ -44,7 +44,7 @@ public class Canje {
 		this.campaña = unaCampaña;
 		
 		
-		validarDatos(unDueño.getPuntaje(),Integer.parseInt(unBeneficio.getPuntajeConsumible()));
+		validarDatos(unDueño.getPuntaje(),unBeneficio.getPuntajeConsumible());
 	}
 	
 	
