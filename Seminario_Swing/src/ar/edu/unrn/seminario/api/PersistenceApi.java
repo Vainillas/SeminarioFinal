@@ -1039,4 +1039,15 @@ public class PersistenceApi implements IApi {
 	public List<CanjeDTO> obtenerCanjes(Predicate<CanjeDTO> predicate) throws AppException, NotNullException, DataEmptyException, NotNumberException {
 		return Filtro.filtrar(this.obtenerCanjes(),predicate);
 	}
+
+	@Override
+	public List<ViviendaDTO> obtenerViviendasDeUsuario(Comparator<ViviendaDTO> comparator) throws AppException {
+		return Filtro.filtrar(this.obtenerViviendasDeUsuario(), comparator);
+		
+	}
+
+	@Override
+	public List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate<ViviendaDTO> predicate) throws AppException {
+		return Filtro.filtrar(this.obtenerViviendasDeUsuario(), predicate);
+	}
 }
