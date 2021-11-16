@@ -193,9 +193,7 @@ public class IniciarSesion extends JFrame {
 		 		this.textUsuario.setText("");
 		 		
 		 		String idioma = (String) comboBoxIdioma.getSelectedItem();
-		 		
-		 	
-		 	
+
 		 });
 		 
 		 buttonRegistrarse.setBounds(54, 36, 107, 23);

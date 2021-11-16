@@ -30,9 +30,9 @@ public class VentanaPrincipalDinamica extends JFrame {
 	private static final long serialVersionUID = 4771947449650351645L;
 	private JPanel contentPane;
 	private JMenuItem mntmPantallaNormalPersonal;
-	private JPanel panelAdministrador = new JPanel();
-	private JPanel panelPersonal = new JPanel();
-	private JPanel panelDueño = new JPanel();
+	private JPanel panelAdministrador; ;
+	private JPanel panelPersonal;;
+	private JPanel panelDueño; ;
 	
 	
 	
@@ -54,21 +54,27 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
-		//String rol = "ADMINISTRADOR";
 		String rol = api.obtenerRolUsuarioActivo();
+		this.panelDueño = new JPanel();
+		panelDueño.setBounds(5, 5, 787, 512);
+		this.panelAdministrador = new JPanel();
+		panelAdministrador.setBounds(5, 5, 787, 512);
+		this.panelPersonal = new JPanel();
+		panelPersonal.setBounds(5, 5, 787, 512);
+		this.contentPane = new JPanel();
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 813, 561);
-		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
 		setContentPane(contentPane);
-		contentPane.setLayout(new BorderLayout(0, 0));
+		contentPane.setLayout(null);
 		contentPane.add(panelAdministrador);
 		contentPane.add(panelPersonal);
 		panelPersonal.setLayout(new BorderLayout(0, 0));
 		JMenuBar mbPersonal = new JMenuBar();
 		panelPersonal.add(mbPersonal, BorderLayout.NORTH);
+		
 		
 		JMenu mnOrdenesPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.ordenes"));
 		mbPersonal.add(mnOrdenesPersonal);
@@ -121,7 +127,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		panelAdministrador.add(mbAdministrador, BorderLayout.NORTH);
 		
 		JMenu mUsuariosAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.usuarios.administrador"));
-		mUsuariosAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mbAdministrador.add(mUsuariosAdministrador);
 		
 		JMenuItem mntmAdmListadoUsuario = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.usuarios"));
@@ -141,7 +146,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mUsuariosAdministrador.add(mntmAdmAltaUsuario);
 		
 		JMenu mnViviendasAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.viviendas.administrador"));
-		mnViviendasAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mnViviendasAdministrador.setBackground(new Color(240, 240, 240));
 		mbAdministrador.add(mnViviendasAdministrador);
 		
@@ -164,7 +168,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnViviendasAdministrador.add(mntmRegistrarViviendaAdministrador);
 		
 		JMenu mnOrdenesDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.ordenes.de.retiro.administrador"));
-		mnOrdenesDeRetiroAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mbAdministrador.add(mnOrdenesDeRetiroAdministrador);
 		
 		JMenuItem mntmAdmListadoOrdenesDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.ordenes.de.retiro.administrador"));
@@ -193,7 +196,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnOrdenesDeRetiroAdministrador.add(mntmGenerarOrdenDeRetiroAdministrador);
 		
 		JMenu mnPedidosDeRetiroAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.pedidos.de.retiro.administrador"));
-		mnPedidosDeRetiroAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mbAdministrador.add(mnPedidosDeRetiroAdministrador);
 		
 		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.pedidos.de.retiro.administrador"));
@@ -213,7 +215,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnPedidosDeRetiroAdministrador.add(mntmGenerarPedidoDeRetiroAdministrador);
 		
 		JMenu mnDueñoAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.dueño.administrador"));
-		mnDueñoAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mbAdministrador.add(mnDueñoAdministrador);
 		
 		JMenuItem mntmAdmListadoDueños = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.dueños.administrador"));
@@ -232,7 +233,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnDueñoAdministrador.add(mntmRegistrarDueñoAdministrador);
 		
 		JMenu mnPersonalAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.personal.administrador"));
-		mnPersonalAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mbAdministrador.add(mnPersonalAdministrador);
 		
 		JMenuItem mntmAdmListadoPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.personal.administrador"));
@@ -252,7 +252,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnPersonalAdministrador.add(mntmRegistrarPersonalAdministrador);
 		
 		JMenu mnConfiguracionAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.configuracion.administrador"));
-		mnConfiguracionAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mbAdministrador.add(mnConfiguracionAdministrador);
 		
 		JMenuItem mntmSalirAdmin = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.salir.administrador")); 
@@ -260,14 +259,13 @@ public class VentanaPrincipalDinamica extends JFrame {
 		JMenuItem mntmPantallaEstandar = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.estandar"));
 		mntmPantallaEstandar.setVisible(false);
 		JMenuItem mntmPantallaCompletaAdmin = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.completa"));
-		mntmPantallaCompletaAdmin.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+		mntmPantallaCompletaAdmin.addActionListener((e)->{
 				setExtendedState(MAXIMIZED_BOTH);
 				mntmPantallaCompletaAdmin.setVisible(false);
 				mntmPantallaEstandar.setVisible(true);
 				
 
-			}
+			
 		});
 		mntmPantallaEstandar.addActionListener((e)->{
 			setExtendedState(JFrame.NORMAL);
@@ -278,8 +276,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnConfiguracionAdministrador.add(mntmPantallaEstandar);
 		mnConfiguracionAdministrador.add(mntmPantallaCompletaAdmin);
 		
-		JMenu mnCampaña = new JMenu(labels.getString("ventana.principal.dinamica.menu.campaña")); 
-		mnCampaña.setHorizontalAlignment(SwingConstants.CENTER);
+		JMenu mnCampaña = new JMenu(labels.getString("ventana.principal.dinamica.menu.campaña"));
 		mbAdministrador.add(mnCampaña);
 		
 		JMenuItem mntmGenerarCampaña = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.campaña")); //$NON-NLS-1$
@@ -302,7 +299,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mnCampaña.add(mntmListarCampañaAdministrador);
 		
 		JMenu mnBeneficioAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.beneficio.administrador"));
-		mnBeneficioAdministrador.setHorizontalAlignment(SwingConstants.CENTER);
 		mbAdministrador.add(mnBeneficioAdministrador);
 		
 		JMenuItem mntmGenerarBeneficioAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.beneficio.administrador"));
@@ -432,49 +428,38 @@ public class VentanaPrincipalDinamica extends JFrame {
 			canje.setVisible(true);
 			
 			
+			
 		});
+
+		panelPersonal.setVisible(false);
+		panelAdministrador.setVisible(false);
+		panelDueño.setVisible(false);
 		
-		switch(rol) {
-		case "PERSONAL":
-			System.out.println("Entra");
+		if(rol.equals("PERSONAL")) {
 			panelPersonal.setVisible(true);
-			panelDueño.setVisible(false);
-			panelAdministrador.setVisible(false);
-			break;
-		
-		case "ADMINISTRADOR":
-			
-			panelAdministrador.setVisible(true);
-			panelPersonal.setVisible(false);
-			panelDueño.setVisible(false);
-			break;
-			
-		case "COMUNIDAD":
+		}
+		if(rol.equals("ADMIN")) {
+			this.panelAdministrador.setVisible(true);
+		}
+		if(rol.equals("COMUNIDAD")) {
 			try {
-				if(!api.existeDueñoRegistrado()) {
-					mnViviendasDueño.setVisible(false);
-					mnPedidoDeRetiroDueño.setVisible(false);
-					mnConfiguracionDueño.setVisible(false);
-					mnDueñoNoRegistrado.setVisible(true);
-					mnCanjearPuntosDueño.setVisible(false);
-					mnDatosDueño.setVisible(false);
+				System.out.println("entra aca");
+				if(api.existeDueñoRegistrado()) {
+					this.panelDueño.setVisible(true);
+					mnDueñoNoRegistrado.setVisible(false);
 				}
 				else {
-					panelDueño.setVisible(true);
-					panelAdministrador.setVisible(false);
-					mnDueñoNoRegistrado.setVisible(false);
-					panelPersonal.setVisible(false);
+					this.panelDueño.setVisible(true);
+					mnPedidoDeRetiroDueño.setVisible(false);
+					mnCanjearPuntosDueño.setVisible(false);
+					mnDatosDueño.setVisible(false);
+					mnViviendasDueño.setVisible(false);
 					
 				}
-			}catch (AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
-			break;
-			
-			
 		}
-		
-			
 		
 			
 			
