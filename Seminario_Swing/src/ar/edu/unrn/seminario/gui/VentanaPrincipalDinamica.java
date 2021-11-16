@@ -53,21 +53,16 @@ public class VentanaPrincipalDinamica extends JFrame {
 	}
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
-		//String rol = "ADMINISTRADOR	";
+		//String rol = "ADMINISTRADOR";
 		String rol = api.obtenerRolUsuarioActivo();
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		List<RolDTO> roles = null;
 		setBounds(100, 100, 813, 561);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBounds(1080, 1920, WIDTH, HEIGHT);
 		setContentPane(contentPane);
-		try {
-			roles = api.obtenerRoles();
-		} catch (AppException e) {
-			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("ventana.principal.dinamica.mensaje.error"),JOptionPane.ERROR_MESSAGE);
-		}
+
 		
 		
 		
@@ -158,7 +153,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmiAdmListadoViviendas = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.viviendas.administrador"));
 		mntmiAdmListadoViviendas.addActionListener((e)->{
-			ListadoDeViviendas listadoViviendas = new ListadoDeViviendas(api,labels);
+			ListadoDeViviendasDinamico listadoViviendas = new ListadoDeViviendasDinamico(api,labels);
 			listadoViviendas.setVisible(true);
 			
 		});
@@ -329,6 +324,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnViviendasDueño);
 		
 		JMenuItem mntmListarViviendasDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.viviendas.dueño"));
+		mntmListarViviendasDueño.addActionListener((e)->{
+			ListadoDeViviendasDinamico listado = new ListadoDeViviendasDinamico(api,labels);
+			listado.setVisible(true);
+		});
 		mnViviendasDueño.add(mntmListarViviendasDueño);
 		
 		JMenu mnDatosDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.dueño"));
@@ -371,9 +370,18 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnPedidoDeRetiroDueño);
 		
 		JMenuItem mntmListarPedidosDeRetiroDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.pedido.de.retiro.dueño")); 
+		mntmListarPedidosDeRetiroDueño.addActionListener((e)->{
+			ListadoDePedidosDeRetiro listado = new ListadoDePedidosDeRetiro(api,labels);
+			listado.setVisible(true);
+		});
+		
 		mnPedidoDeRetiroDueño.add(mntmListarPedidosDeRetiroDueño);
 		
 		JMenuItem mntmGenerarPedidoDeRetiroDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.pedido.de.retiro.dueño")); //$NON-NLS-1$
+		mntmGenerarPedidoDeRetiroDueño.addActionListener((e)->{
+			GenerarPedidoDeRetiro pedido = new GenerarPedidoDeRetiro(api,labels);
+			pedido.setVisible(true);
+		});
 		mnPedidoDeRetiroDueño.add(mntmGenerarPedidoDeRetiroDueño);
 		
 		JMenu mnDueñoNoRegistrado = new JMenu(labels.getString("ventana.principal.dinamica.menu.registrarse.dueño"));
@@ -395,6 +403,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmCanjearPuntos = new JMenuItem("Canjear Mis Puntos");
 		mntmCanjearPuntos.addActionListener((e)->{
+			
 			CanjearPuntos canje = new CanjearPuntos(api);
 			canje.setVisible(true);
 			
@@ -409,16 +418,22 @@ public class VentanaPrincipalDinamica extends JFrame {
 			
 			
 		});
+		
 		switch(rol) {
 		case "PERSONAL":
+			System.out.println("Entra");
 			panelPersonal.setVisible(true);
 			panelDueño.setVisible(false);
 			panelAdministrador.setVisible(false);
+			break;
 		
 		case "ADMINISTRADOR":
+			
 			panelAdministrador.setVisible(true);
 			panelPersonal.setVisible(false);
 			panelDueño.setVisible(false);
+			break;
+			
 		case "COMUNIDAD":
 			try {
 				if(!api.existeDueñoRegistrado()) {
@@ -429,13 +444,21 @@ public class VentanaPrincipalDinamica extends JFrame {
 					mnCanjearPuntosDueño.setVisible(false);
 					mnDatosDueño.setVisible(false);
 				}
-			} catch (AppException e1) {
+				else {
+					panelDueño.setVisible(true);
+					panelAdministrador.setVisible(false);
+					mnDueñoNoRegistrado.setVisible(false);
+					panelPersonal.setVisible(false);
+				}
+			}catch (AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
-			panelDueño.setVisible(true);
-			panelAdministrador.setVisible(false);
-			panelPersonal.setVisible(false);
+			break;
+			
+			
 		}
+		
+			
 		
 			
 			

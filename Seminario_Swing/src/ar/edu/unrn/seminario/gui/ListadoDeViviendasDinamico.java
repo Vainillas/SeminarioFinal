@@ -25,7 +25,7 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 @SuppressWarnings("serial")
-public class ListadoDeViviendas extends JFrame {
+public class ListadoDeViviendasDinamico extends JFrame {
 	IApi api;
 	private JTable table;
 	DefaultTableModel modelo;
@@ -53,8 +53,22 @@ public class ListadoDeViviendas extends JFrame {
 	private JLabel lbCodigo;
 	private JButton btnLimpiarFiltro;
 	private ResourceBundle labels = ResourceBundle.getBundle("labels");
-
-	public ListadoDeViviendas(IApi api, ResourceBundle labels){
+	private Comparator <ViviendaDTO> comparator;
+	private Predicate <ViviendaDTO> predicate;
+	private List<ViviendaDTO> viviendas = null;
+	
+	public ListadoDeViviendasDinamico(IApi api, ResourceBundle labels){
+		try {
+		if(api.obtenerRolUsuarioActivo().equals("ADMIN")) {
+				viviendas = api.obtenerViviendas();
+		}
+		if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+			viviendas = api.obtenerViviendasDeUsuario();
+		}
+		}catch(AppException e1) {
+			JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+		}
+		
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1151, 523);
@@ -84,16 +98,12 @@ public class ListadoDeViviendas extends JFrame {
 				labels.getString("listado.de.viviendas.titulos.vivienda.dni"),
 				labels.getString("listado.de.viviendas.titulos.vivienda.correo.electronico"),
 				labels.getString("listado.de.viviendas.titulos.vivienda.codigo"),
+				
 		};
 		
 		
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-
-		// Obtiene la lista de viviendas a mostrar
-		List<ViviendaDTO> viviendas;
-		try {
-			viviendas = api.obtenerViviendas();
-			//viviendas = api.obtenerViviendasDeUsuario();    *Este método es funcional
+		modelo = new DefaultTableModel(new Object[][] {}, titulos);			
+			//viviendas = api.obtenerViviendasDeUsuario();  
 			for (ViviendaDTO v : viviendas) {
 				modelo.addRow(new Object[] { v.getDireccion().getBarrio(),
 							v.getDireccion().getCalle(),
@@ -110,15 +120,6 @@ public class ListadoDeViviendas extends JFrame {
 							});
 			}
 			
-		} catch (AppException e1)  {
-			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
-			dispose();
-			
-		} catch (Exception e1){
-			JOptionPane.showMessageDialog(null,e1.getMessage(),"error",2);
-			setVisible(false);
-			dispose();
-		}
 		
 		// Agrega los usuarios en el model
 		
@@ -147,12 +148,19 @@ public class ListadoDeViviendas extends JFrame {
 			Comparator <ViviendaDTO> comparator = (ViviendaDTO v1, ViviendaDTO v2)->
 			(v1.getDireccion().getBarrio().compareToIgnoreCase(v2.getDireccion().getBarrio()));
 			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(comparator);
-				this.reloadGrid(v);
+				
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					viviendas = api.obtenerViviendasDeUsuario(comparator);
+				
+				}
+				else {
+					viviendas = api.obtenerViviendas(comparator);	
+				}
+				
+				this.reloadGrid(viviendas);
 				
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 
 		});
@@ -162,14 +170,18 @@ public class ListadoDeViviendas extends JFrame {
 		btnOrdenarPorCodPostal = new JButton(labels.getString("listado.de.viviendas.button.ordenar.por.codigo.postal"));
 		btnOrdenarPorCodPostal.setBounds(25, 63, 183, 23);
 		btnOrdenarPorCodPostal.addActionListener((e)->{
-			Comparator <ViviendaDTO> comparator = (ViviendaDTO v1, ViviendaDTO v2)->
+			comparator = (ViviendaDTO v1, ViviendaDTO v2)->
 			(v1.getDireccion().getCodPostal().compareToIgnoreCase(v2.getDireccion().getCodPostal()));
 			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(comparator);
-				this.reloadGrid(v);
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					viviendas = api.obtenerViviendasDeUsuario(comparator);
+				
+				}
+				else {
+					viviendas = api.obtenerViviendas(comparator);	
+				}
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
@@ -182,14 +194,20 @@ public class ListadoDeViviendas extends JFrame {
 		btnOrdenarPorCodigo = new JButton(labels.getString("listado.de.viviendas.button.ordenar.por.codigo"));
 		btnOrdenarPorCodigo.setBounds(45, 91, 143, 23);
 		btnOrdenarPorCodigo.addActionListener((e)->{
-			Comparator <ViviendaDTO> comparator = (ViviendaDTO v1, ViviendaDTO v2)->
+			comparator = (ViviendaDTO v1, ViviendaDTO v2)->
 			(String.valueOf(v1.getID()).compareToIgnoreCase(String.valueOf(v2.getID())));
 			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(comparator);
-				this.reloadGrid(v);
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					viviendas = api.obtenerViviendasDeUsuario(comparator);
+				
+				}
+				else {
+					viviendas = api.obtenerViviendas(comparator);	
+				}
+				
+				this.reloadGrid(viviendas);
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",0);
 			}
 			
 
@@ -202,18 +220,24 @@ public class ListadoDeViviendas extends JFrame {
 		btnOrdenarPorNombreYApellido.setBounds(15, 119, 203, 23);
 		btnOrdenarPorNombreYApellido.addActionListener((e)->{
 			
-			Comparator <ViviendaDTO> comparator = (ViviendaDTO v1, ViviendaDTO v2)->
+			comparator = (ViviendaDTO v1, ViviendaDTO v2)->
 			(  v1.getDueño().getNombre().compareToIgnoreCase(v2.getDueño().getNombre()) +
 			 v1.getDueño().getApellido().compareToIgnoreCase(v2.getDueño().getApellido())
 
 			);
 			
 			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(comparator);
-				this.reloadGrid(v);
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					viviendas = api.obtenerViviendasDeUsuario(comparator);
+				
+				}
+				else {
+					viviendas = api.obtenerViviendas(comparator);	
+				}
+				
+				this.reloadGrid(viviendas);
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",0);
 			}
 			
 		});
@@ -241,13 +265,19 @@ public class ListadoDeViviendas extends JFrame {
 
 					try {
 						
-						Predicate <ViviendaDTO> predicate =
+						 predicate =
 								(ViviendaDTO v)->v.getDueño().getNombre().toLowerCase().contains(txNombre_Apellido.getText().toLowerCase())
 								|| v.getDueño().getApellido().contains(txNombre_Apellido.getText());
-						this.reloadGrid(api.obtenerViviendas(predicate));
+								if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+									viviendas = api.obtenerViviendasDeUsuario(comparator);
+								
+								}
+								else {
+									viviendas = api.obtenerViviendas(comparator);	
+								}
+								this.reloadGrid(viviendas);
 				
 					} catch (Exception e1) {
-						// TODO Bloque catch generado automáticamente
 						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 					}
 					rdbtnNombre_apellido.setSelected(false);	
@@ -263,15 +293,20 @@ public class ListadoDeViviendas extends JFrame {
 
 		rdbtn_barrio_calle.addActionListener((e)->{
 			if(rdbtn_barrio_calle.isSelected()) {
-				Predicate <ViviendaDTO> predicate =
+				 predicate =
 						(ViviendaDTO v)->v.getDireccion().getBarrio().toLowerCase().contains(this.tx_barrio_calle.getText().toLowerCase())
 						||v.getDireccion().getCalle().toLowerCase().contains(this.tx_barrio_calle.getText().toLowerCase());
 						try {
-							System.out.println("entro");
-							this.reloadGrid(api.obtenerViviendas(predicate));
+							if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+								viviendas = api.obtenerViviendasDeUsuario(comparator);
+							
+							}
+							else {
+								viviendas = api.obtenerViviendas(comparator);	
+							}
+							this.reloadGrid(viviendas);
 				
 						} catch (Exception e1) {
-							// TODO Bloque catch generado automáticamente
 							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 						}
 						rdbtn_barrio_calle.setSelected(false);			
@@ -311,10 +346,18 @@ public class ListadoDeViviendas extends JFrame {
 		JRadioButton rdbtnDni = new JRadioButton("");
 		rdbtnDni.addActionListener((e)->{
 			if(rdbtnDni.isSelected()) {
-				Predicate <ViviendaDTO> predicate = (ViviendaDTO v)->v.getDueño().getDni().contains(txDni.getText());
+				 predicate = (ViviendaDTO v)->v.getDueño().getDni().contains(txDni.getText());
 			
 				try {
-					this.reloadGrid(api.obtenerViviendas(predicate));
+					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+						viviendas = api.obtenerViviendasDeUsuario(comparator);
+					
+					}
+					else {
+						viviendas = api.obtenerViviendas(comparator);	
+					}
+					
+					this.reloadGrid(viviendas);
 				
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -328,10 +371,17 @@ public class ListadoDeViviendas extends JFrame {
 		JRadioButton rdbtnCodigo = new JRadioButton("");
 		rdbtnCodigo.addActionListener((E)->{
 		if(rdbtnCodigo.isSelected()) {
-			Predicate <ViviendaDTO> predicate = (ViviendaDTO v)-> String.valueOf(v.getID()). contains(this.txCodigo.getText());
+			Predicate <ViviendaDTO> predicate = (ViviendaDTO v)-> String.valueOf(v.getID()).contains(this.txCodigo.getText());
 			try {
-				List<ViviendaDTO> v = api.obtenerViviendas(predicate);
-				this.reloadGrid(v);
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					viviendas = api.obtenerViviendasDeUsuario(predicate);
+				
+				}
+				else {
+					viviendas = api.obtenerViviendas(predicate);	
+				}
+				
+				this.reloadGrid(viviendas);
 				
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -357,9 +407,17 @@ public class ListadoDeViviendas extends JFrame {
 		btnLimpiarFiltro = new JButton("Limpiar FIltro");
 		btnLimpiarFiltro.addActionListener((e)->{
 			try {
-				reloadGrid(api.obtenerViviendas());
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					viviendas = api.obtenerViviendasDeUsuario();
+				
+				}
+				else {
+					viviendas = api.obtenerViviendas();	
+				}
+				
+				this.reloadGrid(viviendas);
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
+				
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 
 			}

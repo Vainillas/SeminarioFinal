@@ -109,7 +109,11 @@ public class CanjearPuntos extends JFrame {
 					CampañaDTO c = api.obtenerCampañaPorCodigo(codCampaña);
 					for(Beneficio b :c.getCatalogo().getListaBeneficios() ) {
 						if(tableBeneficios.getValueAt(tableBeneficios.getSelectedRow(), 0).equals(b.getDescripcion())) {
+
 							codBeneficio = b.getCodigo();
+							
+							System.out.println("puntajede if :"+tableBeneficios.getValueAt(tableBeneficios.getSelectedColumn(), 0));
+							System.out.println("puntajede de Bb :  "+b.getPuntajeConsumible() );
 							
 							break;
 						}
@@ -121,8 +125,6 @@ public class CanjearPuntos extends JFrame {
 				
 			}
 		});
-		
-		//tableBeneficios.setCellSelectionEnabled(false);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		scrollPaneCampañas = new JScrollPane();
 		panelCampañas = new JPanel();
@@ -133,17 +135,14 @@ public class CanjearPuntos extends JFrame {
 		scrollPaneCampañas.setBounds(0, 0, 342, 280);
 		panelCampañas.add(scrollPaneCampañas);
 		tableCampañas = new JTable();
-		tableCampañas.setCellSelectionEnabled(false);
-		//tableCampañas.setColumnSelectionAllowed(false);
-		tableCampañas.setRowSelectionAllowed(false);
+
 		
 
 		tableCampañas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				String nombreCam = null;
-
-
+				
 				List<CampañaDTO> campa = null;
 				List<Beneficio> b = null;
 				try {
@@ -156,9 +155,6 @@ public class CanjearPuntos extends JFrame {
 						break;
 						
 					}
-					
-					
-					
 				}
 				modeloBeneficio.setRowCount(0);
 				
