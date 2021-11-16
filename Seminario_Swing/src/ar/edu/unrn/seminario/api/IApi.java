@@ -143,8 +143,6 @@ public interface IApi {
 			 throws AppException;
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() 
 			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
-	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) 
-			throws AppException;
 
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()
 			throws AppException;

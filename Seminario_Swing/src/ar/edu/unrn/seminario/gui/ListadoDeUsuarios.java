@@ -179,7 +179,7 @@ public class ListadoDeUsuarios extends JFrame {
 		btnOrdenarPorRol.addActionListener((e)->{
 
 			Comparator <UsuarioDTO> comparator = (UsuarioDTO v1, UsuarioDTO v2)
-					->(v1.getRol().compareToIgnoreCase(v2.getRol())
+					->(v1.getRol().getNombre().compareToIgnoreCase(v2.getRol().getNombre())
 			);
 			
 			try {
