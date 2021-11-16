@@ -228,6 +228,9 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mntmRegistrarDueñoAdministrador.addActionListener((e)->{
 			RegistrarDueño registro =  new RegistrarDueño(api,labels);
 			registro.setVisible(true);
+			setVisible(false);
+			dispose();
+			
 			
 		});
 		mnDueñoAdministrador.add(mntmRegistrarDueñoAdministrador);
@@ -447,6 +450,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 				if(api.existeDueñoRegistrado()) {
 					this.panelDueño.setVisible(true);
 					mnDueñoNoRegistrado.setVisible(false);
+					
 				}
 				else {
 					this.panelDueño.setVisible(true);
