@@ -1050,4 +1050,14 @@ public class PersistenceApi implements IApi {
 	public List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate<ViviendaDTO> predicate) throws AppException {
 		return Filtro.filtrar(this.obtenerViviendasDeUsuario(), predicate);
 	}
+
+	@Override
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
+		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), comparator);
+	}
+
+	@Override
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<PedidoDeRetiroDTO> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
+		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate);
+	}
 }

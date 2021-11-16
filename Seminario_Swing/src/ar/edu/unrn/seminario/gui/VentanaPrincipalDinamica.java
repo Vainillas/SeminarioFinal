@@ -210,7 +210,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmGenerarPedidoDeRetiroAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.generar.pedido.de.retiro.administrador")); 
 		mntmGenerarPedidoDeRetiroAdministrador.addActionListener((e)->{
-			GenerarPedidoDeRetiro pedido = new GenerarPedidoDeRetiro(api,labels);
+			GenerarPedidoDeRetiroDinamico pedido = new GenerarPedidoDeRetiroDinamico(api,labels);
 			pedido.setVisible(true);
 			
 		});
@@ -389,7 +389,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmGenerarPedidoDeRetiroDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.generar.pedido.de.retiro.dueño")); //$NON-NLS-1$
 		mntmGenerarPedidoDeRetiroDueño.addActionListener((e)->{
-			GenerarPedidoDeRetiro pedido = new GenerarPedidoDeRetiro(api,labels);
+			GenerarPedidoDeRetiroDinamico pedido = new GenerarPedidoDeRetiroDinamico(api,labels);
 			pedido.setVisible(true);
 		});
 		mnPedidoDeRetiroDueño.add(mntmGenerarPedidoDeRetiroDueño);
