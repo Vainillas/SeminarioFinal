@@ -29,11 +29,16 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.utilities.Predicate;
 import java.awt.event.ActionListener;
 
-public class ListadoDePedidosDeRetiro extends JFrame {
+public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -64,7 +69,9 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 	private JRadioButton rdbt_ordenar_por_codigo_vivienda;
 	private JScrollPane scrollPane ;
 	private JButton btn_limpiar_ordenamiento;
-
+	private List<PedidoDeRetiroDTO> predicate;
+	private List<PedidoDeRetiroDTO> comparator;
+	private List<PedidoDeRetiroDTO> listaPedidos;
 	/**
 	 * Launch the application.
 	 */
@@ -74,7 +81,24 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 	 * Create the frame.
 	 * @param labels 
 	 */
-	public ListadoDePedidosDeRetiro(IApi api, ResourceBundle labels) {
+	public ListadoDePedidosDeRetiroDinamico(IApi api, ResourceBundle labels) {
+		try {
+			this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario();
+			if(api.obtenerRolUsuarioActivo().equals("ADMIN")){
+			
+			
+			}
+			else {
+				this.listaPedidos = api.obtenerPedidosDeRetiro();
+			} 
+			
+		}catch (DataEmptyException | NotNullException | DateNullException | AppException
+						| IncorrectEmailException | StringNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",0);
+				}
+			
+		
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));

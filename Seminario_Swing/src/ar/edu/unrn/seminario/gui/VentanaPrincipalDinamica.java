@@ -161,7 +161,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmRegistrarViviendaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.alta.vivienda.administrador"));
 		mntmRegistrarViviendaAdministrador.addActionListener((e)->{
-			RegistroVivienda vivienda = new RegistroVivienda(api,labels);
+			RegistrarVivienda vivienda = new RegistrarVivienda(api,labels);
 			vivienda.setVisible(true);
 			
 			
@@ -202,7 +202,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmAdmListadoPedidosDeRetiros = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listado.pedidos.de.retiro.administrador"));
 		mntmAdmListadoPedidosDeRetiros.addActionListener((e)->{
-			ListadoDePedidosDeRetiro listadoPedidos = new ListadoDePedidosDeRetiro(api, labels);
+			ListadoDePedidosDeRetiroDinamico listadoPedidos = new ListadoDePedidosDeRetiroDinamico(api, labels);
 			listadoPedidos.setVisible(true);
 			
 		});
@@ -330,6 +330,16 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 		mnViviendasDueño.add(mntmListarViviendasDueño);
 		
+		JMenuItem mntmDueñoGenerarVivienda = new JMenuItem(labels.getString("registro.viviendas.menu.item.generar.vivienda"));
+		
+		
+		mntmDueñoGenerarVivienda.addActionListener((e)->{
+			RegistrarVivienda vivienda = new RegistrarVivienda(api,labels);
+			vivienda.setVisible(true);
+			
+		});
+		mnViviendasDueño.add(mntmDueñoGenerarVivienda);
+		
 		JMenu mnDatosDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.dueño"));
 		mbDueño.add(mnDatosDueño);
 		
@@ -371,7 +381,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmListarPedidosDeRetiroDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.pedido.de.retiro.dueño")); 
 		mntmListarPedidosDeRetiroDueño.addActionListener((e)->{
-			ListadoDePedidosDeRetiro listado = new ListadoDePedidosDeRetiro(api,labels);
+			ListadoDePedidosDeRetiroDinamico listado = new ListadoDePedidosDeRetiroDinamico(api,labels);
 			listado.setVisible(true);
 		});
 		
@@ -398,10 +408,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 		mnDueñoNoRegistrado.add(mntmRegistrarDatosPersonales);
 		
-		JMenu mnCanjearPuntosDueño = new JMenu("Canje De Puntos");
+		JMenu mnCanjearPuntosDueño = new JMenu(labels.getString("registro.viviendas.menu.canje.de.puntos"));
 		mbDueño.add(mnCanjearPuntosDueño);
 		
-		JMenuItem mntmCanjearPuntos = new JMenuItem("Canjear Mis Puntos");
+		JMenuItem mntmCanjearPuntos = new JMenuItem(labels.getString("registro.viviendas.menu.item.canje.de.puntos"));
 		mntmCanjearPuntos.addActionListener((e)->{
 			
 			CanjearPuntos canje = new CanjearPuntos(api);
@@ -449,6 +459,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 					panelAdministrador.setVisible(false);
 					mnDueñoNoRegistrado.setVisible(false);
 					panelPersonal.setVisible(false);
+					
 				}
 			}catch (AppException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);

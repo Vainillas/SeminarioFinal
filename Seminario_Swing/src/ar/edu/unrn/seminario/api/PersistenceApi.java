@@ -228,8 +228,7 @@ public class PersistenceApi implements IApi {
 	} 
 	
 	public void registrarVivienda(String calle, String altura,
-			String codigoPostal, String latitud, String longitud, String barrio)
-			throws Exception {
+			String codigoPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
 		Dueño dueño = dueñoDao.findByUser(this.userOnline.getUsuario());
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
@@ -639,7 +638,8 @@ public class PersistenceApi implements IApi {
     	ordenDeRetiroDao.update(orden);
     }
     
-    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
+    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) 
+    		throws AppException, DataEmptyException, StringNullException, NotNumberException {
         Direccion direccion = null;
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);  
         this.direccionDao.create(direccion);
@@ -754,7 +754,7 @@ public class PersistenceApi implements IApi {
         return pedidosDto;
 	}
 	
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() throws AppException, Exception {
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
 		
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
 		

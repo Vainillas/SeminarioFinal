@@ -42,7 +42,8 @@ import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
 public interface IApi {
 
-	void registrarVivienda(String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
+	void registrarVivienda(String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException, AppException;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
@@ -92,8 +93,8 @@ public interface IApi {
 			throws Exception;
 
 	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
-			String barrio) 
-					throws Exception;
+			String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException 
+					;
 
 	DueñoDTO obtenerDueño(String dni) 
 			throws AppException;
@@ -132,7 +133,7 @@ public interface IApi {
 			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
 	
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
-			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
+			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, IncorrectEmailException;
 
 	Usuario getUserOnline();
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
@@ -140,7 +141,8 @@ public interface IApi {
 	 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) 
 			 throws AppException;
-
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() 
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) 
 			throws AppException;
 
