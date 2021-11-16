@@ -91,7 +91,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private ArrayList<String> ordenSeleccionada = new ArrayList<String>();
 	private ArrayList<String> residuosSeleccionados = new ArrayList<String>();
 	private ArrayList<String> cantResiduosRetirados = new ArrayList<String>();
-	private String codigoOrden;
+	private Integer codigoOrden;
 	private String descripcion;  
 	private JComboBox<String> comboBoxResiduosDinamico;
 	private JLabel lbResiduoSeleccionado;
@@ -369,10 +369,11 @@ public class GenerarRegistroDeVisita extends JFrame {
 			System.out.println(this.residuosSeleccionados.toString());
 			try { 
 				this.descripcion = this.tp_observacion.getText();
-				this.codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);		
+				System.out.println(table.getValueAt(table.getSelectedRow(), 1));
+				this.codigoOrden = (Integer) table.getValueAt(table.getSelectedRow(), 1);
 				spinner_dia.getValue();
 				
-					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,Integer.parseInt(codigoOrden),(Integer)spinner_dia.getValue(),(Integer)spinner_mes.getValue(),(Integer)spinner_año.getValue());
+					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,codigoOrden,(Integer)spinner_dia.getValue(),(Integer)spinner_mes.getValue(),(Integer)spinner_año.getValue());
 					
 				 
 				
