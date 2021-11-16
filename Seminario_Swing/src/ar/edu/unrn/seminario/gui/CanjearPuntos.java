@@ -108,7 +108,7 @@ public class CanjearPuntos extends JFrame {
 				try {
 					CampañaDTO c = api.obtenerCampañaPorCodigo(codCampaña);
 					for(Beneficio b :c.getCatalogo().getListaBeneficios() ) {
-						if(tableBeneficios.getValueAt(tableBeneficios.getSelectedColumn(), 0).equals(b.getDescripcion())) {
+						if(tableBeneficios.getValueAt(tableBeneficios.getSelectedRow(), 0).equals(b.getDescripcion())) {
 							codBeneficio = b.getCodigo();
 							
 							break;
@@ -152,9 +152,11 @@ public class CanjearPuntos extends JFrame {
 					for(CampañaDTO c : campa) {
 					if(nombreCam.equals(c.getNombreCampaña())) {
 						b = c.getCatalogo().getListaBeneficios();
+						codCampaña = c.getCodigo();
 						break;
+						
 					}
-					codCampaña = c.getCodigo();
+					
 					
 					
 				}

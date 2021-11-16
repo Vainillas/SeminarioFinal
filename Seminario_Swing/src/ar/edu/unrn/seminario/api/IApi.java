@@ -133,16 +133,14 @@ public interface IApi {
 	
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
 			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
-
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() throws AppException, Exception;
+	
 	Usuario getUserOnline();
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
 			 throws AppException;
 	 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) 
 			 throws AppException;
-
-	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) 
-			throws AppException;
 
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()
 			throws AppException;
