@@ -152,7 +152,8 @@ public interface IApi {
 	void registrarDueño(String nombre, String apellido, String dni) 
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
 	
-	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) 
+	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, 
+			String observacion, int codOrden, Integer dia, Integer mes, Integer año) 
 			throws AppException, NotNullException;
 	
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) 

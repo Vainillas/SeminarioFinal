@@ -78,7 +78,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JPanel panel_visita = new JPanel();
 	private JTextPane tp_observacion;
 	private JLabel lb_observacion;
-	private JLabel lb_hora;
+	private JLabel lb_año;
 	private JLabel lb_dia;
 	private JSlider slider_Dinamico;
 	private JLabel lb_mes;
@@ -285,16 +285,16 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lb_observacion.setBounds(32, 127, 142, 14);
 		panel_visita.add(lb_observacion);
 		
-		lb_hora = new JLabel(labels.getString("registro.de.visita.label.hora"));
-		lb_hora.setBounds(10, 11, 46, 14);
-		panel_visita.add(lb_hora);
+		lb_año = new JLabel(labels.getString("registro.de.visita.label.hora"));
+		lb_año.setBounds(20, 78, 46, 14);
+		panel_visita.add(lb_año);
 		lb_dia = new JLabel(labels.getString("registro.de.visita.label.dia"));
-		lb_dia.setBounds(10, 48, 46, 14);
+		lb_dia.setBounds(20, 11, 46, 14);
 		panel_visita.add(lb_dia);
 		
 		
 		lb_mes = new JLabel(labels.getString("registro.de.visita.label.mes"));
-		lb_mes.setBounds(10, 78, 46, 14);
+		lb_mes.setBounds(20, 43, 46, 14);
 		panel_visita.add(lb_mes);
 		
 		lb_cantidad_residuos = new JLabel(labels.getString("registro.de.visita.label.cantidad.residuos"));
@@ -309,12 +309,12 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 		List<String> numeros = this.inicializarFecha(24);		
 		SpinnerModel maximo_hora = new SpinnerListModel(numeros);
-		JSpinner spinner_hora = new JSpinner(maximo_hora);
-		spinner_hora.setModel(maximo_hora);
-		panel_visita.add(spinner_hora);	
-		spinner_hora.setModel(maximo_hora);
-		spinner_hora.setBounds(74, 8, 52, 20);
-		panel_visita.add(spinner_hora);
+		JSpinner spinner_año = new JSpinner(maximo_hora);
+		spinner_año.setModel(maximo_hora);
+		panel_visita.add(spinner_año);	
+		spinner_año.setModel(maximo_hora);
+		spinner_año.setBounds(74, 75, 52, 20);
+		panel_visita.add(spinner_año);
 		
 		
 		
@@ -325,14 +325,14 @@ public class GenerarRegistroDeVisita extends JFrame {
 		JSpinner spinner_dia = new JSpinner(maximo_dia);
 		spinner_dia.setModel(maximo_dia);
 		panel_visita.add(spinner_dia);
-		spinner_dia.setBounds(74, 45, 52, 20);
+		spinner_dia.setBounds(74, 8, 52, 20);
 		
 		
 		numeros = inicializarFecha(12);
 		SpinnerModel maximo_mes = new SpinnerListModel(numeros);
 		JSpinner spinner_mes = new JSpinner(maximo_mes);
 		spinner_mes.setModel(maximo_mes);
-		spinner_mes.setBounds(74, 75, 52, 20);
+		spinner_mes.setBounds(76, 40, 52, 20);
 		panel_visita.add(spinner_mes);
 		
 		
@@ -370,8 +370,10 @@ public class GenerarRegistroDeVisita extends JFrame {
 			try { 
 				this.descripcion = this.tp_observacion.getText();
 				this.codigoOrden = (String) table.getValueAt(table.getSelectedRow(), 1);		
+				spinner_dia.getValue();
 				
-					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,Integer.parseInt(codigoOrden));
+					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,Integer.parseInt(codigoOrden),(Integer)spinner_dia.getValue(),(Integer)spinner_mes.getValue(),(Integer)spinner_año.getValue());
+					
 				 
 				
 				JOptionPane.showMessageDialog(null,"Registro de visita generado con exito!","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);

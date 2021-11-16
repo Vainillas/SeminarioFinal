@@ -1060,4 +1060,13 @@ public class PersistenceApi implements IApi {
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<PedidoDeRetiroDTO> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
 		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate);
 	}
+
+	@Override
+	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg,
+			String observacion, int codOrden, Integer dia, Integer mes, Integer año)
+			throws AppException, NotNullException {
+		//completenlo belleses
+		// TODO Esbozo de método generado automáticamente
+		
+	}
 }
