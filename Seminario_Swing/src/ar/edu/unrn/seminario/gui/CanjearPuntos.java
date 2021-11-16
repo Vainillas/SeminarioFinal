@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -49,34 +50,16 @@ public class CanjearPuntos extends JFrame {
 	private JTextField tfPuntosDelDueño;
 	private int codCampaña;
 	private int codBeneficio;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IApi api = new PersistenceApi();
-					CanjearPuntos frame = new CanjearPuntos(api);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
-	public CanjearPuntos(IApi api) {
-		setTitle("Listar Campañas");
+	public CanjearPuntos(IApi api,ResourceBundle labels) {
+		
+		setTitle(labels.getString("canjear.puntos.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1045, 409);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		btnVolver = new JButton("Volver a Menu Principal");
+		btnVolver = new JButton(labels.getString("canjear.puntos.button.volver"));
 		btnVolver.setBounds(5, 342, 970, 23);
 		btnVolver.addActionListener((e)->{
 			setVisible(false);
@@ -147,9 +130,14 @@ public class CanjearPuntos extends JFrame {
 				
 			}
 		});
-		String [] titulosBeneficios = {"DESCRIPCION","PUNTAJE CONSUMIBLE ","CODIGO PUNTAJE"};
+		String [] titulosBeneficios = {
+				labels.getString("canjear.puntos.titulos.beneficio.descripcion"),
+				labels.getString("canjear.puntos.titulos.beneficio.puntaje.consumible"),
+				labels.getString("canjear.puntos.titulos.beneficio.codigo.puntaje")};
 
-		String[] titulos = { "NOMBRE","CODIGO CAMPAÑA"};
+		String[] titulos = { 
+				labels.getString("canjear.puntos.titulos.campaña.nombre"),
+				labels.getString("canjear.puntos.titulos.campaña.codigo")};
 		modeloCampaña = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficio = new DefaultTableModel(new Object[][] {},titulosBeneficios);
 		
@@ -170,7 +158,7 @@ public class CanjearPuntos extends JFrame {
 
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 		}
 		
 
@@ -179,17 +167,17 @@ public class CanjearPuntos extends JFrame {
 		tableBeneficios.setModel(modeloBeneficio);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		
-		JLabel lbCampañas = new JLabel("Indique la Campa\u00F1a");
+		JLabel lbCampañas = new JLabel(labels.getString("canjear.puntos.label.indique.campaña"));
 		lbCampañas.setHorizontalAlignment(SwingConstants.CENTER);
 		lbCampañas.setBounds(29, 35, 302, 14);
 		contentPane.add(lbCampañas);
 		
-		JLabel lbBeneficio = new JLabel("Indique el Beneficio Que Quiere Canjear");
+		JLabel lbBeneficio = new JLabel(labels.getString("canjear.puntos.label.indique.beneficio.que.quiere.cambiar"));
 		lbBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		lbBeneficio.setBounds(453, 35, 243, 14);
 		contentPane.add(lbBeneficio);
 		
-		JLabel lbMisPuntos = new JLabel("Mis Puntos:");
+		JLabel lbMisPuntos = new JLabel(labels.getString("canjear.puntos.label.mis.puntos"));
 		lbMisPuntos.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lbMisPuntos.setBounds(813, 26, 110, 23);
 		contentPane.add(lbMisPuntos);
@@ -209,16 +197,15 @@ public class CanjearPuntos extends JFrame {
 		contentPane.add(tfPuntosDelDueño);
 		tfPuntosDelDueño.setColumns(10);
 		
-		JButton btnCanjearPuntos = new JButton("Canjear Puntos");
+		JButton btnCanjearPuntos = new JButton(labels.getString("canjear.puntos.label.canjear.puntos"));
 		btnCanjearPuntos.addActionListener((e)->{
-			
+			if(this.tableCampañas.isRowSelected(this.tableCampañas.getSelectedRow())) {
 			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow())) {
 				
 				try {
-					System.out.println("codigo benef"+codBeneficio);
-					System.out.println("codigo Camp" +codCampaña);
 					api.generarCanje(codBeneficio, codCampaña);
-					int res = JOptionPane.showConfirmDialog(null,"Desea Canjear otro Beneficio?","Mensaje Informativo",JOptionPane.YES_NO_OPTION );
+					//JOptionPane.showMessageDialog(null,labels.getString("canjear.puntos.label.canjear.puntos.exitoso"),labels.getString("canjear.puntos.label.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
+					int res = JOptionPane.showConfirmDialog(null,labels.getString("canjear.puntos.mensaje.informativo1"),labels.getString("canjear.puntos.mensaje.informativo2"),JOptionPane.YES_NO_OPTION );
 					if(res == 0 ) {
 						tfPuntosDelDueño.setText((String.valueOf(api.obtenerDueñoActivo().getPuntaje())));
 						
@@ -230,6 +217,7 @@ public class CanjearPuntos extends JFrame {
 						
 					}
 					
+
 					
 				} catch (AppException | NotNullException | InsuficientPointsException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -237,7 +225,11 @@ public class CanjearPuntos extends JFrame {
 				
 			}
 			else {
-				JOptionPane.showMessageDialog(null,"Debe seleccionar Un Beneficio","Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,labels.getString("canjear.puntos.mensaje.de.error.beneficio"),"Error",JOptionPane.ERROR_MESSAGE);
+			}
+			}
+			else {
+				JOptionPane.showMessageDialog(null,labels.getString("canjear.puntos.mensaje.de.error.campaña"),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		btnCanjearPuntos.setBounds(809, 97, 151, 23);
@@ -249,7 +241,7 @@ public class CanjearPuntos extends JFrame {
 		
 
 
-		cerrarButton = new JButton("Cerrar");
+		cerrarButton = new JButton(labels.getString("canjear.puntos.button.cerrar"));
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
