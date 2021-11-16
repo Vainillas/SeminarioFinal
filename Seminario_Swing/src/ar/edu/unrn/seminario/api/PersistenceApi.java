@@ -228,8 +228,7 @@ public class PersistenceApi implements IApi {
 	} 
 	
 	public void registrarVivienda(String calle, String altura,
-			String codigoPostal, String latitud, String longitud, String barrio)
-			throws Exception {
+			String codigoPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
 		Dueño dueño = dueñoDao.findByUser(this.userOnline.getUsuario());
 		Direccion direccion = new Direccion(calle, altura,codigoPostal,latitud,longitud,barrio);
 		Vivienda vivienda = new Vivienda(direccion,dueño);
@@ -257,6 +256,148 @@ public class PersistenceApi implements IApi {
 			dtos.add(new ViviendaDTO(v.getDireccion(),v.getDueño(),v.getID()));
 		}
 		return dtos;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->v1.getID()-v2.getID())
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+					
+				String var1 = (v1.getDueño().getNombre()+ " " +  v1.getDueño().getApellido());
+				String var2 = (v2.getDueño().getNombre()+ " " + v2.getDueño().getApellido());
+				if(var1.compareToIgnoreCase(var2)>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO = vDTO.stream()
+				.sorted((v1,v2)->{
+					
+				if(v1.getDireccion().getCodPostal().compareToIgnoreCase(v2.getDireccion().getCodPostal())>0) 
+					return 1;
+			
+				else 
+					return -1;
+				})
+				
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO = vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getBarrio().compareToIgnoreCase(v2.getDireccion().getBarrio())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getAltura().compareToIgnoreCase(v2.getDireccion().getAltura())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	
+	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+				if(v1.getDireccion().getCalle().compareToIgnoreCase(v2.getDireccion().getCalle())>0) 
+					return 1;
+				
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException{
+		List<ViviendaDTO>vDTO = this.obtenerViviendas();
+		vDTO= vDTO.stream()
+				.sorted((v1,v2)->{
+					String latLong1 = (v1.getDireccion().getLatitud() +" " +  v1.getDireccion().getLongitud());
+					String latLong2 = (v2.getDireccion().getLatitud() +" " + v2.getDireccion().getLongitud());
+					
+				if(latLong1.compareToIgnoreCase(latLong2)>0) 
+					return 1;
+				else 
+					return -1;
+				})
+				.collect(Collectors.toList());
+		return vDTO;
+	}
+	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
+	
+	public static class filtradoUsuarioRol implements Comparator<UsuarioDTO>{
+		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
+			if(v1.getRol().compareToIgnoreCase(v2.getRol())>=0)
+				return 1;
+			else
+				return -1;
+			}
+	}
+	public static class filtradoUsuarioNombre implements Comparator<UsuarioDTO>{
+		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
+			if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
+
+				return 1;
+			}
+
+			else {
+				return -1;}
+
+		}
+		
+	}
+	public static class filtradoUsuarioCorreo implements Comparator<UsuarioDTO>{
+		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
+			if(v1.getEmail().compareToIgnoreCase(v2.getEmail()) >= 0) {
+				
+				return 1;}
+			else {
+				return -1;
+			}
+		}
+	}
+	
+	public List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador)throws AppException{
+		List<UsuarioDTO> usuario = this.obtenerUsuarios();
+		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
+		.collect(Collectors.toList()); 
+		
+		return usuario;
 	}
 	
     public void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception   {
@@ -497,7 +638,8 @@ public class PersistenceApi implements IApi {
     	ordenDeRetiroDao.update(orden);
     }
     
-    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException {
+    public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) 
+    		throws AppException, DataEmptyException, StringNullException, NotNumberException {
         Direccion direccion = null;
 		direccion = new Direccion(calle, altura, codPostal,latitud, longitud, barrio);  
         this.direccionDao.create(direccion);
@@ -612,7 +754,7 @@ public class PersistenceApi implements IApi {
         return pedidosDto;
 	}
 	
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() throws AppException, Exception {
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
 		
 		List<PedidoDeRetiroDTO> pedidosDto = new ArrayList<>();
 		
@@ -746,7 +888,6 @@ public class PersistenceApi implements IApi {
 		
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate predicado) throws AppException {
 		return Filtro.filtrar(this.obtenerOrdenesDeRetiro(), predicado);
@@ -821,7 +962,6 @@ public class PersistenceApi implements IApi {
 	public void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException, InsuficientPointsException {
 		
 		Beneficio beneficio = this.beneficioDao.find(codBeneficio);
-		System.out.println(beneficio.toString());
 		
 		Campaña campaña = this.campañaDao.find(codCampaña);
 		
@@ -915,5 +1055,24 @@ public class PersistenceApi implements IApi {
 	@Override
 	public List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate<ViviendaDTO> predicate) throws AppException {
 		return Filtro.filtrar(this.obtenerViviendasDeUsuario(), predicate);
+	}
+
+	@Override
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
+		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), comparator);
+	}
+
+	@Override
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<PedidoDeRetiroDTO> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
+		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate);
+	}
+
+	@Override
+	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg,
+			String observacion, int codOrden, Integer dia, Integer mes, Integer año)
+			throws AppException, NotNullException {
+		//completenlo belleses
+		// TODO Esbozo de método generado automáticamente
+		
 	}
 }

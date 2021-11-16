@@ -42,7 +42,8 @@ import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 
 public interface IApi {
 
-	void registrarVivienda(String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException,Exception;
+	void registrarVivienda(String calle, String altura, String codigoPostal, String latitud, String longitud, String barrio) 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, SQLException, AppException;
 	
 	UsuarioDTO obtenerUsuario(String username);
 
@@ -92,8 +93,8 @@ public interface IApi {
 			throws Exception;
 
 	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
-			String barrio) 
-					throws Exception;
+			String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException 
+					;
 
 	DueñoDTO obtenerDueño(String dni) 
 			throws AppException;
@@ -132,15 +133,18 @@ public interface IApi {
 			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
 	
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
-			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, Exception;
-	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() throws AppException, Exception;
-	
+			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, IncorrectEmailException;
+
 	Usuario getUserOnline();
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
 			 throws AppException;
 	 
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) 
 			 throws AppException;
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() 
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
+	List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador) 
+			throws AppException;
 
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()
 			throws AppException;
@@ -148,7 +152,8 @@ public interface IApi {
 	void registrarDueño(String nombre, String apellido, String dni) 
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
 	
-	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) 
+	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, 
+			String observacion, int codOrden, Integer dia, Integer mes, Integer año) 
 			throws AppException, NotNullException;
 	
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) 
@@ -219,5 +224,9 @@ public interface IApi {
 	List<ViviendaDTO> obtenerViviendasDeUsuario(Comparator<ViviendaDTO> comparator) throws AppException;
 
 	List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate<ViviendaDTO> predicate) throws AppException;
+
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
+
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<PedidoDeRetiroDTO> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 	
 }

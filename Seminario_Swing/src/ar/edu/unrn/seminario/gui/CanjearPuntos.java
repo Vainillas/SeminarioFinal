@@ -78,6 +78,7 @@ public class CanjearPuntos extends JFrame {
 	 */
 	public CanjearPuntos(IApi api) {
 		this.api = api;
+	
 		setTitle("Listar Campañas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1045, 409);

@@ -29,11 +29,16 @@ import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.DateNullException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+import ar.edu.unrn.seminario.exceptions.NotNullException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.utilities.Predicate;
 import java.awt.event.ActionListener;
 
-public class ListadoDePedidosDeRetiro extends JFrame {
+public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
@@ -64,7 +69,10 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 	private JRadioButton rdbt_ordenar_por_codigo_vivienda;
 	private JScrollPane scrollPane ;
 	private JButton btn_limpiar_ordenamiento;
-
+	private Predicate<PedidoDeRetiroDTO> predicate;
+	private Comparator<PedidoDeRetiroDTO> comparator;
+	private List<PedidoDeRetiroDTO> listaPedidos;
+	private String rolUsuarioActivo;
 	/**
 	 * Launch the application.
 	 */
@@ -74,7 +82,26 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 	 * Create the frame.
 	 * @param labels 
 	 */
-	public ListadoDePedidosDeRetiro(IApi api, ResourceBundle labels) {
+	public ListadoDePedidosDeRetiroDinamico(IApi api, ResourceBundle labels) {
+		
+		try {
+			this.rolUsuarioActivo = api.obtenerRolUsuarioActivo();
+			this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario();
+			if(rolUsuarioActivo.equals("ADMIN")){
+				this.listaPedidos = api.obtenerPedidosDeRetiro();
+			
+			}
+			else {
+				this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario();
+			} 
+			
+		}catch (DataEmptyException | NotNullException | DateNullException | AppException
+						| IncorrectEmailException | StringNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",0);
+				}
+			
+		
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
@@ -112,17 +139,11 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulosUsuario);
 
-		// Obtiene la lista de usuarios a mostrar
-		//List<PedidoDeRetiroDTO> PedidoDeRetiro = new ArrayList<PedidoDeRetiroDTO>();
 		
-		try {
-			reloadGrid(api.obtenerPedidosDeRetiro());
-			table.setModel(modelo);
-			scrollPane.setViewportView(table);
+		reloadGrid(this.listaPedidos);
+		table.setModel(modelo);
+		scrollPane.setViewportView(table);
 			
-		} catch (Exception e3) {
-			JOptionPane.showMessageDialog(null, e3.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
-		}
 		
 		
 		
@@ -147,12 +168,17 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 			rdbtn_filtrado_por_codigo_pedido.setSelected(false);
 			if(!tf_filtrado_por_codigo_pedido.getText().equals("")) {
 
-			Predicate <PedidoDeRetiroDTO> predicado = (PedidoDeRetiroDTO p)->
+			 predicate = (PedidoDeRetiroDTO p)->
 			String.valueOf(p.getCodigo()).equals(tf_filtrado_por_codigo_pedido.getText());
 
 				try {
-
-					reloadGrid (api.obtenerPedidosDeRetiro(predicado));
+					if(this.rolUsuarioActivo.equals("ADMIN")) {
+						this.listaPedidos = api.obtenerPedidosDeRetiro(predicate);
+					}
+					else {
+						this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(predicate);
+					}
+					reloadGrid (this.listaPedidos);
 				} catch (Exception e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				
@@ -176,7 +202,7 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		rdbtn_filtrado_por_vivienda.addActionListener((e)->{
 			rdbtn_filtrado_por_vivienda.setSelected(false);
 			if(!tf_filtrado_por_vivienda.getText().equals("")) {
-				Predicate <PedidoDeRetiroDTO> predicado = (PedidoDeRetiroDTO p )->
+				 predicate = (PedidoDeRetiroDTO p )->
 				
 				p.getVivienda().getDireccion().getBarrio().toLowerCase().contains(tf_filtrado_por_vivienda.getText())||
 				p.getVivienda().getDireccion().getCalle().toLowerCase().contains(tf_filtrado_por_vivienda.getText())||
@@ -185,7 +211,13 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 			
 			try {
 
-				reloadGrid(api.obtenerPedidosDeRetiro(predicado));
+				if(this.rolUsuarioActivo.equals("ADMIN")) {
+					this.listaPedidos = api.obtenerPedidosDeRetiro(predicate);
+				}
+				else {
+					this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(predicate);
+				}
+				reloadGrid (this.listaPedidos);
 				
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -207,10 +239,16 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		rdbtn_filtrado_por_codigo_vivienda.addActionListener((e)->{
 				rdbtn_filtrado_por_codigo_vivienda.setSelected(false);
 				if(!tf_filtrado_por_codigo_vivienda.getText().equals("")) {
-					Predicate <PedidoDeRetiroDTO> predicado = (PedidoDeRetiroDTO p )->
+					predicate = (PedidoDeRetiroDTO p )->
 					String.valueOf(p.getVivienda().getID()).equals(tf_filtrado_por_codigo_vivienda.getText());
 					try {
-						reloadGrid(api.obtenerPedidosDeRetiro(predicado));
+						if(this.rolUsuarioActivo.equals("ADMIN")) {
+							this.listaPedidos = api.obtenerPedidosDeRetiro(predicate);
+						}
+						else {
+							this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(predicate);
+						}
+						reloadGrid (this.listaPedidos);
 					
 					} catch (Exception e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -234,10 +272,20 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		JButton btn_limpiar_filtro = new JButton(labels.getString("listado.de.pedidos.de.retiro.label.filtrado.limpiar")); 
 		btn_limpiar_filtro.addActionListener((e)->{
 			try {
-				reloadGrid(api.obtenerPedidosDeRetiro());
-			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				this.listaPedidos = api.obtenerPedidosDeRetiro();
+				if(this.rolUsuarioActivo.equals("ADMIN")) {
+					
+					
+				}
+				else {
+					this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario();
+				}
+			}catch (DataEmptyException | NotNullException | StringNullException | DateNullException
+						| AppException | IncorrectEmailException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
+				reloadGrid (this.listaPedidos);
+			
 			
 			
 		});
@@ -261,10 +309,16 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		rdbtn_ordenar_por_codigo_pedido.addActionListener((e)->{
 			rdbtn_ordenar_por_codigo_pedido.setSelected(false);
 			try {
-				Comparator <PedidoDeRetiroDTO> comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
+				comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
 				(String.valueOf(p1.getCodigo()).compareToIgnoreCase(String.valueOf(p2.getCodigo())));
 				
-				
+				if(this.rolUsuarioActivo.equals("ADMIN")) {
+					this.listaPedidos = api.obtenerPedidosDeRetiro(comparator);
+				}
+				else {
+					this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(comparator);
+				}
+				reloadGrid (this.listaPedidos);
 				reloadGrid(api.obtenerPedidosDeRetiro(comparator));
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -286,7 +340,7 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		rdbtn_ordenar_por_vivienda.addActionListener((e)->{
 			rdbtn_ordenar_por_vivienda.setSelected(false);
 			try {
-				Comparator <PedidoDeRetiroDTO> comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
+				 comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
 						
 				
 						(p1.getVivienda().getDireccion().getBarrio().toLowerCase() + " "+  
@@ -324,8 +378,8 @@ public class ListadoDePedidosDeRetiro extends JFrame {
 		rdbt_ordenar_por_codigo_vivienda = new JRadioButton("");
 		rdbt_ordenar_por_codigo_vivienda.addActionListener((e)->{
 			rdbt_ordenar_por_codigo_vivienda.setSelected(false);
-			
-			Comparator <PedidoDeRetiroDTO> comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
+		
+			comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
 			String.valueOf(p1.getVivienda().getID()).compareToIgnoreCase ( String.valueOf(p2.getVivienda().getID()));
 			try {
 				reloadGrid(api.obtenerPedidosDeRetiro(comparator));
