@@ -96,7 +96,6 @@ public class IniciarSesion extends JFrame {
 		panelBotones.setBounds(20, 128, 404, 52);
 		contentPane.add(panelBotones);
 		panelBotones.setLayout(null);
-		
 		JButton buttonCancelar = new JButton(labels.getString("iniciar.sesion.button.cancelar"));
 		buttonCancelar.addActionListener((e)->{
 			

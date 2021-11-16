@@ -97,13 +97,8 @@ public class CanjearPuntos extends JFrame {
 		tableBeneficios.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				/*try {
-					//List<Beneficio> c = 
+					codBeneficio = (Integer)tableBeneficios.getValueAt(tableBeneficios.getSelectedRow(),2);
 					
-				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-	
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-				}*/
 				
 			}
 		});
@@ -126,17 +121,18 @@ public class CanjearPuntos extends JFrame {
 				String nombreCam = null;
 				
 				CampañaDTO campa = null;
-				List<Beneficio> b = null;
 				try {
 					
 					nombreCam = (String)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),0 );
-					campa = api.obtenerCampañaPorCodigo((Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),0));
-				modeloBeneficio.setRowCount(0);
-				for(Beneficio bene : b) {
-					modeloBeneficio.addRow(new Object[] {
-							
+					codCampaña = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),1);
+					campa = api.obtenerCampañaPorCodigo(codCampaña);
+					
+					modeloBeneficio.setRowCount(0);
+				for(Beneficio bene : campa.getCatalogo().getListaBeneficios()) {
+					modeloBeneficio.addRow(new Object[] {	
 						bene.getDescripcion(),
-						bene.getPuntajeConsumible()
+						bene.getPuntajeConsumible(),
+						bene.getCodigo()
 					});
 
 				}
@@ -219,7 +215,8 @@ public class CanjearPuntos extends JFrame {
 			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow())) {
 				
 				try {
-					
+					System.out.println("codigo benef"+codBeneficio);
+					System.out.println("codigo Camp" +codCampaña);
 					api.generarCanje(codBeneficio, codCampaña);
 					int res = JOptionPane.showConfirmDialog(null,"Desea Canjear otro Beneficio?","Mensaje Informativo",JOptionPane.YES_NO_OPTION );
 					if(res == 0 ) {
