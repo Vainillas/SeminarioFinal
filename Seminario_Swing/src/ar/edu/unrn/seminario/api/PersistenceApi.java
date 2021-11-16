@@ -130,7 +130,7 @@ public class PersistenceApi implements IApi {
 		
 		for (Usuario u : usuarios) {
 			dtos.add(new UsuarioDTO(u.getUsuario(), u.getContrasena(), u.getEmail(),
-					u.getRol().getNombre(), u.isActivo(), u.obtenerEstado()));
+					u.getRol(), u.isActivo(), u.obtenerEstado()));
 		}
 		return dtos;
 	}
@@ -357,47 +357,6 @@ public class PersistenceApi implements IApi {
 				})
 				.collect(Collectors.toList());
 		return vDTO;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	
-	public static class filtradoUsuarioRol implements Comparator<UsuarioDTO>{
-		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
-			if(v1.getRol().compareToIgnoreCase(v2.getRol())>=0)
-				return 1;
-			else
-				return -1;
-			}
-	}
-	public static class filtradoUsuarioNombre implements Comparator<UsuarioDTO>{
-		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
-			if(v1.getUsername().compareToIgnoreCase(v2.getUsername()) > 0) {
-
-				return 1;
-			}
-
-			else {
-				return -1;}
-
-		}
-		
-	}
-	public static class filtradoUsuarioCorreo implements Comparator<UsuarioDTO>{
-		public int compare(UsuarioDTO v1, UsuarioDTO v2) {
-			if(v1.getEmail().compareToIgnoreCase(v2.getEmail()) >= 0) {
-				
-				return 1;}
-			else {
-				return -1;
-			}
-		}
-	}
-	
-	public List<UsuarioDTO> obtenerUsuariosOrdenados(Comparator<UsuarioDTO> comparador)throws AppException{
-		List<UsuarioDTO> usuario = this.obtenerUsuarios();
-		usuario = usuario.stream().sorted((v1,v2)->comparador.compare(v1, v2))
-		.collect(Collectors.toList()); 
-		
-		return usuario;
 	}
 	
     public void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception   {
