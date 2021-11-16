@@ -133,7 +133,7 @@ public interface IApi {
 			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
 	
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
-			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, IncorrectEmailException;
+			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
 
 	Usuario getUserOnline();
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
