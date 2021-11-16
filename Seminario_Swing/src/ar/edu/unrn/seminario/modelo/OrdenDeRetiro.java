@@ -101,6 +101,18 @@ public class OrdenDeRetiro {
 	public Estado getEstado() {
 		return estado;
 	}
+	public boolean concretar() {
+		return this.getEstado().concretar();
+	}
+	public boolean cancelar() {
+		return this.getEstado().cancelar();
+	}
+	public boolean setPendiente() {
+		return this.getEstado().pendiente();
+	}
+	public boolean ejecutar() {
+		return this.getEstado().ejecutar();
+	}
 	public void setCodigo(int codigo) {
 		this.codigo=codigo;
 	}
