@@ -94,7 +94,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 			
 		}catch (DataEmptyException | NotNullException | DateNullException | AppException
 						| IncorrectEmailException | StringNullException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"Error");
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",0);
 				}
 			
 		
