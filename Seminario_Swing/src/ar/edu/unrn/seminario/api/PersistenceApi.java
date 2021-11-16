@@ -96,9 +96,11 @@ public class PersistenceApi implements IApi {
 	private BeneficioDao beneficioDao;
 	private CanjeDao canjeDao;
 	private CampañaDao campañaDao;
-
-	
 	private Usuario userOnline;
+	private final String enEjecucion = "en ejecucion";
+	private final String concretado = "concretado";
+	private final String pendiente = "pendiente";
+	private final String cancelado = "cancelado";
 
 	public PersistenceApi() {
 		rolDao = new RolDAOJDBC();
@@ -257,107 +259,6 @@ public class PersistenceApi implements IApi {
 		}
 		return dtos;
 	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigo() throws AppException{
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
-				.sorted((v1,v2)->v1.getID()-v2.getID())
-				.collect(Collectors.toList());
-		return vDTO;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorNombreYApellido() throws AppException{
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
-				.sorted((v1,v2)->{
-					
-				String var1 = (v1.getDueño().getNombre()+ " " +  v1.getDueño().getApellido());
-				String var2 = (v2.getDueño().getNombre()+ " " + v2.getDueño().getApellido());
-				if(var1.compareToIgnoreCase(var2)>0) 
-					return 1;
-				
-				else 
-					return -1;
-				})
-				
-				.collect(Collectors.toList());
-		return vDTO;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCodigoPostal() throws AppException{
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO = vDTO.stream()
-				.sorted((v1,v2)->{
-					
-				if(v1.getDireccion().getCodPostal().compareToIgnoreCase(v2.getDireccion().getCodPostal())>0) 
-					return 1;
-			
-				else 
-					return -1;
-				})
-				
-				.collect(Collectors.toList());
-		return vDTO;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorBarrio() throws AppException{
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO = vDTO.stream()
-				.sorted((v1,v2)->{
-				if(v1.getDireccion().getBarrio().compareToIgnoreCase(v2.getDireccion().getBarrio())>0) 
-					return 1;
-				
-				else 
-					return -1;
-				})
-				.collect(Collectors.toList());
-		return vDTO;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorAltura() throws AppException{
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
-				.sorted((v1,v2)->{
-				if(v1.getDireccion().getAltura().compareToIgnoreCase(v2.getDireccion().getAltura())>0) 
-					return 1;
-				
-				else 
-					return -1;
-				})
-				.collect(Collectors.toList());
-		return vDTO;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	
-	public List<ViviendaDTO> obtenerViviendasOrdenadasPorCalle() throws AppException{
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
-				.sorted((v1,v2)->{
-				if(v1.getDireccion().getCalle().compareToIgnoreCase(v2.getDireccion().getCalle())>0) 
-					return 1;
-				
-				else 
-					return -1;
-				})
-				.collect(Collectors.toList());
-		return vDTO;
-	}
-	//****************************REEMPLAZAR POR ORDENAMIENTO PARAMETRIZADO****************************
-	public List<ViviendaDTO> obtenerViviendasPorLatitudYLongitud() throws AppException{
-		List<ViviendaDTO>vDTO = this.obtenerViviendas();
-		vDTO= vDTO.stream()
-				.sorted((v1,v2)->{
-					String latLong1 = (v1.getDireccion().getLatitud() +" " +  v1.getDireccion().getLongitud());
-					String latLong2 = (v2.getDireccion().getLatitud() +" " + v2.getDireccion().getLongitud());
-					
-				if(latLong1.compareToIgnoreCase(latLong2)>0) 
-					return 1;
-				else 
-					return -1;
-				})
-				.collect(Collectors.toList());
-		return vDTO;
-	}
 	
     public void registrarDueño(String nombre, String apellido, String dni, String correo, String username) throws Exception   {
     	Usuario usuario = null;
@@ -447,21 +348,21 @@ public class PersistenceApi implements IApi {
     	
     	
     	
-    	
+    	//Si pasa el cappeo, creo la visita
     	
     	
     	this.visitaDao.create(visita);
     	
     	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
     	
-    	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals("en ejecucion")) {
-    		actualizarEstadoOrden(codOrden, "en ejecucion");
+    	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals(enEjecucion)) {
+    		actualizarEstadoOrden(codOrden, new Estado(enEjecucion));
     	}
     	
     	if(!comprobarCantidadResiduos(codOrden)) {
-    		actualizarEstadoOrden(codOrden, "concretado");
+    		actualizarEstadoOrden(codOrden, new Estado(concretado));
     		OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
-    		int puntaje = calcularPuntaje(orden.getPedidoAsociado());
+    		int puntaje = calcularPuntaje(orden);
     		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
     	}
     	
@@ -590,11 +491,35 @@ public class PersistenceApi implements IApi {
     	return listaResiduosRestantesDTO;
     }
     
-    public void actualizarEstadoOrden(int codOrden, String estado) throws AppException{
+    public void actualizarEstadoOrden(int codOrden, Estado estado) throws AppException{
     	OrdenDeRetiro orden = this.ordenDeRetiroDao.find(codOrden);
-    	Estado nuevoEstado = new Estado(estado);
-    	orden.setEstado(nuevoEstado);
-    	ordenDeRetiroDao.update(orden);
+    	boolean valido = false;
+    	if(estado.cancelado()) {
+    		valido = orden.cancelar();
+    	}
+    	if(estado.concretado()) {
+    		valido = orden.concretar();
+    	}
+    	if(estado.enEjecucion()) {
+    		valido = orden.ejecutar();
+    	}
+    	if(estado.pendiente()) {
+    		valido = orden.setPendiente();
+    	}
+    	if(valido)
+    		ordenDeRetiroDao.update(orden);
+    	else {
+    		throw new AppException("No se pudo actualizar la orden al estado \""+estado.obtenerEstado()+"\"");
+    	}
+    }
+    public void concretarOrdenDeRetiro(int codOrden) throws AppException{
+    	OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
+    	actualizarEstadoOrden(codOrden, new Estado(concretado));
+    	int puntaje = calcularPuntaje(orden);
+		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
+    }
+    public void cancelarOrdenDeRetiro(int codOrden) throws AppException{
+    	actualizarEstadoOrden(codOrden, new Estado(cancelado));
     }
     
     public void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud, String barrio) 
@@ -786,6 +711,7 @@ public class PersistenceApi implements IApi {
     	}
     	return o;
     }
+   
     
     public void actualizarOrdenDeRetiro(OrdenDeRetiro orden) throws AppException {
     	ordenDeRetiroDao.update(orden);
@@ -943,12 +869,22 @@ public class PersistenceApi implements IApi {
     	} 
     	return canjesDto;
 	}
-	
-	public int calcularPuntaje(PedidoDeRetiro unPedido){
+	//Obsoleto
+	/*public int calcularPuntaje(PedidoDeRetiro unPedido){
 		int sumaPuntos = 0;
 		for(Residuo r: unPedido.getListResiduos()){
 			sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
 		}
+		return sumaPuntos;
+	}*/
+	public int calcularPuntaje(OrdenDeRetiro unaOrden){
+		int sumaPuntos = 0;
+		for(Visita v : unaOrden.getVisitas()) {
+			for(Residuo r: v.getResiduosExtraidos()){
+				sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
+			}
+		}
+		
 		return sumaPuntos;
 	}
 	

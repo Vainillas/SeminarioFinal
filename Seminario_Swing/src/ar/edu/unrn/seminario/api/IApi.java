@@ -206,7 +206,7 @@ public interface IApi {
 	List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	CampañaDTO obtenerCampañaPorCodigo(int codigo) throws AppException, NotNullException, DataEmptyException, NotNumberException;
-	int calcularPuntaje(PedidoDeRetiro unPedido);
+	int calcularPuntaje(OrdenDeRetiro unaOrden);
 	void sumarPuntos(Dueño dueño, int puntaje) throws AppException;
 	List<ResiduoDTO> devolverResiduosRestantes(int codOrden) throws AppException;
 	Boolean comprobarCantidadResiduos(int codOrden) throws AppException;
