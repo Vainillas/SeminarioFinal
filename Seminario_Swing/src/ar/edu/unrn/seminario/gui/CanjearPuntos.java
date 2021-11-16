@@ -13,12 +13,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
@@ -32,7 +30,6 @@ import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
-import ar.edu.unrn.seminario.utilities.Predicate;
 import java.awt.Color;
 import java.awt.Font;
 
@@ -42,10 +39,6 @@ public class CanjearPuntos extends JFrame {
 	private JTable tableCampañas;
 	private DefaultTableModel modeloCampaña;
 	private DefaultTableModel modeloBeneficio;
-	
-	private IApi api;
-	private JButton activarButton;
-	private JButton desactivarButton;
 	private JButton btnVolver;
 	private JPanel panelBeneficios;
 	private JButton cerrarButton;
@@ -77,8 +70,6 @@ public class CanjearPuntos extends JFrame {
 	 * Create the frame.
 	 */
 	public CanjearPuntos(IApi api) {
-		this.api = api;
-	
 		setTitle("Listar Campañas");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1045, 409);
@@ -106,23 +97,13 @@ public class CanjearPuntos extends JFrame {
 		tableBeneficios.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				try {
-					CampañaDTO c = api.obtenerCampañaPorCodigo(codCampaña);
-					for(Beneficio b :c.getCatalogo().getListaBeneficios() ) {
-						if(tableBeneficios.getValueAt(tableBeneficios.getSelectedRow(), 0).equals(b.getDescripcion())) {
-
-							codBeneficio = b.getCodigo();
-							
-							System.out.println("puntajede if :"+tableBeneficios.getValueAt(tableBeneficios.getSelectedColumn(), 0));
-							System.out.println("puntajede de Bb :  "+b.getPuntajeConsumible() );
-							
-							break;
-						}
-					}
+				/*try {
+					//List<Beneficio> c = 
+					
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 	
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-				}
+				}*/
 				
 			}
 		});
@@ -144,21 +125,13 @@ public class CanjearPuntos extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				String nombreCam = null;
 				
-				List<CampañaDTO> campa = null;
+				CampañaDTO campa = null;
 				List<Beneficio> b = null;
 				try {
+					
 					nombreCam = (String)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),0 );
-					campa = api.obtenerCampañas();
-					for(CampañaDTO c : campa) {
-					if(nombreCam.equals(c.getNombreCampaña())) {
-						b = c.getCatalogo().getListaBeneficios();
-						codCampaña = c.getCodigo();
-						break;
-						
-					}
-				}
+					campa = api.obtenerCampañaPorCodigo((Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),0));
 				modeloBeneficio.setRowCount(0);
-				
 				for(Beneficio bene : b) {
 					modeloBeneficio.addRow(new Object[] {
 							
@@ -178,9 +151,9 @@ public class CanjearPuntos extends JFrame {
 				
 			}
 		});
-		String [] titulosBeneficios = {"DESCRIPCION","PUNTAJE CONSUMIBLE "};
-		String[] titulos = { "NOMBRE"};
+		String [] titulosBeneficios = {"DESCRIPCION","PUNTAJE CONSUMIBLE ","CODIGO PUNTAJE"};
 
+		String[] titulos = { "NOMBRE","CODIGO CAMPAÑA"};
 		modeloCampaña = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficio = new DefaultTableModel(new Object[][] {},titulosBeneficios);
 		
@@ -195,6 +168,7 @@ public class CanjearPuntos extends JFrame {
 			for (CampañaDTO c : campaña) {
 				modeloCampaña.addRow(new Object[] { 
 						c.getNombreCampaña(),
+						c.getCodigo()
 						});
 				
 
