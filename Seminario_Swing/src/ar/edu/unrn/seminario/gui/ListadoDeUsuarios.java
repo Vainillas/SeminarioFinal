@@ -93,7 +93,7 @@ public class ListadoDeUsuarios extends JFrame {
 				usuarios = api.obtenerUsuarios();
 				// Agrega los usuarios en el model
 				for (UsuarioDTO u : usuarios) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol().getNombre() });
 				}
 
 		} catch (AppException e2) {
