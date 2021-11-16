@@ -809,6 +809,12 @@ public class PersistenceApi implements IApi {
     	} 
     	return beneficiosDto;
 	}
+	public BeneficioDTO obtenerBeneficioPorCodigo(int codigo) throws AppException, NotNullException{
+		BeneficioDTO beneficiosDto = null;
+    	Beneficio beneficio = beneficioDao.find(codigo);
+    	beneficiosDto = new BeneficioDTO(beneficio.getDescripcion(),beneficio.getPuntajeConsumible(), beneficio.getCodigo());
+    	return beneficiosDto;
+	}
 
 
 	

@@ -190,7 +190,7 @@ public interface IApi {
 			throws NotNullException, DataEmptyException, NotNumberException, AppException;
 
 	List<BeneficioDTO> obtenerBeneficios() throws AppException, NotNullException, DataEmptyException, NotNumberException;
-	
+	BeneficioDTO obtenerBeneficioPorCodigo(int codigo) throws AppException, NotNullException;
 	List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
