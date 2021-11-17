@@ -12,8 +12,8 @@ public class UsuarioIngreso  {
 		validarDatos(user,password);
 		this.user = user;
 		this.password = password;
-		
 	}
+	
 	private void validarDatos(String user, String password) throws IncorrectEmailException, DataEmptyException, StringNullException{
 		
 		if(ConditionHelper.stringIsEmpty(user)) { throw new DataEmptyException("nombre de usuario vacio");}

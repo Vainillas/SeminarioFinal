@@ -14,9 +14,6 @@ public class Visita {
 	private int codOrden;
 	private int codigo;
 	
-	
-	
-
 	public Visita(String observacion, ArrayList<Residuo> listaResiduos, int codOrden)throws NotNullException {
 		System.out.println(" verificacion"+observacion);
 		this.observacion=observacion;
@@ -32,6 +29,7 @@ public class Visita {
 		this.codigo=codigo;
 		fecha = new Date(Calendar.getInstance().getTime().getTime());
 	}
+	
 	public void ValidarDatos(String observacion,ArrayList<Residuo> listaResiduos ) throws NotNullException {
 		if(ConditionHelper.stringIsEmpty(observacion)) { 
 			System.out.println("entro");	
@@ -41,9 +39,8 @@ public class Visita {
 			throw new NotNullException("Descripcion vacia");}
 		
 		if(ConditionHelper.IsNull(listaResiduos)) {throw new NotNullException("lista de residuos nula");}
-		
-		
 	}
+	
 	public int getCodigo() {
 		return codigo;
 	}
