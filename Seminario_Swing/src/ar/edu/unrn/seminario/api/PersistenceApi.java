@@ -835,6 +835,7 @@ public class PersistenceApi implements IApi {
     	} 
     	return beneficiosDto;
 	}
+	
 	public BeneficioDTO obtenerBeneficioPorCodigo(int codigo) throws AppException, NotNullException{
 		BeneficioDTO beneficiosDto = null;
     	Beneficio beneficio = beneficioDao.find(codigo);
@@ -879,6 +880,7 @@ public class PersistenceApi implements IApi {
     	} 
     	return canjesDto;
 	}
+	
 	public int calcularPuntaje(OrdenDeRetiro unaOrden){
 		int sumaPuntos = 0;
 		for(Visita v : unaOrden.getVisitas()) {
@@ -891,12 +893,10 @@ public class PersistenceApi implements IApi {
 	}
 	
 	public void sumarPuntos(Dueño dueño, int puntaje) throws AppException {  
-		
 		dueño.sumarPuntos(puntaje);
-		
 		dueñoDao.update(dueño);       
-		
 	}
+	
 	public void generarCampaña(List<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
 		
 		ArrayList<Beneficio> listaDeBeneficios = new ArrayList<Beneficio>();
@@ -962,7 +962,7 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<PedidoDeRetiroDTO> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
-		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate);
+		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate); 
 	}
 
 	@Override

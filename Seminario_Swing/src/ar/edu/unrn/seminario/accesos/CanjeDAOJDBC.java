@@ -34,7 +34,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 
 			statement.setInt(1, canje.getBeneficioCanjeado().getCodigo());
 			statement.setString(2, canje.getDueñoCanjeador().getDni());
-			statement.setDate(3,new java.sql.Date(canje.getFechaCanje().getDate()));
+			statement.setDate(3, new java.sql.Date(canje.getFechaCanje().getDate())); 
 			statement.setInt(4, canje.getCampaña().getCodigo());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {

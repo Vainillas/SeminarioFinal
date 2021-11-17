@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
@@ -52,7 +53,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 	private JTextField txCodigo;
 	private JLabel lbCodigo;
 	private JButton btnLimpiarFiltro;
-	private ResourceBundle labels = ResourceBundle.getBundle("labels");
+	private ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es") );
 	private Comparator <ViviendaDTO> comparator;
 	private Predicate <ViviendaDTO> predicate;
 	private List<ViviendaDTO> viviendas = null;
@@ -403,7 +404,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		lbCodigo.setBounds(0, 140, 77, 14);
 		panelFiltrado.add(lbCodigo);
 		
-		btnLimpiarFiltro = new JButton(labels.getString("listado.de.viviendas.button.filtrado.limpiar"));
+		btnLimpiarFiltro = new JButton(labels.getString("listado.de.viviendas.button.limpiar"));
 		btnLimpiarFiltro.addActionListener((e)->{
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {

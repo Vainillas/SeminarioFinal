@@ -81,8 +81,8 @@ public class GenerarCampaña extends JFrame {
 		try {
 			beneficio = api.obtenerBeneficios();
 			for(BeneficioDTO b : beneficio) {
-				
-				modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
+				System.out.println("Holis "+ b.getDescripcion());
+				modeloBeneficiosNoAsociados.addRow(new Object[]{b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e) {
 			
@@ -146,6 +146,7 @@ public class GenerarCampaña extends JFrame {
 			}
 		});
 		JLabel lblNewLabel = new JLabel(labels.getString("generar.campaña.label.seleccionar.beneficios.campaña"));
+		tableBeneficiosNoAsociados.setModel(modeloBeneficiosNoAsociados);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(355, 30, 279, 14);
 		contentPane.add(lblNewLabel);
@@ -173,7 +174,7 @@ public class GenerarCampaña extends JFrame {
 
 					}
 					try {
-						
+						 
 						api.generarCampaña(codigo,tfnombreCampaña.getText());
 						JOptionPane.showMessageDialog(null,labels.getString("generar.campaña.confirmacion.campaña.generada"),labels.getString("generar.campaña.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
@@ -233,14 +234,12 @@ public class GenerarCampaña extends JFrame {
 					beneficios = api.obtenerBeneficios();
 
 					for(BeneficioDTO b : beneficios) {
-						this.modeloBeneficiosNoAsociados.addRow(new Object[] {
-								b.getDescripcion(),b.getPuntajeConsumible()
-								});
+						
 
 						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 					}
 					
-				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) { 
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
 			}
