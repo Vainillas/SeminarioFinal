@@ -160,16 +160,15 @@ public class GenerarCampaña extends JFrame {
 		JButton btnGenerarCampaña = new JButton("GenerarCampa\u00F1a");
 		btnGenerarCampaña.addActionListener((e)->{
 			List<Integer>codigo = null;
-			
+
 			if(this.tableBeneficiosAsociados.getRowCount()!=0) {
 				int res = JOptionPane.showConfirmDialog(null,"Seguro que desea crear la campaña con esos beneficios?","Confirmar envio", JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					codigo = new ArrayList<Integer>();
-				
+
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
 
-					}
 						
 						try {
 
@@ -182,19 +181,17 @@ public class GenerarCampaña extends JFrame {
 							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 						
 						}
-				}
-
-			
-			}
+					}}
 			
 			
 			else {
 				JOptionPane.showMessageDialog(null,"debe seleccionar un beneficio","Error",JOptionPane.ERROR_MESSAGE);
 			}
-			
+				}
 		});
+			
 		
-		tableBeneficiosNoAsociados.setModel(this.modeloBeneficiosNoAsociados);
+
 		scrollPaneBeneficioNoAsociado.setViewportView(tableBeneficiosNoAsociados);
 		
 		JLabel lbBeneficiosSinAsociar = new JLabel("Beneficios Sin Asociar");

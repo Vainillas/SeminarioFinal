@@ -182,7 +182,6 @@ public class ListadoDeCampañas extends JFrame {
 		
 		try {
 			campaña = api.obtenerCampañas();
-			System.out.println( campaña.size());
 			for (CampañaDTO c : campaña) {
 				modeloCampaña.addRow(new Object[] { 
 						c.getNombreCampaña(),
