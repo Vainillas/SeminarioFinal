@@ -5,6 +5,7 @@ import java.util.List;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.modelo.Canje;
+import ar.edu.unrn.seminario.modelo.Dueño;
 
 public interface CanjeDao {
 	void create(Canje canje) throws AppException;
@@ -18,4 +19,6 @@ public interface CanjeDao {
 	List<Canje> findAll() throws AppException, NotNullException;
 
 	boolean exists(int codigo) throws AppException;
+
+	List<Canje> findByUser(Dueño dueño)throws AppException, NotNullException;
 }

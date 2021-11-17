@@ -869,9 +869,10 @@ public class PersistenceApi implements IApi {
     	return canjesDto;
 	}
 	public List<CanjeDTO> obtenerCanjesPorUsuario() throws AppException, NotNullException, DataEmptyException, NotNumberException{
-		
+		String username = this.userOnline.getUsuario();
+		Dueño dueño = dueñoDao.findByUser(username);
 		List<CanjeDTO> canjesDto = new ArrayList<>();
-    	List<Canje> canjes = canjeDao.findAll();
+    	List<Canje> canjes = canjeDao.findByUser(dueño);
     	for (Canje c : canjes) {
     		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
     	} 

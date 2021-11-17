@@ -204,7 +204,9 @@ public interface IApi {
 	
 	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException, InsuficientPointsException;
 	
+	
 	List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	List<CanjeDTO> obtenerCanjesPorUsuario() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	CampañaDTO obtenerCampañaPorCodigo(int codigo) throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	int calcularPuntaje(OrdenDeRetiro unaOrden);
