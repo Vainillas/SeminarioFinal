@@ -276,7 +276,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lb_observacion.setBounds(32, 127, 142, 14);
 		panel_visita.add(lb_observacion);
 		
-		lb_año = new JLabel(labels.getString("registro.de.visita.label.hora"));
+		lb_año = new JLabel(labels.getString("registro.de.visita.label.año"));
 		lb_año.setBounds(20, 78, 46, 14);
 		panel_visita.add(lb_año);
 		lb_dia = new JLabel(labels.getString("registro.de.visita.label.dia"));
@@ -298,7 +298,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		
 
-		List<String> numeros = this.inicializarFecha(24);		
+		List<String> numeros = this.inicializarFecha(2022);		
 		SpinnerModel maximo_hora = new SpinnerListModel(numeros);
 		JSpinner spinner_año = new JSpinner(maximo_hora);
 		spinner_año.setModel(maximo_hora);
