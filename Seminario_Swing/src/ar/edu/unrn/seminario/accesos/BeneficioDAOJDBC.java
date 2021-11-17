@@ -26,7 +26,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 						+ "VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 
 			statement.setString(1, b.getDescripcion());
-			statement.setInt(2, Integer.parseInt(b.getPuntajeConsumible()));
+			statement.setInt(2, b.getPuntajeConsumible());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
 				System.out.println("Modificando " + cantidad + " registros");
@@ -57,7 +57,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 			ResultSet resultSetConsulta = statement.executeQuery();
 			if(resultSetConsulta.next()) {
 				beneficio= new Beneficio(resultSetConsulta.getString("nombre_beneficio"),  
-						String.valueOf(resultSetConsulta.getInt("costo")),
+						resultSetConsulta.getInt("costo"),
 						resultSetConsulta.getInt("codigo"));
 			}
 		} catch (SQLException e) {
@@ -77,7 +77,7 @@ public class BeneficioDAOJDBC implements BeneficioDao {
 					"SELECT * from beneficios");
 
 			while (ResultSetBeneficios.next()) {
-				Beneficio beneficio = new Beneficio(ResultSetBeneficios.getString("nombre_beneficio"),String.valueOf(ResultSetBeneficios.getString("costo")),
+				Beneficio beneficio = new Beneficio(ResultSetBeneficios.getString("nombre_beneficio"),ResultSetBeneficios.getInt("costo"),
 						ResultSetBeneficios.getInt("codigo"));
 				beneficios.add(beneficio);
 			}

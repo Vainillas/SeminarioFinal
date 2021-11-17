@@ -96,6 +96,10 @@ public class RegistrarDueño extends JFrame {
 		btn_aceptar.addActionListener((e)->{
 			try {
 				api.registrarDueño(this.tf_nombre.getText(),tf_apellido.getText(),tf_dni.getText());
+				VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api,labels);
+				ventana.setVisible(true);
+				setVisible(false);
+				dispose();
 			} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | AppException e1) {
 				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
@@ -106,6 +110,9 @@ public class RegistrarDueño extends JFrame {
 		
 		JButton btn_cancelar = new JButton(labels.getString("registrar.dueño.button.cancelar"));
 		btn_cancelar.addActionListener((e)->{
+			VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api,labels);
+			ventana.setVisible(true);
+			
 			this.setVisible(false);
 			dispose();
 			

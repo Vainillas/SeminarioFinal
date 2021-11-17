@@ -23,8 +23,6 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
-import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioNombre;
-import ar.edu.unrn.seminario.api.PersistenceApi.filtradoUsuarioRol;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
@@ -95,7 +93,7 @@ public class ListadoDeUsuarios extends JFrame {
 				usuarios = api.obtenerUsuarios();
 				// Agrega los usuarios en el model
 				for (UsuarioDTO u : usuarios) {
-					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+					modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol().getNombre() });
 				}
 
 		} catch (AppException e2) {
@@ -144,7 +142,7 @@ public class ListadoDeUsuarios extends JFrame {
 					try {
 						api.desactivarUsuario(username);
 						//reloadGrid(null);
-					} catch (StateException e1) {
+					} catch (StateException | AppException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(), 
 								labels.getString("listado.usuario.mensaje.error"), 
 								JOptionPane.ERROR_MESSAGE);
@@ -181,7 +179,7 @@ public class ListadoDeUsuarios extends JFrame {
 		btnOrdenarPorRol.addActionListener((e)->{
 
 			Comparator <UsuarioDTO> comparator = (UsuarioDTO v1, UsuarioDTO v2)
-					->(v1.getRol().compareToIgnoreCase(v2.getRol())
+					->(v1.getRol().getNombre().compareToIgnoreCase(v2.getRol().getNombre())
 			);
 			
 			try {

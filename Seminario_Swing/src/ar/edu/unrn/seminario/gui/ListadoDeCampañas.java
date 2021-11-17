@@ -62,6 +62,7 @@ public class ListadoDeCampañas extends JFrame {
 	private JTextField tfDescripcion;
 	private JTextField tfFiltrarBeneficioPorCodigo;
 	private JTextField tfFiltrarBeneficioPorPuntaje;
+	private List<Beneficio> beneficiosActual = null;
 	/**
 	 * Launch the application.
 	 */
@@ -120,44 +121,37 @@ public class ListadoDeCampañas extends JFrame {
 		tableCampañas.setColumnSelectionAllowed(false);
 		tableCampañas.setRowSelectionAllowed(false);
 		
-
 		tableCampañas.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				Integer codigo = null;
-
-
+				modeloBeneficio.setRowCount(0);
 				List<CampañaDTO> campa = null;
 				List<Beneficio> b = null;
 				try {
 					codigo = (Integer)tableCampañas.getValueAt(tableCampañas.getSelectedRow(),2 );
+					
 					campa = api.obtenerCampañas();
 					for(CampañaDTO c : campa) {
-					if(codigo.equals(c.getCodigo())) {
-						//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
-						b = c.getCatalogo().getListaBeneficios();
-						
-						break;
+						if(codigo.equals(c.getCodigo())) {
+							//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
+							b = c.getCatalogo().getListaBeneficios();
+							beneficiosActual = b;
+							break;
+						}
 					}
-					
-				}
-				modeloBeneficio.setRowCount(0);
-				
-				for(Beneficio bene : b) {
-					
-					modeloBeneficio.addRow(new Object[] {
+					for(Beneficio bene : b) {
 						
-						bene.getDescripcion(),
-						bene.getCodigo(),
-						bene.getPuntajeConsumible()
+						modeloBeneficio.addRow(new Object[] {
+							
+							bene.getDescripcion(),
+							bene.getCodigo(),
+							bene.getPuntajeConsumible()
+							
+						});
 						
-					});
-					
-					
-				}
-				
-				tableBeneficios.setModel(modeloBeneficio);
-				scrollPaneBeneficios.setViewportView(tableBeneficios);
+						
+					}
 				
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -228,7 +222,8 @@ public class ListadoDeCampañas extends JFrame {
 		
 		JRadioButton rdbtnNombre = new JRadioButton("");
 		rdbtnNombre.addActionListener((e)->{
-			Predicate<CampañaDTO> predicado = (CampañaDTO c)->c.getNombreCampaña().contains(this.tfNombre.getText());
+			
+			Predicate<CampañaDTO> predicado = (CampañaDTO c)->c.getNombreCampaña().toLowerCase().contains(this.tfNombre.getText().toLowerCase());
 			rdbtnNombre.setSelected(false);
 			try {
 				if(!this.tfNombre.getText().equals("")) {
@@ -261,7 +256,7 @@ public class ListadoDeCampañas extends JFrame {
 		rdbtnEstado.addActionListener((e)->{
 			rdbtnEstado.setSelected(false);
 			if(!this.tfEstado.getText().equals("")) {
-				Predicate<CampañaDTO> predicate  = (CampañaDTO c)->c.getEstado().contains(this.tfEstado.getText());
+				Predicate<CampañaDTO> predicate  = (CampañaDTO c)->c.getEstado().toLowerCase().contains(this.tfEstado.getText().toLowerCase());
 				try {
 				reloadGrid(api.obtenerCampañas(predicate));
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
@@ -348,7 +343,8 @@ public class ListadoDeCampañas extends JFrame {
 				
 				if(this.tableCampañas.getSelectedRowCount() != 0 ) {
 					
-					Predicate <BeneficioDTO> predicado = (BeneficioDTO b)->b.getDescripcion().contains(this.tfDescripcion.getText());
+					Predicate <BeneficioDTO> predicado = (BeneficioDTO b)->
+					b.getDescripcion().toLowerCase().contains(this.tfDescripcion.getText().toLowerCase());
 					try {
 						reloadGridBeneficio(api.obtenerBeneficios(predicado));
 					} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
@@ -376,6 +372,10 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosBeneficios.add(tfFiltrarBeneficioPorCodigo);
 		
 		JRadioButton rdbtnFiltrarBeneficioPorCodigo = new JRadioButton("");
+		rdbtnFiltrarBeneficioPorCodigo.addActionListener((e)->{
+			
+			
+		});
 		rdbtnFiltrarBeneficioPorCodigo.setBounds(175, 31, 21, 21);
 		panelFiltradosBeneficios.add(rdbtnFiltrarBeneficioPorCodigo);
 		
@@ -395,11 +395,18 @@ public class ListadoDeCampañas extends JFrame {
 		
 		JButton btnLimpiarFIltroBeneficios = new JButton("Limpiar Filtro");
 		btnLimpiarFIltroBeneficios.addActionListener((e)->{
-			try {
-				reloadGridBeneficio(api.obtenerBeneficios());
-			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
-			}
+
+				//modeloBeneficio.setRowCount(0);
+				modeloBeneficio.setRowCount(0);
+				this.tfDescripcion.setText("");
+				for (Beneficio b : this.beneficiosActual) {
+					this.modeloBeneficio.addRow(new Object[] {
+						b.getDescripcion(),
+						b.getCodigo(),
+						b.getPuntajeConsumible()
+					});
+				}
+			
 			
 			
 		});
@@ -428,6 +435,17 @@ public class ListadoDeCampañas extends JFrame {
 
 
 	}
+	/**private void reloadGridBeneficio(List<Beneficio> beneficio) {
+		this.modeloBeneficio.setRowCount(0);
+		for (Beneficio b : beneficio) {
+			this.modeloBeneficio.addRow(new Object[] {
+				b.getDescripcion(),
+				b.getCodigo(),
+				b.getPuntajeConsumible()
+			});
+		}
+		
+	}*/
 	private void reloadGridBeneficio(List<BeneficioDTO> beneficio) {
 		this.modeloBeneficio.setRowCount(0);
 		for (BeneficioDTO b : beneficio) {
@@ -440,8 +458,7 @@ public class ListadoDeCampañas extends JFrame {
 		
 	}
 
-	private void reloadGrid(List<CampañaDTO> campañaDTO) {
-		
+	private void reloadGrid(List<CampañaDTO> campañaDTO) {	
 		this.modeloCampaña.setRowCount(0);
 		this.modeloBeneficio.setRowCount(0);
 		for (CampañaDTO c : campañaDTO) {

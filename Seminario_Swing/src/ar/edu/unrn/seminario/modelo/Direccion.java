@@ -17,8 +17,7 @@ public class Direccion {
 	
 	public Direccion(String calle, String altura, String codPostal, String longitud, String latitud, String barrio) 
 			throws DataEmptyException, StringNullException, NotNumberException {
-		super();
-
+		super();		
 		validarDatos(calle, altura, codPostal,longitud,latitud,barrio);
 		this.calle = calle;
 		this.longitud = longitud;

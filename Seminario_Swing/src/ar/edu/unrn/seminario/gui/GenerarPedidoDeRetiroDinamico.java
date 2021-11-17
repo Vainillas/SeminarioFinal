@@ -50,7 +50,7 @@ import java.awt.event.ActionListener;
 import java.awt.FlowLayout;
 
 
-public class GenerarPedidoDeRetiro extends JFrame {
+public class GenerarPedidoDeRetiroDinamico extends JFrame {
 
 	/**
 	 * 
@@ -77,11 +77,11 @@ public class GenerarPedidoDeRetiro extends JFrame {
 	public static void main(String [] args) {
 		PersistenceApi api = new PersistenceApi();
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
-		GenerarPedidoDeRetiro p = new GenerarPedidoDeRetiro(api,labels );
+		GenerarPedidoDeRetiroDinamico p = new GenerarPedidoDeRetiroDinamico(api,labels );
 		p.setVisible(true);
 	}
 	
-	public GenerarPedidoDeRetiro(IApi api, ResourceBundle labels) {
+	public GenerarPedidoDeRetiroDinamico(IApi api, ResourceBundle labels) {
 
 		setTitle(labels.getString("pedido.retiro.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -206,6 +206,7 @@ public class GenerarPedidoDeRetiro extends JFrame {
 		
 		panelResiduos.add(ftfKg);
 		btnEnviarKg.addActionListener((e)->{
+			if(!this.ftfKg.getText().equals("")) {
 				int res = JOptionPane.showConfirmDialog(null,("seguro que desea seleccionar "+ftfKg.getText()+" kg de "+ String.valueOf(comboBox.getSelectedItem()).toLowerCase())+"?","",JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					
@@ -220,7 +221,10 @@ public class GenerarPedidoDeRetiro extends JFrame {
 					ftfKg.setEnabled(false);
 					comboBox.setEnabled(false);
 				}
-				
+			}
+			else {
+				JOptionPane.showMessageDialog(null,labels.getString("pedido.retiro.mensaje.error"),"Error",0);
+			}
 			
 			
 		});
@@ -286,8 +290,12 @@ public class GenerarPedidoDeRetiro extends JFrame {
 				List<ViviendaDTO> viviendas= new ArrayList<ViviendaDTO>();	
 		
 					try {
+						if(api.obtenerRolUsuarioActivo().equals("ADMIN")) {
 						viviendas = api.obtenerViviendas();
-						
+						}
+						else {
+						viviendas = api.obtenerViviendasDeUsuario();
+						}
 						// Agrega las direcciones de el dueño en el model
 						for (ViviendaDTO d : viviendas) {
 							modelo.addRow(new Object[] { d.getDireccion().getBarrio(), 

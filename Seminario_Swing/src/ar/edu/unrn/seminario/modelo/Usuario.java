@@ -12,8 +12,6 @@ public class Usuario {
 	private String contrasena;
 	private String email;
 	private Rol rol;
-	
-
 	private boolean activo;
 
 	public Usuario(String usuario, String contrasena, String email, Rol rol) throws NotNullException,IncorrectEmailException, DataEmptyException, StringNullException{
@@ -23,6 +21,17 @@ public class Usuario {
 		this.email = email;
 		this.rol = rol;
 		this.activo=false;
+	}
+	public Usuario(String usuario, String contrasena, String email, Rol rol, int activo) throws NotNullException,IncorrectEmailException, DataEmptyException, StringNullException{
+		validarDatos(usuario, contrasena, email, rol);
+		this.usuario = usuario;
+		this.contrasena = contrasena;
+		this.email = email;
+		this.rol = rol;
+		this.activo=false;
+		if(activo == 1) {
+			this.activo=true;
+		}
 	}
 	private void validarDatos(String usuario, String contrasena, String email, Rol rol) throws DataEmptyException, StringNullException, NotNullException, IncorrectEmailException {
 

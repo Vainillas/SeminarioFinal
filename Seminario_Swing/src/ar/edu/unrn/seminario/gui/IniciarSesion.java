@@ -28,6 +28,17 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import java.awt.Font;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.CardLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import javax.swing.border.BevelBorder;
+import javax.swing.UIManager;
+import javax.swing.border.MatteBorder;
+import java.awt.Color;
+import javax.swing.border.EtchedBorder;
 
 public class IniciarSesion extends JFrame {
 
@@ -37,9 +48,6 @@ public class IniciarSesion extends JFrame {
 	private IApi api;
 	private JPanel panelNoRegistrado;
 	private JComboBox comboBoxIdioma;
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -67,39 +75,44 @@ public class IniciarSesion extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 316);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 240));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelDatos = new JPanel();
-		panelDatos.setLayout(null);
-		panelDatos.setBounds(20, 11, 404, 118);
+		panelDatos.setBackground(new Color(255, 255, 224));
+		panelDatos.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+		panelDatos.setBounds(80, 88, 275, 118);
 		contentPane.add(panelDatos);
+		panelDatos.setLayout(null);
+		
+		JLabel labelUsuario = new JLabel(labels.getString("iniciar.sesion.label.usuario"));
+		labelUsuario.setBounds(10, 28, 99, 14);
+		panelDatos.add(labelUsuario);
 		
 		textUsuario = new JTextField("");
+		textUsuario.setBounds(119, 25, 146, 20);
 		textUsuario.setToolTipText("");
-		textUsuario.setBounds(101, 40, 234, 20);
 		panelDatos.add(textUsuario);
 		textUsuario.setColumns(10);
 		
 		textPassword = new JPasswordField("");
+		textPassword.setBounds(119, 69, 146, 20);
 		textPassword.setToolTipText("");
-		textPassword.setBounds(101, 80, 234, 20);
 		panelDatos.add(textPassword);
 		
-		JLabel labelUsuario = new JLabel(labels.getString("iniciar.sesion.label.usuario"));
-		labelUsuario.setBounds(10, 43, 64, 14);
-		panelDatos.add(labelUsuario);
-		
 		JLabel labelPassword = new JLabel(labels.getString("iniciar.sesion.label.password"));
-		labelPassword.setBounds(10, 83, 64, 14);
+		labelPassword.setBackground(new Color(255, 255, 224));
+		labelPassword.setBounds(10, 72, 99, 14);
 		panelDatos.add(labelPassword);
 		
 		JPanel panelBotones = new JPanel();
-		panelBotones.setBounds(20, 128, 404, 52);
+		panelBotones.setBackground(new Color(255, 255, 224));
+		panelBotones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelBotones.setBounds(10, 214, 414, 52);
 		contentPane.add(panelBotones);
 		panelBotones.setLayout(null);
-		
 		JButton buttonCancelar = new JButton(labels.getString("iniciar.sesion.button.cancelar"));
 		buttonCancelar.addActionListener((e)->{
 			
@@ -109,9 +122,6 @@ public class IniciarSesion extends JFrame {
 		});
 		buttonCancelar.setBounds(216, 18, 89, 23); 
 		panelBotones.add(buttonCancelar);
-		comboBoxIdioma = new JComboBox();
-		comboBoxIdioma.addItem("ESPAÑOL");
-		comboBoxIdioma.addItem("INGLES");
 		
 		JButton buttonAceptar = new JButton(labels.getString("iniciar.sesion.button.aceptar"));
 		buttonAceptar.addActionListener((e)->{
@@ -142,45 +152,52 @@ public class IniciarSesion extends JFrame {
 		
 		buttonAceptar.setBounds(81, 18, 89, 23);
 		panelBotones.add(buttonAceptar);
-		
-		 panelNoRegistrado = new JPanel();
-		panelNoRegistrado.setBounds(211, 191, 213, 84);
-		panelNoRegistrado.setLayout(null);
-		panelNoRegistrado.setVisible(true);
-		contentPane.add(panelNoRegistrado);
-		JLabel labelNoRegistrado = new JLabel(labels.getString("iniciar.sesion.label.no.registrado"));
-		labelNoRegistrado.setBounds(53, 11, 150, 14);
-		panelNoRegistrado.add(labelNoRegistrado);
-		
-		JButton buttonRegistrarse = new JButton(labels.getString("iniciar.sesion.label.registrarse"));
-		buttonRegistrarse.addActionListener((e)->{
-				AltaUsuario usuario = new AltaUsuario(api,labels);
-				usuario.setVisible(true);
-				this.textPassword.setText("");
-				this.textUsuario.setText("");
-				
-				String idioma = (String) comboBoxIdioma.getSelectedItem();
-				
-			
-			
-		});
-		
-		buttonRegistrarse.setBounds(54, 36, 107, 23);
-		panelNoRegistrado.add(buttonRegistrarse);
+		comboBoxIdioma = new JComboBox();
+		comboBoxIdioma.addItem("ESPAÑOL");
+		comboBoxIdioma.addItem("INGLES");
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(null);
-		panel.setBounds(20, 191, 181, 86);
+		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel.setBackground(new Color(255, 255, 224));
+		panel.setBounds(10, 1, 181, 84);
 		contentPane.add(panel);
+		panel.setLayout(null);
 		
 
 		
-		comboBoxIdioma.setBounds(58, 33, 113, 22);
+		comboBoxIdioma.setBounds(58, 28, 113, 22);
 		panel.add(comboBoxIdioma);
 		
 		JLabel lbIdioma = new JLabel(labels.getString("iniciar.sesion.label.idioma")); 
-		lbIdioma.setBounds(10, 11, 46, 14);
+		lbIdioma.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lbIdioma.setBounds(10, 11, 121, 14);
 		panel.add(lbIdioma);
+		
+		 panelNoRegistrado = new JPanel();
+		 panelNoRegistrado.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		 panelNoRegistrado.setBackground(new Color(255, 255, 224));
+		 panelNoRegistrado.setBounds(243, 1, 181, 84);
+		 contentPane.add(panelNoRegistrado);
+		 panelNoRegistrado.setLayout(null);
+		 panelNoRegistrado.setVisible(true);
+		 JLabel labelNoRegistrado = new JLabel(labels.getString("iniciar.sesion.label.no.registrado"));
+		 labelNoRegistrado.setFont(new Font("Tahoma", Font.BOLD, 11));
+		 labelNoRegistrado.setBounds(10, 11, 150, 14);
+		 panelNoRegistrado.add(labelNoRegistrado);
+		 
+		 JButton buttonRegistrarse = new JButton(labels.getString("iniciar.sesion.label.registrarse"));
+		 buttonRegistrarse.addActionListener((e)->{
+		 		AltaUsuario usuario = new AltaUsuario(api,labels);
+		 		usuario.setVisible(true);
+		 		this.textPassword.setText("");
+		 		this.textUsuario.setText("");
+		 		
+		 		String idioma = (String) comboBoxIdioma.getSelectedItem();
+
+		 });
+		 
+		 buttonRegistrarse.setBounds(54, 36, 107, 23);
+		 panelNoRegistrado.add(buttonRegistrarse);
 		
 	}
 }

@@ -107,7 +107,7 @@ public class GenerarCampaña extends JFrame {
 			public void mousePressed(MouseEvent e) {
 
 				String  descripcion = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),0 );
-				String puntaje = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
+				Integer puntaje = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),2 );
 				
 				//tableBeneficiosNoAsociados.clearSelection();
@@ -134,7 +134,7 @@ public class GenerarCampaña extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
-				String puntaje = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
+				Integer puntaje = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),2 );		
 				modeloBeneficiosNoAsociados.removeRow(tableBeneficiosNoAsociados.getSelectedRow());
 				modeloBeneficiosAsociados.addRow(new Object[] {descripcion,puntaje,codigo});
@@ -165,22 +165,22 @@ public class GenerarCampaña extends JFrame {
 				int res = JOptionPane.showConfirmDialog(null,"Seguro que desea crear la campaña con esos beneficios?","Confirmar envio", JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					codigo = new ArrayList<Integer>();
-
+					
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
 
+					}
+					try {
 						
-						try {
+						api.generarCampaña(codigo,tfnombreCampaña.getText());
+						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
+						setVisible(false);
+						dispose();
+					} catch (AppException | NotNullException e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 
-							api.generarCampaña(codigo,tfnombreCampaña.getText());
-							System.out.println("eeeeo");
-							JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
-							setVisible(false);
-							dispose();
-						} catch (AppException | NotNullException e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 						
-						}
 					}}
 			
 			
@@ -231,7 +231,7 @@ public class GenerarCampaña extends JFrame {
 					beneficios = api.obtenerBeneficios();
 
 					for(BeneficioDTO b : beneficios) {
-						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible()});
+						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 					}
 					
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {

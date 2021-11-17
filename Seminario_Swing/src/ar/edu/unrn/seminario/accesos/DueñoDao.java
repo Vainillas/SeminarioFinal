@@ -23,4 +23,5 @@ public interface DueñoDao {
 	List<Dueño> findAll() throws AppException, NotNumberException;
 
 	boolean exists(String dni) throws AppException;
+	boolean existsByUser(String username) throws AppException;
 }
