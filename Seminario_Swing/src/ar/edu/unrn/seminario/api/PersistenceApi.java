@@ -867,14 +867,15 @@ public class PersistenceApi implements IApi {
     	} 
     	return canjesDto;
 	}
-	//Obsoleto
-	/*public int calcularPuntaje(PedidoDeRetiro unPedido){
-		int sumaPuntos = 0;
-		for(Residuo r: unPedido.getListResiduos()){
-			sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
-		}
-		return sumaPuntos;
-	}*/
+	public List<CanjeDTO> obtenerCanjesPorUsuario() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		
+		List<CanjeDTO> canjesDto = new ArrayList<>();
+    	List<Canje> canjes = canjeDao.findAll();
+    	for (Canje c : canjes) {
+    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
+    	} 
+    	return canjesDto;
+	}
 	public int calcularPuntaje(OrdenDeRetiro unaOrden){
 		int sumaPuntos = 0;
 		for(Visita v : unaOrden.getVisitas()) {

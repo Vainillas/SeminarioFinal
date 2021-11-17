@@ -370,13 +370,14 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			System.out.println(table.getSelectedRow());
 			
 			if(!(table.getSelectedRow() == -1)) {
-				System.out.println("todo ok");
-				/*try {
-					api.concretarOrdenDeRetiro((int)table.getValueAt(table.getSelectedColumn(),table.getSelectedRow() ));
+
+				try {
+					System.out.println((int)table.getValueAt(table.getSelectedRow(),1));
+					api.concretarOrdenDeRetiro((int)table.getValueAt(table.getSelectedRow(),1));
 				} catch (AppException e1) {
 					// TODO Bloque catch generado automáticamente
 					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
-				}*/
+				}
 			}
 			else {
 				JOptionPane.showMessageDialog(null,"Debe Seleccionar Un Pedido","error",0);
