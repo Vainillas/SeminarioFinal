@@ -6,6 +6,8 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -20,10 +22,13 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.CanjeDTO;
+import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
+import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.SwingConstants;
@@ -34,8 +39,7 @@ import javax.swing.JTextField;
 public class ListadoDeCanjes extends JFrame {
 
 	private JPanel contentPane;
-	DefaultTableModel modelo;
-	IApi api;
+	private DefaultTableModel modelo;
 	private JTable table;
 	private JTextField tfFiltrarPorNombreCampaña;
 	private JTextField tfFiltrarPorCodigoCampaña;
@@ -43,15 +47,21 @@ public class ListadoDeCanjes extends JFrame {
 	private JTextField tfFiltrarPorUsuarioAsociado;
 	private JTextField tfFiltrarPorCodigoUsuario;
 	private JTextField tfFiltrarPorCodigoBeneficio;
-	/**
-	 * Launch the application.
-	 */
+	private List<CanjeDTO> listaFiltrados;
+	private List<CanjeDTO> listaOrdenamiento;
+	private String rolUsuarioActivo;
+	private String [] titulos;
+	private JLabel filtrarPorCodigoUsuario ;
+	private JLabel filtrarPorUsuarioAsociado ;
+	private JRadioButton rdbtnFiltrarPorUsuarioAsociado;
+	private JRadioButton rdbtnUsuarioAsociado;
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					IApi api = new PersistenceApi();
-					ListadoDeCanjes frame = new ListadoDeCanjes(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
+					ListadoDeCanjes frame = new ListadoDeCanjes(api,labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,10 +72,9 @@ public class ListadoDeCanjes extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @param labels 
 	 */
-	public ListadoDeCanjes(IApi api) {
-		this.api = api;
-
+	public ListadoDeCanjes(IApi api, ResourceBundle labels) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1139, 427);
 		contentPane = new JPanel();
@@ -73,39 +82,44 @@ public class ListadoDeCanjes extends JFrame {
 		setContentPane(contentPane);
 
 
-			String[] titulos = { 
-					"NOMBRE CAMPAÑA",
-					"CODIGO CAMPAÑA", 
-					"DESCRIPCION BENEFICIO", 
-					"CODIGO BENEFICIO", 
-					"DUEÑO ASOCIADO",
-					"DNI DUEÑO" 
-					
-			};
-			
+
+		String []titulos = { 
+				"NOMBRE CAMPAÑA",
+				"CODIGO CAMPAÑA", 
+				"DESCRIPCION BENEFICIO", 
+				"CODIGO BENEFICIO", 
+				"DUEÑO ASOCIADO",
+				"DNI DUEÑO" 	
+		};
+		String []titulos2 = { 
+				"NOMBRE CAMPAÑA",
+				"CODIGO CAMPAÑA", 
+				"DESCRIPCION BENEFICIO", 
+				"CODIGO BENEFICIO", 
+		};
 			List<CanjeDTO> canjes = null;
+			
 			try {
-				canjes = api.obtenerCanjes();
+				if(api.obtenerRolUsuarioActivo().equalsIgnoreCase("ADMIN")) {
+					modelo = new DefaultTableModel(new Object[][] {},titulos);
+					canjes = api.obtenerCanjes();
+					rolUsuarioActivo = "ADMIN";
+					this.titulos = titulos;
+				}
+				else {
+					System.out.println("Etrno a dueno");
+					modelo = new DefaultTableModel(new Object[][] {},titulos2);
+					this.titulos = titulos;
+					canjes = api.obtenerCanjesPorUsuario();
+					rolUsuarioActivo = "COMUNIDAD";
+				}
+				
+			reloadGrid(canjes);
 			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
 			}
 			
-			for (CanjeDTO c : canjes) {
-				modelo.addRow(new Object[] {
-						c.getCampaña().getNombreCampaña(),
-						c.getCampaña().getCodigo(),
-						c.getBeneficioCanjeado().getDescripcion(),
-						c.getBeneficioCanjeado().getCodigo(),
-						c.getDueñoCanjeador().getNombre(),
-						c.getDueñoCanjeador().getDni()
-
-				});
-			}
 			
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);
-
-
-
 		JButton cerrarButton = new JButton("Cerrar");
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -133,8 +147,9 @@ public class ListadoDeCanjes extends JFrame {
 		table = new JTable();
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
-		
+		reloadGrid(canjes);
 		JPanel panel_Filtrados = new JPanel();
+		panel_Filtrados.setVisible(false);
 		panel_Filtrados.setBounds(848, 5, 265, 203);
 		contentPane.add(panel_Filtrados);
 		panel_Filtrados.setLayout(null);
@@ -160,6 +175,14 @@ public class ListadoDeCanjes extends JFrame {
 			
 			Predicate <CanjeDTO> predicate = (CanjeDTO c)->c.getCampaña().getNombreCampaña().toLowerCase().contains(this.tfFiltrarPorNombreCampaña.getText());
 			try {
+				
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					this.listaFiltrados = api.obtenerCanjesPorUsuario();
+				}
+				else {
+					this.listaFiltrados = api.obtenerCanjes();
+				}
+				
 				reloadGrid(api.obtenerCanjes(predicate));
 			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
@@ -191,12 +214,12 @@ public class ListadoDeCanjes extends JFrame {
 		filtrarPorCodigoBeneficio.setBounds(0, 114, 139, 14);
 		panel_Filtrados.add(filtrarPorCodigoBeneficio);
 		
-		JLabel filtrarPorUsuarioAsociado = new JLabel("Usuario Asociado:");
+		filtrarPorUsuarioAsociado = new JLabel("Usuario Asociado:");
 		filtrarPorUsuarioAsociado.setHorizontalAlignment(SwingConstants.CENTER);
 		filtrarPorUsuarioAsociado.setBounds(0, 139, 139, 14);
 		panel_Filtrados.add(filtrarPorUsuarioAsociado);
 		
-		JLabel filtrarPorCodigoUsuario = new JLabel("Codigo Usuario:");
+		 filtrarPorCodigoUsuario = new JLabel("Codigo Usuario:");
 		filtrarPorCodigoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		filtrarPorCodigoUsuario.setBounds(0, 164, 139, 14);
 		panel_Filtrados.add(filtrarPorCodigoUsuario);
@@ -251,7 +274,7 @@ public class ListadoDeCanjes extends JFrame {
 		rdbtnFiltrarPorCodigoBeneficio.setBounds(238, 110, 21, 23);
 		panel_Filtrados.add(rdbtnFiltrarPorCodigoBeneficio);
 		
-		JRadioButton rdbtnFiltrarPorUsuarioAsociado = new JRadioButton("");
+		rdbtnFiltrarPorUsuarioAsociado = new JRadioButton("");
 		rdbtnFiltrarPorUsuarioAsociado.addActionListener((e)->{
 			rdbtnFiltrarPorUsuarioAsociado.setSelected(false);
 		});
@@ -269,6 +292,7 @@ public class ListadoDeCanjes extends JFrame {
 		panel_Filtrados.add(rdbtnFiltrarPorCodigoUsuario);
 		
 		JPanel panel_Ordenamiento = new JPanel();
+		panel_Ordenamiento.setVisible(false);
 		panel_Ordenamiento.setBounds(848, 210, 265, 178);
 		contentPane.add(panel_Ordenamiento);
 		panel_Ordenamiento.setLayout(null);
@@ -307,7 +331,7 @@ public class ListadoDeCanjes extends JFrame {
 		rdbtnOrdenarCodigoBeneficio.setBounds(111, 101, 148, 23);
 		panel_Ordenamiento.add(rdbtnOrdenarCodigoBeneficio);
 		
-		JRadioButton rdbtnUsuarioAsociado = new JRadioButton("Usuario Asociado");
+		rdbtnUsuarioAsociado = new JRadioButton("Usuario Asociado");
 		rdbtnUsuarioAsociado.addActionListener((e)->{
 			rdbtnUsuarioAsociado.setSelected(false);
 		});
@@ -322,14 +346,42 @@ public class ListadoDeCanjes extends JFrame {
 		});
 		rdbtnCodigoUsuario.setBounds(111, 150, 146, 25);
 		panel_Ordenamiento.add(rdbtnCodigoUsuario);
-
+		if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+			this.filtrarPorCodigoUsuario.setVisible(false);
+			this.filtrarPorUsuarioAsociado.setVisible(false);
+			this.rdbtnFiltrarPorUsuarioAsociado.setVisible(false);
+			rdbtnFiltrarPorCodigoUsuario.setVisible(false);
+			tfFiltrarPorCodigoUsuario.setVisible(false);
+			tfFiltrarPorUsuarioAsociado.setVisible(false);
+			//lbFiltrarPorUsuarioAsociado.setVisible(false);
+			
+			
+		}
 	}
 	
 	private void reloadGrid(List <CanjeDTO> canje) {
 		
 		modelo.setRowCount(0);
-		
-		// Agrega los usuarios en el model
+		if(this.rolUsuarioActivo.equals("ADMIN")) {
+			for (CanjeDTO c : canje) {
+				modelo.addRow(new Object[] { 
+							c.getCampaña().getNombreCampaña(),
+							c.getCampaña().getCodigo(),
+							c.getBeneficioCanjeado().getCodigo(),
+							c.getDueñoCanjeador().getNombre()+" "+ c.getDueñoCanjeador().getApellido(),
+							c.getDueñoCanjeador().getDni()
+				});
+			}
+		}
+		else {
+			for (CanjeDTO c : canje) {
+				modelo.addRow(new Object[] { 
+							c.getCampaña().getNombreCampaña(),
+							c.getCampaña().getCodigo(),
+							c.getBeneficioCanjeado().getCodigo(),
+				});
+			}
+		}
 		
 
 	}
