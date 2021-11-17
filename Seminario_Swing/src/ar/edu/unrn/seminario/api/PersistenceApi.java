@@ -801,7 +801,7 @@ public class PersistenceApi implements IApi {
 		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate);
 		
 	}
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, Exception{
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException{
 		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), comparator);
 	}
 
@@ -959,12 +959,12 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
-		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), comparator);
+		return Filtro.filtrar(this.obtenerPedidosDeRetiroDeUsuario(), comparator);
 	}
 
 	@Override
 	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<PedidoDeRetiroDTO> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
-		return Filtro.filtrar(this.obtenerPedidosDeRetiro(), predicate);
+		return Filtro.filtrar(this.obtenerPedidosDeRetiroDeUsuario(), predicate);
 	}
 
 	@Override

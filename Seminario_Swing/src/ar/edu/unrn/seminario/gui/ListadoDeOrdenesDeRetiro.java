@@ -303,6 +303,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			Comparator <OrdenDeRetiroDTO> comparator = (OrdenDeRetiroDTO o1, OrdenDeRetiroDTO o2)->
 			o1.getRecolector().getDni().compareToIgnoreCase(o2.getRecolector().getDni());
 			try {
+				
 				reloadGrid(api.obtenerOrdenesDeRetiro(comparator));
 			} catch (AppException e1) {
 				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);

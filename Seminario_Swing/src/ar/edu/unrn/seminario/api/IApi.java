@@ -133,7 +133,8 @@ public interface IApi {
 			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
 	
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
-			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException, IncorrectEmailException;
+			throws DataEmptyException, NotNullException, StringNullException, DateNullException, 
+			AppException, IncorrectEmailException;
 
 	Usuario getUserOnline();
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
@@ -142,7 +143,8 @@ public interface IApi {
 	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) 
 			 throws AppException;
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() 
-			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, 
+			StringNullException, DateNullException;
 
 	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()
 			throws AppException;
@@ -182,7 +184,7 @@ public interface IApi {
 			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro(Comparator<PedidoDeRetiroDTO> comparator) 
-			throws AppException, Exception;
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 
 	List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) 
 			throws AppException, NotNumberException;
