@@ -375,7 +375,6 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 					viviendas = api.obtenerViviendasDeUsuario(predicate);
-				
 				}
 				else {
 					viviendas = api.obtenerViviendas(predicate);	

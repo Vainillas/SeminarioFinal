@@ -151,7 +151,7 @@ public interface IApi {
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException;
 	
 	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, 
-			String observacion, int codOrden, Integer dia, Integer mes, Integer año) 
+			String observacion, Integer codOrden, Integer dia, Integer mes, Integer año) 
 			throws AppException, NotNullException;
 	
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) 
@@ -164,7 +164,8 @@ public interface IApi {
 	ArrayList<String> obtenerNombresResiduos() throws AppException;
 	
 
-
+	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, Integer codOrden) throws AppException, NotNullException;
+	
 	List<ViviendaDTO> obtenerViviendasDeUsuario() 
 			throws AppException;
 
@@ -211,7 +212,8 @@ public interface IApi {
 	List<ResiduoDTO> devolverResiduosRestantes(int codOrden) throws AppException;
 	Boolean comprobarCantidadResiduos(int codOrden) throws AppException;
 	boolean comprobarExcedenteResiduos(OrdenDeRetiro ordenAComprobar, Visita visitaNueva);
-	
+	void concretarOrdenDeRetiro(int codOrden) throws AppException;
+	void cancelarOrdenDeRetiro(int codOrden) throws AppException;
 	List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	
 
