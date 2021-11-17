@@ -59,7 +59,7 @@ public class GenerarCampaña extends JFrame {
 
 
 	public GenerarCampaña(IApi api, ResourceBundle labels) {
-		setTitle("Generar Campaña");
+		setTitle(labels.getString("generar.campaña.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1000, 349);
 		contentPane = new JPanel();
@@ -70,9 +70,9 @@ public class GenerarCampaña extends JFrame {
 		panelBeneficiosNoAsociados.setBounds(10, 60, 402, 236);
 		contentPane.add(panelBeneficiosNoAsociados);
 		String [] titulos = {
-				"Descripcion",
-				"Puntaje",
-				"Codigo"
+				labels.getString("generar.campaña.titulos.descripcion"),
+				labels.getString("generar.campaña.titulos.puntaje"),
+				labels.getString("generar.campaña.titulos.codigo")
 				
 		};
 		
@@ -145,12 +145,12 @@ public class GenerarCampaña extends JFrame {
 				
 			}
 		});
-		JLabel lblNewLabel = new JLabel("Selecciones Los Beneficios Para La Campa\u00F1a");
+		JLabel lblNewLabel = new JLabel(labels.getString("generar.campaña.label.seleccionar.beneficios.campaña"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(355, 30, 279, 14);
 		contentPane.add(lblNewLabel);
 		
-		JLabel lbNombreCampaña = new JLabel("Nombre de la campa\u00F1a:");
+		JLabel lbNombreCampaña = new JLabel(labels.getString("generar.campaña.label.nombre.campaña"));
 		lbNombreCampaña.setBounds(10, 11, 140, 14);
 		contentPane.add(lbNombreCampaña);
 		
@@ -159,12 +159,12 @@ public class GenerarCampaña extends JFrame {
 		contentPane.add(tfnombreCampaña);
 		tfnombreCampaña.setColumns(10);
 		
-		JButton btnGenerarCampaña = new JButton("GenerarCampa\u00F1a");
+		JButton btnGenerarCampaña = new JButton(labels.getString("generar.campaña.button.generar.campaña"));
 		btnGenerarCampaña.addActionListener((e)->{
 			List<Integer>codigo = null;
 
 			if(this.tableBeneficiosAsociados.getRowCount()!=0) {
-				int res = JOptionPane.showConfirmDialog(null,"Seguro que desea crear la campaña con esos beneficios?","Confirmar envio", JOptionPane.YES_NO_OPTION);
+				int res = JOptionPane.showConfirmDialog(null,labels.getString("generar.campaña.pregunta"),labels.getString("generar.campaña.confirmacion.envio"), JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					codigo = new ArrayList<Integer>();
 					
@@ -175,7 +175,7 @@ public class GenerarCampaña extends JFrame {
 					try {
 						
 						api.generarCampaña(codigo,tfnombreCampaña.getText());
-						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,labels.getString("generar.campaña.confirmacion.campaña.generada"),labels.getString("generar.campaña.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
 					} catch (AppException | NotNullException e1) {
@@ -187,7 +187,7 @@ public class GenerarCampaña extends JFrame {
 			
 			
 			else {
-				JOptionPane.showMessageDialog(null,"debe seleccionar un beneficio","Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,labels.getString("generar.campaña.mensaje.error.seleccionar.beneficio"),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 				}
 		});
@@ -196,12 +196,12 @@ public class GenerarCampaña extends JFrame {
 
 		scrollPaneBeneficioNoAsociado.setViewportView(tableBeneficiosNoAsociados);
 		
-		JLabel lbBeneficiosSinAsociar = new JLabel("Beneficios Sin Asociar");
+		JLabel lbBeneficiosSinAsociar = new JLabel(labels.getString("generar.campaña.label.beneficios.sin.asociar"));
 		lbBeneficiosSinAsociar.setHorizontalAlignment(SwingConstants.CENTER);
 		lbBeneficiosSinAsociar.setBounds(130, 40, 168, 14);
 		contentPane.add(lbBeneficiosSinAsociar);
 		
-		JLabel lbBeneficiosAsociados = new JLabel("Beneficios Asociados ");
+		JLabel lbBeneficiosAsociados = new JLabel(labels.getString("generar.campaña.label.beneficios.asociados"));
 		lbBeneficiosAsociados.setHorizontalAlignment(SwingConstants.CENTER);
 		lbBeneficiosAsociados.setBounds(687, 40, 199, 14);
 		contentPane.add(lbBeneficiosAsociados);
@@ -213,14 +213,14 @@ public class GenerarCampaña extends JFrame {
 		
 		panelBotones.add(btnGenerarCampaña);
 		
-		JButton btnCancelar = new JButton("Cancelar");
+		JButton btnCancelar = new JButton(labels.getString("generar.campaña.button.cancelar"));
 		btnCancelar.addActionListener((e)->{
 			setVisible(false);
 			dispose();
 		});
 		panelBotones.add(btnCancelar);
 
-		JButton btnRemoverBeneficios = new JButton("Remover Beneficios");
+		JButton btnRemoverBeneficios = new JButton(labels.getString("generar.campaña.button.remover.beneficios"));
 		btnRemoverBeneficios.addActionListener((e)->{
 			if(modeloBeneficiosNoAsociados.getRowCount()!= beneficio.size()) {
 				

@@ -394,7 +394,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				try {
 					api.cancelarOrdenDeRetiro((int)table.getValueAt(table.getSelectedRow(),1 ));
 					
-					JOptionPane.showMessageDialog(null,labels.getString("listado.de.pedidos.de.retiro.mensaje.orden.cancelada"));
+					JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.orden.cancelada"));
 					this.reloadGrid(api.obtenerOrdenesDeRetiro());
 
 				} catch (AppException e1) {

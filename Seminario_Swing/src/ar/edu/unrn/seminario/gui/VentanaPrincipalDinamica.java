@@ -466,7 +466,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		}
 		if(rol.equals("COMUNIDAD")) {
 			try {
-				System.out.println("entra aca");
 				if(api.existeDueñoRegistrado()) {
 					this.panelDueño.setVisible(true);
 					mnDueñoNoRegistrado.setVisible(false);

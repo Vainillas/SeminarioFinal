@@ -403,7 +403,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		lbCodigo.setBounds(0, 140, 77, 14);
 		panelFiltrado.add(lbCodigo);
 		
-		btnLimpiarFiltro = new JButton("Limpiar FIltro");
+		btnLimpiarFiltro = new JButton(labels.getString("listado.de.viviendas.button.filtrado.limpiar"));
 		btnLimpiarFiltro.addActionListener((e)->{
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {

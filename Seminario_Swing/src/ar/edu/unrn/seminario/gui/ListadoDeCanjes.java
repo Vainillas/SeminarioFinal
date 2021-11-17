@@ -84,18 +84,18 @@ public class ListadoDeCanjes extends JFrame {
 
 
 		String []titulos = { 
-				"NOMBRE CAMPAÑA",
-				"CODIGO CAMPAÑA", 
-				"DESCRIPCION BENEFICIO", 
-				"CODIGO BENEFICIO", 
-				"DUEÑO ASOCIADO",
-				"DNI DUEÑO" 	
+				labels.getString("listado.de.canjes.titulo.nombre.campaña"),
+				labels.getString("listado.de.canjes.titulo.codigo.campaña"), 
+				labels.getString("listado.de.canjes.titulo.descripcion.beneficio"), 
+				labels.getString("listado.de.canjes.titulo.codigo.beneficio"), 
+				labels.getString("listado.de.canjes.titulo.dueño.asociado"),
+				labels.getString("listado.de.canjes.titulo.dni.dueño") 	
 		};
 		String []titulos2 = { 
-				"NOMBRE CAMPAÑA",
-				"CODIGO CAMPAÑA", 
-				"DESCRIPCION BENEFICIO", 
-				"CODIGO BENEFICIO", 
+				labels.getString("listado.de.canjes.titulo2.nombre.campaña"),
+				labels.getString("listado.de.canjes.titulo2.codigo.campaña"), 
+				labels.getString("listado.de.canjes.titulo2.descripcion.beneficio"), 
+				labels.getString("listado.de.canjes.titulo2.codigo.beneficio"), 
 		};
 			List<CanjeDTO> canjes = null;
 			
@@ -107,7 +107,6 @@ public class ListadoDeCanjes extends JFrame {
 					this.titulos = titulos;
 				}
 				else {
-					System.out.println("Etrno a dueno");
 					modelo = new DefaultTableModel(new Object[][] {},titulos2);
 					this.titulos = titulos;
 					canjes = api.obtenerCanjesPorUsuario();
@@ -120,7 +119,7 @@ public class ListadoDeCanjes extends JFrame {
 			}
 			
 			
-		JButton cerrarButton = new JButton("Cerrar");
+		JButton cerrarButton = new JButton(labels.getString("listado.de.canjes.boton.cerrar"));
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -154,12 +153,12 @@ public class ListadoDeCanjes extends JFrame {
 		contentPane.add(panel_Filtrados);
 		panel_Filtrados.setLayout(null);
 		
-		JLabel lbFiltrarPor = new JLabel("Filtrar Por:");
+		JLabel lbFiltrarPor = new JLabel(labels.getString("listado.de.canjes.label.filtrar.por"));
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(69, 11, 110, 14);
 		panel_Filtrados.add(lbFiltrarPor);
 		
-		JLabel filtrarPorNombreCampaña = new JLabel("Nombre De Campa\u00F1a:");
+		JLabel filtrarPorNombreCampaña = new JLabel(labels.getString("listado.de.canjes.label.nombre.de.campaña"));
 		filtrarPorNombreCampaña.setHorizontalAlignment(SwingConstants.CENTER);
 		filtrarPorNombreCampaña.setBounds(0, 39, 139, 14);
 		panel_Filtrados.add(filtrarPorNombreCampaña);
@@ -197,29 +196,29 @@ public class ListadoDeCanjes extends JFrame {
 		});
 		panel_Filtrados.add(rdbtnFiltrarPorNombreCampaña);
 		
-		JLabel filtrarPorCodigoCampaña = new JLabel("Codigo De Campa\u00F1a:");
+		JLabel filtrarPorCodigoCampaña = new JLabel(labels.getString("listado.de.canjes.label.codigo.de.campaña"));
 
 		filtrarPorCodigoCampaña.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		filtrarPorCodigoCampaña.setBounds(0, 64, 139, 14);
 		panel_Filtrados.add(filtrarPorCodigoCampaña);
 		
-		JLabel filtrarPorDescripcionBeneficio = new JLabel("Descripcion Del Beneficio:");
+		JLabel filtrarPorDescripcionBeneficio = new JLabel(labels.getString("listado.de.canjes.label.descripcion.del.beneficio"));
 		filtrarPorDescripcionBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		filtrarPorDescripcionBeneficio.setBounds(0, 89, 139, 14);
 		panel_Filtrados.add(filtrarPorDescripcionBeneficio);
 		
-		JLabel filtrarPorCodigoBeneficio = new JLabel("Codigo Del Beneficio");
+		JLabel filtrarPorCodigoBeneficio = new JLabel(labels.getString("listado.de.canjes.label.codigo.del.beneficio"));
 		filtrarPorCodigoBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		filtrarPorCodigoBeneficio.setBounds(0, 114, 139, 14);
 		panel_Filtrados.add(filtrarPorCodigoBeneficio);
 		
-		filtrarPorUsuarioAsociado = new JLabel("Usuario Asociado:");
+		filtrarPorUsuarioAsociado = new JLabel(labels.getString("listado.de.canjes.label.usuario.asociado"));
 		filtrarPorUsuarioAsociado.setHorizontalAlignment(SwingConstants.CENTER);
 		filtrarPorUsuarioAsociado.setBounds(0, 139, 139, 14);
 		panel_Filtrados.add(filtrarPorUsuarioAsociado);
 		
-		 filtrarPorCodigoUsuario = new JLabel("Codigo Usuario:");
+		 filtrarPorCodigoUsuario = new JLabel(labels.getString("listado.de.canjes.label.codigo.usuario"));
 		filtrarPorCodigoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
 		filtrarPorCodigoUsuario.setBounds(0, 164, 139, 14);
 		panel_Filtrados.add(filtrarPorCodigoUsuario);
@@ -297,12 +296,12 @@ public class ListadoDeCanjes extends JFrame {
 		contentPane.add(panel_Ordenamiento);
 		panel_Ordenamiento.setLayout(null);
 		
-		JLabel lbOrdenarPor = new JLabel("Ordenar Por:");
+		JLabel lbOrdenarPor = new JLabel(labels.getString("listado.de.canjes.label.ordenar.por"));
 		lbOrdenarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbOrdenarPor.setBounds(70, 0, 119, 14);
 		panel_Ordenamiento.add(lbOrdenarPor);
 		
-		JRadioButton rdbtnOrdenarNombreCampaña = new JRadioButton("Nombre De Campa\u00F1a");
+		JRadioButton rdbtnOrdenarNombreCampaña = new JRadioButton(labels.getString("listado.de.canjes.label.nombre.de.campaña"));
 		rdbtnOrdenarNombreCampaña.addActionListener((e)->{
 			rdbtnOrdenarNombreCampaña.setSelected(false);
 			
@@ -310,28 +309,28 @@ public class ListadoDeCanjes extends JFrame {
 		rdbtnOrdenarNombreCampaña.setBounds(24, 21, 165, 25);
 		panel_Ordenamiento.add(rdbtnOrdenarNombreCampaña);
 		
-		JRadioButton rdbtnOrdenarCodigoCampaña = new JRadioButton("Codigo De Campa\u00F1a");
+		JRadioButton rdbtnOrdenarCodigoCampaña = new JRadioButton(labels.getString("listado.de.canjes.label.codigo.de.campaña"));
 		rdbtnOrdenarCodigoCampaña.addActionListener((e)->{
 			rdbtnOrdenarCodigoCampaña.setSelected(false);
 		});
 		rdbtnOrdenarCodigoCampaña.setBounds(111, 49, 148, 23);
 		panel_Ordenamiento.add(rdbtnOrdenarCodigoCampaña);
 		
-		JRadioButton rdbtnOrdenarDescripcionBeneficio = new JRadioButton("Descripcion De Beneficio");
+		JRadioButton rdbtnOrdenarDescripcionBeneficio = new JRadioButton(labels.getString("listado.de.canjes.label.descripcion.del.beneficio"));
 		rdbtnOrdenarDescripcionBeneficio.addActionListener((e)->{
 			rdbtnOrdenarDescripcionBeneficio.setSelected(false);
 		});
 		rdbtnOrdenarDescripcionBeneficio.setBounds(24, 75, 184, 23);
 		panel_Ordenamiento.add(rdbtnOrdenarDescripcionBeneficio);
 		
-		JRadioButton rdbtnOrdenarCodigoBeneficio = new JRadioButton("Codigo Beneficio");
+		JRadioButton rdbtnOrdenarCodigoBeneficio = new JRadioButton(labels.getString("listado.de.canjes.label.codigo.del.beneficio"));
 		rdbtnOrdenarCodigoBeneficio.addActionListener((e)->{
 			rdbtnOrdenarCodigoBeneficio.setSelected(false);
 		});
 		rdbtnOrdenarCodigoBeneficio.setBounds(111, 101, 148, 23);
 		panel_Ordenamiento.add(rdbtnOrdenarCodigoBeneficio);
 		
-		rdbtnUsuarioAsociado = new JRadioButton("Usuario Asociado");
+		rdbtnUsuarioAsociado = new JRadioButton(labels.getString("listado.de.canjes.label.usuario.asociado"));
 		rdbtnUsuarioAsociado.addActionListener((e)->{
 			rdbtnUsuarioAsociado.setSelected(false);
 		});
@@ -339,7 +338,7 @@ public class ListadoDeCanjes extends JFrame {
 		rdbtnUsuarioAsociado.setBounds(24, 122, 154, 25);
 		panel_Ordenamiento.add(rdbtnUsuarioAsociado);
 		
-		JRadioButton rdbtnCodigoUsuario = new JRadioButton("Codigo Usuario");
+		JRadioButton rdbtnCodigoUsuario = new JRadioButton(labels.getString("listado.de.canjes.label.codigo.usuario"));
 		rdbtnCodigoUsuario.addActionListener((e)->{
 			rdbtnCodigoUsuario.setSelected(false);
 			
@@ -367,6 +366,7 @@ public class ListadoDeCanjes extends JFrame {
 				modelo.addRow(new Object[] { 
 							c.getCampaña().getNombreCampaña(),
 							c.getCampaña().getCodigo(),
+							c.getBeneficioCanjeado().getDescripcion(),
 							c.getBeneficioCanjeado().getCodigo(),
 							c.getDueñoCanjeador().getNombre()+" "+ c.getDueñoCanjeador().getApellido(),
 							c.getDueñoCanjeador().getDni()
@@ -378,6 +378,7 @@ public class ListadoDeCanjes extends JFrame {
 				modelo.addRow(new Object[] { 
 							c.getCampaña().getNombreCampaña(),
 							c.getCampaña().getCodigo(),
+							c.getBeneficioCanjeado().getDescripcion(),
 							c.getBeneficioCanjeado().getCodigo(),
 				});
 			}
