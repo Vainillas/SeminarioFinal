@@ -54,7 +54,7 @@ public class ListadoDePersonal extends JFrame {
 	 * @param labels 
 	 */
 	public ListadoDePersonal(IApi api, ResourceBundle labels) {
-		setTitle("Listado Del Personal");
+		setTitle(labels.getString("listado.de.personal.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 729, 470);
 		contentPane = new JPanel();
@@ -71,11 +71,11 @@ public class ListadoDePersonal extends JFrame {
 		table = new JTable();
 		
 		String[] titulos = { 
-				"NOMBRE",
-				"APELLIDO",
-				"TELEFONO",
-				"DNI",
-				"CORREO ELECTRONICO"
+				labels.getString("listado.de.personal.titulos.nombre"),
+				labels.getString("listado.de.personal.titulos.apellido"),
+				labels.getString("listado.de.personal.titulos.telefono"),
+				labels.getString("listado.de.personal.titulos.dni"),
+				labels.getString("listado.de.personal.titulos.correo.electronico")
 				
 		};
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
@@ -104,7 +104,7 @@ public class ListadoDePersonal extends JFrame {
 
 		scrollPane.setViewportView(table);
 		
-		btnNewButton = new JButton("Volver a menu principal");
+		btnNewButton = new JButton(labels.getString("listado.de.personal.button.volver.menu.principal"));
 		btnNewButton.setBounds(0, 398, 703, 23);
 		btnNewButton.addActionListener((e)->{
 			setVisible(false);

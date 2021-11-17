@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.api;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 
@@ -864,7 +865,7 @@ public class PersistenceApi implements IApi {
 		List<CanjeDTO> canjesDto = new ArrayList<>();
     	List<Canje> canjes = canjeDao.findAll();
     	for (Canje c : canjes) {
-    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
+    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña(),(Date) c.getFechaCanje(),c.getCodigo()));
     	} 
     	return canjesDto;
 	}
@@ -874,7 +875,7 @@ public class PersistenceApi implements IApi {
 		List<CanjeDTO> canjesDto = new ArrayList<>();
     	List<Canje> canjes = canjeDao.findByUser(dueño);
     	for (Canje c : canjes) {
-    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
+    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña(),(Date) c.getFechaCanje(),c.getCodigo()));
     	} 
     	return canjesDto;
 	}

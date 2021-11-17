@@ -101,12 +101,12 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		tablePedidos.setRowSelectionAllowed(true);//permitiendo seleccion de fila
 		tablePedidos.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
 		String[] titulosPedidoRetiro = { 
-				"OBSERVACION", 
-				"DIRECCION" ,
-				"DNI PROPIETARIO",
-				"FECHA PEDIDO", 
-				"MAQUINARIA PESADA",
-				"CODIGO PEDIDO"
+				labels.getString("generar.orden.retiro.texto.modelo.observacion"), 
+				labels.getString("generar.orden.retiro.texto.modelo.direccion"),
+				labels.getString("generar.orden.retiro.texto.modelo.dni"),
+				labels.getString("generar.orden.retiro.texto.modelo.fecha"), 
+				labels.getString("generar.orden.retiro.texto.modelo.maquinaria"),
+				labels.getString("generar.orden.retiro.texto.modelo.codigopedido")
 		};
 		modeloPedidos = new DefaultTableModel(new Object[][] {}, titulosPedidoRetiro); 
 		
@@ -152,7 +152,11 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		tableRecolector.setRowSelectionAllowed(true);//permitiendo seleccion de fila
 		tableRecolector.setColumnSelectionAllowed(false);//eliminando seleccion de columnas
 		
-		String[] titulosRecolector = {"NOMBRE","APELLIDO","DNI","TELEFONO","EMAIL"};
+		String[] titulosRecolector = {labels.getString("generar.orden.retiro.texto.modelo.recolector.nombre"),
+				labels.getString("generar.orden.retiro.texto.modelo.recolector.apellido"),
+				labels.getString("generar.orden.retiro.texto.modelo.recolector.dni"),
+				labels.getString("generar.orden.retiro.texto.modelo.recolector.telefono"),
+				labels.getString("generar.orden.retiro.texto.modelo.recolector.email")};
 		modeloRecolector = new DefaultTableModel(new Object[][] {}, titulosRecolector);
 		
 
@@ -189,7 +193,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		panelBotones.setBounds(295, 542, 442, 44);
 		contentPane.add(panelBotones);
 		
-		JButton btnGenerarOrden = new JButton("Generar Orden");
+		JButton btnGenerarOrden = new JButton(labels.getString("generar.orden.retiro.button.generar.orden"));
 
 		btnGenerarOrden.addActionListener((e)->{
 			try {
@@ -202,7 +206,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 				api.generarOrdenDeRetiro(this.codigoPedidoSeleccionado);
 				}
 				
-				JOptionPane.showMessageDialog(null,"Orden generada con exito","Mensaje",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null,labels.getString("generar.orden.retiro.mensaje.exito"),"Mensaje",JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);
 				dispose();
 			
@@ -217,7 +221,7 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		btnGenerarOrden.setToolTipText("");
 		panelBotones.add(btnGenerarOrden);
 		
-		JButton btnCancelarOrden = new JButton("Cancelar Orden");
+		JButton btnCancelarOrden = new JButton(labels.getString("generar.orden.retiro.button.cancelar.orden"));
 		btnCancelarOrden.addActionListener((e)->{
 			setVisible(false);
 			dispose();
@@ -226,13 +230,13 @@ public class GenerarOrdenDeRetiro extends JFrame {
 		btnCancelarOrden.setHorizontalAlignment(SwingConstants.LEADING);
 		panelBotones.add(btnCancelarOrden);
 		
-		JLabel lbRecolector = new JLabel("Seleccionar recolector");
+		JLabel lbRecolector = new JLabel(labels.getString("generar.orden.retiro.texto.seleccion.recolector"));
 		lbRecolector.setHorizontalAlignment(SwingConstants.CENTER);
 		lbRecolector.setVerticalAlignment(SwingConstants.BOTTOM);
 		lbRecolector.setBounds(694, 21, 275, 14);
 		contentPane.add(lbRecolector);
 		
-		JLabel lblNewLabel = new JLabel("Seleccionar Pedido De Retiro");
+		JLabel lblNewLabel = new JLabel(labels.getString("generar.orden.retiro.texto.seleccion.pedido"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(97, 21, 268, 14);
 		contentPane.add(lblNewLabel);

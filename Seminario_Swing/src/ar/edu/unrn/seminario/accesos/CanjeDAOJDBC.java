@@ -195,23 +195,28 @@ public class CanjeDAOJDBC implements CanjeDao {
 		return canjeObjetivo;
 	}
 
-	public List<Canje> findAll() throws AppException, NotNullException{ //Muy copypasteada, probar
+	public List<Canje> findAll() throws AppException, NotNullException{
+		/*Nota: 
+		*Inicializar las listas al momento de usarlas, porque a diferencia del find,
+		*se hacen muchas iteraciones al reconstruir cada canje, por lo que se sigue
+		*agregando en listas que nunca se borran.
+		*/
 		ArrayList<Canje>listaCanjes = new ArrayList<>();
 		Canje canjeObjetivo = null;
 		Beneficio beneficioCanjeado = null;
 		
 		Campaña campaña = null;
 		Catalogo catalogo = null;
-		ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
+
 		Beneficio beneficio = null;
 		
-		ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
+		
 		Canje canje = null;
 		Dueño dueño = null;
 		Usuario user = null;
 		Rol rol = null;
 		
-		ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
+		
 		
 		
 		try {
@@ -254,6 +259,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 						+ "WHERE c.codigo = ?");
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetConsulta2 = statement.executeQuery();
+				ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
 				while(resultSetConsulta2.next()) {
 					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
 							resultSetConsulta2.getInt("b.costo"),
@@ -275,6 +281,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 						+ "WHERE c.codigo = ?");
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetCanje = statement.executeQuery();
+				ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
 				while(resultSetCanje.next()) {
 					rol = new Rol(resultSetCanje.getInt("r.codigo"),
 							resultSetCanje.getString("r.nombre"));
@@ -302,6 +309,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 						+ "WHERE c.codigo = ?");
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetBeneficiarios = statement.executeQuery();
+				ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
 				while(resultSetBeneficiarios.next()) {
 					rol = new Rol(resultSetBeneficiarios.getInt("r.codigo"),
 							resultSetBeneficiarios.getString("r.nombre"));
@@ -321,7 +329,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				
 				//Setear campaña al canje
 				canjeObjetivo.setCampaña(campaña);
-				listaCanjes.add(canje);
+				listaCanjes.add(canjeObjetivo);
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException | InsuficientPointsException e) {
 			throw new AppException("Error al buscar todos los canjes: " + e.getMessage());
@@ -337,16 +345,16 @@ public class CanjeDAOJDBC implements CanjeDao {
 		
 		Campaña campaña = null;
 		Catalogo catalogo = null;
-		ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
+
 		Beneficio beneficio = null;
 		
-		ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
+
 		Canje canje = null;
 		Dueño dueño = null;
 		Usuario user = null;
 		Rol rol = null;
 		
-		ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
+
 		
 		
 		try {
@@ -372,12 +380,8 @@ public class CanjeDAOJDBC implements CanjeDao {
 						resultSetConsulta.getString("u.contrasena"),
 						resultSetConsulta.getString("u.email"),
 						rol);
-				dueño = new Dueño(resultSetConsulta.getString("p.nombre"),
-						resultSetConsulta.getString("p.apellido"),
-						resultSetConsulta.getString("p.dni"),
-						resultSetConsulta.getString("p.correo_electronico"),
-						user);
-				canjeObjetivo = new Canje(beneficioCanjeado, dueño, resultSetConsulta.getDate("cje.fecha"),
+				dueño = d;
+				canjeObjetivo = new Canje(beneficioCanjeado, d, resultSetConsulta.getDate("cje.fecha"),
 						resultSetConsulta.getInt("cje.codigo"));
 				
 				
@@ -389,20 +393,24 @@ public class CanjeDAOJDBC implements CanjeDao {
 						+ "JOIN beneficios_campaña ca ON (c.codigo = ca.cod_campaña) "
 						+ "JOIN beneficios b ON (ca.cod_beneficio = b.codigo) "
 						+ "WHERE c.codigo = ?");
+				ArrayList<Beneficio> listaBeneficios = new ArrayList<>();
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetConsulta2 = statement.executeQuery();
+				//RECUPERO LOS BENEFICIOS DE LA CAMPAÑA
 				while(resultSetConsulta2.next()) {
 					beneficio = new Beneficio(resultSetConsulta2.getString("b.nombre_beneficio"),
 							resultSetConsulta2.getInt("b.costo"),
 							resultSetConsulta2.getInt("b.codigo"));
 					listaBeneficios.add(beneficio);
 				}
+				//CREO LA CAMPAÑA CON SU LISTA DE BENEFICIOS (CATALOGO)
 				catalogo = new Catalogo(listaBeneficios);
 				campaña = new Campaña(resultSetConsulta.getString("c.nombre"),catalogo,
 						resultSetConsulta.getString("c.estado"),
 						resultSetConsulta.getInt("c.codigo"));
 				
 				
+				//RECUPERO LA LISTA DE CANJES EFECTUADOS PARA ESA CAMPAÑA
 				statement = conn.prepareStatement("SELECT * FROM campañas c "
 						+ "JOIN canjes ca ON (c.codigo = ca.cod_campaña) "
 						+ "JOIN propietarios p ON (p.dni = ca.dni) "
@@ -412,6 +420,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 						+ "WHERE c.codigo = ?");
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetCanje = statement.executeQuery();
+				ArrayList<Canje>listaCanjesEfectuados = new ArrayList<>();
 				while(resultSetCanje.next()) {
 					rol = new Rol(resultSetCanje.getInt("r.codigo"),
 							resultSetCanje.getString("r.nombre"));
@@ -439,6 +448,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 						+ "WHERE c.codigo = ?");
 				statement.setInt(1, resultSetConsulta.getInt("c.codigo"));
 				ResultSet resultSetBeneficiarios = statement.executeQuery();
+				ArrayList<Dueño>listaBeneficiarios = new ArrayList<>();
 				while(resultSetBeneficiarios.next()) {
 					rol = new Rol(resultSetBeneficiarios.getInt("r.codigo"),
 							resultSetBeneficiarios.getString("r.nombre"));
@@ -458,7 +468,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 				
 				//Setear campaña al canje
 				canjeObjetivo.setCampaña(campaña);
-				listaCanjes.add(canje);
+				listaCanjes.add(canjeObjetivo);
 			}
 		} catch (SQLException | DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | NotNullException | InsuficientPointsException e) {
 			throw new AppException("Error al buscar todos los canjes por dueño: " + e.getMessage());
