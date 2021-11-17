@@ -145,6 +145,7 @@ public class GenerarCampaña extends JFrame {
 				
 			}
 		});
+		tableBeneficiosNoAsociados.setModel(modeloBeneficiosNoAsociados);
 		JLabel lblNewLabel = new JLabel(labels.getString("generar.campaña.label.seleccionar.beneficios.campaña"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(355, 30, 279, 14);
@@ -233,10 +234,6 @@ public class GenerarCampaña extends JFrame {
 					beneficios = api.obtenerBeneficios();
 
 					for(BeneficioDTO b : beneficios) {
-						this.modeloBeneficiosNoAsociados.addRow(new Object[] {
-								b.getDescripcion(),b.getPuntajeConsumible()
-								});
-
 						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 					}
 					

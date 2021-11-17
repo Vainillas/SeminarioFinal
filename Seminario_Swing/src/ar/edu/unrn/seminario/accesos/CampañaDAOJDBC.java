@@ -138,7 +138,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 							resultSetCanje.getString("p.apellido"),
 							resultSetCanje.getString("p.dni"),
 							resultSetCanje.getString("p.correo_electronico"),
-							user);
+							user,resultSetCanje.getInt("p.puntaje") );
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
@@ -165,7 +165,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 							resultSetBeneficiarios.getString("p.apellido"),
 							resultSetBeneficiarios.getString("p.dni"),
 							resultSetBeneficiarios.getString("p.correo_electronico"),
-							user);
+							user, resultSetBeneficiarios.getInt("p.puntaje"));
 					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
 					listaBeneficiarios.add(dueño);
 				}
@@ -239,7 +239,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 							resultSetCanje.getString("p.apellido"),
 							resultSetCanje.getString("p.dni"),
 							resultSetCanje.getString("p.correo_electronico"),
-							user);
+							user, resultSetCanje.getInt("p.puntaje"));
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
@@ -267,7 +267,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 							resultSetBeneficiarios.getString("p.apellido"),
 							resultSetBeneficiarios.getString("p.dni"),
 							resultSetBeneficiarios.getString("p.correo_electronico"),
-							user);
+							user, resultSetBeneficiarios.getInt("p.puntaje"));
 					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
 					listaBeneficiarios.add(dueño);
 				}

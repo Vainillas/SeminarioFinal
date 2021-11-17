@@ -516,6 +516,8 @@ public class PersistenceApi implements IApi {
     	OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
     	actualizarEstadoOrden(codOrden, new Estado(concretado));
     	int puntaje = calcularPuntaje(orden);
+    	System.out.println("Puntaje de orden concretada : " + puntaje);
+    	System.out.println(orden.getPedidoAsociado().getVivienda().getDueño().getPuntaje());
 		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
     }
     public void cancelarOrdenDeRetiro(int codOrden) throws AppException{
@@ -893,7 +895,7 @@ public class PersistenceApi implements IApi {
 	public void sumarPuntos(Dueño dueño, int puntaje) throws AppException {  
 		
 		dueño.sumarPuntos(puntaje);
-		
+		System.out.println("Puntaje nuevo del dueño: " +dueño.getPuntaje());
 		dueñoDao.update(dueño);       
 		
 	}

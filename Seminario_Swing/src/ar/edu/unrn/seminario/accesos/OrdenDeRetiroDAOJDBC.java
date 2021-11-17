@@ -134,7 +134,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 							resultSetConsulta.getString("u.contrasena"),
 							resultSetConsulta.getString("u.email"),
 							rol);
-					dueño = new Dueño(resultSetConsulta.getString("pr.nombre") , resultSetConsulta.getString("pr.apellido") , resultSetConsulta.getString("pr.dni"), resultSetConsulta.getString("pr.correo_electronico"), usuario);
+					dueño = new Dueño(resultSetConsulta.getString("pr.nombre") , resultSetConsulta.getString("pr.apellido") , resultSetConsulta.getString("pr.dni"), resultSetConsulta.getString("pr.correo_electronico"), usuario, resultSetConsulta.getInt("pr.puntaje"));
 					direccion = new Direccion(resultSetConsulta.getString("d.calle"), Integer.toString(resultSetConsulta.getInt("d.altura")), Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), resultSetConsulta.getString("d.longitud"), resultSetConsulta.getString("d.latitud"), resultSetConsulta.getString("d.barrio"));
 					vivienda = new Vivienda(direccion, dueño, resultSetConsulta.getInt("v.codigo"));
 
@@ -248,7 +248,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 							resultSetConsulta.getString("u.contrasena"),
 							resultSetConsulta.getString("u.email"),
 							rol);
-					dueño = new Dueño(resultSetConsulta.getString("pr.nombre") , resultSetConsulta.getString("pr.apellido") , resultSetConsulta.getString("pr.dni"), resultSetConsulta.getString("pr.correo_electronico"), usuario);
+					dueño = new Dueño(resultSetConsulta.getString("pr.nombre") , resultSetConsulta.getString("pr.apellido") , resultSetConsulta.getString("pr.dni"), resultSetConsulta.getString("pr.correo_electronico"), usuario, resultSetConsulta.getInt("pr.puntaje"));
 					direccion = new Direccion(resultSetConsulta.getString("d.calle"), Integer.toString(resultSetConsulta.getInt("d.altura")), Integer.toString(resultSetConsulta.getInt("d.codigo_postal")), resultSetConsulta.getString("d.longitud"), resultSetConsulta.getString("d.latitud"), resultSetConsulta.getString("d.barrio"));
 					vivienda = new Vivienda(direccion, dueño, resultSetConsulta.getInt("v.codigo"));
 
