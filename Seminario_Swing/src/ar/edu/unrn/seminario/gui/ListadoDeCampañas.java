@@ -83,12 +83,14 @@ public class ListadoDeCampañas extends JFrame {
 	public ListadoDeCampañas(IApi api) {
 		this.api = api;
 		setTitle("Listar Campañas");
+		//setTitle(labels.getString("listado.de.campañas.titulo.listado"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1045, 409);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		btnVolver = new JButton("Volver a Menu Principal");
+		//btnVolver = new JButton(labels.getString("listado.de.campañas.boton.menu.principal"));
 		btnVolver.setBounds(5, 342, 970, 23);
 		btnVolver.addActionListener((e)->{
 			setVisible(false);
@@ -134,7 +136,6 @@ public class ListadoDeCampañas extends JFrame {
 					campa = api.obtenerCampañas();
 					for(CampañaDTO c : campa) {
 						if(codigo.equals(c.getCodigo())) {
-							//se que esto esta super mal pero cuando hagan lo de obtenerBeneficio()BeneficioDTO lo saco
 							b = c.getCatalogo().getListaBeneficios();
 							beneficiosActual = b;
 							break;
@@ -165,8 +166,17 @@ public class ListadoDeCampañas extends JFrame {
 			}
 		});
 		String [] titulosBeneficios = {"DESCRIPCION","CODIGO","PUNTAJE CONSUMIBLE "};
+		/*String [] titulosBeneficios = {labels.getString("listado.de.campañas.titulo.descripcion"),
+		 * labels.getString("listado.de.campañas.titulo.codigo"),
+		 * labels.getString("listado.de.campañas.titulo.puntaje.consumible")};
+		 * 
+		 */
 		String[] titulos = { "NOMBRE", "ESTADO","CODIGO"};
-
+		/*String[] titulos = { labels.getString("listado.de.campañas.titulo.nombre"),
+		 *  labels.getString("listado.de.campañas.titulo.estado"),
+		 *  labels.getString("listado.de.campañas.titulo.codigo")};
+		 * 
+		 */
 		modeloCampaña = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficio = new DefaultTableModel(new Object[][] {},titulosBeneficios);
 		
@@ -196,11 +206,17 @@ public class ListadoDeCampañas extends JFrame {
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		
 		JLabel lbCampañas = new JLabel("campa\u00F1as");
+		/*
+		 * JLabel lbCampañas = new JLabel(labels.getString("listado.de.campañas.label.campañas"));
+		 */
 		lbCampañas.setHorizontalAlignment(SwingConstants.CENTER);
 		lbCampañas.setBounds(79, 35, 179, 14);
 		contentPane.add(lbCampañas);
 		
 		JLabel lbBeneficio = new JLabel("Beneficios De La campa\u00F1a Seleccionada");
+		/*
+		 * JLabel lbBeneficio = new JLabel(labels.getString("listado.de.campañas.label.beneficios.de.campaña"));
+		 */
 		lbBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		lbBeneficio.setBounds(453, 35, 243, 14);
 		contentPane.add(lbBeneficio);
@@ -212,6 +228,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosCampaña.setLayout(null);
 		
 		JLabel lbFiltrarPorNombre = new JLabel("Nombre :");
+		/*
+		 * JLabel lbFiltrarPorNombre = new JLabel(labels.getString("listado.de.campañas.filtrado.por.nombre"));
+		 */
 		lbFiltrarPorNombre.setBounds(16, 8, 54, 14);
 		panelFiltradosCampaña.add(lbFiltrarPorNombre);
 		
@@ -244,6 +263,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosCampaña.add(rdbtnNombre);
 		
 		JLabel lblEstado = new JLabel("Estado:");
+		/*
+		 * JLabel lblEstado = new JLabel(labels.getString("listado.de.campañas.filtrado.por.estado"));
+		 */
 		lblEstado.setBounds(19, 34, 51, 14);
 		panelFiltradosCampaña.add(lblEstado);
 		
@@ -269,6 +291,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosCampaña.add(rdbtnEstado);
 		
 		JLabel lblCodigo = new JLabel("Codigo:");
+		/*
+		 * JLabel lblCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
+		 */
 		lblCodigo.setBounds(19, 60, 51, 14);
 		panelFiltradosCampaña.add(lblCodigo);
 		
@@ -288,6 +313,9 @@ public class ListadoDeCampañas extends JFrame {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}catch(NumberFormatException e1) {
 					JOptionPane.showMessageDialog(null, "Debe introducir un codigo numerico","error",JOptionPane.ERROR_MESSAGE);
+					/*
+					 * JOptionPane.showMessageDialog(null, labels.getString("listado.de.campañas.mensaje.error.numerico"),"error",JOptionPane.ERROR_MESSAGE);
+					 */
 				}
 		
 			}
@@ -296,6 +324,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosCampaña.add(rdbtnCodigoCampaña);
 		
 		JButton btnLimpiarFiltroCampañas = new JButton("Limpiar Filtro");
+		/*
+		 * JButton btnLimpiarFiltroCampañas = new JButton(labels.getString(" listado.de.campañas.filtrado.limpiar.filtro"));
+		 */
 		btnLimpiarFiltroCampañas.addActionListener((e)->{
 			
 				try {
@@ -316,6 +347,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosCampaña.add(btnLimpiarFiltroCampañas);
 		
 		JLabel lbFiltrarPor = new JLabel("Filtrar Campa\u00F1a por:");
+		/*
+		 * 	JLabel lbFiltrarPor = new JLabel(labels.getString("listado.de.campañas.filtrar.campañas.por"));
+		 */
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(836, 35, 122, 14);
 		contentPane.add(lbFiltrarPor);
@@ -327,6 +361,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosBeneficios.setLayout(null);
 		
 		JLabel lbFiltradoPorDescripcion = new JLabel("Descripcion:");
+		/*
+		 *JLabel lbFiltradoPorDescripcion = new JLabel(labels.getString("listado.de.campañas.filtrado.por.descripcion"));
+		 */
 		lbFiltradoPorDescripcion.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltradoPorDescripcion.setBounds(0, 8, 79, 14);
 		panelFiltradosBeneficios.add(lbFiltradoPorDescripcion);
@@ -354,6 +391,9 @@ public class ListadoDeCampañas extends JFrame {
 				
 				else {
 					JOptionPane.showMessageDialog(null, "Debe Seleccionar Una Campaña Antes De Filtrar Beneficios ","Error",JOptionPane.ERROR_MESSAGE);
+					/*
+					 * JOptionPane.showMessageDialog(null, labels.getString("listado.de.campañas.mensaje.error.seleccionar.campaña"),"Error",JOptionPane.ERROR_MESSAGE);
+					 */
 				}
 
 			}
@@ -362,6 +402,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosBeneficios.add(rdbtnDescripcion);
 		
 		JLabel lbFiltrarBeneficioPorCodigo = new JLabel("Codigo:");
+		/*
+		 * JLabel lbFiltrarBeneficioPorCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
+		 */
 		lbFiltrarBeneficioPorCodigo.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltrarBeneficioPorCodigo.setBounds(10, 34, 63, 14);
 		panelFiltradosBeneficios.add(lbFiltrarBeneficioPorCodigo);
@@ -380,6 +423,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosBeneficios.add(rdbtnFiltrarBeneficioPorCodigo);
 		
 		JLabel lbFiltrarPorPuntaje = new JLabel("Puntaje:");
+		/*
+		 * JLabel lbFiltrarPorPuntaje = new JLabel(labels.getString("listado.de.campañas.filtrado.beneficio.por.puntaje"));
+		 */
 		lbFiltrarPorPuntaje.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltrarPorPuntaje.setBounds(10, 60, 63, 14);
 		panelFiltradosBeneficios.add(lbFiltrarPorPuntaje);
@@ -394,6 +440,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosBeneficios.add(rdbtnPuntaje);
 		
 		JButton btnLimpiarFIltroBeneficios = new JButton("Limpiar Filtro");
+		/*
+		 * JButton btnLimpiarFIltroBeneficios = new JButton(labels.getString("listado.de.campañas.filtrado.limpiar.filtro"));
+		 */
 		btnLimpiarFIltroBeneficios.addActionListener((e)->{
 
 				//modeloBeneficio.setRowCount(0);
@@ -414,6 +463,9 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosBeneficios.add(btnLimpiarFIltroBeneficios);
 		
 		JLabel lbFiltrarBeneficio = new JLabel("Filtrar Beneficio Por:");
+		/*
+		 * JLabel lbFiltrarBeneficio = new JLabel(labels.getString("listado.de.campañas.filtrar.beneficios.por"));
+		 */
 		lbFiltrarBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarBeneficio.setBounds(822, 179, 179, 14);
 		contentPane.add(lbFiltrarBeneficio);
@@ -425,6 +477,9 @@ public class ListadoDeCampañas extends JFrame {
 
 
 		cerrarButton = new JButton("Cerrar");
+		/*
+		 * cerrarButton = new JButton(labels.getString("listado.de.campañas.boton.cerrar"));
+		 */
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);

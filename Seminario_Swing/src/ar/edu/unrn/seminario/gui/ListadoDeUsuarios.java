@@ -200,7 +200,7 @@ public class ListadoDeUsuarios extends JFrame {
 		});
 		panelBotonesOrdenamiento.setLayout(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("Ordenar por:");
+		JLabel lblNewLabel_1 = new JLabel(labels.getString("listado.de.dueños.label.ordenar.por"));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setBounds(10, 11, 145, 14);
 		panelBotonesOrdenamiento.add(lblNewLabel_1);
@@ -268,7 +268,7 @@ public class ListadoDeUsuarios extends JFrame {
 		contentPane.add(panelBotonesFiltrados);
 		panelBotonesFiltrados.setLayout(null);
 		
-		JLabel lbFiltradoPor = new JLabel("filtrar por:"); 
+		JLabel lbFiltradoPor = new JLabel(labels.getString("listado.de.dueños.label.filtrar.por")); 
 		lbFiltradoPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltradoPor.setBounds(24, 11, 181, 14);
 		panelBotonesFiltrados.add(lbFiltradoPor);
@@ -303,7 +303,7 @@ public class ListadoDeUsuarios extends JFrame {
 		rdbtnAceptar.setBounds(199, 40, 21, 20);
 		panelBotonesFiltrados.add(rdbtnAceptar);
 		
-		btnLimpiarFIltro = new JButton("Limpiar Filtro"); //$NON-NLS-1$
+		btnLimpiarFIltro = new JButton(labels.getString("listado.de.dueños.button.limpiar.filtro")); //$NON-NLS-1$
 		btnLimpiarFIltro.addActionListener((e)->{
 			
 			try {

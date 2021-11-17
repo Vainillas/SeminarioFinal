@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.api;
 
+import java.sql.Date;
 import java.util.ArrayList;
 
 
@@ -864,18 +865,20 @@ public class PersistenceApi implements IApi {
 		List<CanjeDTO> canjesDto = new ArrayList<>();
     	List<Canje> canjes = canjeDao.findAll();
     	for (Canje c : canjes) {
-    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
+    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña(),(Date) c.getFechaCanje(),c.getCodigo()));
     	} 
     	return canjesDto;
 	}
-	//Obsoleto
-	/*public int calcularPuntaje(PedidoDeRetiro unPedido){
-		int sumaPuntos = 0;
-		for(Residuo r: unPedido.getListResiduos()){
-			sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
-		}
-		return sumaPuntos;
-	}*/
+	public List<CanjeDTO> obtenerCanjesPorUsuario() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		String username = this.userOnline.getUsuario();
+		Dueño dueño = dueñoDao.findByUser(username);
+		List<CanjeDTO> canjesDto = new ArrayList<>();
+    	List<Canje> canjes = canjeDao.findByUser(dueño);
+    	for (Canje c : canjes) {
+    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña(),(Date) c.getFechaCanje(),c.getCodigo()));
+    	} 
+    	return canjesDto;
+	}
 	public int calcularPuntaje(OrdenDeRetiro unaOrden){
 		int sumaPuntos = 0;
 		for(Visita v : unaOrden.getVisitas()) {

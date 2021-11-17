@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.dto;
 import java.sql.Date;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
+import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.modelo.Campaña;
 import ar.edu.unrn.seminario.modelo.Dueño;
@@ -14,15 +15,14 @@ public class CanjeDTO {
 	private Campaña campaña;
 	private int codigo;
 
-	
-	public CanjeDTO(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña){
-		java.util.Date fechaActualUtil = DateHelper.getDate();
-    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
-		fechaCanje = fechaActual;
+	public CanjeDTO(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña, Date fecha, int codigo){
+		fechaCanje = fecha;
 		this.beneficioCanjeado = unBeneficio;
 		this.dueñoCanjeador = unDueño;
 		this.campaña = unaCampaña;
+		this.codigo = codigo;
 	}
+	
 	
 	public CanjeDTO(Beneficio unBeneficio, Dueño unDueño, Date fecha){
 		fechaCanje = fecha;
@@ -77,7 +77,7 @@ public class CanjeDTO {
 
 	@Override
 	public String toString() {
-		return "CanjeDTO [fechaCanje=" + fechaCanje + ", beneficioCanjeado=" + beneficioCanjeado + ", dueñoCanjeador="
-				+ dueñoCanjeador + ", campaña=" + campaña + ", codigo=" + codigo + "]";
+		return "Canje [fechaCanje=" + fechaCanje + ", beneficioCanjeado=" + beneficioCanjeado + ", dueñoCanjeador="
+				+ dueñoCanjeador + ", campaña=" + campaña.getNombreCampaña() +" codigocampaña: "+ campaña.getCodigo() + ", codigo canje=" + codigo + "]";
 	}
 }

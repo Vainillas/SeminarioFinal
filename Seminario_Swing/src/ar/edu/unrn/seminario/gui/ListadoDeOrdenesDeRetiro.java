@@ -348,12 +348,12 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		rdbtnOrdenarPorCodigoOrden.setBounds(150, 57, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorCodigoOrden);
 		
-		lbFiltrado = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado"));
+		lbFiltrado = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.filtrado"));
 		lbFiltrado.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrado.setBounds(52, 11, 143, 14);
 		panel.add(lbFiltrado);
 		
-		lbOrdenamiento = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.ordenamiento"));
+		lbOrdenamiento = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenamiento"));
 		lbOrdenamiento.setHorizontalAlignment(SwingConstants.CENTER);
 		lbOrdenamiento.setBounds(52, 194, 143, 14);
 		panel.add(lbOrdenamiento);
@@ -363,21 +363,25 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_botones.setBounds(304, 367, 441, 37);
 		panel.add(panel_botones);
 		
-		JButton btnConcretarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.label.concretar.orden"));
+		JButton btnConcretarOrden = new JButton(labels.getString("listado.de.ordenes.de.retiro.label.concretar.orden"));
 		panel_botones.add(btnConcretarOrden);
 		btnConcretarOrden.addActionListener((e)->{
 			System.out.println(table.getSelectedColumn());
 			System.out.println(table.getSelectedRow());
 			
 			if(!(table.getSelectedRow() == -1)) {
-				System.out.println("todo ok");
-				/*try {
-					api.concretarOrdenDeRetiro((int)table.getValueAt(table.getSelectedColumn(),table.getSelectedRow() ));
-				} catch (AppException e1) {
-					// TODO Bloque catch generado automáticamente
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
-				}*/
+					try {
+						api.concretarOrdenDeRetiro((int)table.getValueAt(table.getSelectedRow(),1 ));
+						JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.label.concretar.orden"));
+						this.reloadGrid(api.obtenerOrdenesDeRetiro());
+					} catch (AppException e1) {
+						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+					}
+					
 			}
+					
+				
+			
 			else {
 				JOptionPane.showMessageDialog(null,"Debe Seleccionar Un Pedido","error",0);
 			}
@@ -385,12 +389,32 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		JButton btnCancelarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.cancelar.orden"));
 		btnCancelarOrden.addActionListener((e)->{
+			if(!(table.getSelectedRow() == -1)) {
+
+				try {
+					api.cancelarOrdenDeRetiro((int)table.getValueAt(table.getSelectedRow(),1 ));
+					
+					JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.orden.cancelada"));
+					this.reloadGrid(api.obtenerOrdenesDeRetiro());
+
+				} catch (AppException e1) {
+					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.error"),"error",0);
+			}
 			
-			this.setVisible(false);
-			dispose();
 			
 		});
 		panel_botones.add(btnCancelarOrden);
+		
+		JButton btnSalir = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.salir"));
+		btnSalir.addActionListener((e)->{
+			this.setVisible(false);
+			dispose();
+		});
+		panel_botones.add(btnSalir);
 		
 		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
 		btnLimpiar.setBounds(79, 333, 87, 23);

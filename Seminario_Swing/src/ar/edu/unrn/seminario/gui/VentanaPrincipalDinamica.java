@@ -55,6 +55,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
 		String rol = api.obtenerRolUsuarioActivo();
+		//String rol = "ADMIN";
 		this.panelDueño = new JPanel();
 		panelDueño.setBounds(5, 5, 787, 512);
 		this.panelAdministrador = new JPanel();
@@ -312,6 +313,17 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 		
 		mnBeneficioAdministrador.add(mntmGenerarBeneficioAdministrador);
+		
+		JMenu mnCanjesAdministrador = new JMenu(labels.getString("ventana.principal.dinamica.menu.canjes.administrador"));
+		mbAdministrador.add(mnCanjesAdministrador);
+		
+		JMenuItem mtnmListarCanjes = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.canjes.administrador"));
+		mtnmListarCanjes.addActionListener((e)->{
+			ListadoDeCanjes listado = new ListadoDeCanjes(api,labels);
+			listado.setVisible(true);
+		});
+		
+		mnCanjesAdministrador.add(mtnmListarCanjes);
 		contentPane.add(panelDueño);
 		panelDueño.setLayout(new BorderLayout(0, 0));
 		
@@ -424,7 +436,15 @@ public class VentanaPrincipalDinamica extends JFrame {
 		});
 		mnCanjearPuntosDueño.add(mntmCanjearPuntos);
 		
-		JMenuItem mntmCanjearPuntosDueño = new JMenuItem("Canjear Mis Puntos");
+		JMenuItem mntmListarCanjesDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.canjes.dueño"));
+		mntmListarCanjesDueño.addActionListener((e)->{
+			ListadoDeCanjes listado = new ListadoDeCanjes(api, labels);
+			listado.setVisible(true);
+			
+		});
+		mnCanjearPuntosDueño.add(mntmListarCanjesDueño);
+		
+		JMenuItem mntmCanjearPuntosDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.canjear.puntos.dueño"));
 
 		mntmCanjearPuntosDueño.addActionListener((e)->{
 			CanjearPuntos canje = new CanjearPuntos(api,labels);
@@ -446,7 +466,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		}
 		if(rol.equals("COMUNIDAD")) {
 			try {
-				System.out.println("entra aca");
 				if(api.existeDueñoRegistrado()) {
 					this.panelDueño.setVisible(true);
 					mnDueñoNoRegistrado.setVisible(false);
