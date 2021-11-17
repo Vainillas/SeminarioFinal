@@ -91,7 +91,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private ArrayList<String> ordenSeleccionada = new ArrayList<String>();
 	private ArrayList<String> residuosSeleccionados = new ArrayList<String>();
 	private ArrayList<String> cantResiduosRetirados = new ArrayList<String>();
-	private int codigoOrden;
+
+
+	private Integer codigoOrden;
 	private String descripcion;  
 	private JComboBox<String> comboBoxResiduosDinamico;
 	private JLabel lbResiduoSeleccionado;
@@ -353,16 +355,23 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 			
 			try { 
+
 				
 				
 				
+
+				this.descripcion = this.tp_observacion.getText();
+				System.out.println(table.getValueAt(table.getSelectedRow(), 1));
+				this.codigoOrden = (Integer) table.getValueAt(table.getSelectedRow(), 1);
 				spinner_dia.getValue();
+
 					api.registrarVisita(
 							residuosSeleccionados, 
 							cantResiduosRetirados,
 							this.descripcion,
 							codigoOrden);
 							
+					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,codigoOrden,(Integer)spinner_dia.getValue(),(Integer)spinner_mes.getValue(),(Integer)spinner_año.getValue());
 					
 				JOptionPane.showMessageDialog(null,"Registro de visita generado con exito!","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);

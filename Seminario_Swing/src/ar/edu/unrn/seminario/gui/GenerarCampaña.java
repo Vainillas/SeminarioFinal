@@ -107,7 +107,7 @@ public class GenerarCampaña extends JFrame {
 			public void mousePressed(MouseEvent e) {
 
 				String  descripcion = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),0 );
-				String puntaje = (String)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
+				Integer puntaje = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosAsociados.getValueAt(tableBeneficiosAsociados.getSelectedRow(),2 );
 				
 				//tableBeneficiosNoAsociados.clearSelection();
@@ -135,6 +135,7 @@ public class GenerarCampaña extends JFrame {
 				
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
 				System.out.println(tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 ));
+
 				Integer puntaje = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),2 );		
 				modeloBeneficiosNoAsociados.removeRow(tableBeneficiosNoAsociados.getSelectedRow());
@@ -170,11 +171,9 @@ public class GenerarCampaña extends JFrame {
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
 					}
-					System.out.println("cantidad de beneficios asociados"+codigo.size());
 					try {
 						
 						api.generarCampaña(codigo,tfnombreCampaña.getText());
-						System.out.println("eeeeo");
 						JOptionPane.showMessageDialog(null,"Campaña Generada Con Exito!","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
 						setVisible(false);
 						dispose();
@@ -232,6 +231,8 @@ public class GenerarCampaña extends JFrame {
 						this.modeloBeneficiosNoAsociados.addRow(new Object[] {
 								b.getDescripcion(),b.getPuntajeConsumible()
 								});
+
+						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 					}
 					
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
