@@ -86,7 +86,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JButton btn_cancelar;
 	private JButton btn_registrar_visita;
 	private JButton btn_limpiar;
-	private ResourceBundle labels;
 	private JLabel lb_cantidad_residuos;
 	private ArrayList<String> ordenSeleccionada = new ArrayList<String>();
 	private ArrayList<String> residuosSeleccionados = new ArrayList<String>();
@@ -147,7 +146,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 			};	
 		
 		
-		comboBoxResiduosDinamico  = new JComboBox();
+		comboBoxResiduosDinamico  = new JComboBox<String>();
 		comboBoxResiduosDinamico.addActionListener((e)->{
 			
 			
@@ -156,7 +155,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				this.reloadSliderGrid(api.devolverResiduosRestantes(codigoOrden));
 			}catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 					| DateNullException | AppException e1) {
-				 JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				 JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 		
 			
@@ -222,7 +221,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		slider_Dinamico.setMaximum(50);
 		slider_Dinamico.setPaintLabels(true);
 		slider_Dinamico.setPaintTicks(true);
-		slider_Dinamico.setMajorTickSpacing(1);
+		slider_Dinamico.setMajorTickSpacing(3);
 		slider_Dinamico.setBounds(258, 40, 262, 40);
 		slider_Dinamico.setEnabled(false);
 		table.setRowSelectionAllowed(true);
@@ -250,7 +249,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				}
 
 			} catch (Exception e2) {
-				JOptionPane.showMessageDialog(null, e2.getMessage(), "error: ",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e2.getMessage(), "Error: ",JOptionPane.ERROR_MESSAGE);
 				setVisible(false);
 				dispose();
 				
@@ -351,18 +350,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_botones.add(btn_limpiar);
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
-			this.descripcion = this.tp_observacion.getText();
-
-			
+			this.descripcion = this.tp_observacion.getText();	
 			try { 
-
-				
-				
-				
-
 				this.descripcion = this.tp_observacion.getText();
-				System.out.println(table.getValueAt(table.getSelectedRow(), 1));
-				this.codigoOrden = (Integer) table.getValueAt(table.getSelectedRow(), 1);
 				spinner_dia.getValue();
 
 					api.registrarVisita(
@@ -371,22 +361,25 @@ public class GenerarRegistroDeVisita extends JFrame {
 							this.descripcion,
 							codigoOrden);
 							
-					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,codigoOrden,(Integer)spinner_dia.getValue(),(Integer)spinner_mes.getValue(),(Integer)spinner_año.getValue());
-					
-				JOptionPane.showMessageDialog(null,"Registro de visita generado con exito!","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
+					api.registrarVisita(residuosSeleccionados, 
+							cantResiduosRetirados,
+							this.descripcion,codigoOrden,
+							Integer.parseInt((String)spinner_dia.getValue()),
+							Integer.parseInt((String)spinner_mes.getValue()),
+							Integer.parseInt((String)spinner_año.getValue()));
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);
 				dispose();
 			} catch ( AppException | NotNullException e1) {
 
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 			
 			catch(java.lang.ArrayIndexOutOfBoundsException e1) {
-				JOptionPane.showMessageDialog(null, "Debe Seleccionar Un Pedido De Retiro","error",JOptionPane.ERROR_MESSAGE);
-			}
-			
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.error") ,"error",JOptionPane.ERROR_MESSAGE);
+			}		
 		});
-		
+
 		panel_botones.add(btn_registrar_visita);
 		
 		panel_botones.add(btn_cancelar);

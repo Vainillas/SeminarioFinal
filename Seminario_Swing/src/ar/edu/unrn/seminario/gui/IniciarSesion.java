@@ -1,7 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 
 
-import java.awt.EventQueue;
+
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -13,7 +13,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotCorrectPasswordException;
-import ar.edu.unrn.seminario.exceptions.NotNullException;
+
 import ar.edu.unrn.seminario.exceptions.NotRegisterException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 
@@ -21,51 +21,48 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPasswordField;
-import javax.swing.JSeparator;
+
 import javax.swing.JButton;
-import java.awt.event.ActionListener;
+
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.awt.event.ActionEvent;
+
 import javax.swing.JComboBox;
 import java.awt.Font;
-import java.awt.FlowLayout;
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
+
+
 import javax.swing.border.BevelBorder;
-import javax.swing.UIManager;
-import javax.swing.border.MatteBorder;
+
 import java.awt.Color;
+import java.awt.EventQueue;
+
 import javax.swing.border.EtchedBorder;
 
 public class IniciarSesion extends JFrame {
 
+
+
+	private static final long serialVersionUID = -6855317395374495359L;
 	private JPanel contentPane;
 	private JTextField textUsuario;
 	private JPasswordField textPassword;	
-	private IApi api;
 	private JPanel panelNoRegistrado;
-	private JComboBox comboBoxIdioma;
-	public static void main(String[] args) {
+	private JComboBox<String> comboBoxIdioma;
+
+	public static void main(String [] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					PersistenceApi api = new PersistenceApi();
 					IniciarSesion frame = new IniciarSesion(api);
 					frame.setVisible(true);
-					
 				} catch (Exception e) {
-					e.printStackTrace();
+					e.printStackTrace(); 
 				}
 			}
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public IniciarSesion(IApi api) {
 		
@@ -192,7 +189,7 @@ public class IniciarSesion extends JFrame {
 		 		this.textPassword.setText("");
 		 		this.textUsuario.setText("");
 		 		
-		 		String idioma = (String) comboBoxIdioma.getSelectedItem();
+
 		 });
 		 
 		 buttonRegistrarse.setBounds(54, 36, 107, 23);
