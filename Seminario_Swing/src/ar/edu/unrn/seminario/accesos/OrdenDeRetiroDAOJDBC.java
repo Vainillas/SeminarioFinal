@@ -64,6 +64,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 
 		public void update(OrdenDeRetiro orden) throws AppException {
 			try {
+				System.out.println("Actualizando Orden");
 				Connection conn = ConnectionManager.getConnection();
 	            PreparedStatement statement = conn.prepareStatement("UPDATE ordenes SET codigoPedido = ?, dniRecolector = ?, fecha = ?, estado = ?"
 	            		+ "WHERE codigoOrden = ?");
@@ -73,6 +74,7 @@ public class OrdenDeRetiroDAOJDBC implements OrdenDeRetiroDao{
 	            statement.setString(4, orden.getEstado().obtenerEstado());
 	            statement.setInt(5, orden.getCodigo());
 	            statement.executeUpdate();
+	            
 			}catch (SQLException e) {
 	            throw new AppException("Error de SQL al actualizar orden de retiro: " + e.getMessage());
 	        }  finally {

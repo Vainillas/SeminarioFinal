@@ -320,7 +320,6 @@ public class PersistenceApi implements IApi {
     		//Por cada tipo de residuo ingresado creo una instancia y la agrego a la lista
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
-    		
     	}
     	//Ordeno la lista
     	listaTipos.sort((TipoResiduo t1, TipoResiduo t2)->t1.getNombre().compareTo(t2.getNombre()));
@@ -352,6 +351,7 @@ public class PersistenceApi implements IApi {
     	
     	this.visitaDao.create(visita);
     	
+
     	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
     	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals(enEjecucion)) {
     		actualizarEstadoOrden(codOrden, new Estado(enEjecucion));
@@ -363,6 +363,7 @@ public class PersistenceApi implements IApi {
     		int puntaje = calcularPuntaje(orden);
     		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
     	}
+    	
     	
     }
     public boolean comprobarExcedenteResiduos(OrdenDeRetiro ordenAComprobar, Visita visitaNueva) {
@@ -867,14 +868,16 @@ public class PersistenceApi implements IApi {
     	} 
     	return canjesDto;
 	}
-	//Obsoleto
-	/*public int calcularPuntaje(PedidoDeRetiro unPedido){
-		int sumaPuntos = 0;
-		for(Residuo r: unPedido.getListResiduos()){
-			sumaPuntos = sumaPuntos + r.getCantidadKg() * r.getTipo().getValor(); 
-		}
-		return sumaPuntos;
-	}*/
+	public List<CanjeDTO> obtenerCanjesPorUsuario() throws AppException, NotNullException, DataEmptyException, NotNumberException{
+		String username = this.userOnline.getUsuario();
+		Dueño dueño = dueñoDao.findByUser(username);
+		List<CanjeDTO> canjesDto = new ArrayList<>();
+    	List<Canje> canjes = canjeDao.findByUser(dueño);
+    	for (Canje c : canjes) {
+    		canjesDto.add(new CanjeDTO(c.getBeneficioCanjeado(),c.getDueñoCanjeador(), c.getCampaña()));
+    	} 
+    	return canjesDto;
+	}
 	public int calcularPuntaje(OrdenDeRetiro unaOrden){
 		int sumaPuntos = 0;
 		for(Visita v : unaOrden.getVisitas()) {
@@ -910,7 +913,9 @@ public class PersistenceApi implements IApi {
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
 		List<CampañaDTO> campañasDto = new ArrayList<>();
     	List<Campaña> campañas = campañaDao.findAll();
+
     	System.out.println(campañas.size());
+
     	for (Campaña c : campañas) {
     		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
     	} 

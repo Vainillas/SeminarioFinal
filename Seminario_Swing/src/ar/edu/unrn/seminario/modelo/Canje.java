@@ -1,6 +1,6 @@
 package ar.edu.unrn.seminario.modelo;
 
-import java.sql.Date;
+import java.util.Date;
 
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
@@ -9,7 +9,7 @@ public class Canje {
 	private Date fechaCanje;
 	private Beneficio beneficioCanjeado;
 	private Dueño dueñoCanjeador;
-	private Campaña campaña;
+	private Campaña campaña;//BORRAR ESTO 
 	private int codigo;
 
 	
@@ -24,8 +24,9 @@ public class Canje {
 		//validarDatos(unDueño.getPuntaje(),Integer.parseInt(unBeneficio.getPuntajeConsumible()));
 	}
 	public Canje(Beneficio unBeneficio, Dueño unDueño, Campaña unaCampaña, int codigo) throws  InsuficientPointsException{
-		java.util.Date fechaActualUtil = DateHelper.getDate();
-    	java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime());
+		//java.util.Date fechaActualUtil = DateHelper.getDate();
+    	//java.sql.Date fechaActual = new java.sql.Date(fechaActualUtil.getTime()); //CAMBIAR  a DATE NORMAL
+    	java.util.Date fechaActual = DateHelper.getDate();
 		fechaCanje = fechaActual;
 		this.beneficioCanjeado = unBeneficio;
 		this.dueñoCanjeador = unDueño;
