@@ -83,6 +83,7 @@ public class GenerarCampaña extends JFrame {
 			for(BeneficioDTO b : beneficio) {
 				
 				modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
+			
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e) {
 			
@@ -101,7 +102,7 @@ public class GenerarCampaña extends JFrame {
 		panelBeneficiosAsociados.add(scrollPaneBeneficiosAsociados, BorderLayout.CENTER);
 		
 		tableBeneficiosAsociados = new JTable();
-
+		
 		tableBeneficiosAsociados.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -134,8 +135,6 @@ public class GenerarCampaña extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
-				System.out.println(tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 ));
-
 				Integer puntaje = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),2 );		
 				modeloBeneficiosNoAsociados.removeRow(tableBeneficiosNoAsociados.getSelectedRow());
@@ -145,6 +144,7 @@ public class GenerarCampaña extends JFrame {
 				
 			}
 		});
+
 		tableBeneficiosNoAsociados.setModel(modeloBeneficiosNoAsociados);
 		JLabel lblNewLabel = new JLabel(labels.getString("generar.campaña.label.seleccionar.beneficios.campaña"));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -224,10 +224,10 @@ public class GenerarCampaña extends JFrame {
 		JButton btnRemoverBeneficios = new JButton(labels.getString("generar.campaña.button.remover.beneficios"));
 		btnRemoverBeneficios.addActionListener((e)->{
 			if(modeloBeneficiosNoAsociados.getRowCount()!= beneficio.size()) {
-				
+	
 				this.modeloBeneficiosAsociados.setRowCount(0);
 				this.modeloBeneficiosNoAsociados.setRowCount(0);
-			
+				
 				List<BeneficioDTO> beneficios;
 				
 				try {
