@@ -73,7 +73,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	private JLabel lbFiltrado;
 	private JLabel lbOrdenamiento;
 	private JPanel panel_botones;
-	private JButton btnSalir;
 	private JButton btnLimpiar;
 	private ResourceBundle labels;
 	private JLabel lbFiltradoPorCodigoOrden;
@@ -364,18 +363,8 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_botones.setBounds(304, 367, 441, 37);
 		panel.add(panel_botones);
 		
-		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
-		panel_botones.add(btnLimpiar);
-		
-		btnSalir = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.salir"));
-		btnSalir.addActionListener((e)->{
-			this.setVisible(false);
-			dispose();
-			
-		});
-		panel_botones.add(btnSalir);
-		
-		JButton btnConcretarOrden = new JButton("Concretar Orden");
+		JButton btnConcretarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.label.concretar.orden"));
+		panel_botones.add(btnConcretarOrden);
 		btnConcretarOrden.addActionListener((e)->{
 			System.out.println(table.getSelectedColumn());
 			System.out.println(table.getSelectedRow());
@@ -393,12 +382,26 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				JOptionPane.showMessageDialog(null,"Debe Seleccionar Un Pedido","error",0);
 			}
 		});
-		btnConcretarOrden.setBounds(74, 328, 121, 23);
-		panel.add(btnConcretarOrden);
 		
-		JButton btnCancelarOrden = new JButton("Cancelar Orden");
-		btnCancelarOrden.setBounds(74, 361, 121, 23);
-		panel.add(btnCancelarOrden);
+		JButton btnCancelarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.cancelar.orden"));
+		btnCancelarOrden.addActionListener((e)->{
+			
+			this.setVisible(false);
+			dispose();
+			
+		});
+		panel_botones.add(btnCancelarOrden);
+		
+		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
+		btnLimpiar.setBounds(79, 333, 87, 23);
+		panel.add(btnLimpiar);
+		btnLimpiar.addActionListener((e)->{
+			try {
+				this.reloadGrid(api.obtenerOrdenesDeRetiro());
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+			}
+		});
 		
 
 		
