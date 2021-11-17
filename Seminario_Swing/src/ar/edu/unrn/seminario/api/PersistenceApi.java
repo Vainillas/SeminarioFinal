@@ -3,10 +3,9 @@ package ar.edu.unrn.seminario.api;
 import java.util.ArrayList;
 
 
+
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-
 import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.accesos.BeneficioDAOJDBC;
 import ar.edu.unrn.seminario.accesos.BeneficioDao;
@@ -312,9 +311,9 @@ public class PersistenceApi implements IApi {
 	}
 
 
-    public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, int codOrden) throws AppException, NotNullException{
+    public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, Integer codOrden) throws AppException, NotNullException{
     	Visita visita = null; //Inicializo visita en null
-    	
+    	System.out.println("codigo orden"+ codOrden);
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>(); //Inicializo la lista de tipo de residuos
     	
     	for(int i=0;i<residuosIngresados.size();i++){  
@@ -354,7 +353,6 @@ public class PersistenceApi implements IApi {
     	
 
     	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
-    	
     	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals(enEjecucion)) {
     		actualizarEstadoOrden(codOrden, new Estado(enEjecucion));
     	}
@@ -477,8 +475,8 @@ public class PersistenceApi implements IApi {
     			}
     		}
     	}
+    	
     	int i;
-
     	for(i=0;i<listaResiduos.size();i++) {
     		int cantidad = listaResiduos.get(i).getCantidadKg() - listaSumaVisitas.get(i).getCantidadKg();
     		ResiduoDTO residuoDTO = null;
@@ -944,7 +942,6 @@ public class PersistenceApi implements IApi {
 		return Filtro.filtrar(this.obtenerCanjes(),predicate);
 	}
 
-	@Override
 	public List<ViviendaDTO> obtenerViviendasDeUsuario(Comparator<ViviendaDTO> comparator) throws AppException {
 		return Filtro.filtrar(this.obtenerViviendasDeUsuario(), comparator);
 		
@@ -967,10 +964,12 @@ public class PersistenceApi implements IApi {
 
 	@Override
 	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg,
-			String observacion, int codOrden, Integer dia, Integer mes, Integer año)
+			String observacion, Integer codOrden, Integer dia, Integer mes, Integer año)
 			throws AppException, NotNullException {
-		//completenlo belleses
 		// TODO Esbozo de método generado automáticamente
 		
 	}
+
+
+
 }

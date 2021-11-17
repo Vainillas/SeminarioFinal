@@ -1,11 +1,9 @@
 
 package ar.edu.unrn.seminario.gui;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JButton;
@@ -27,18 +25,17 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 public class AltaUsuario extends JFrame {
 
+
+	private static final long serialVersionUID = 1L;
+
 	private JPanel contentPane;
 	private JTextField usuarioTextField;
 	private JTextField contrasenaTextField;
 	private JTextField emailTextField;
-	private JComboBox rolComboBox;
-	private ResourceBundle labels;
+	private JComboBox<String> rolComboBox;
 	private List<RolDTO> roles = new ArrayList<>();
 
-	/**
-	 * Create the frame.
-	 * @param labels 
-	 */
+	@SuppressWarnings("unchecked")
 	public AltaUsuario(IApi api, ResourceBundle labels) {
 
 		// Obtengo los roles
@@ -119,7 +116,7 @@ public class AltaUsuario extends JFrame {
 		
 		cancelarButton.setBounds(323, 215, 97, 25);
 		contentPane.add(cancelarButton);
-		rolComboBox = new JComboBox();
+		rolComboBox = new JComboBox<String>();
 		rolComboBox.setBounds(148, 131, 160, 22);
 		contentPane.add(rolComboBox);
 		

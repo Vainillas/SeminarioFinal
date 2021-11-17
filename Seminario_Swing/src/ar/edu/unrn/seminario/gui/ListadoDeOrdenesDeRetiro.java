@@ -73,7 +73,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	private JLabel lbFiltrado;
 	private JLabel lbOrdenamiento;
 	private JPanel panel_botones;
-	private JButton btnSalir;
 	private JButton btnLimpiar;
 	private ResourceBundle labels;
 	private JLabel lbFiltradoPorCodigoOrden;
@@ -288,12 +287,13 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		tfFiltradoPorCodigoOrden.setColumns(10);
 		
 		panel_ordenamientos = new JPanel();
-		panel_ordenamientos.setBounds(52, 219, 143, 137);
+		panel_ordenamientos.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panel_ordenamientos.setBounds(10, 219, 220, 98);
 		panel.add(panel_ordenamientos);
 		panel_ordenamientos.setLayout(null);
 		
 		JLabel lbOrdenarPorDni = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenar.por.dni")); 
-		lbOrdenarPorDni.setBounds(10, 8, 90, 14);
+		lbOrdenarPorDni.setBounds(50, 8, 90, 14);
 		lbOrdenarPorDni.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_ordenamientos.add(lbOrdenarPorDni);
 		
@@ -309,13 +309,13 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			}
 		});
 		
-		rdbtnOrdenarPorDni.setBounds(100, 5, 21, 21);
+		rdbtnOrdenarPorDni.setBounds(150, 5, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorDni);
 		
 		lbOrdenarPorCodigoPedido = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenar.por.codigo.pedido")); 
 		
 		lbOrdenarPorCodigoPedido.setHorizontalAlignment(SwingConstants.CENTER);
-		lbOrdenarPorCodigoPedido.setBounds(10, 34, 90, 14);
+		lbOrdenarPorCodigoPedido.setBounds(50, 34, 90, 14);
 		panel_ordenamientos.add(lbOrdenarPorCodigoPedido);
 		
 		JRadioButton rdbtnOrdenarPorCodigoPedido = new JRadioButton(""); 
@@ -331,12 +331,12 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
 		});
-		rdbtnOrdenarPorCodigoPedido.setBounds(100, 31, 21, 21);
+		rdbtnOrdenarPorCodigoPedido.setBounds(150, 31, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorCodigoPedido);
 		
 		lbOrdenarPorCodigoOrden = new JLabel(labels.getString("listado.de.ordenes.de.retiro.label.ordenar.por.codigo.orden")); 
 		lbOrdenarPorCodigoOrden.setHorizontalAlignment(SwingConstants.CENTER);
-		lbOrdenarPorCodigoOrden.setBounds(10, 60, 90, 14);
+		lbOrdenarPorCodigoOrden.setBounds(50, 60, 90, 14);
 		panel_ordenamientos.add(lbOrdenarPorCodigoOrden);
 		
 		rdbtnOrdenarPorCodigoOrden = new JRadioButton(""); 
@@ -345,7 +345,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			Comparator <OrdenDeRetiroDTO> comparator = (OrdenDeRetiroDTO o1, OrdenDeRetiroDTO o2)->
 			(String.valueOf(o1.getCodigo()).compareToIgnoreCase(String.valueOf(o2.getCodigo())));
 		});
-		rdbtnOrdenarPorCodigoOrden.setBounds(100, 57, 21, 21);
+		rdbtnOrdenarPorCodigoOrden.setBounds(150, 57, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorCodigoOrden);
 		
 		lbFiltrado = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.filtrado"));
@@ -363,16 +363,45 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_botones.setBounds(304, 367, 441, 37);
 		panel.add(panel_botones);
 		
-		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
-		panel_botones.add(btnLimpiar);
+		JButton btnConcretarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.label.concretar.orden"));
+		panel_botones.add(btnConcretarOrden);
+		btnConcretarOrden.addActionListener((e)->{
+			System.out.println(table.getSelectedColumn());
+			System.out.println(table.getSelectedRow());
+			
+			if(!(table.getSelectedRow() == -1)) {
+				System.out.println("todo ok");
+				/*try {
+					api.concretarOrdenDeRetiro((int)table.getValueAt(table.getSelectedColumn(),table.getSelectedRow() ));
+				} catch (AppException e1) {
+					// TODO Bloque catch generado automáticamente
+					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+				}*/
+			}
+			else {
+				JOptionPane.showMessageDialog(null,"Debe Seleccionar Un Pedido","error",0);
+			}
+		});
 		
-		btnSalir = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.salir"));
-		btnSalir.addActionListener((e)->{
+		JButton btnCancelarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.cancelar.orden"));
+		btnCancelarOrden.addActionListener((e)->{
+			
 			this.setVisible(false);
 			dispose();
 			
 		});
-		panel_botones.add(btnSalir);
+		panel_botones.add(btnCancelarOrden);
+		
+		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
+		btnLimpiar.setBounds(79, 333, 87, 23);
+		panel.add(btnLimpiar);
+		btnLimpiar.addActionListener((e)->{
+			try {
+				this.reloadGrid(api.obtenerOrdenesDeRetiro());
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+			}
+		});
 		
 
 		

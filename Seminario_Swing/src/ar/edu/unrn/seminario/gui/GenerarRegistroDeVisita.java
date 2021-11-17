@@ -86,11 +86,12 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JButton btn_cancelar;
 	private JButton btn_registrar_visita;
 	private JButton btn_limpiar;
-	private ResourceBundle labels;
 	private JLabel lb_cantidad_residuos;
 	private ArrayList<String> ordenSeleccionada = new ArrayList<String>();
 	private ArrayList<String> residuosSeleccionados = new ArrayList<String>();
 	private ArrayList<String> cantResiduosRetirados = new ArrayList<String>();
+
+
 	private Integer codigoOrden;
 	private String descripcion;  
 	private JComboBox<String> comboBoxResiduosDinamico;
@@ -144,50 +145,50 @@ public class GenerarRegistroDeVisita extends JFrame {
 					
 			};	
 		
-		table = new JTable();
-		comboBoxResiduosDinamico  = new JComboBox();
+		
+		comboBoxResiduosDinamico  = new JComboBox<String>();
 		comboBoxResiduosDinamico.addActionListener((e)->{
 			
 			
 			try {
 				PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
-				this.reloadSliderGrid(pedido.getListResiduos());
+				this.reloadSliderGrid(api.devolverResiduosRestantes(codigoOrden));
 			}catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 					| DateNullException | AppException e1) {
-				 JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				 JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 		
 			
 		});
 		comboBoxResiduosDinamico.setBounds(152, 40, 96, 20);
+		table = new JTable();
 		table.addMouseListener(new MouseAdapter() {
-			//ArrayList<String> ordenSeleccionada;
 			public void mouseClicked(MouseEvent arg0) {
-				residuosSeleccionados.clear();
-				
-				cantResiduosRetirados.clear();
 				comboBoxResiduosDinamico.removeAllItems();
 				lbResiduoSeleccionado.setVisible(true);
 				comboBoxResiduosDinamico.removeAllItems();
 				lb_cantidad_residuos.setVisible(true);
 				int fila = table.getColumnCount();
-				ordenSeleccionada = new ArrayList<String>();
+				try {
 				for (int i = 0; i < fila; i++) {
+					
 					ordenSeleccionada.add( (String) table.getValueAt(table.getSelectedRow(), i));
 					
 				}
 				
 				PedidoDeRetiroDTO pedido = null;
-				try {
+					codigoOrden =Integer.valueOf( (String)table.getValueAt(table.getSelectedRow(),1));
 					pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
-					for(Residuo r : pedido.getListResiduos()) {
+					for(ResiduoDTO r : api.devolverResiduosRestantes(codigoOrden)) {
 						comboBoxResiduosDinamico.addItem(r.getTipo().getNombre());
 					}
+				reloadSliderGrid(api.devolverResiduosRestantes(codigoOrden));
+				
 				}catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 						| DateNullException | AppException e) {
 					 JOptionPane.showMessageDialog(null, e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 				}
-				reloadSliderGrid(pedido.getListResiduos());
+				
 				slider_Dinamico.setEnabled(true);
 				
 				
@@ -212,21 +213,15 @@ public class GenerarRegistroDeVisita extends JFrame {
 					if(!validacion ) {
 						residuosSeleccionados.add((String)comboBoxResiduosDinamico.getSelectedItem());
 						cantResiduosRetirados.add(String.valueOf(slider_Dinamico.getValue()) );
-					}
-					
-				
-				System.out.println(residuosSeleccionados.toString());
-				System.out.println(cantResiduosRetirados.toString());
-				
-				
+						
+					}		
 			}
 		});
 		slider_Dinamico.setValue(0);
 		slider_Dinamico.setMaximum(50);
 		slider_Dinamico.setPaintLabels(true);
 		slider_Dinamico.setPaintTicks(true);
-		slider_Dinamico.setMajorTickSpacing(5);
-		slider_Dinamico.setMinorTickSpacing(10);
+		slider_Dinamico.setMajorTickSpacing(3);
 		slider_Dinamico.setBounds(258, 40, 262, 40);
 		slider_Dinamico.setEnabled(false);
 		table.setRowSelectionAllowed(true);
@@ -241,9 +236,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 				Predicate <OrdenDeRetiroDTO> predicate = (OrdenDeRetiroDTO o)->
 				!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado");
 				ordenes = api.obtenerOrdenesDeRetiro(predicate);				
-				// Agrega las direcciones de el dueño en el model <- Incorrecto
 				for (OrdenDeRetiroDTO o : ordenes) {
-					//if(!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado")) {
 					modelo.addRow(new Object[] {
 							DateHelper.changeFormat(o.getFechaOrden()),
 							Integer.toString(o.getCodigo()),
@@ -251,14 +244,12 @@ public class GenerarRegistroDeVisita extends JFrame {
 							o.getRecolector().getNombre() +" "+  o.getRecolector().getApellido(),
 							o.getRecolector().getDni(),
 							Integer.toString(o.getPedidoAsociado().getCodigo()),
-							o.getPedidoAsociado().getObservacion()
-							
+							o.getPedidoAsociado().getObservacion()	
 					});
-					//}
 				}
 
 			} catch (Exception e2) {
-				JOptionPane.showMessageDialog(null, e2.getMessage(), "error: ",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e2.getMessage(), "Error: ",JOptionPane.ERROR_MESSAGE);
 				setVisible(false);
 				dispose();
 				
@@ -307,7 +298,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		
 
-		List<String> numeros = this.inicializarFecha(24);		
+		List<String> numeros = this.inicializarFecha(2022);		
 		SpinnerModel maximo_hora = new SpinnerListModel(numeros);
 		JSpinner spinner_año = new JSpinner(maximo_hora);
 		spinner_año.setModel(maximo_hora);
@@ -335,8 +326,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 		spinner_mes.setBounds(76, 40, 52, 20);
 		panel_visita.add(spinner_mes);
 		
-		
-		
 		panel_visita.add(comboBoxResiduosDinamico);
 		
 		lbResiduoSeleccionado = new JLabel("Residuo");
@@ -351,47 +340,46 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		btn_cancelar = new JButton(labels.getString("registro.de.visita.label.cancelar"));
 		btn_cancelar.addActionListener((e)->{
-			
 			setVisible(false);
 			dispose(); 
-			
-			
+
 		});
-		
 		btn_limpiar = new JButton(labels.getString("registro.de.visita.label.limpiar"));
-		btn_limpiar.addActionListener((e)->{
-			
+		btn_limpiar.addActionListener((e)->{	
 		});
 		panel_botones.add(btn_limpiar);
-		
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
-			System.out.println(this.residuosSeleccionados.toString());
+			this.descripcion = this.tp_observacion.getText();	
 			try { 
 				this.descripcion = this.tp_observacion.getText();
-				System.out.println(table.getValueAt(table.getSelectedRow(), 1));
-				this.codigoOrden = (Integer) table.getValueAt(table.getSelectedRow(), 1);
 				spinner_dia.getValue();
-				
-					api.registrarVisita(residuosSeleccionados, cantResiduosRetirados,this.descripcion,codigoOrden,(Integer)spinner_dia.getValue(),(Integer)spinner_mes.getValue(),(Integer)spinner_año.getValue());
-					
-				 
-				
-				JOptionPane.showMessageDialog(null,"Registro de visita generado con exito!","mensaje informativo",JOptionPane.INFORMATION_MESSAGE);
+
+					api.registrarVisita(
+							residuosSeleccionados, 
+							cantResiduosRetirados,
+							this.descripcion,
+							codigoOrden);
+							
+					api.registrarVisita(residuosSeleccionados, 
+							cantResiduosRetirados,
+							this.descripcion,codigoOrden,
+							Integer.parseInt((String)spinner_dia.getValue()),
+							Integer.parseInt((String)spinner_mes.getValue()),
+							Integer.parseInt((String)spinner_año.getValue()));
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);
 				dispose();
 			} catch ( AppException | NotNullException e1) {
 
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
 			}
 			
 			catch(java.lang.ArrayIndexOutOfBoundsException e1) {
-				JOptionPane.showMessageDialog(null, "Debe Seleccionar Un Pedido De Retiro","error",JOptionPane.ERROR_MESSAGE);
-			}
-		
-			
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.error") ,"error",JOptionPane.ERROR_MESSAGE);
+			}		
 		});
-		
+
 		panel_botones.add(btn_registrar_visita);
 		
 		panel_botones.add(btn_cancelar);
@@ -416,8 +404,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 
 
-	private void reloadSliderGrid(ArrayList<Residuo> residuos) {
-		for(Residuo r : residuos) {
+	private void reloadSliderGrid(List<ResiduoDTO> list) {
+		for(ResiduoDTO r : list) {
 			if(r.getTipo().getNombre().equals((String) comboBoxResiduosDinamico.getSelectedItem())) {
 				slider_Dinamico.setMaximum(r.getCantidadKg());
 				

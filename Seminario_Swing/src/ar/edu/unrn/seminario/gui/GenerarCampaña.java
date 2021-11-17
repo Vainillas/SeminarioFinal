@@ -134,6 +134,8 @@ public class GenerarCampaña extends JFrame {
 			public void mousePressed(MouseEvent e) {
 				
 				String  descripcion = (String)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),0 );
+				System.out.println(tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 ));
+
 				Integer puntaje = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),1 );
 				Integer codigo = (Integer)tableBeneficiosNoAsociados.getValueAt(tableBeneficiosNoAsociados.getSelectedRow(),2 );		
 				modeloBeneficiosNoAsociados.removeRow(tableBeneficiosNoAsociados.getSelectedRow());
@@ -231,6 +233,10 @@ public class GenerarCampaña extends JFrame {
 					beneficios = api.obtenerBeneficios();
 
 					for(BeneficioDTO b : beneficios) {
+						this.modeloBeneficiosNoAsociados.addRow(new Object[] {
+								b.getDescripcion(),b.getPuntajeConsumible()
+								});
+
 						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 					}
 					
