@@ -39,13 +39,15 @@ public class CampañaDAOJDBC implements CampañaDao{
 			ResultSet clave = statement.getGeneratedKeys();
 			clave.next();
 			int codigoCampaña = clave.getInt(1);
-			clave.close();
+			clave.close();  
 			for(Beneficio b : campaña.getCatalogo().getListaBeneficios()) {
 				PreparedStatement statement2 = conn.prepareStatement
 	                    ("INSERT INTO beneficios_campaña(cod_beneficio, cod_campaña) "
 	                    		+ "VALUES(?, ?)");
 				statement2.setInt(1, b.getCodigo());
-				statement2.setInt(2, codigoCampaña);
+
+                statement2.setInt(2, codigoCampaña);
+
 				statement2.executeUpdate();
 			}
 			
@@ -140,7 +142,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
-					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					canje = new Canje(beneficio, dueño, campaña, new java.util.Date(resultSetCanje.getDate("ca.fecha").getTime()) /*resultSetCanje.getDate("ca.fecha")*/, resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
 				}
 				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
@@ -241,7 +243,7 @@ public class CampañaDAOJDBC implements CampañaDao{
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
-					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					canje = new Canje(beneficio, dueño, campaña, new java.util.Date(resultSetCanje.getDate("ca.fecha").getTime()), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
 				}
 				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);

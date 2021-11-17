@@ -320,7 +320,6 @@ public class PersistenceApi implements IApi {
     		//Por cada tipo de residuo ingresado creo una instancia y la agrego a la lista
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
-    		
     	}
     	//Ordeno la lista
     	listaTipos.sort((TipoResiduo t1, TipoResiduo t2)->t1.getNombre().compareTo(t2.getNombre()));
@@ -352,6 +351,7 @@ public class PersistenceApi implements IApi {
     	
     	this.visitaDao.create(visita);
     	
+
     	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
     	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals(enEjecucion)) {
     		actualizarEstadoOrden(codOrden, new Estado(enEjecucion));
@@ -363,6 +363,7 @@ public class PersistenceApi implements IApi {
     		int puntaje = calcularPuntaje(orden);
     		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
     	}
+    	
     	
     }
     public boolean comprobarExcedenteResiduos(OrdenDeRetiro ordenAComprobar, Visita visitaNueva) {
@@ -911,7 +912,9 @@ public class PersistenceApi implements IApi {
 	public List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException{
 		List<CampañaDTO> campañasDto = new ArrayList<>();
     	List<Campaña> campañas = campañaDao.findAll();
+
     	System.out.println(campañas.size());
+
     	for (Campaña c : campañas) {
     		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
     	} 

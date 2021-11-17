@@ -170,6 +170,7 @@ public class GenerarCampaña extends JFrame {
 					
 					for(int i =0 ;i<this.tableBeneficiosAsociados.getRowCount();i++ ) {
 						codigo.add((Integer)tableBeneficiosAsociados.getValueAt(i,2 ));
+
 					}
 					try {
 						
@@ -180,15 +181,19 @@ public class GenerarCampaña extends JFrame {
 					} catch (AppException | NotNullException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 
-					}
-				}
-				else {
-					JOptionPane.showMessageDialog(null,"debe seleccionar un beneficio","Error",JOptionPane.ERROR_MESSAGE);
-				}
 
-			}});
+						
+					}}
+			
+			
+			else {
+				JOptionPane.showMessageDialog(null,"debe seleccionar un beneficio","Error",JOptionPane.ERROR_MESSAGE);
+			}
+				}
+		});
+			
+		
 
-		tableBeneficiosNoAsociados.setModel(this.modeloBeneficiosNoAsociados);
 		scrollPaneBeneficioNoAsociado.setViewportView(tableBeneficiosNoAsociados);
 		
 		JLabel lbBeneficiosSinAsociar = new JLabel("Beneficios Sin Asociar");

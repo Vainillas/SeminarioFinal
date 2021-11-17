@@ -34,7 +34,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 
 			statement.setInt(1, canje.getBeneficioCanjeado().getCodigo());
 			statement.setString(2, canje.getDueñoCanjeador().getDni());
-			statement.setDate(3, canje.getFechaCanje());
+			statement.setDate(3,new java.sql.Date(canje.getFechaCanje().getDate()));
 			statement.setInt(4, canje.getCampaña().getCodigo());
 			int cantidad = statement.executeUpdate();
 			if (cantidad > 0) {
@@ -154,7 +154,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
-					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					canje = new Canje(beneficio, dueño, campaña, new java.util.Date(resultSetCanje.getDate("ca.fecha").getTime()), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
 				}
 				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
@@ -290,7 +290,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
-					canje = new Canje(beneficio, dueño, campaña, resultSetCanje.getDate("ca.fecha"), resultSetCanje.getInt("ca.codigo"));
+					canje = new Canje(beneficio, dueño, campaña, new java.util.Date(resultSetCanje.getDate("ca.fecha").getTime()), resultSetCanje.getInt("ca.codigo"));
 					listaCanjesEfectuados.add(canje);
 				}
 				campaña.setListaCanjesEfectuados(listaCanjesEfectuados);
