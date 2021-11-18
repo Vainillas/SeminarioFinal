@@ -367,8 +367,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		JButton btnConcretarOrden = new JButton(labels.getString("listado.de.ordenes.de.retiro.label.concretar.orden"));
 		panel_botones.add(btnConcretarOrden);
 		btnConcretarOrden.addActionListener((e)->{
-			System.out.println(table.getSelectedColumn());
-			System.out.println(table.getSelectedRow());
 			
 			if(!(table.getSelectedRow() == -1)) {
 					try {

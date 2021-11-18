@@ -44,8 +44,6 @@ public class Canje {
 		this.dueñoCanjeador = unDueño;
 		this.campaña = unaCampaña;
 		
-		System.out.println("puntaje del dueño" + unDueño.getPuntaje());
-		System.out.println("puntaje consumible" + unBeneficio.getPuntajeConsumible());
 		validarDatos(unDueño.getPuntaje(),unBeneficio.getPuntajeConsumible());
 	}
 	
