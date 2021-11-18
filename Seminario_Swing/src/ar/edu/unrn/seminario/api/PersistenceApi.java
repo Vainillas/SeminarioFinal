@@ -516,8 +516,6 @@ public class PersistenceApi implements IApi {
     	OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
     	actualizarEstadoOrden(codOrden, new Estado(concretado));
     	int puntaje = calcularPuntaje(orden);
-    	System.out.println("Puntaje de orden concretada : " + puntaje);
-    	System.out.println(orden.getPedidoAsociado().getVivienda().getDueño().getPuntaje());
 		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
     }
     public void cancelarOrdenDeRetiro(int codOrden) throws AppException{
@@ -896,8 +894,7 @@ public class PersistenceApi implements IApi {
 		
 		dueño.sumarPuntos(puntaje);
 		System.out.println("Puntaje nuevo del dueño: " +dueño.getPuntaje());
-		dueñoDao.update(dueño);       
-		
+		dueñoDao.update(dueño);
 	}
 	public void generarCampaña(List<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
 		
@@ -971,8 +968,6 @@ public class PersistenceApi implements IApi {
 	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg,
 			String observacion, Integer codOrden, Integer dia, Integer mes, Integer año)
 			throws AppException, NotNullException {
-		// TODO Esbozo de método generado automáticamente
-		
 	}
 
 
