@@ -103,7 +103,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						user);
+						user, resultSetConsulta.getInt("p.puntaje"));
 				canjeObjetivo = new Canje(beneficioCanjeado, dueño, resultSetConsulta.getDate("cje.fecha"),
 						resultSetConsulta.getInt("cje.codigo"));
 				
@@ -150,7 +150,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetCanje.getString("p.apellido"),
 							resultSetCanje.getString("p.dni"),
 							resultSetCanje.getString("p.correo_electronico"),
-							user);
+							user, resultSetCanje.getInt("p.puntaje"));
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
@@ -177,7 +177,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetBeneficiarios.getString("p.apellido"),
 							resultSetBeneficiarios.getString("p.dni"),
 							resultSetBeneficiarios.getString("p.correo_electronico"),
-							user);
+							user, resultSetBeneficiarios.getInt("p.puntaje"));
 					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
 					listaBeneficiarios.add(dueño);
 				}
@@ -244,7 +244,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 						resultSetConsulta.getString("p.apellido"),
 						resultSetConsulta.getString("p.dni"),
 						resultSetConsulta.getString("p.correo_electronico"),
-						user);
+						user, resultSetConsulta.getInt("p.puntaje"));
 				canjeObjetivo = new Canje(beneficioCanjeado, dueño, resultSetConsulta.getDate("cje.fecha"),
 						resultSetConsulta.getInt("cje.codigo"));
 				
@@ -293,7 +293,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetCanje.getString("p.apellido"),
 							resultSetCanje.getString("p.dni"),
 							resultSetCanje.getString("p.correo_electronico"),
-							user);
+							user, resultSetCanje.getInt("p.puntaje"));
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
@@ -321,7 +321,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetBeneficiarios.getString("p.apellido"),
 							resultSetBeneficiarios.getString("p.dni"),
 							resultSetBeneficiarios.getString("p.correo_electronico"),
-							user);
+							user, resultSetBeneficiarios.getInt("p.puntaje") );
 					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
 					listaBeneficiarios.add(dueño);
 				}
@@ -432,7 +432,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetCanje.getString("p.apellido"),
 							resultSetCanje.getString("p.dni"),
 							resultSetCanje.getString("p.correo_electronico"),
-							user);
+							user, resultSetCanje.getInt("p.puntaje"));
 					beneficio = new Beneficio(resultSetCanje.getString("b.nombre_beneficio"),
 							resultSetCanje.getInt("b.costo"),
 							resultSetCanje.getInt("b.codigo"));
@@ -460,7 +460,7 @@ public class CanjeDAOJDBC implements CanjeDao {
 							resultSetBeneficiarios.getString("p.apellido"),
 							resultSetBeneficiarios.getString("p.dni"),
 							resultSetBeneficiarios.getString("p.correo_electronico"),
-							user);
+							user, resultSetBeneficiarios.getInt("p.puntaje"));
 					//Si no sale, hacer el listaBeneficiarios.contains() para agregar el dueño una sola vez
 					listaBeneficiarios.add(dueño);
 				}
