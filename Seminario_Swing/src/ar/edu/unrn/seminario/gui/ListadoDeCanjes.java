@@ -75,6 +75,7 @@ public class ListadoDeCanjes extends JFrame {
 	 * @param labels 
 	 */
 	public ListadoDeCanjes(IApi api, ResourceBundle labels) {
+		this.setTitle(labels.getString("listado.de.canjes.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1139, 427);
 		contentPane = new JPanel();
