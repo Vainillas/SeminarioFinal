@@ -317,16 +317,14 @@ public class PersistenceApi implements IApi {
     	System.out.println(residuosIngresadosKg.toString());
     	
     	Visita visita = null; //Inicializo visita en null
-    	System.out.println("codigo orden"+ codOrden);
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>(); //Inicializo la lista de tipo de residuos
+
     	
     	for(int i=0;i<residuosIngresados.size();i++){  
     		//Por cada tipo de residuo ingresado creo una instancia y la agrego a la lista
     		TipoResiduo t = tipoResiduoDao.find(residuosIngresados.get(i));
     		listaTipos.add(t);
     	}
-    	//Ordeno la lista
-    	listaTipos.sort((TipoResiduo t1, TipoResiduo t2)->t1.getNombre().compareTo(t2.getNombre()));
     	//Creo una lista de residuos
     	ArrayList<Residuo> listResiduos = new ArrayList<Residuo>();
     	//Instancio los residuos con el tipo de residuo que instancié antes y le meto la cantidad
@@ -351,22 +349,26 @@ public class PersistenceApi implements IApi {
     	
     	
     	//Si pasa el cappeo, creo la visita
-    	
-    	
-    	this.visitaDao.create(visita);
-    	
+    	if(ordenComprobacion.getEstado().enEjecucion() || ordenComprobacion.getEstado().pendiente()) {
 
-    	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
-    	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals(enEjecucion)) {
-    		actualizarEstadoOrden(codOrden, new Estado(enEjecucion));
+        	this.visitaDao.create(visita);
+        	
+
+        	OrdenDeRetiro ordenCorrespondiente = this.ordenDeRetiroDao.find(codOrden);
+        	if(ordenCorrespondiente.getVisitas().size() > 0 && !ordenCorrespondiente.getEstado().obtenerEstado().equals(enEjecucion)) {
+        		actualizarEstadoOrden(codOrden, new Estado(enEjecucion));
+        	}
+        	
+        	if(!comprobarCantidadResiduos(codOrden)) {
+        		actualizarEstadoOrden(codOrden, new Estado(concretado));
+        		OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
+        		int puntaje = calcularPuntaje(orden);
+        		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
+        	}
     	}
+    	else
+    		throw new AppException("La orden a agregar una visita ya está concretada o cancelada");
     	
-    	if(!comprobarCantidadResiduos(codOrden)) {
-    		actualizarEstadoOrden(codOrden, new Estado(concretado));
-    		OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
-    		int puntaje = calcularPuntaje(orden);
-    		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
-    	}
     	
     	
     }
@@ -374,7 +376,9 @@ public class PersistenceApi implements IApi {
     	boolean excedido = false;
     	ArrayList<Visita> visitas= ordenAComprobar.getVisitas();
     	visitas.add(visitaNueva);
+    	//Lista de residuos del pedido de retiro
     	ArrayList<Residuo> listaResiduos = ordenAComprobar.getPedidoAsociado().getListResiduos();
+    	
     	
     	ArrayList<Residuo> listaSumaVisitas = new ArrayList<Residuo>();
     	for(int j=0; j<listaResiduos.size(); j++) {
@@ -388,10 +392,11 @@ public class PersistenceApi implements IApi {
     				}
     			}
     		}
+    		
     	}
     	int i;
-    	
     	for(i=0;i<listaResiduos.size();i++) {
+    		
     		if(listaResiduos.get(i).getCantidadKg() < listaSumaVisitas.get(i).getCantidadKg()) {// quizas cambiar a != en otro momento
     			//Si alguna cantidad de un residuo especifico en la lista de residuos del pedido
     			//es mayor o igual a la cantidad de ese mismo residuo en el total de la lista de visitas
@@ -519,8 +524,6 @@ public class PersistenceApi implements IApi {
     	OrdenDeRetiro orden = ordenDeRetiroDao.find(codOrden);
     	actualizarEstadoOrden(codOrden, new Estado(concretado));
     	int puntaje = calcularPuntaje(orden);
-    	System.out.println("Puntaje de orden concretada : " + puntaje);
-    	System.out.println(orden.getPedidoAsociado().getVivienda().getDueño().getPuntaje());
 		sumarPuntos(orden.getPedidoAsociado().getVivienda().getDueño(), puntaje);
     }
     public void cancelarOrdenDeRetiro(int codOrden) throws AppException{
@@ -772,7 +775,6 @@ public class PersistenceApi implements IApi {
 	public void registrarDueño(String nombre, String apellido, String dni)
 			throws DataEmptyException, StringNullException, IncorrectEmailException, NotNumberException, AppException {
 		Dueño dueño = new Dueño(nombre, apellido, dni, this.userOnline.getEmail(),this.userOnline);
-		System.out.println(dueño.toString());
         this.dueñoDao.create(dueño);
         
 		
@@ -898,9 +900,7 @@ public class PersistenceApi implements IApi {
 	public void sumarPuntos(Dueño dueño, int puntaje) throws AppException {  
 		
 		dueño.sumarPuntos(puntaje);
-		System.out.println("Puntaje nuevo del dueño: " +dueño.getPuntaje());
-		dueñoDao.update(dueño);       
-		
+		dueñoDao.update(dueño);
 	}
 	public void generarCampaña(List<Integer> listaBeneficios, String unNombre) throws AppException, NotNullException {
 		
@@ -920,12 +920,10 @@ public class PersistenceApi implements IApi {
 		List<CampañaDTO> campañasDto = new ArrayList<>();
     	List<Campaña> campañas = campañaDao.findAll();
 
-    	System.out.println(campañas.size());
 
     	for (Campaña c : campañas) {
     		campañasDto.add(new CampañaDTO(c.getNombreCampaña(), c.getCatalogo(),c.getEstado(), c.getCodigo()));
     	} 
-    	System.out.println(campañasDto.size());
     	return campañasDto;
 	}
 	
@@ -974,8 +972,6 @@ public class PersistenceApi implements IApi {
 	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg,
 			String observacion, Integer codOrden, Integer dia, Integer mes, Integer año)
 			throws AppException, NotNullException {
-		// TODO Esbozo de método generado automáticamente
-		
 	}
 
 

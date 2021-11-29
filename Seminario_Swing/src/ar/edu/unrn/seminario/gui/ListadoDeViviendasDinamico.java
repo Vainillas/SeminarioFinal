@@ -115,7 +115,6 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			}
 			if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 				modelo = new DefaultTableModel(new Object[][] {}, titulos2);	
-				System.out.println("entro a comunidad");
 				this.btnOrdenarPorNombreYApellido.setVisible(false);
 				this.lbNombre_Apellido.setVisible(false);
 				this.lbDni.setVisible(false);
