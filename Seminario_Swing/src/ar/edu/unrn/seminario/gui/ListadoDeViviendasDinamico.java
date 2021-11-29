@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
@@ -26,9 +27,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class ListadoDeViviendasDinamico extends JFrame {
+	private 
 	IApi api;
 	private JTable table;
-	DefaultTableModel modelo;
+	private DefaultTableModel modelo;
 
 	private JPanel contentPane;
 	private JPanel panel;
@@ -74,7 +76,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		setTitle(labels.getString("listado.de.viviendas.titulo"));
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane);
-		table = new JTable();
+		table = new NotEditJTable();
 		String[] titulos = { 
 				labels.getString("listado.de.viviendas.titulos.vivienda.barrio"),
 				labels.getString("listado.de.viviendas.titulos.vivienda.calle"),

@@ -29,6 +29,7 @@ import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.SwingConstants;
@@ -144,7 +145,7 @@ public class ListadoDeCanjes extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane);
 		
-		table = new JTable();
+		table = new NotEditJTable();
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
 		reloadGrid(canjes);

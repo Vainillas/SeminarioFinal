@@ -53,11 +53,13 @@ public class IniciarSesion extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					
+			
 					PersistenceApi api = new PersistenceApi();
 					IniciarSesion frame = new IniciarSesion(api);
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace(); 
+					JOptionPane.showMessageDialog(null,e.getMessage(),"error",1);
 				}
 			}
 		});

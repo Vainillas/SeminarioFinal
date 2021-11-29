@@ -17,6 +17,7 @@ import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.UsuarioDTO;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import java.awt.ScrollPane;
@@ -125,7 +126,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel.add(scrollPane);
 		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
-		table = new JTable();
+		table = new NotEditJTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.fecha.orden"),  
 				

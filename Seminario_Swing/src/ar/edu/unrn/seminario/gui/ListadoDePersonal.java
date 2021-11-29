@@ -22,6 +22,8 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
+
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
@@ -68,7 +70,7 @@ public class ListadoDePersonal extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(0, 0, 703, 398);
 		panel.add(scrollPane);
-		table = new JTable();
+		table = new NotEditJTable();
 		
 		String[] titulos = { 
 				labels.getString("listado.de.personal.titulos.nombre"),

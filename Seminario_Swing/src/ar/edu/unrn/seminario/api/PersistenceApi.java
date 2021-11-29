@@ -313,6 +313,9 @@ public class PersistenceApi implements IApi {
 
 
     public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, Integer codOrden) throws AppException, NotNullException{
+    	System.out.println(residuosIngresados.toString());
+    	System.out.println(residuosIngresadosKg.toString());
+    	
     	Visita visita = null; //Inicializo visita en null
     	System.out.println("codigo orden"+ codOrden);
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>(); //Inicializo la lista de tipo de residuos

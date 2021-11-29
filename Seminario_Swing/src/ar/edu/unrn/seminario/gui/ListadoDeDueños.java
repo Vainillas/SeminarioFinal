@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
+
 import java.awt.EventQueue;
 
 import javax.swing.JButton;
@@ -35,7 +36,7 @@ import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
-
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 public class ListadoDeDueños extends JFrame {
 
 	private JPanel contentPane;
@@ -67,7 +68,7 @@ public class ListadoDeDueños extends JFrame {
 		panelListado.setLayout(new BorderLayout(0, 0));
 		JScrollPane scrollPane = new JScrollPane();
 		panelListado.add(scrollPane);
-		table = new JTable();
+		table = new NotEditJTable();
 		
 		String[] titulos = { 
 				labels.getString("listado.de.dueños.titulos.nombre.completo"),

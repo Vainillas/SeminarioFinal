@@ -29,6 +29,7 @@ import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 import java.awt.event.ActionListener;
 
@@ -120,7 +121,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 
 		
 		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
-		table = new JTable();
+		table = new NotEditJTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.de.pedidos.de.retiro.titulos.fecha.pedido"), 
 				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.pedido"), 

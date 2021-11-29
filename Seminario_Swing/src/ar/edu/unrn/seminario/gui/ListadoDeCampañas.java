@@ -30,6 +30,7 @@ import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import java.awt.FlowLayout;
@@ -107,7 +108,7 @@ public class ListadoDeCampañas extends JFrame {
 		scrollPaneBeneficios = new JScrollPane();
 		panelBeneficios.add(scrollPaneBeneficios, BorderLayout.CENTER);
 		
-		tableBeneficios = new JTable();
+		tableBeneficios = new NotEditJTable();
 		tableBeneficios.setCellSelectionEnabled(false);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		scrollPaneCampañas = new JScrollPane();
@@ -118,7 +119,7 @@ public class ListadoDeCampañas extends JFrame {
 		
 		scrollPaneCampañas.setBounds(0, 0, 342, 280);
 		panelCampañas.add(scrollPaneCampañas);
-		tableCampañas = new JTable();
+		tableCampañas = new NotEditJTable();
 		tableCampañas.setCellSelectionEnabled(false);
 		tableCampañas.setColumnSelectionAllowed(false);
 		tableCampañas.setRowSelectionAllowed(false);

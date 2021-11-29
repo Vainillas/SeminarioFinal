@@ -28,6 +28,7 @@ import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 
 import ar.edu.unrn.seminario.exceptions.StateException;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
@@ -69,7 +70,7 @@ public class ListadoDeUsuarios extends JFrame {
 		contentPane.add(scrollPane);
 		//ResourceBundle labels = ResourceBundle.getBundle("labels"); 
 		setTitle(labels.getString("listado.usuario.titulo"));
-		table = new JTable();
+		table = new NotEditJTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.usuario.titulos.usuario.USUARIO"),  
 				labels.getString("listado.usuario.titulos.usuario.EMAIL"), 
