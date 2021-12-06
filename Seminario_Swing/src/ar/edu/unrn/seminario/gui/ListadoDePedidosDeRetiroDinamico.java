@@ -55,7 +55,6 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 	private JLabel lbOrdenamiento;
 	private JPanel panel_botones;
 	private JButton btnSalir;
-	private JButton btnLimpiar;
 	private ResourceBundle labels;
 	private JRadioButton rdbtnNewRadioButton;
 	private JLabel lb_ordenar_por_vivienda;
@@ -91,7 +90,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 			
 		}catch (DataEmptyException | NotNullException | DateNullException | AppException
 						| IncorrectEmailException | StringNullException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",0);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
 				}
 			
 		
@@ -111,7 +110,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		scrollPane.setBounds(252, 11, 770, 345);
 		panel.add(scrollPane);
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1074, 464);
 		
 		
@@ -129,6 +128,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 				labels.getString("listado.de.pedidos.de.retiro.titulos.vivienda.pedido"), 
 				labels.getString("listado.de.pedidos.de.retiro.titulos.codigo.vivienda.pedido"),
 				labels.getString("listado.de.pedidos.de.retiro.titulos.observacion")
+				
 				};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulosUsuario);
@@ -172,7 +172,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 					}
 					reloadGrid (this.listaPedidos);
 				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				
 				
 				}
@@ -210,7 +210,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 				reloadGrid (this.listaPedidos);
 				
 			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			}
 			
@@ -241,7 +241,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 						reloadGrid (this.listaPedidos);
 					
 					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 				}
 			
@@ -272,7 +272,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 				}
 			}catch (DataEmptyException | NotNullException | StringNullException | DateNullException
 						| AppException | IncorrectEmailException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 				reloadGrid (this.listaPedidos);
 			
@@ -310,10 +310,8 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 				else {
 					reloadGrid(api.obtenerPedidosDeRetiro(comparator));
 				}
-				//reloadGrid (this.listaPedidos);
-				
 			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
@@ -353,7 +351,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 				
 				
 			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		
@@ -407,7 +405,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 					reloadGrid(listaPedidos);
 				}  catch (AppException | IncorrectEmailException | DataEmptyException | NotNullException
 						| StringNullException | DateNullException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 				
 		});
@@ -429,15 +427,13 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		panel_botones.setBounds(304, 367, 441, 37);
 		panel.add(panel_botones);
 		
-		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
-		panel_botones.add(btnLimpiar);
-		
 		btnSalir = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.salir"));
 		btnSalir.addActionListener((e)->{
 			this.setVisible(false);
 			dispose();
 			
 		});
+		panel_botones.setLayout(new BorderLayout(0, 0));
 		panel_botones.add(btnSalir);
 		
 	}
@@ -456,9 +452,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 			 		maquinaria,
 			 		p.getVivienda().getDireccion().getBarrio()+" "+p.getVivienda().getDireccion().getCalle()+" "+p.getVivienda().getDireccion().getAltura(),
 			 		p.getVivienda().getID(),
-			 		p.getObservacion()
-			 		
-				
+			 		p.getObservacion(),
 			});
 		}
 

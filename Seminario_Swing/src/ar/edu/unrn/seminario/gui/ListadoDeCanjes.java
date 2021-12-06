@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
+import ar.edu.unrn.seminario.dto.BeneficioDTO;
 import ar.edu.unrn.seminario.dto.CanjeDTO;
 import ar.edu.unrn.seminario.dto.RecolectorDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
@@ -46,30 +48,14 @@ public class ListadoDeCanjes extends JFrame {
 	private JTextField tfFiltrarPorCodigoCampaña;
 	private JTextField tfFiltrarDescripcionBeneficio;
 	private JTextField tfFiltrarPorUsuarioAsociado;
-	private JTextField tfFiltrarPorCodigoUsuario;
 	private JTextField tfFiltrarPorCodigoBeneficio;
-	private List<CanjeDTO> listaFiltrados;
-	private List<CanjeDTO> listaOrdenamiento;
+
 	private String rolUsuarioActivo;
 	private String [] titulos;
-	private JLabel filtrarPorCodigoUsuario ;
 	private JLabel filtrarPorUsuarioAsociado ;
 	private JRadioButton rdbtnFiltrarPorUsuarioAsociado;
 	private JRadioButton rdbtnUsuarioAsociado;
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					IApi api = new PersistenceApi();
-					ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
-					ListadoDeCanjes frame = new ListadoDeCanjes(api,labels);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the frame.
@@ -77,7 +63,7 @@ public class ListadoDeCanjes extends JFrame {
 	 */
 	public ListadoDeCanjes(IApi api, ResourceBundle labels) {
 		this.setTitle(labels.getString("listado.de.canjes.titulo"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 		setBounds(100, 100, 1139, 427);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -99,34 +85,30 @@ public class ListadoDeCanjes extends JFrame {
 				labels.getString("listado.de.canjes.titulo2.descripcion.beneficio"), 
 				labels.getString("listado.de.canjes.titulo2.codigo.beneficio"), 
 		};
-			List<CanjeDTO> canjes = null;
 			
 			try {
 				if(api.obtenerRolUsuarioActivo().equalsIgnoreCase("ADMIN")) {
 					modelo = new DefaultTableModel(new Object[][] {},titulos);
-					canjes = api.obtenerCanjes();
-					rolUsuarioActivo = "ADMIN";
+					
+					rolUsuarioActivo = "ADMINISTRADOR";
+					this.reloadGridAdministrador(api.obtenerCanjesPorUsuario());
 					this.titulos = titulos;
 				}
 				else {
 					modelo = new DefaultTableModel(new Object[][] {},titulos2);
 					this.titulos = titulos;
-					canjes = api.obtenerCanjesPorUsuario();
 					rolUsuarioActivo = "COMUNIDAD";
+					System.out.println("entro aca");
+					this.reloadGrid(api.obtenerCanjesPorUsuario());
 				}
-				
-			reloadGrid(canjes);
 			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
-			
-			
 		JButton cerrarButton = new JButton(labels.getString("listado.de.canjes.boton.cerrar"));
-		cerrarButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				setVisible(false);
-				dispose();
-			}
+
+		cerrarButton.addActionListener((e)->{
+			setVisible(false);
+			dispose();
 		});
 		contentPane.setLayout(null);
 
@@ -134,6 +116,7 @@ public class ListadoDeCanjes extends JFrame {
 		pnlBotonesOperaciones.setBounds(5, 322, 841, 37);
 		pnlBotonesOperaciones.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		contentPane.add(pnlBotonesOperaciones);
+		pnlBotonesOperaciones.setLayout(new BorderLayout(0, 0));
 	
 		pnlBotonesOperaciones.add(cerrarButton);
 		
@@ -144,13 +127,10 @@ public class ListadoDeCanjes extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane);
-		
 		table = new NotEditJTable();
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
-		reloadGrid(canjes);
 		JPanel panel_Filtrados = new JPanel();
-		panel_Filtrados.setVisible(false);
 		panel_Filtrados.setBounds(848, 5, 265, 203);
 		contentPane.add(panel_Filtrados);
 		panel_Filtrados.setLayout(null);
@@ -173,29 +153,25 @@ public class ListadoDeCanjes extends JFrame {
 		JRadioButton rdbtnFiltrarPorNombreCampaña = new JRadioButton("");
 		rdbtnFiltrarPorNombreCampaña.addActionListener((e)->{
 			rdbtnFiltrarPorNombreCampaña.setSelected(false);
-			
-			Predicate <CanjeDTO> predicate = (CanjeDTO c)->c.getCampaña().getNombreCampaña().toLowerCase().contains(this.tfFiltrarPorNombreCampaña.getText());
-			try {
-				
-				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-					this.listaFiltrados = api.obtenerCanjesPorUsuario();
+			if(!this.tfFiltrarPorNombreCampaña.getText().equals("")) {
+				Predicate <CanjeDTO> predicate = (CanjeDTO c)->
+				c.getCampaña().getNombreCampaña().toLowerCase().contains(this.tfFiltrarPorNombreCampaña.getText().toLowerCase());
+				try {
+					
+					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+					}
+					else {
+						this.reloadGridAdministrador(api.obtenerCanjes(predicate));
+					}
+					
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
-				else {
-					this.listaFiltrados = api.obtenerCanjes();
-				}
-				
-				reloadGrid(api.obtenerCanjes(predicate));
-			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
 			}
-			
 			
 		});
 		rdbtnFiltrarPorNombreCampaña.setBounds(238, 36, 21, 23);
-		rdbtnFiltrarPorNombreCampaña.addActionListener((e)->{
-			
-			
-		});
 		panel_Filtrados.add(rdbtnFiltrarPorNombreCampaña);
 		
 		JLabel filtrarPorCodigoCampaña = new JLabel(labels.getString("listado.de.canjes.label.codigo.de.campaña"));
@@ -220,11 +196,6 @@ public class ListadoDeCanjes extends JFrame {
 		filtrarPorUsuarioAsociado.setBounds(0, 139, 139, 14);
 		panel_Filtrados.add(filtrarPorUsuarioAsociado);
 		
-		 filtrarPorCodigoUsuario = new JLabel(labels.getString("listado.de.canjes.label.codigo.usuario"));
-		filtrarPorCodigoUsuario.setHorizontalAlignment(SwingConstants.CENTER);
-		filtrarPorCodigoUsuario.setBounds(0, 164, 139, 14);
-		panel_Filtrados.add(filtrarPorCodigoUsuario);
-		
 		tfFiltrarPorCodigoCampaña = new JTextField();
 		tfFiltrarPorCodigoCampaña.setColumns(10);
 		tfFiltrarPorCodigoCampaña.setBounds(149, 61, 86, 20);
@@ -240,11 +211,6 @@ public class ListadoDeCanjes extends JFrame {
 		tfFiltrarPorUsuarioAsociado.setBounds(149, 136, 86, 20);
 		panel_Filtrados.add(tfFiltrarPorUsuarioAsociado);
 		
-		tfFiltrarPorCodigoUsuario = new JTextField();
-		tfFiltrarPorCodigoUsuario.setColumns(10);
-		tfFiltrarPorCodigoUsuario.setBounds(149, 161, 86, 20);
-		panel_Filtrados.add(tfFiltrarPorCodigoUsuario);
-		
 		tfFiltrarPorCodigoBeneficio = new JTextField();
 		tfFiltrarPorCodigoBeneficio.setColumns(10);
 		tfFiltrarPorCodigoBeneficio.setBounds(149, 111, 86, 20);
@@ -253,7 +219,21 @@ public class ListadoDeCanjes extends JFrame {
 		JRadioButton rdbtnFiltrarPorCodigoCampaña = new JRadioButton("");
 		rdbtnFiltrarPorCodigoCampaña.addActionListener((e)->{
 			rdbtnFiltrarPorCodigoCampaña.setSelected(false);
-			
+			if(!this.tfFiltrarPorCodigoCampaña.getText().equals("")) {
+				Predicate <CanjeDTO> predicate = (CanjeDTO c)->
+				String.valueOf( c.getCampaña().getCodigo()).contains(this.tfFiltrarPorCodigoCampaña.getText());
+				try {
+					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+					}
+					else {
+						this.reloadGridAdministrador(api.obtenerCanjes(predicate));
+					}
+
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
 		rdbtnFiltrarPorCodigoCampaña.setBounds(238, 60, 21, 23);
 		panel_Filtrados.add(rdbtnFiltrarPorCodigoCampaña);
@@ -261,7 +241,24 @@ public class ListadoDeCanjes extends JFrame {
 		JRadioButton rdbtnFiltrarPorDescripcionBeneficio = new JRadioButton("");
 		rdbtnFiltrarPorDescripcionBeneficio.addActionListener((e)->{
 			rdbtnFiltrarPorDescripcionBeneficio.setSelected(false);
-
+			if(!this.tfFiltrarDescripcionBeneficio.getText().equals("")) {
+				Predicate <CanjeDTO> predicate = (CanjeDTO c)->
+				c.getBeneficioCanjeado().getDescripcion().toLowerCase().contains(this.tfFiltrarDescripcionBeneficio.getText().toLowerCase());
+				
+				try {
+					
+					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+						
+					}
+					else {
+						reloadGridAdministrador(api.obtenerCanjes(predicate));
+						
+					}
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"ERROR",JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
 		rdbtnFiltrarPorDescripcionBeneficio.setBounds(238, 85, 21, 23);
 		panel_Filtrados.add(rdbtnFiltrarPorDescripcionBeneficio);
@@ -269,7 +266,24 @@ public class ListadoDeCanjes extends JFrame {
 		JRadioButton rdbtnFiltrarPorCodigoBeneficio = new JRadioButton("");
 		rdbtnFiltrarPorCodigoBeneficio.addActionListener((e)->{
 			rdbtnFiltrarPorCodigoBeneficio.setSelected(false);
-			
+			if(!this.tfFiltrarPorCodigoBeneficio.getText().equals("")) {
+				Predicate <CanjeDTO> predicate = (CanjeDTO c)->
+			String.valueOf(	c.getBeneficioCanjeado().getCodigo()).contains(this.tfFiltrarPorCodigoBeneficio.getText());
+
+				try {
+					
+					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+						
+					}
+					else {
+						reloadGridAdministrador(api.obtenerCanjes(predicate));
+						
+					}
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+				}
+			}
 			
 		});
 		rdbtnFiltrarPorCodigoBeneficio.setBounds(238, 110, 21, 23);
@@ -278,22 +292,51 @@ public class ListadoDeCanjes extends JFrame {
 		rdbtnFiltrarPorUsuarioAsociado = new JRadioButton("");
 		rdbtnFiltrarPorUsuarioAsociado.addActionListener((e)->{
 			rdbtnFiltrarPorUsuarioAsociado.setSelected(false);
+
+			if(!this.tfFiltrarPorUsuarioAsociado.getText().equals("")) {
+				Predicate <CanjeDTO> predicate = (CanjeDTO c)->
+			String.valueOf(c.getDueñoCanjeador().getNombre() + " "+ c.getDueñoCanjeador().getApellido()).toLowerCase().contains(this.tfFiltrarPorUsuarioAsociado.getText().toLowerCase());
+				try {
+					
+					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+					}
+					else {
+						reloadGridAdministrador(api.obtenerCanjes(predicate));
+						
+					}
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+				}
+			}
 		});
 		
 		rdbtnFiltrarPorUsuarioAsociado.setBounds(238, 135, 21, 23);
 		panel_Filtrados.add(rdbtnFiltrarPorUsuarioAsociado);
 		
-		JRadioButton rdbtnFiltrarPorCodigoUsuario = new JRadioButton("");
-		rdbtnFiltrarPorCodigoUsuario.addActionListener((e)->{
-			
-			rdbtnFiltrarPorCodigoUsuario.setSelected(false);
-			
+		JButton btnLimpiarFiltrado = new JButton(labels.getString("listado.de.canjes.button.limpiar.filtro"));
+
+
+		btnLimpiarFiltrado.addActionListener((e)->{
+			try {
+				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+					
+						reloadGrid(api.obtenerCanjesPorUsuario());
+					
+				}
+				else {
+					reloadGridAdministrador(api.obtenerCanjes());
+				}
+			}
+			catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
 		});
-		rdbtnFiltrarPorCodigoUsuario.setBounds(238, 160, 21, 23);
-		panel_Filtrados.add(rdbtnFiltrarPorCodigoUsuario);
+		
+		btnLimpiarFiltrado.setBounds(44, 169, 191, 23);
+		panel_Filtrados.add(btnLimpiarFiltrado);
 		
 		JPanel panel_Ordenamiento = new JPanel();
-		panel_Ordenamiento.setVisible(false);
 		panel_Ordenamiento.setBounds(848, 210, 265, 178);
 		contentPane.add(panel_Ordenamiento);
 		panel_Ordenamiento.setLayout(null);
@@ -307,6 +350,18 @@ public class ListadoDeCanjes extends JFrame {
 		rdbtnOrdenarNombreCampaña.addActionListener((e)->{
 			rdbtnOrdenarNombreCampaña.setSelected(false);
 			
+				try {
+					Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->c1.getCampaña().getNombreCampaña().compareToIgnoreCase(c2.getCampaña().getNombreCampaña());
+					if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+					}
+					else {
+						reloadGridAdministrador(api.obtenerCanjes(comparator));
+					}
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",0);
+				}
+			
 		});
 		rdbtnOrdenarNombreCampaña.setBounds(24, 21, 165, 25);
 		panel_Ordenamiento.add(rdbtnOrdenarNombreCampaña);
@@ -314,6 +369,18 @@ public class ListadoDeCanjes extends JFrame {
 		JRadioButton rdbtnOrdenarCodigoCampaña = new JRadioButton(labels.getString("listado.de.canjes.label.codigo.de.campaña"));
 		rdbtnOrdenarCodigoCampaña.addActionListener((e)->{
 			rdbtnOrdenarCodigoCampaña.setSelected(false);
+			try {
+				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
+				String.valueOf( c1.getCampaña().getCodigo()).compareToIgnoreCase(String.valueOf( c2.getCampaña().getCodigo()));
+				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+				}
+				else {
+				reloadGridAdministrador(api.obtenerCanjes(comparator));
+				}
+			}catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
 		});
 		rdbtnOrdenarCodigoCampaña.setBounds(111, 49, 148, 23);
 		panel_Ordenamiento.add(rdbtnOrdenarCodigoCampaña);
@@ -321,6 +388,18 @@ public class ListadoDeCanjes extends JFrame {
 		JRadioButton rdbtnOrdenarDescripcionBeneficio = new JRadioButton(labels.getString("listado.de.canjes.label.descripcion.del.beneficio"));
 		rdbtnOrdenarDescripcionBeneficio.addActionListener((e)->{
 			rdbtnOrdenarDescripcionBeneficio.setSelected(false);
+			try {
+				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
+				 c1.getBeneficioCanjeado().getDescripcion().compareToIgnoreCase(c2.getBeneficioCanjeado().getDescripcion());
+				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+				}
+				else {
+					reloadGridAdministrador(api.obtenerCanjes(comparator));
+				}
+			}catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",1);
+			}
 		});
 		rdbtnOrdenarDescripcionBeneficio.setBounds(24, 75, 184, 23);
 		panel_Ordenamiento.add(rdbtnOrdenarDescripcionBeneficio);
@@ -328,34 +407,64 @@ public class ListadoDeCanjes extends JFrame {
 		JRadioButton rdbtnOrdenarCodigoBeneficio = new JRadioButton(labels.getString("listado.de.canjes.label.codigo.del.beneficio"));
 		rdbtnOrdenarCodigoBeneficio.addActionListener((e)->{
 			rdbtnOrdenarCodigoBeneficio.setSelected(false);
+			try {
+				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
+				String.valueOf(c1.getBeneficioCanjeado().getCodigo()).compareToIgnoreCase(String.valueOf(c2.getBeneficioCanjeado().getCodigo()));
+				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+				}
+				else {
+					reloadGridAdministrador(api.obtenerCanjes(comparator));
+				}
+			}catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
 		});
 		rdbtnOrdenarCodigoBeneficio.setBounds(111, 101, 148, 23);
 		panel_Ordenamiento.add(rdbtnOrdenarCodigoBeneficio);
 		
 		rdbtnUsuarioAsociado = new JRadioButton(labels.getString("listado.de.canjes.label.usuario.asociado"));
 		rdbtnUsuarioAsociado.addActionListener((e)->{
+			try {
+				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
+				(c2.getDueñoCanjeador().getNombre() + " " + c2.getDueñoCanjeador().getApellido()).compareToIgnoreCase(c2.getDueñoCanjeador().getNombre() + " " + c2.getDueñoCanjeador().getApellido());
+				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+				}
+				else {
+					reloadGridAdministrador(api.obtenerCanjes(comparator));
+				}
+			}catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
 			rdbtnUsuarioAsociado.setSelected(false);
 		});
 		
-		rdbtnUsuarioAsociado.setBounds(24, 122, 154, 25);
+		rdbtnUsuarioAsociado.setBounds(24, 118, 154, 25);
 		panel_Ordenamiento.add(rdbtnUsuarioAsociado);
 		
-		JRadioButton rdbtnCodigoUsuario = new JRadioButton(labels.getString("listado.de.canjes.label.codigo.usuario"));
-		rdbtnCodigoUsuario.addActionListener((e)->{
-			rdbtnCodigoUsuario.setSelected(false);
-			
+		JButton btnLimpiarOrdenamiento = new JButton(labels.getString("listado.de.canjes.button.limpiar.ordenamiento"));
+		btnLimpiarOrdenamiento.addActionListener((e)->{
+			try {
+				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+					
+						reloadGrid(api.obtenerCanjesPorUsuario());
+				}
+				else {
+					reloadGridAdministrador(api.obtenerCanjes());
+				}
+			}
+			catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
 		});
-		rdbtnCodigoUsuario.setBounds(111, 150, 146, 25);
-		panel_Ordenamiento.add(rdbtnCodigoUsuario);
+		btnLimpiarOrdenamiento.setBounds(40, 144, 195, 23);
+		panel_Ordenamiento.add(btnLimpiarOrdenamiento);
 		if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-			this.filtrarPorCodigoUsuario.setVisible(false);
 			this.filtrarPorUsuarioAsociado.setVisible(false);
 			this.rdbtnFiltrarPorUsuarioAsociado.setVisible(false);
-			rdbtnFiltrarPorCodigoUsuario.setVisible(false);
-			tfFiltrarPorCodigoUsuario.setVisible(false);
 			tfFiltrarPorUsuarioAsociado.setVisible(false);
-			//lbFiltrarPorUsuarioAsociado.setVisible(false);
-			
+			this.rdbtnUsuarioAsociado.setVisible(false);
 			
 		}
 	}
@@ -363,19 +472,8 @@ public class ListadoDeCanjes extends JFrame {
 	private void reloadGrid(List <CanjeDTO> canje) {
 		
 		modelo.setRowCount(0);
-		if(this.rolUsuarioActivo.equals("ADMIN")) {
-			for (CanjeDTO c : canje) {
-				modelo.addRow(new Object[] { 
-							c.getCampaña().getNombreCampaña(),
-							c.getCampaña().getCodigo(),
-							c.getBeneficioCanjeado().getDescripcion(),
-							c.getBeneficioCanjeado().getCodigo(),
-							c.getDueñoCanjeador().getNombre()+" "+ c.getDueñoCanjeador().getApellido(),
-							c.getDueñoCanjeador().getDni()
-				});
-			}
-		}
-		else {
+
+
 			for (CanjeDTO c : canje) {
 				modelo.addRow(new Object[] { 
 							c.getCampaña().getNombreCampaña(),
@@ -384,8 +482,21 @@ public class ListadoDeCanjes extends JFrame {
 							c.getBeneficioCanjeado().getCodigo(),
 				});
 			}
-		}
+		
 		
 
+	}
+	private void reloadGridAdministrador(List<CanjeDTO> canje) {
+		modelo.setRowCount(0);
+		for (CanjeDTO c : canje) {
+			modelo.addRow(new Object[] { 
+						c.getCampaña().getNombreCampaña(),
+						c.getCampaña().getCodigo(),
+						c.getBeneficioCanjeado().getDescripcion(),
+						c.getBeneficioCanjeado().getCodigo(),
+						c.getDueñoCanjeador().getNombre()+" "+ c.getDueñoCanjeador().getApellido(),
+						c.getDueñoCanjeador().getDni(),
+			});
+		}
 	}
 }

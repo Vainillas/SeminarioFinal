@@ -1,5 +1,7 @@
 package ar.edu.unrn.seminario.api;
 
+import static ar.edu.unrn.seminario.utilities.Filtro.filtrar;
+
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -312,9 +314,9 @@ public class PersistenceApi implements IApi {
 	}
 
 
-    public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, Integer codOrden) throws AppException, NotNullException{
-    	System.out.println(residuosIngresados.toString());
-    	System.out.println(residuosIngresadosKg.toString());
+    public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, Integer codOrden) 
+    		throws AppException, NotNullException{
+    	
     	
     	Visita visita = null; //Inicializo visita en null
     	ArrayList<TipoResiduo> listaTipos = new ArrayList<TipoResiduo>(); //Inicializo la lista de tipo de residuos
@@ -811,7 +813,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public List<DueñoDTO> obtenerDueños(Predicate<DueñoDTO> predicate) throws AppException, NotNumberException {
+	public List<DueñoDTO> obtenerDueños(Predicate predicate) throws AppException, NotNumberException {
 		return Filtro.filtrar(this.obtenerDueños(), predicate);
 	}
 	
@@ -938,13 +940,13 @@ public class PersistenceApi implements IApi {
 		return Filtro.filtrar(this.obtenerCampañas(), predicado);
 		
 	}
-	public List<BeneficioDTO> obtenerBeneficios(Predicate<BeneficioDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException{
+	public List<BeneficioDTO> obtenerBeneficios(Predicate predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException{
 		return Filtro.filtrar(this.obtenerBeneficios(), predicado);
 		
 	}
 
 	@Override
-	public List<CanjeDTO> obtenerCanjes(Predicate<CanjeDTO> predicate) throws AppException, NotNullException, DataEmptyException, NotNumberException {
+	public List<CanjeDTO> obtenerCanjes(Predicate predicate) throws AppException, NotNullException, DataEmptyException, NotNumberException {
 		return Filtro.filtrar(this.obtenerCanjes(),predicate);
 	}
 
@@ -954,7 +956,7 @@ public class PersistenceApi implements IApi {
 	}
 
 	@Override
-	public List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate<ViviendaDTO> predicate) throws AppException {
+	public List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate predicate) throws AppException {
 		return Filtro.filtrar(this.obtenerViviendasDeUsuario(), predicate);
 	}
 
@@ -963,15 +965,27 @@ public class PersistenceApi implements IApi {
 		return Filtro.filtrar(this.obtenerPedidosDeRetiroDeUsuario(), comparator);
 	}
 
-	@Override
-	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<PedidoDeRetiroDTO> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
+	public List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate  predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException {
 		return Filtro.filtrar(this.obtenerPedidosDeRetiroDeUsuario(), predicate);
 	}
 
+
+
 	@Override
-	public void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg,
-			String observacion, Integer codOrden, Integer dia, Integer mes, Integer año)
-			throws AppException, NotNullException {
+	public <T> List<CanjeDTO> obtenerCanjes(Comparator<T> comparator) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException {
+		return Filtro.filtrar(this.obtenerCanjes(),comparator);
+	}
+
+	@Override
+	public List<CanjeDTO> obtenerCanjesPorUsuario(Comparator<CanjeDTO> comparator) throws AppException, NotNullException, DataEmptyException, NotNumberException {
+		return Filtro.filtrar(this.obtenerCanjesPorUsuario(), comparator);
+	}
+
+	@Override
+	public List<CanjeDTO> obtenerCanjesDeUsuario(Predicate<CanjeDTO> predicate) throws AppException, NotNullException, DataEmptyException, NotNumberException {
+
+		return Filtro.filtrar(this.obtenerCanjesPorUsuario(), predicate);
 	}
 
 

@@ -109,7 +109,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 
 		setTitle(labels.getString("listado.de.ordenes.de.retiro.titulo")); 
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 836, 464);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -145,7 +145,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		try {
 			this.reloadGrid(api.obtenerOrdenesDeRetiro());
 		} catch (AppException e2) {
-			JOptionPane.showMessageDialog(null, e2.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e2.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 		}
 
 
@@ -180,7 +180,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				try {
 					this.reloadGrid(api.obtenerOrdenesDeRetiro(predicate));
 				} catch (AppException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 				
 			}
@@ -210,7 +210,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				try {
 					this.reloadGrid(api.obtenerOrdenesDeRetiro(predicado));
 				} catch (AppException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 				}
 				
@@ -237,7 +237,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				try {
 					this.reloadGrid(api.obtenerOrdenesDeRetiro(predicado));
 				} catch (AppException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 				}
 				
@@ -272,7 +272,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				try {
 					this.reloadGrid(api.obtenerOrdenesDeRetiro(predicado));
 				} catch (AppException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 				}
 				
@@ -286,6 +286,18 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		tfFiltradoPorCodigoOrden.setBounds(100, 88, 86, 20);
 		panel_filtrados.add(tfFiltradoPorCodigoOrden);
 		tfFiltradoPorCodigoOrden.setColumns(10);
+		
+		JButton btnLimpiarFiltro = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
+		btnLimpiarFiltro.addActionListener((e)->{
+			try {
+				this.reloadGrid(api.obtenerOrdenesDeRetiro());
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
+		});
+		
+		btnLimpiarFiltro.setBounds(69, 125, 89, 23);
+		panel_filtrados.add(btnLimpiarFiltro);
 		
 		panel_ordenamientos = new JPanel();
 		panel_ordenamientos.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -307,7 +319,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				
 				reloadGrid(api.obtenerOrdenesDeRetiro(comparator));
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		
@@ -330,7 +342,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			try {
 				reloadGrid(api.obtenerOrdenesDeRetiro(comparator));
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		rdbtnOrdenarPorCodigoPedido.setBounds(150, 31, 21, 21);
@@ -362,7 +374,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		panel_botones = new JPanel();
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel_botones.setBounds(304, 367, 441, 37);
+		panel_botones.setBounds(304, 367, 469, 37);
 		panel.add(panel_botones);
 		
 		JButton btnConcretarOrden = new JButton(labels.getString("listado.de.ordenes.de.retiro.label.concretar.orden"));
@@ -375,7 +387,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 						JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.label.concretar.orden"));
 						this.reloadGrid(api.obtenerOrdenesDeRetiro());
 					} catch (AppException e1) {
-						JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+						JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
 					}
 					
 			}
@@ -402,7 +414,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				}
 			}
 			else {
-				JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.error"),"error",0);
+				JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.error"),labels.getString("mensaje.error.general"),0);
 			}
 			
 			
@@ -410,6 +422,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_botones.add(btnCancelarOrden);
 		
 		JButton btnSalir = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.salir"));
+		btnSalir.setVisible(true);
 		btnSalir.addActionListener((e)->{
 			this.setVisible(false);
 			dispose();
@@ -417,13 +430,14 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		panel_botones.add(btnSalir);
 		
 		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
+
 		btnLimpiar.setBounds(79, 333, 87, 23);
 		panel.add(btnLimpiar);
 		btnLimpiar.addActionListener((e)->{
 			try {
 				this.reloadGrid(api.obtenerOrdenesDeRetiro());
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
 			}
 		});
 		

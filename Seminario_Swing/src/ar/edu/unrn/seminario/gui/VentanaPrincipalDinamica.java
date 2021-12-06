@@ -295,7 +295,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmListarCampañaAdministrador = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.listar.campañas")); //$NON-NLS-1$
 		mntmListarCampañaAdministrador.addActionListener((e)->{
-			ListadoDeCampañas c = new ListadoDeCampañas(api);
+			ListadoDeCampañas c = new ListadoDeCampañas(api,labels);
 			c.setVisible(true);
 			
 		});
@@ -356,6 +356,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbDueño.add(mnDatosDueño);
 		
 		JMenuItem mntmDatosDelDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.datos.del.dueño"));
+		mntmDatosDelDueño.addActionListener((e)->{
+			DatosPersonalesDeDueño datosPersonales = new DatosPersonalesDeDueño(api);
+			datosPersonales.setVisible(true);
+		});
 		mnDatosDueño.add(mntmDatosDelDueño);
 		
 		JMenu mnConfiguracionDueño = new JMenu(labels.getString("ventana.principal.dinamica.menu.configuracion.dueño"));
@@ -480,7 +484,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 					
 				}
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		}
 		

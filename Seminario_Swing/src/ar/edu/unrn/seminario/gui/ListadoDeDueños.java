@@ -37,6 +37,7 @@ import javax.swing.JRadioButton;
 import javax.swing.border.BevelBorder;
 import java.awt.event.ActionListener;
 import ar.edu.unrn.seminario.utilities.NotEditJTable;
+import java.awt.event.ActionEvent;
 public class ListadoDeDueños extends JFrame {
 
 	private JPanel contentPane;
@@ -55,7 +56,7 @@ public class ListadoDeDueños extends JFrame {
 	public ListadoDeDueños(IApi api, ResourceBundle labels) {
 		
 		setTitle(labels.getString("listado.de.dueños.titulo"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 971, 470);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -85,7 +86,7 @@ public class ListadoDeDueños extends JFrame {
 				
 				
 			} catch (AppException | NotNumberException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				
 			}
 		table.setModel(modelo);
@@ -127,7 +128,7 @@ public class ListadoDeDueños extends JFrame {
 				try {
 					reloadGrid(api.obtenerDueños(predicate));
 				} catch (AppException | NotNumberException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				
 				}
 			}
@@ -156,7 +157,7 @@ public class ListadoDeDueños extends JFrame {
 				try {
 					reloadGrid(api.obtenerDueños(predicate));
 				} catch (AppException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			
 				}
 			}
@@ -185,7 +186,7 @@ public class ListadoDeDueños extends JFrame {
 				try {
 					reloadGrid(api.obtenerDueños(predicate));
 				} catch (AppException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
@@ -212,7 +213,7 @@ public class ListadoDeDueños extends JFrame {
 				try {
 					reloadGrid(api.obtenerDueños(predicate));
 				} catch (AppException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 			}
 		});
@@ -220,12 +221,12 @@ public class ListadoDeDueños extends JFrame {
 		rdbtnFiltrarPorUsername.setBounds(220, 83, 21, 21);
 		panelFiltrado.add(rdbtnFiltrarPorUsername);
 		
-		JButton btnLimpiarFiltro = new JButton(labels.getString("listado.de.dueños.button.limpiar.filtro")); //$NON-NLS-1$
+		JButton btnLimpiarFiltro = new JButton(labels.getString("listado.de.dueños.button.limpiar.filtro")); 
 		btnLimpiarFiltro.addActionListener((e)->{
 			try {
 				reloadGrid(api.obtenerDueños());
 			} catch (AppException | NotNumberException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
@@ -237,7 +238,7 @@ public class ListadoDeDueños extends JFrame {
 		
 		panelOrdenamiento = new JPanel();
 		panelOrdenamiento.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panelOrdenamiento.setBounds(21, 247, 175, 119);
+		panelOrdenamiento.setBounds(21, 247, 175, 145);
 		contentPane.add(panelOrdenamiento);
 		panelOrdenamiento.setLayout(null);
 		
@@ -254,7 +255,7 @@ public class ListadoDeDueños extends JFrame {
 					try {
 						reloadGrid(api.obtenerDueños(comparator));
 					} catch (AppException | NotNumberException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 						
 					}
 					
@@ -277,7 +278,7 @@ public class ListadoDeDueños extends JFrame {
 					try {
 						reloadGrid(api.obtenerDueños(comparator));
 					} catch (AppException | NotNumberException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 						
 					}
 					
@@ -300,7 +301,7 @@ public class ListadoDeDueños extends JFrame {
 					try {
 						reloadGrid(api.obtenerDueños(comparator));
 					} catch (AppException | NotNumberException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 						
 					}
 					
@@ -326,12 +327,24 @@ public class ListadoDeDueños extends JFrame {
 						
 						reloadGrid(api.obtenerDueños(comparator));
 					} catch (AppException | NotNumberException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 						
 					}
 		});
 		rdbtnOrdenarPorCorreoElectronico.setBounds(140, 57, 21, 21);
 		panelOrdenamiento.add(rdbtnOrdenarPorCorreoElectronico);
+		
+		JButton btnLimpiarFiltro_1 = new JButton(labels.getString("listado.de.dueños.button.limpiar.ordenamiento"));
+		btnLimpiarFiltro_1.addActionListener((e)->{
+			try {
+				this.reloadGrid(api.obtenerDueños());
+			} catch (AppException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
+		});
+		
+		btnLimpiarFiltro_1.setBounds(13, 122, 150, 23);
+		panelOrdenamiento.add(btnLimpiarFiltro_1);
 		
 		JLabel lbOrdenarPor = new JLabel(labels.getString("listado.de.dueños.label.ordenar.por"));
 		lbOrdenarPor.setHorizontalAlignment(SwingConstants.CENTER);

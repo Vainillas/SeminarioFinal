@@ -87,7 +87,7 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 	public GenerarPedidoDeRetiroDinamico(IApi api, ResourceBundle labels) {
 
 		setTitle(labels.getString("pedido.retiro.titulo"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1076, 368);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.info);
@@ -122,6 +122,7 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 		panelDatos.add(boxCargaPesada);
 		
 		JTextArea taObservacion = new JTextArea();
+		taObservacion.setLineWrap(true);
 		taObservacion.setBounds(10, 90, 295, 108);
 		panelDatos.add(taObservacion);
 		

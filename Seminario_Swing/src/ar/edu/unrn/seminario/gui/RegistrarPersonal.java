@@ -62,7 +62,7 @@ public class RegistrarPersonal extends JFrame {
 
 	public RegistrarPersonal(IApi api, ResourceBundle labels) {
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 		setBounds(100, 100, 450, 315);
 		setTitle(labels.getString("registrar.personal.titulo"));
 		panelPrincipal = new JPanel();
@@ -105,7 +105,7 @@ public class RegistrarPersonal extends JFrame {
 					setVisible(false);
 					dispose();
 				} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | AppException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.WARNING_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.WARNING_MESSAGE);
 					
 				}
 				

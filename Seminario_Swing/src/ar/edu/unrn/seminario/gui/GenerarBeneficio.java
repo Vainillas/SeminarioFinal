@@ -51,7 +51,7 @@ public class GenerarBeneficio extends JFrame {
 		setTitle(labels.getString("generar.beneficio.titulo"));
 		
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 558, 257);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -90,29 +90,29 @@ public class GenerarBeneficio extends JFrame {
 		panel_2.setBounds(10, 187, 522, 31);
 		contentPane.add(panel_2);
 		
-		JButton btnLimpiar = new JButton(labels.getString("generar.beneficio.button.limpiar")); //$NON-NLS-1$
+		JButton btnLimpiar = new JButton(labels.getString("generar.beneficio.button.limpiar")); 
 		btnLimpiar.addActionListener((e)->{
 			ftfPuntos.setText("");
 			tpDescripcion.setText("");
 		});
 		panel_2.add(btnLimpiar);
 		
-		JButton btnAceptar = new JButton(labels.getString("generar.beneficio.button.aceptar")); //$NON-NLS-1$
+		JButton btnAceptar = new JButton(labels.getString("generar.beneficio.button.aceptar")); 
 		btnAceptar.addActionListener((e)->{
 			try {
 				api.agregarBeneficio(tpDescripcion.getText(),ftfPuntos.getText());
-				JOptionPane.showMessageDialog(null, "Beneficio Registrado Con Exito","Mensaje Informativo",JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, labels.getString("generar.beneficio.mensaje.informativo.beneficio.generado.exitosamente"),labels.getString("mensaje.informativo.general"),JOptionPane.INFORMATION_MESSAGE);
 				setVisible(false);
 				dispose();
 			} catch (NotNullException | DataEmptyException | NotNumberException | AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				
 			}
 			
 		});
 		panel_2.add(btnAceptar);
 		
-		JButton btnCancelar = new JButton(labels.getString("generar.beneficio.button.cancelar")); //$NON-NLS-1$
+		JButton btnCancelar = new JButton(labels.getString("generar.beneficio.button.cancelar")); 
 		btnCancelar.addActionListener((e)->{
 			setVisible(false);
 			dispose();

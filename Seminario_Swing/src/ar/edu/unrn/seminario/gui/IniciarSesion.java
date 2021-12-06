@@ -4,6 +4,7 @@ package ar.edu.unrn.seminario.gui;
 
 
 import javax.swing.JFrame;
+
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -114,14 +115,11 @@ public class IniciarSesion extends JFrame {
 		panelBotones.setLayout(null);
 		JButton buttonCancelar = new JButton(labels.getString("iniciar.sesion.button.cancelar"));
 		buttonCancelar.addActionListener((e)->{
-			
 				setVisible(false);
 				dispose();
-			
 		});
 		buttonCancelar.setBounds(216, 18, 89, 23); 
 		panelBotones.add(buttonCancelar);
-		
 		JButton buttonAceptar = new JButton(labels.getString("iniciar.sesion.button.aceptar"));
 		buttonAceptar.addActionListener((e)->{
 				try {
@@ -134,67 +132,54 @@ public class IniciarSesion extends JFrame {
 						VentanaPrincipalDinamica ventana = new VentanaPrincipalDinamica(api,l);
 						ventana.setVisible(true);
 						dispose();
-						
-
 				}catch (DataEmptyException | IncorrectEmailException | AppException | NotCorrectPasswordException | StringNullException  e1) {
-					
-					JOptionPane.showMessageDialog(null,e1.getMessage() ,"Error" ,0);
-					
+					JOptionPane.showMessageDialog(null,e1.getMessage() ,labels.getString("mensaje.error.general") ,0);
 				}
 				catch(NotRegisterException e1) {
-					
-					JOptionPane.showMessageDialog(null,e1.getMessage() ,"Error" ,0);
+					JOptionPane.showMessageDialog(null,e1.getMessage() ,labels.getString("mensaje.error.general") ,0);
 				}
 			
 		});
-		
 		buttonAceptar.setBounds(81, 18, 89, 23);
 		panelBotones.add(buttonAceptar);
 		comboBoxIdioma = new JComboBox();
 		comboBoxIdioma.addItem("ESPAÑOL");
 		comboBoxIdioma.addItem("INGLES");
-		
 		JPanel panel = new JPanel();
 		panel.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel.setBackground(new Color(255, 255, 224));
 		panel.setBounds(10, 1, 181, 84);
 		contentPane.add(panel);
 		panel.setLayout(null);
-		
-
-		
 		comboBoxIdioma.setBounds(58, 28, 113, 22);
 		panel.add(comboBoxIdioma);
-		
 		JLabel lbIdioma = new JLabel(labels.getString("iniciar.sesion.label.idioma")); 
 		lbIdioma.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lbIdioma.setBounds(10, 11, 121, 14);
 		panel.add(lbIdioma);
-		
-		 panelNoRegistrado = new JPanel();
-		 panelNoRegistrado.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		 panelNoRegistrado.setBackground(new Color(255, 255, 224));
-		 panelNoRegistrado.setBounds(243, 1, 181, 84);
-		 contentPane.add(panelNoRegistrado);
-		 panelNoRegistrado.setLayout(null);
-		 panelNoRegistrado.setVisible(true);
-		 JLabel labelNoRegistrado = new JLabel(labels.getString("iniciar.sesion.label.no.registrado"));
-		 labelNoRegistrado.setFont(new Font("Tahoma", Font.BOLD, 11));
-		 labelNoRegistrado.setBounds(10, 11, 150, 14);
-		 panelNoRegistrado.add(labelNoRegistrado);
-		 
-		 JButton buttonRegistrarse = new JButton(labels.getString("iniciar.sesion.label.registrarse"));
-		 buttonRegistrarse.addActionListener((e)->{
-		 		AltaUsuario usuario = new AltaUsuario(api,labels);
-		 		usuario.setVisible(true);
-		 		this.textPassword.setText("");
-		 		this.textUsuario.setText("");
+		panelNoRegistrado = new JPanel();
+		panelNoRegistrado.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
+		panelNoRegistrado.setBackground(new Color(255, 255, 224));
+		panelNoRegistrado.setBounds(243, 1, 181, 84);
+		contentPane.add(panelNoRegistrado);
+		panelNoRegistrado.setLayout(null);
+		panelNoRegistrado.setVisible(true);
+		JLabel labelNoRegistrado = new JLabel(labels.getString("iniciar.sesion.label.no.registrado"));
+		labelNoRegistrado.setFont(new Font("Tahoma", Font.BOLD, 11));
+		labelNoRegistrado.setBounds(10, 11, 150, 14);
+		panelNoRegistrado.add(labelNoRegistrado);
+		JButton buttonRegistrarse = new JButton(labels.getString("iniciar.sesion.label.registrarse"));
+		buttonRegistrarse.addActionListener((e)->{
+		 	AltaUsuario usuario = new AltaUsuario(api,labels);
+		 	usuario.setVisible(true);
+		 	this.textPassword.setText("");
+		 	this.textUsuario.setText("");
 		 		
-
+		 		
 		 });
 		 
-		 buttonRegistrarse.setBounds(54, 36, 107, 23);
-		 panelNoRegistrado.add(buttonRegistrarse);
+		buttonRegistrarse.setBounds(54, 36, 107, 23);
+		panelNoRegistrado.add(buttonRegistrarse);
 		
 	}
 }

@@ -45,7 +45,7 @@ public class RegistrarVivienda extends JFrame {
 
     	setTitle(labels.getString("registro.viviendas.titulo"));
     	this.api=api;
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setBounds(100, 100, 576, 351);
         contentPane = new JPanel();
         contentPane.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -163,8 +163,8 @@ public class RegistrarVivienda extends JFrame {
 						else
 							JOptionPane.showMessageDialog(null, labels.getString("registro.viviendas.mensaje.error"));
 					} catch (HeadlessException | AppException | DataEmptyException | StringNullException
-							| IncorrectEmailException | NotNumberException | SQLException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",0);
+							| IncorrectEmailException | NotNumberException  e1) {
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
 					}
 								 
         });

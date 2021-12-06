@@ -38,7 +38,7 @@ public class RegistrarDueño extends JFrame {
 
 	public RegistrarDueño(IApi api, ResourceBundle labels) {
 		setTitle(labels.getString("registrar.dueño.titulo")); 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 367, 243);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.controlHighlight);
@@ -101,7 +101,7 @@ public class RegistrarDueño extends JFrame {
 				setVisible(false);
 				dispose();
 			} catch (DataEmptyException | StringNullException | IncorrectEmailException | NotNumberException | AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			
 		});

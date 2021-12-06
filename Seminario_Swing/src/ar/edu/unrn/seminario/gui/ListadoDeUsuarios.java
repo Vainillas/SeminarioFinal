@@ -3,6 +3,7 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.event.MouseAdapter;
 
+
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -29,7 +30,6 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 
 import ar.edu.unrn.seminario.exceptions.StateException;
 import ar.edu.unrn.seminario.utilities.NotEditJTable;
-import ar.edu.unrn.seminario.utilities.OrderingPredicate;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.JTextField;
@@ -58,7 +58,7 @@ public class ListadoDeUsuarios extends JFrame {
 	public ListadoDeUsuarios(IApi api, ResourceBundle labels){
 		this.api = api;
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 977, 415);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -98,7 +98,7 @@ public class ListadoDeUsuarios extends JFrame {
 				}
 
 		} catch (AppException e2) {
-				JOptionPane.showMessageDialog(null, e2.getMessage(), "error: ",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e2.getMessage(), labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				setVisible(false);
 				dispose();
 				
@@ -187,8 +187,7 @@ public class ListadoDeUsuarios extends JFrame {
 				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
 				this.reloadGrid(u);
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
 			}
 			
 
@@ -237,8 +236,7 @@ public class ListadoDeUsuarios extends JFrame {
 				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
 				this.reloadGrid(u);
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+			JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
 			}
 		});
 		
@@ -253,8 +251,7 @@ public class ListadoDeUsuarios extends JFrame {
 				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
 				this.reloadGrid(u);
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
 			}
 
 			
@@ -292,7 +289,7 @@ public class ListadoDeUsuarios extends JFrame {
 					List<UsuarioDTO> us =api.obtenerUsuarios(predicate);
 					reloadGrid(us);
 				} catch (AppException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 				
 				rdbtnAceptar.setSelected(false);
@@ -310,14 +307,13 @@ public class ListadoDeUsuarios extends JFrame {
 			try {
 				this.reloadGrid(api.obtenerUsuarios());
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			
 		});
 		btnLimpiarFIltro.setBounds(71, 114, 89, 23);
 		panelBotonesFiltrados.add(btnLimpiarFIltro);
 
-		// Deshabilitar botones que requieren tener una fila seleccionada
 		habilitarBotones(false);
 		
 	}
@@ -329,7 +325,6 @@ public class ListadoDeUsuarios extends JFrame {
 	}
 	private void reloadGrid(List<UsuarioDTO> us) {
 		modelo.setRowCount(0);
-		// Agrega los usuarios en el model
 		for (UsuarioDTO u : us) {
 		modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
 		}

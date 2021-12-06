@@ -50,14 +50,9 @@ public class ListadoDePersonal extends JFrame {
 			}
 		});
 	}
-
-	/**
-	 * Create the frame.
-	 * @param labels 
-	 */
 	public ListadoDePersonal(IApi api, ResourceBundle labels) {
 		setTitle(labels.getString("listado.de.personal.titulo"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 729, 470);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -98,7 +93,7 @@ public class ListadoDePersonal extends JFrame {
 				}
 				
 			} catch (DataEmptyException | StringNullException | IncorrectEmailException | AppException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				
 			}
 		table.setModel(modelo);
