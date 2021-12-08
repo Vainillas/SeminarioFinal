@@ -212,8 +212,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					}
 					if(!validacion ) {
 						residuosSeleccionados.add((String)comboBoxResiduosDinamico.getSelectedItem());
-						cantResiduosRetirados.add(String.valueOf(slider_Dinamico.getValue()) );
-						
+						cantResiduosRetirados.add(String.valueOf(slider_Dinamico.getValue()) );	
 					}		
 			}
 		});
@@ -345,7 +344,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 		});
 		btn_limpiar = new JButton(labels.getString("registro.de.visita.label.limpiar"));
-		btn_limpiar.addActionListener((e)->{	
+		btn_limpiar.addActionListener((e)->{
+			
 		});
 		panel_botones.add(btn_limpiar);
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));

@@ -2,13 +2,9 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
-
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,9 +20,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.SoftBevelBorder;
 import javax.swing.table.DefaultTableModel;
 
-import ar.edu.unrn.seminario.Helper.DateHelper;
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
 import ar.edu.unrn.seminario.dto.PedidoDeRetiroDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
@@ -86,10 +80,9 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		
 		try {
 			this.rolUsuarioActivo = api.obtenerRolUsuarioActivo();
-			this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario();
 			if(rolUsuarioActivo.equals("ADMIN")){
 				this.listaPedidos = api.obtenerPedidosDeRetiro();
-			
+				
 			}
 			else {
 				this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario();
@@ -138,8 +131,6 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 				};
 		
 		modelo = new DefaultTableModel(new Object[][] {}, titulosUsuario);
-
-		
 		reloadGrid(this.listaPedidos);
 		table.setModel(modelo);
 		scrollPane.setViewportView(table);
@@ -207,8 +198,6 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 				p.getVivienda().getDireccion().getBarrio().toLowerCase().contains(tf_filtrado_por_vivienda.getText())||
 				p.getVivienda().getDireccion().getCalle().toLowerCase().contains(tf_filtrado_por_vivienda.getText())||
 				p.getVivienda().getDireccion().getAltura().toLowerCase().contains(tf_filtrado_por_vivienda.getText());
-			
-			
 			try {
 
 				if(this.rolUsuarioActivo.equals("ADMIN")) {
@@ -309,17 +298,19 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		rdbtn_ordenar_por_codigo_pedido.addActionListener((e)->{
 			rdbtn_ordenar_por_codigo_pedido.setSelected(false);
 			try {
+				
 				comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
 				(String.valueOf(p1.getCodigo()).compareToIgnoreCase(String.valueOf(p2.getCodigo())));
 				
-				if(this.rolUsuarioActivo.equals("ADMIN")) {
-					this.listaPedidos = api.obtenerPedidosDeRetiro(comparator);
+				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
+					reloadGrid(api.obtenerPedidosDeRetiroDeUsuario(comparator));
+					
 				}
 				else {
-					this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(comparator);
+					reloadGrid(api.obtenerPedidosDeRetiro(comparator));
 				}
-				reloadGrid (this.listaPedidos);
-				reloadGrid(api.obtenerPedidosDeRetiro(comparator));
+				//reloadGrid (this.listaPedidos);
+				
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
@@ -350,18 +341,16 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 	compareToIgnoreCase(
 						(p2.getVivienda().getDireccion().getBarrio().toLowerCase() +" "+  
 						p2.getVivienda().getDireccion().getCalle().toLowerCase() +" "+  
-						p2.getVivienda().getDireccion().getAltura().toLowerCase()))		
+						p2.getVivienda().getDireccion().getAltura().toLowerCase()))	;
+				if(this.rolUsuarioActivo.equals("ADMIN")) {
+							this.listaPedidos = api.obtenerPedidosDeRetiro(comparator);
+						}
+				else {
+							this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(comparator);
+						}
+					reloadGrid (this.listaPedidos);
 				
-						
-			
 				
-				;
-				
-						
-				
-				
-				
-				reloadGrid(api.obtenerPedidosDeRetiro(comparator));
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
@@ -381,18 +370,46 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		
 			comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
 			String.valueOf(p1.getVivienda().getID()).compareToIgnoreCase ( String.valueOf(p2.getVivienda().getID()));
-			try {
-				reloadGrid(api.obtenerPedidosDeRetiro(comparator));
-			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			
+				try {
+				if(this.rolUsuarioActivo.equals("ADMIN")) {
+						reloadGrid(api.obtenerPedidosDeRetiro(comparator));
+				}
 				
-			}
+				else {
+						reloadGrid(api.obtenerPedidosDeRetiroDeUsuario(comparator));
+					} 
+			
+				}catch (AppException | IncorrectEmailException | DataEmptyException | NotNullException
+						| StringNullException | DateNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
+				
+				
+			
 			
 		});
 		rdbt_ordenar_por_codigo_vivienda.setBounds(120, 59, 21, 21);
 		panel_ordenamientos.add(rdbt_ordenar_por_codigo_vivienda);
 		
 		btn_limpiar_ordenamiento = new JButton(labels.getString("listado.de.pedidos.de.retiro.label.ordenamiento.limpiar")); //$NON-NLS-1$
+		btn_limpiar_ordenamiento.addActionListener((e)->{
+				try {
+				
+					if(this.rolUsuarioActivo.equals("ADMIN")) {
+					this.listaPedidos = api.obtenerPedidosDeRetiro();
+					}
+					else {
+						this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario();
+					}
+		
+					reloadGrid(listaPedidos);
+				}  catch (AppException | IncorrectEmailException | DataEmptyException | NotNullException
+						| StringNullException | DateNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				}
+				
+		});
 		btn_limpiar_ordenamiento.setBounds(49, 93, 87, 23);
 		panel_ordenamientos.add(btn_limpiar_ordenamiento);
 		

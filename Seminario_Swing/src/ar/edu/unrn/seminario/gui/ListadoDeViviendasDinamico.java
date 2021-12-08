@@ -35,17 +35,20 @@ public class ListadoDeViviendasDinamico extends JFrame {
 	private JPanel panel;
 	private JPanel panelOrdenamiento;
 	private JButton btnSalir;
-
+	private JRadioButton rdbtnDni = new JRadioButton("");
 	private JButton btnOrdenarPorBarrio;
 	private JButton btnOrdenarPorCodPostal;
 	private JButton btnOrdenarPorCodigo;
-	private JButton btnOrdenarPorNombreYApellido;
+	private JButton btnOrdenarPorNombreYApellido= new JButton();
 	private JLabel lbOrdenarPor;
 	private JPanel panelFiltrado;
 	private JLabel lbFiltrarPor;
-
+	private JRadioButton rdbtnCodigo = new JRadioButton("");
+	private JLabel lbCodigo = new JLabel();
+	private JButton btnLimpiarFiltro = new JButton();
 	private JTextField tx_barrio_calle ;
 	private JLabel lb_barrio_calle;
+/*<<<<<<< HEAD
 	private JLabel lbNombre_Apellido;
 	private JTextField txNombre_Apellido ;
 	private JLabel lbDni;
@@ -54,22 +57,19 @@ public class ListadoDeViviendasDinamico extends JFrame {
 	private JLabel lbCodigo;
 	private JButton btnLimpiarFiltro;
 	private ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es") );
+=======*/
+	private JLabel lbNombre_Apellido = new JLabel();
+	private JTextField txNombre_Apellido = new JTextField() ;
+	private JLabel lbDni = new JLabel();
+	private JTextField txDni = new JTextField();
+	private JTextField txCodigo = new JTextField();;
+	private ResourceBundle labels = ResourceBundle.getBundle("labels");
+//>>>>>>> branch 'master' of https://github.com/Vainillas/SeminarioFinal.git
 	private Comparator <ViviendaDTO> comparator;
 	private Predicate <ViviendaDTO> predicate;
 	private List<ViviendaDTO> viviendas = null;
-	
+	private JRadioButton rdbtnNombre_apellido = new JRadioButton();
 	public ListadoDeViviendasDinamico(IApi api, ResourceBundle labels){
-		try {
-		if(api.obtenerRolUsuarioActivo().equals("ADMIN")) {
-				viviendas = api.obtenerViviendas();
-		}
-		if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-			viviendas = api.obtenerViviendasDeUsuario();
-		}
-		}catch(AppException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
-		}
-		
 		this.api=api;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1151, 523);
@@ -101,34 +101,48 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				labels.getString("listado.de.viviendas.titulos.vivienda.codigo"),
 				
 		};
+		String[] titulos2 = { 
+				labels.getString("listado.de.viviendas.titulos.vivienda.barrio"),
+				labels.getString("listado.de.viviendas.titulos.vivienda.calle"),
+				labels.getString("listado.de.viviendas.titulos.vivienda.altura"),
+				labels.getString("listado.de.viviendas.titulos.vivienda.codigo.postal"),
+				labels.getString("listado.de.viviendas.titulos.vivienda.latitud"),
+				labels.getString("listado.de.viviendas.titulos.vivienda.longitud"),
+		};
 		
-		
-		modelo = new DefaultTableModel(new Object[][] {}, titulos);			
-			//viviendas = api.obtenerViviendasDeUsuario();  
-			for (ViviendaDTO v : viviendas) {
-				modelo.addRow(new Object[] { v.getDireccion().getBarrio(),
-							v.getDireccion().getCalle(),
-							v.getDireccion().getAltura(),
-							v.getDireccion().getCodPostal(),
-							v.getDireccion().getLatitud(),
-							v.getDireccion().getLongitud(),
-							v.getDueño().getNombre(),
-							v.getDueño().getApellido(),
-							v.getDueño().getDni(),
-							v.getDueño().getCorreo(),
-							v.getID()
-							
-							});
-			}
 			
-		
 		// Agrega los usuarios en el model
 		
-		table.setModel(modelo);
+		
 		
 
 		scrollPane.setViewportView(table);
-		
+		try {
+			if(api.obtenerRolUsuarioActivo().equals("ADMIN")) {
+					modelo = new DefaultTableModel(new Object[][] {}, titulos);		
+					btnLimpiarFiltro.setBounds(73, 174, 124, 23);
+					reloadGridAdmin( api.obtenerViviendas());
+			}
+			if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+				modelo = new DefaultTableModel(new Object[][] {}, titulos2);	
+				System.out.println("entro a comunidad");
+				this.btnOrdenarPorNombreYApellido.setVisible(false);
+				this.lbNombre_Apellido.setVisible(false);
+				this.lbDni.setVisible(false);
+				this.txDni.setVisible(false);
+				this.txNombre_Apellido.setVisible(false);
+				this.rdbtnDni.setVisible(false);
+				this.rdbtnNombre_apellido.setVisible(false);
+				this.txCodigo.setVisible(false);
+				this.lbCodigo.setVisible(false);
+				this.rdbtnCodigo.setVisible(false);
+				reloadGridDueño( api.obtenerViviendasDeUsuario());
+				btnLimpiarFiltro.setBounds(73, 70, 124, 23);
+			}
+			}catch(AppException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			}
+		table.setModel(modelo);
 		btnSalir = new JButton(labels.getString("listado.de.viviendas.button.salir"));
 		btnSalir.addActionListener((e)->{
 			setVisible(false);
@@ -139,7 +153,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		
 		panelOrdenamiento = new JPanel();
 		panelOrdenamiento.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 0), null, null, null));
-		panelOrdenamiento.setBounds(850, 5, 221, 186);
+		panelOrdenamiento.setBounds(850, 5, 221, 161);
 		contentPane.add(panelOrdenamiento);
 		panelOrdenamiento.setLayout(null);
 		
@@ -149,21 +163,19 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			Comparator <ViviendaDTO> comparator = (ViviendaDTO v1, ViviendaDTO v2)->
 			(v1.getDireccion().getBarrio().compareToIgnoreCase(v2.getDireccion().getBarrio()));
 			try {
-				
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-					viviendas = api.obtenerViviendasDeUsuario(comparator);
+					this.reloadGridDueño(api.obtenerViviendasDeUsuario(comparator));
+					//api.obtenerViviendasDeUsuario();
 				
 				}
 				else {
-					viviendas = api.obtenerViviendas(comparator);	
+					this.reloadGridAdmin(api.obtenerViviendas(comparator));
 				}
 				
-				this.reloadGrid(viviendas);
 				
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
 			}
-
 		});
 		
 		panelOrdenamiento.add(btnOrdenarPorBarrio);
@@ -173,13 +185,15 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		btnOrdenarPorCodPostal.addActionListener((e)->{
 			comparator = (ViviendaDTO v1, ViviendaDTO v2)->
 			(v1.getDireccion().getCodPostal().compareToIgnoreCase(v2.getDireccion().getCodPostal()));
+			
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-					viviendas = api.obtenerViviendasDeUsuario(comparator);
+					reloadGridDueño(api.obtenerViviendasDeUsuario(comparator));
+
 				
 				}
 				else {
-					viviendas = api.obtenerViviendas(comparator);	
+					reloadGridAdmin(api.obtenerViviendas(comparator));
 				}
 			} catch (AppException e1) {
 				JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
@@ -199,25 +213,27 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			(String.valueOf(v1.getID()).compareToIgnoreCase(String.valueOf(v2.getID())));
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-					viviendas = api.obtenerViviendasDeUsuario(comparator);
+					this.reloadGridDueño(api.obtenerViviendasDeUsuario(comparator));
+					//api.obtenerViviendasDeUsuario();
 				
 				}
 				else {
-					viviendas = api.obtenerViviendas(comparator);	
+					this.reloadGridAdmin(api.obtenerViviendas(comparator));
 				}
 				
-				this.reloadGrid(viviendas);
+				
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",0);
+				
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 			}
-			
 
 			
 		});
 		panelOrdenamiento.add(btnOrdenarPorCodigo);
 		
 		
-		btnOrdenarPorNombreYApellido = new JButton(labels.getString("listado.de.viviendas.button.ordenar.por.nombre.y.apellido"));
+		btnOrdenarPorNombreYApellido.setText( labels.getString("listado.de.viviendas.button.ordenar.por.nombre.y.apellido"));
 		btnOrdenarPorNombreYApellido.setBounds(15, 119, 203, 23);
 		btnOrdenarPorNombreYApellido.addActionListener((e)->{
 			
@@ -229,16 +245,19 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-					viviendas = api.obtenerViviendasDeUsuario(comparator);
+					this.reloadGridDueño(api.obtenerViviendasDeUsuario(comparator));
+					//api.obtenerViviendasDeUsuario();
 				
 				}
 				else {
-					viviendas = api.obtenerViviendas(comparator);	
+					this.reloadGridAdmin(api.obtenerViviendas(comparator));
 				}
 				
-				this.reloadGrid(viviendas);
+				
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",0);
+				
+				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 			}
 			
 		});
@@ -258,29 +277,28 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(87, 5, 124, 14);
 		panelFiltrado.add(lbFiltrarPor);
-		JRadioButton rdbtnNombre_apellido = new JRadioButton();
-		rdbtnNombre_apellido.setBounds(228, 70, 21, 14);
+
+		rdbtnNombre_apellido.setBounds(228, 131, 21, 14);
 		panelFiltrado.add(rdbtnNombre_apellido);
 		rdbtnNombre_apellido .addActionListener((e)->{
 			if(rdbtnNombre_apellido.isSelected()) {
 
-					try {
-						
-						 predicate =
-								(ViviendaDTO v)->v.getDueño().getNombre().toLowerCase().contains(txNombre_Apellido.getText().toLowerCase())
-								|| v.getDueño().getApellido().contains(txNombre_Apellido.getText());
-								if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-									viviendas = api.obtenerViviendasDeUsuario(comparator);
-								
-								}
-								else {
-									viviendas = api.obtenerViviendas(comparator);	
-								}
-								this.reloadGrid(viviendas);
-				
-					} catch (Exception e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				try {
+					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+						this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
+						//api.obtenerViviendasDeUsuario();
+					
 					}
+					else {
+						this.reloadGridAdmin(api.obtenerViviendas(predicate));
+					}
+					
+					
+				} catch (AppException e1) {
+					
+					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
+				}
 					rdbtnNombre_apellido.setSelected(false);	
 		}
 			
@@ -299,16 +317,17 @@ public class ListadoDeViviendasDinamico extends JFrame {
 						||v.getDireccion().getCalle().toLowerCase().contains(this.tx_barrio_calle.getText().toLowerCase());
 						try {
 							if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-								viviendas = api.obtenerViviendasDeUsuario(comparator);
-							
+								this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
+								//api.obtenerViviendasDeUsuario();
 							}
 							else {
-								viviendas = api.obtenerViviendas(comparator);	
+								this.reloadGridAdmin(api.obtenerViviendas(predicate));
 							}
-							this.reloadGrid(viviendas);
-				
-						} catch (Exception e1) {
+
+						} catch (AppException e1) {
+							
 							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 						}
 						rdbtn_barrio_calle.setSelected(false);			
 		}
@@ -323,99 +342,102 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		lb_barrio_calle.setBounds(0, 34, 101, 14);
 		panelFiltrado.add(lb_barrio_calle);
 		
-		lbNombre_Apellido = new JLabel(labels.getString("listado.de.viviendas.label.nombre.y.apellido"));
+		lbNombre_Apellido.setText(labels.getString("listado.de.viviendas.label.nombre.y.apellido"));
 		lbNombre_Apellido.setHorizontalAlignment(SwingConstants.CENTER);
-		lbNombre_Apellido.setBounds(0, 70, 119, 14);
-		panelFiltrado.add(lbNombre_Apellido);
-		
-		txNombre_Apellido = new JTextField();
-		
-		txNombre_Apellido.setBounds(109, 69, 113, 20);
+		lbNombre_Apellido.setBounds(0, 134, 119, 14);
+		panelFiltrado.add(lbNombre_Apellido);		
+		txNombre_Apellido.setBounds(109, 131, 113, 20);
 		panelFiltrado.add(txNombre_Apellido);
 		txNombre_Apellido.setColumns(10);
 		
-		lbDni = new JLabel(labels.getString("listado.de.viviendas.label.dni"));
+		lbDni.setText(labels.getString("listado.de.viviendas.label.dni"));
 		lbDni.setHorizontalAlignment(SwingConstants.CENTER);
 		lbDni.setBounds(10, 106, 77, 14);
 		panelFiltrado.add(lbDni);
 		
-		txDni = new JTextField();
 		txDni.setBounds(110, 103, 114, 20);
 		panelFiltrado.add(txDni);
 		txDni.setColumns(10);
 		
-		JRadioButton rdbtnDni = new JRadioButton("");
 		rdbtnDni.addActionListener((e)->{
 			if(rdbtnDni.isSelected()) {
 				 predicate = (ViviendaDTO v)->v.getDueño().getDni().contains(txDni.getText());
 			
-				try {
-					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-						viviendas = api.obtenerViviendasDeUsuario(comparator);
-					
+				 try {
+						if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+							this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
+							//api.obtenerViviendasDeUsuario();
+						
+						}
+						else {
+							this.reloadGridAdmin(api.obtenerViviendas(predicate));
+						}
+						
+						
+					} catch (AppException e1) {
+						
+						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 					}
-					else {
-						viviendas = api.obtenerViviendas(comparator);	
-					}
-					
-					this.reloadGrid(viviendas);
-				
-				} catch (Exception e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
-				}
 				rdbtnDni.setSelected(false);
 		}
 		});
 		rdbtnDni.setBounds(228, 102, 25, 23);
 		panelFiltrado.add(rdbtnDni);
 		
-		JRadioButton rdbtnCodigo = new JRadioButton("");
+
 		rdbtnCodigo.addActionListener((E)->{
 		if(rdbtnCodigo.isSelected()) {
 			Predicate <ViviendaDTO> predicate = (ViviendaDTO v)-> String.valueOf(v.getID()).contains(this.txCodigo.getText());
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-					viviendas = api.obtenerViviendasDeUsuario(predicate);
+					this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
+					//api.obtenerViviendasDeUsuario();
+				
 				}
 				else {
-					viviendas = api.obtenerViviendas(predicate);	
+					this.reloadGridAdmin(api.obtenerViviendas(predicate));
 				}
 				
-				this.reloadGrid(viviendas);
 				
-			} catch (Exception e1) {
+			} catch (AppException e1) {
+				
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+
 			}
-			rdbtnCodigo.setSelected(false);
 		}
-		
-			
 		});
-		rdbtnCodigo.setBounds(228, 136, 25, 23);
+		rdbtnCodigo.setBounds(228, 70, 25, 23);
 		panelFiltrado.add(rdbtnCodigo);
 		
-		txCodigo = new JTextField();
+
 		txCodigo.setColumns(10);
-		txCodigo.setBounds(110, 137, 114, 20);
+		txCodigo.setBounds(108, 70, 114, 20);
 		panelFiltrado.add(txCodigo);
 		
-		lbCodigo = new JLabel(labels.getString("listado.de.pedidos.de.retiro.label.codigo"));
+		//lbCodigo = new JLabel(labels.getString("listado.de.viviendas.label.codigo"));
+		lbCodigo.setText(  labels.getString("listado.de.viviendas.label.codigo"));
 		lbCodigo.setHorizontalAlignment(SwingConstants.CENTER);
-		lbCodigo.setBounds(0, 140, 77, 14);
+		lbCodigo.setBounds(0, 70, 101, 14);
 		panelFiltrado.add(lbCodigo);
 		
+
 		btnLimpiarFiltro = new JButton(labels.getString("listado.de.viviendas.button.limpiar"));
+
+		btnLimpiarFiltro.setText(labels.getString("listado.de.viviendas.button.filtrado.limpiar"));
+
 		btnLimpiarFiltro.addActionListener((e)->{
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-					viviendas = api.obtenerViviendasDeUsuario();
+					this.reloadGridDueño(api.obtenerViviendasDeUsuario());
+					//api.obtenerViviendasDeUsuario();
 				
 				}
 				else {
-					viviendas = api.obtenerViviendas();	
+					this.reloadGridAdmin(api.obtenerViviendas());
 				}
 				
-				this.reloadGrid(viviendas);
+				
 			} catch (AppException e1) {
 				
 				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
@@ -424,11 +446,10 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			
 			
 		});
-		btnLimpiarFiltro.setBounds(87, 188, 89, 23);
-		panelFiltrado.add(btnLimpiarFiltro);
+				panelFiltrado.add(btnLimpiarFiltro);
 		
 	}
-	private void reloadGrid(List<ViviendaDTO> viviendas) {
+	private void reloadGridAdmin(List<ViviendaDTO> viviendas){
 		modelo.setRowCount(0);
 		// Agrega los usuarios en el model
 
@@ -445,7 +466,23 @@ public class ListadoDeViviendasDinamico extends JFrame {
 								v.getDueño().getCorreo(),
 								v.getID()
 								});
+			}
 	}
+	private void reloadGridDueño(List<ViviendaDTO> viviendas) {
+		modelo.setRowCount(0);
+		// Agrega los usuarios en el model
+
+			for (ViviendaDTO v : viviendas) {
+				modelo.addRow(new Object[] { 
+								v.getDireccion().getBarrio(),
+								v.getDireccion().getCalle(),
+								v.getDireccion().getAltura(),
+								v.getDireccion().getCodPostal(),
+								v.getDireccion().getLatitud(),
+								v.getDireccion().getLongitud(),
+								});
+			}
+			
 			
 	}
 
