@@ -217,8 +217,7 @@ public class ListadoDeUsuarios extends JFrame {
 				List<UsuarioDTO> u = api.obtenerUsuarios(comparator);
 				this.reloadGrid(u);
 			} catch (AppException e1) {
-				// TODO Bloque catch generado automáticamente
-				e1.printStackTrace();
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
 			}
 			
 			
@@ -326,7 +325,7 @@ public class ListadoDeUsuarios extends JFrame {
 	private void reloadGrid(List<UsuarioDTO> us) {
 		modelo.setRowCount(0);
 		for (UsuarioDTO u : us) {
-		modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol() });
+		modelo.addRow(new Object[] { u.getUsername(), u.getEmail(), u.getEstado(), u.getRol().getNombre() });
 		}
 	}
 

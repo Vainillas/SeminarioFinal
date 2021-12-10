@@ -51,15 +51,12 @@ public interface IApi {
 	void registrarPersonal(String nombre, String apellido, String dni, String correoElectronico, String telefono) 
 			throws DataEmptyException,StringNullException,IncorrectEmailException, NotNumberException, AppException;
 	
-	
 	void registrarUsuario(String usuario, String password, String email, Integer rol) 
 			throws NotNullException, IncorrectEmailException, DataEmptyException, StringNullException, AppException;
 	
 	List<RolDTO> obtenerRoles() 
 			throws AppException;
 
-	
-	
 	List<RolDTO> obtenerRolesActivos();
 	void guardarRol(Integer codigo, String descripción, boolean estado); // crear el objeto de dominio “Rol”
 
@@ -71,29 +68,32 @@ public interface IApi {
 	public void desactivarRol(Integer codigo); // recuperar el objeto Rol, imp
 
 	public List<UsuarioDTO> obtenerUsuarios() throws AppException;
+	
 	public <T>List<UsuarioDTO> obtenerUsuarios(Predicate <T> predicate) 
 			throws AppException;
 	
 	public List<ViviendaDTO> obtenerViviendas() throws AppException;
 	
-	public <T> List<ViviendaDTO> obtenerViviendas(Comparator<T> comparator ) throws AppException;
+	public <T> List<ViviendaDTO> obtenerViviendas(Comparator<T> comparator ) 
+			throws AppException;
+	
 	public <T>List<UsuarioDTO> obtenerUsuarios(Comparator <T> comparator ) 
 			throws AppException;
 
-	
 	void activarUsuario(String username) 
 			throws StateException, AppException; // recuperar el objeto Usuario, implementar el comportamiento de estado.
 
 	void desactivarUsuario(String username) 
 			throws StateException, AppException ; // recuperar el objeto Usuario, implementar el comportamiento de estado.
-	boolean existeDueñoRegistrado() throws AppException;
+	
+	boolean existeDueñoRegistrado() 
+			throws AppException;
 	
 	void registrarDueño(String nombre, String apellido, String dni, String correo, String username) 
 			throws Exception;
 
-	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,
-			String barrio) throws AppException, DataEmptyException, StringNullException, NotNumberException 
-					;
+	void registrarDireccion(String calle, String altura, String codPostal, String latitud, String longitud,String barrio) 
+			throws AppException, DataEmptyException, StringNullException, NotNumberException ;
 
 	DueñoDTO obtenerDueño(String dni) 
 			throws AppException;
@@ -105,7 +105,7 @@ public interface IApi {
 			throws AppException;
 
 	void generarPedidoDeRetiro(boolean cargaPesada, ArrayList<String> residuosSeleccionados,ArrayList<String> residuosSeleccionadosKg, String observacion, ArrayList<String> domicilioSeleccionado) 
-		throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException ;
+			throws AppException, DataEmptyException, NotNullException, StringNullException, DateNullException, NumberFormatException, KilogramEmptyException, NotNumberException ;
 
 	boolean existeUsuario(String usuario) 
 			throws NotRegisterException, AppException;
@@ -119,16 +119,15 @@ public interface IApi {
 	List<DireccionDTO> obtenerDirecciones() 
 			throws AppException;
 
-
 	void usuarioActivo(String username) 
 			throws AppException;
 
-
-	public String obtenerRolUsuarioActivo();
+	String obtenerRolUsuarioActivo();
 	
 	List<RecolectorDTO> obtenerRecolectores() 
 			throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
-	public PedidoDeRetiroDTO obtenerPedidoDeRetiro(int codigo) 
+	
+	PedidoDeRetiroDTO obtenerPedidoDeRetiro(int codigo) 
 			throws DataEmptyException, NotNullException, StringNullException, DateNullException, AppException;
 	
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiro() 
@@ -136,16 +135,18 @@ public interface IApi {
 			AppException, IncorrectEmailException;
 
 	Usuario getUserOnline();
-	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
-			 throws AppException;
+	
+	void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado, String dniRecolector) 
+			throws AppException;
 	 
-	 public void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) 
-			 throws AppException;
+	void generarOrdenDeRetiro(Integer codigoPedidoSeleccionado) 
+			throws AppException;
+	 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario() 
 			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, 
 			StringNullException, DateNullException;
 
-	public List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()
+	List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro()
 			throws AppException;
 
 	void registrarDueño(String nombre, String apellido, String dni) 
@@ -154,14 +155,14 @@ public interface IApi {
 	<T> List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Predicate<T> predicate) 
 			throws AppException;
 	
-
 	<T>List<ViviendaDTO> obtenerViviendas(Predicate<T> predicate) 
 			throws AppException;
 
-	ArrayList<String> obtenerNombresResiduos() throws AppException;
+	ArrayList<String> obtenerNombresResiduos() 
+			throws AppException;
 	
-
-	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, Integer codOrden) throws AppException, NotNullException;
+	void registrarVisita(ArrayList<String> residuosIngresados, ArrayList<String> residuosIngresadosKg, String observacion, Integer codOrden) 
+			throws AppException, NotNullException;
 	
 	List<ViviendaDTO> obtenerViviendasDeUsuario() 
 			throws AppException;
@@ -190,47 +191,84 @@ public interface IApi {
 	void agregarBeneficio(String descripcion, String puntajeConsumible) 
 			throws NotNullException, DataEmptyException, NotNumberException, AppException;
 
-	List<BeneficioDTO> obtenerBeneficios() throws AppException, NotNullException, DataEmptyException, NotNumberException;
-	BeneficioDTO obtenerBeneficioPorCodigo(int codigo) throws AppException, NotNullException;
-	List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) throws AppException;
+	List<BeneficioDTO> obtenerBeneficios() 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	
+	BeneficioDTO obtenerBeneficioPorCodigo(int codigo) 
+			throws AppException, NotNullException;
+	
+	List<OrdenDeRetiroDTO> obtenerOrdenesDeRetiro(Comparator<OrdenDeRetiroDTO> comparator) 
+			throws AppException;
 
-	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() throws AppException, Exception;
+	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroSinOrden() 
+			throws AppException, Exception;
 	
-	void generarCampaña(List<Integer> codigo, String unNombre) throws AppException, NotNullException;
+	void generarCampaña(List<Integer> codigo, String unNombre) 
+			throws AppException, NotNullException;
 	
+	void generarCanje(int codBeneficio, int codCampaña) 
+			throws AppException, NotNullException, InsuficientPointsException;
 	
-	void generarCanje(int codBeneficio, int codCampaña) throws AppException, NotNullException, InsuficientPointsException;
-	
-	
-	List<CanjeDTO> obtenerCanjes() throws AppException, NotNullException, DataEmptyException, NotNumberException;
-	List<CanjeDTO> obtenerCanjesPorUsuario(Comparator<CanjeDTO> comparator) throws AppException, NotNullException, DataEmptyException, NotNumberException;
-	List<CampañaDTO> obtenerCampañas() throws AppException, NotNullException, DataEmptyException, NotNumberException;
-	CampañaDTO obtenerCampañaPorCodigo(int codigo) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	List<CanjeDTO> obtenerCanjes() 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
+	List<CanjeDTO> obtenerCanjesPorUsuario(Comparator<CanjeDTO> comparator) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
+	List<CampañaDTO> obtenerCampañas() 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
+	CampañaDTO obtenerCampañaPorCodigo(int codigo) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
 	int calcularPuntaje(OrdenDeRetiro unaOrden);
+
 	void sumarPuntos(Dueño dueño, int puntaje) throws AppException;
-	List<ResiduoDTO> devolverResiduosRestantes(int codOrden) throws AppException;
-	Boolean comprobarCantidadResiduos(int codOrden) throws AppException;
-	boolean comprobarExcedenteResiduos(OrdenDeRetiro ordenAComprobar, Visita visitaNueva);
-	void concretarOrdenDeRetiro(int codOrden) throws AppException;
-	void cancelarOrdenDeRetiro(int codOrden) throws AppException;
-	List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
 	
+	List<ResiduoDTO> devolverResiduosRestantes(int codOrden) 
+			throws AppException;
 
-	<T>List<BeneficioDTO> obtenerBeneficios(Predicate<T> predicado) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	Boolean comprobarCantidadResiduos(int codOrden) 
+			throws AppException;
 
-	<T>List<CanjeDTO> obtenerCanjes(Predicate<T> predicate) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	boolean comprobarExcedenteResiduos(OrdenDeRetiro ordenAComprobar, Visita visitaNueva);
+	void concretarOrdenDeRetiro(int codOrden) 
+			throws AppException;
 
-	List<ViviendaDTO> obtenerViviendasDeUsuario(Comparator<ViviendaDTO> comparator) throws AppException;
+	void cancelarOrdenDeRetiro(int codOrden) 
+			throws AppException;
 
-	<T>List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate<T> predicate) throws AppException;
+	List<CampañaDTO> obtenerCampañas(Predicate<CampañaDTO> predicado) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	
+	<T>List<BeneficioDTO> obtenerBeneficios(Predicate<T> predicado) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
+	<T>List<CanjeDTO> obtenerCanjes(Predicate<T> predicate) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
+	List<ViviendaDTO> obtenerViviendasDeUsuario(Comparator<ViviendaDTO> comparator) 
+			throws AppException;
+
+	<T>List<ViviendaDTO> obtenerViviendasDeUsuario(Predicate<T> predicate) 
+			throws AppException;
 
 	List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Comparator<PedidoDeRetiroDTO> comparator) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 
-	<T>List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<T> predicate) throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
+	<T>List<PedidoDeRetiroDTO> obtenerPedidosDeRetiroDeUsuario(Predicate<T> predicate) 
+			throws AppException, IncorrectEmailException, DataEmptyException, NotNullException, StringNullException, DateNullException;
 
-	<T>List<CanjeDTO> obtenerCanjes(Comparator<T> comparator) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	<T>List<CanjeDTO> obtenerCanjes(Comparator<T> comparator) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
 
-	<T>List<CanjeDTO> obtenerCanjesPorUsuario() throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	<T>List<CanjeDTO> obtenerCanjesPorUsuario() 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
 
-	List<CanjeDTO> obtenerCanjesDeUsuario(Predicate<CanjeDTO> predicate) throws AppException, NotNullException, DataEmptyException, NotNumberException;
+	List<CanjeDTO> obtenerCanjesDeUsuario(Predicate<CanjeDTO> predicate) 
+			throws AppException, NotNullException, DataEmptyException, NotNumberException;
+
+	List<RecolectorDTO> obtenerRecolectores(Predicate<RecolectorDTO> predicate) 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
+
+	List<RecolectorDTO> obtenerRecolectores(Comparator<RecolectorDTO> comparator) throws DataEmptyException, StringNullException, IncorrectEmailException, AppException;
 }

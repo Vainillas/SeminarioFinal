@@ -988,6 +988,17 @@ public class PersistenceApi implements IApi {
 		return Filtro.filtrar(this.obtenerCanjesPorUsuario(), predicate);
 	}
 
+	@Override
+	public List<RecolectorDTO> obtenerRecolectores(Predicate<RecolectorDTO> predicate) 
+			throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
+		return Filtro.filtrar(this.obtenerRecolectores(), predicate);
+	}
+
+	@Override
+	public List<RecolectorDTO> obtenerRecolectores(Comparator<RecolectorDTO> comparator) throws DataEmptyException, StringNullException, IncorrectEmailException, AppException {
+		return Filtro.filtrar(this.obtenerRecolectores(), comparator);
+	}
+
 
 
 }

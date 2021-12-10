@@ -62,7 +62,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	private JTextField tfFiltradoPorEstado;
 	private JTextField tfFiltradoCodigoPedido;
 	private JPanel panel;
-	private JButton button;
 	private JPanel panel_filtrados;
 	private JLabel lbFiltradoPorDni;
 	private JRadioButton rdbtnFiltradoPorDni;
@@ -75,17 +74,13 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 	private JLabel lbOrdenamiento;
 	private JPanel panel_botones;
 	private JButton btnLimpiar;
-	private ResourceBundle labels;
 	private JLabel lbFiltradoPorCodigoOrden;
 	private JTextField tfFiltradoPorCodigoOrden;
-	private JRadioButton rdbtnNewRadioButton;
 	private JRadioButton rdbtnFiltradoPorCodigoOrden;
 	private JLabel lbOrdenarPorCodigoPedido;
 	private JLabel lbOrdenarPorCodigoOrden;
 	private JRadioButton rdbtnOrdenarPorCodigoOrden;
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -101,10 +96,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 * @param labels 
-	 */
 	public ListadoDeOrdenesDeRetiro(IApi api, ResourceBundle labels) {
 
 		setTitle(labels.getString("listado.de.ordenes.de.retiro.titulo")); 
@@ -124,8 +115,6 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		scrollPane.setViewportBorder(new SoftBevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		scrollPane.setBounds(252, 11, 548, 345);
 		panel.add(scrollPane);
-		//ResourceBundle labels = ResourceBundle.getBundle("labels");
-		//ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("en"));
 		table = new NotEditJTable();
 		String[] titulosUsuario = { 
 				labels.getString("listado.de.ordenes.de.retiro.titulos.fecha.orden"),  

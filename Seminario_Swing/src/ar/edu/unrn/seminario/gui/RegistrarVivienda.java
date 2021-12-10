@@ -37,7 +37,6 @@ public class RegistrarVivienda extends JFrame {
     private JPanel contentPane;
     private JTextField calleIngresada;
     private JLabel labelCodPostal;
-    //private JFormattedTextField codPostIngresado;
     private JTextField latitudIngresada;
     private JTextField barrioIngresado;
     private JTextField longitudIngresada;
