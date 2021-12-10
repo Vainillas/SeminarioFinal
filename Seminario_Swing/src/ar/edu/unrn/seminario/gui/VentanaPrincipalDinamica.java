@@ -259,6 +259,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbAdministrador.add(mnConfiguracionAdministrador);
 		
 		JMenuItem mntmSalirAdmin = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.salir.administrador")); 
+		mntmSalirAdmin.addActionListener((e)->{
+			setVisible(false);
+			dispose();
+		});
 		mnConfiguracionAdministrador.add(mntmSalirAdmin);
 		JMenuItem mntmPantallaEstandar = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.estandar"));
 		mntmPantallaEstandar.setVisible(false);

@@ -57,10 +57,6 @@ public class ListadoDeCanjes extends JFrame {
 	private JRadioButton rdbtnUsuarioAsociado;
 
 
-	/**
-	 * Create the frame.
-	 * @param labels 
-	 */
 	public ListadoDeCanjes(IApi api, ResourceBundle labels) {
 		this.setTitle(labels.getString("listado.de.canjes.titulo"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		

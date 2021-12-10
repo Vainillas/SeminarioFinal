@@ -68,7 +68,7 @@ public class IniciarSesion extends JFrame {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public IniciarSesion(IApi api) {
-		
+		System.out.println("hola mundo");
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
 		
 		setTitle(labels.getString("iniciar.sesion.titulo"));

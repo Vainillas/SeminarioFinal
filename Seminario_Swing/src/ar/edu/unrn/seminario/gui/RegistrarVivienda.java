@@ -30,6 +30,7 @@ import java.awt.HeadlessException;
 
 import javax.swing.border.BevelBorder;
 import javax.swing.border.CompoundBorder;
+import java.awt.Color;
 
 public class RegistrarVivienda extends JFrame {
 	IApi api;
@@ -58,7 +59,7 @@ public class RegistrarVivienda extends JFrame {
         contentPane.add(labeldireccion);
         
         JPanel panel = new JPanel();
-        panel.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));
+        panel.setBorder(new BevelBorder(BevelBorder.RAISED, Color.GRAY, null, Color.DARK_GRAY, null));
         panel.setBounds(85, 36, 413, 253);
         contentPane.add(panel);
         panel.setLayout(null);
@@ -79,7 +80,7 @@ public class RegistrarVivienda extends JFrame {
         panel.add(label);
         
         JFormattedTextField alturaIngresada = new JFormattedTextField();
-        alturaIngresada.setBounds(86, 44, 77, 20);
+        alturaIngresada.setBounds(105, 44, 77, 20);
         panel.add(alturaIngresada);
         
         labelCodPostal = new JLabel(labels.getString("registro.viviendas.label.codigo.postal"));
@@ -96,7 +97,7 @@ public class RegistrarVivienda extends JFrame {
         codPostIngresado.setBounds(215, 72, 77, 20);
         panel.add(codPostIngresado);
         latitudIngresada = new JTextField();
-        latitudIngresada.setBounds(86, 121, 77, 20);
+        latitudIngresada.setBounds(105, 121, 77, 20);
         panel.add(latitudIngresada);
         latitudIngresada.setColumns(10);
         
@@ -112,11 +113,11 @@ public class RegistrarVivienda extends JFrame {
         
         JLabel labelBarrio = new JLabel(labels.getString("registro.viviendas.label.barrio"));
         labelBarrio.setFont(new Font("Tahoma", Font.BOLD, 13));
-        labelBarrio.setBounds(10, 205, 111, 23);
+        labelBarrio.setBounds(5, 205, 121, 23);
         panel.add(labelBarrio);
         
         barrioIngresado = new JTextField();
-        barrioIngresado.setBounds(86, 206, 77, 20);
+        barrioIngresado.setBounds(105, 207, 77, 20);
         panel.add(barrioIngresado);
         barrioIngresado.setColumns(10);
         

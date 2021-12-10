@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 
+
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +34,6 @@ import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
 import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
-
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -316,7 +316,7 @@ public class ListadoDeCampañas extends JFrame {
 		
 
 		
-		JButton btnLimpiarFiltroCampañas = new JButton(labels.getString(" listado.de.campañas.filtrado.limpiar.filtro"));
+		JButton btnLimpiarFiltroCampañas = new JButton(labels.getString("listado.de.campañas.filtrado.limpiar.filtro"));
 		 
 		btnLimpiarFiltroCampañas.addActionListener((e)->{
 			
@@ -434,15 +434,17 @@ public class ListadoDeCampañas extends JFrame {
 		JRadioButton rdbtnPuntaje = new JRadioButton("");
 		rdbtnPuntaje.addActionListener((e)->{
 			rdbtnPuntaje.setSelected(false);
-			Predicate <BeneficioDTO>predicate = (BeneficioDTO b)->
-			String.valueOf(b.getPuntajeConsumible()).contains(this.tfFiltrarBeneficioPorPuntaje.getText());
-			try {
-				this.reloadGridBeneficio(api.obtenerBeneficios(predicate));
-			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),1);
-				
-			}
-			
+			if(!this.tfFiltrarBeneficioPorPuntaje.getText().equals("")) {
+
+				Predicate <BeneficioDTO>predicate = (BeneficioDTO b)->
+				String.valueOf(b.getPuntajeConsumible()).contains(this.tfFiltrarBeneficioPorPuntaje.getText());
+				try {
+					this.reloadGridBeneficio(api.obtenerBeneficios(predicate));
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),1);
+					
+				}
+			}	
 		});
 		
 		rdbtnPuntaje.setBounds(175, 57, 21, 21);
@@ -451,6 +453,7 @@ public class ListadoDeCampañas extends JFrame {
 		JButton btnLimpiarFIltroBeneficios = new JButton(labels.getString("listado.de.campañas.button.limpiar.filtro"));
 		btnLimpiarFIltroBeneficios.addActionListener((e)->{
 
+			if(this.tableBeneficios.getSelectedRow()!= -1) {
 				//modeloBeneficio.setRowCount(0);
 				modeloBeneficio.setRowCount(0);
 				this.tfDescripcion.setText("");
@@ -461,6 +464,10 @@ public class ListadoDeCampañas extends JFrame {
 						b.getPuntajeConsumible()
 					});
 				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null,labels.getString( "listado.de.campañas.mensaje.error.seleccion.beneficio"),labels.getString( "mensaje.error.general"),0);
+			}
 			
 			
 			

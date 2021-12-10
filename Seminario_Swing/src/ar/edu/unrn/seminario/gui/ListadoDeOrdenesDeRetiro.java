@@ -296,7 +296,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			}
 		});
 		
-		btnLimpiarFiltro.setBounds(69, 125, 89, 23);
+		btnLimpiarFiltro.setBounds(55, 125, 110, 23);
 		panel_filtrados.add(btnLimpiarFiltro);
 		
 		panel_ordenamientos = new JPanel();
@@ -431,7 +431,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		
 		btnLimpiar = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.limpiar"));
 
-		btnLimpiar.setBounds(79, 333, 87, 23);
+		btnLimpiar.setBounds(65, 333, 110, 23);
 		panel.add(btnLimpiar);
 		btnLimpiar.addActionListener((e)->{
 			try {
