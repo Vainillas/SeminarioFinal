@@ -282,7 +282,6 @@ public class ListadoDePersonal extends JFrame {
 		});
 		rdbtnCorreoOrdenamiento.setBounds(68, 80, 172, 20);
 		panelOrdenamiento.add(rdbtnCorreoOrdenamiento);
-		
 		JButton btnLimpiarOrdenamiento = new JButton(labels.getString("listado.de.personal.button.limpiar.ordenamiento"));
 		btnLimpiarOrdenamiento.addActionListener((e)->{
 			try {

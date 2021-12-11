@@ -1,8 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
-
-
+import java.awt.Component;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +10,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -48,9 +48,6 @@ public class ListadoDeCampañas extends JFrame {
 	private DefaultTableModel modeloCampaña;
 	private DefaultTableModel modeloBeneficio;
 	
-	private IApi api;
-	private JButton activarButton;
-	private JButton desactivarButton;
 	private JButton btnVolver;
 	private JPanel panelBeneficios;
 	private JButton cerrarButton;
@@ -65,6 +62,10 @@ public class ListadoDeCampañas extends JFrame {
 	private JTextField tfFiltrarBeneficioPorCodigo;
 	private JTextField tfFiltrarBeneficioPorPuntaje;
 	private List<Beneficio> beneficiosActual = null;
+	private JPanel panelFiltradosBeneficios;
+	private JLabel lbFiltrarPor;
+	private JLabel lbFiltradoPorDescripcion;
+	private JRadioButton rdbtnDescripcion;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -82,8 +83,6 @@ public class ListadoDeCampañas extends JFrame {
 	}
 
 	public ListadoDeCampañas(IApi api,ResourceBundle labels) {
-		this.api = api;
-		setTitle(labels.getString("listado.de.campañas.titulo"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1045, 409);
 		contentPane = new JPanel();
@@ -142,13 +141,10 @@ public class ListadoDeCampañas extends JFrame {
 						}
 					}
 					for(Beneficio bene : b) {
-						
 						modeloBeneficio.addRow(new Object[] {
-							
 							bene.getDescripcion(),
 							bene.getCodigo(),
 							bene.getPuntajeConsumible()
-							
 						});
 						
 						
@@ -156,31 +152,24 @@ public class ListadoDeCampañas extends JFrame {
 				
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-				}
-				catch(java.lang.ClassCastException e1) {
-					
-				}
-				
-				
-				
+				}			
 			}
 		});
 
 		String [] titulosBeneficios = {
-		labels.getString("listado.de.campañas.titulo.descripcion"),
-		  labels.getString("listado.de.campañas.titulo.codigo"),
-		  labels.getString("listado.de.campañas.titulo.puntaje.consumible")};
-
+			labels.getString("listado.de.campañas.titulo.descripcion"),
+			labels.getString("listado.de.campañas.titulo.codigo"),
+			labels.getString("listado.de.campañas.titulo.puntaje.consumible")
+		};
 		String[] titulos = { 
 		labels.getString("listado.de.campañas.titulo.nombre"),
-		   labels.getString("listado.de.campañas.titulo.estado"),
-		   labels.getString("listado.de.campañas.titulo.codigo")};
+		labels.getString("listado.de.campañas.titulo.estado"),
+		labels.getString("listado.de.campañas.titulo.codigo")
+		   };
 		  
 		 
 		modeloCampaña = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficio = new DefaultTableModel(new Object[][] {},titulosBeneficios);
-		
-		
 		List<CampañaDTO> campaña;
 		
 		try {
@@ -191,14 +180,11 @@ public class ListadoDeCampañas extends JFrame {
 						c.getEstado(),
 						c.getCodigo() 
 						});
-				
-
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 			JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 		}
 		
-
 		tableCampañas.setModel(modeloCampaña);
 		scrollPaneCampañas.setViewportView(tableCampañas);
 		tableBeneficios.setModel(modeloBeneficio);
@@ -239,18 +225,13 @@ public class ListadoDeCampañas extends JFrame {
 			rdbtnNombre.setSelected(false);
 			try {
 				if(!this.tfNombre.getText().equals("")) {
-					
-					reloadGrid(api.obtenerCampañas(predicado));
-					
+					reloadGridCampaña(api.obtenerCampañas(predicado));
 				}
 				
 			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
-			
-			
-			
-			
+
 		});
 		rdbtnNombre.setBounds(170, 5, 21, 21);
 		panelFiltradosCampaña.add(rdbtnNombre);
@@ -273,7 +254,7 @@ public class ListadoDeCampañas extends JFrame {
 			if(!this.tfEstado.getText().equals("")) {
 				Predicate<CampañaDTO> predicate  = (CampañaDTO c)->c.getEstado().toLowerCase().contains(this.tfEstado.getText().toLowerCase());
 				try {
-				reloadGrid(api.obtenerCampañas(predicate));
+					reloadGridCampaña(api.obtenerCampañas(predicate));
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
@@ -285,7 +266,7 @@ public class ListadoDeCampañas extends JFrame {
 		
 
 		
-		  JLabel lblCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
+		JLabel lblCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
 		 
 		lblCodigo.setBounds(19, 60, 51, 14);
 		panelFiltradosCampaña.add(lblCodigo);
@@ -301,60 +282,42 @@ public class ListadoDeCampañas extends JFrame {
 			if(!this.tfCodigo.getText().equals("")) {
 				try {
 					Predicate <CampañaDTO> predicate = (CampañaDTO c)->c.getCodigo() == Integer.parseInt(this.tfCodigo.getText());
-				reloadGrid(api.obtenerCampañas(predicate));
+					reloadGridCampaña(api.obtenerCampañas(predicate));
 				}catch (AppException | NotNullException | DataEmptyException | NotNumberException  e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}catch(NumberFormatException e1) {
 					JOptionPane.showMessageDialog(null, labels.getString("listado.de.campañas.mensaje.error.numerico"),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-					
 				}
-		
 			}
 		});
 		rdbtnCodigoCampaña.setBounds(170, 57, 21, 21);
 		panelFiltradosCampaña.add(rdbtnCodigoCampaña);
-		
-
-		
-		JButton btnLimpiarFiltroCampañas = new JButton(labels.getString("listado.de.campañas.filtrado.limpiar.filtro"));
-		 
+		JButton btnLimpiarFiltroCampañas = new JButton(labels.getString("listado.de.campañas.filtrado.limpiar.filtro")); 
 		btnLimpiarFiltroCampañas.addActionListener((e)->{
-			
 				try {
 					this.tfCodigo.setText("");
 					this.tfEstado.setText("");
 					this.tfNombre.setText("");
-					reloadGrid(api.obtenerCampañas());
+					reloadGridCampaña(api.obtenerCampañas());
 					
 				} 
 				catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
-			
-			
 		});
 	
 		btnLimpiarFiltroCampañas.setBounds(56, 85, 110, 23);
 		panelFiltradosCampaña.add(btnLimpiarFiltroCampañas);
-		
-
-		
-		JLabel lbFiltrarPor = new JLabel(labels.getString("listado.de.campañas.filtrar.campañas.por"));
-		 
+		lbFiltrarPor = new JLabel(labels.getString("listado.de.campañas.filtrar.campañas.por")); 
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(836, 35, 122, 14);
 		contentPane.add(lbFiltrarPor);
-		
-		JPanel panelFiltradosBeneficios = new JPanel();
+		panelFiltradosBeneficios = new JPanel();
 		panelFiltradosBeneficios.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelFiltradosBeneficios.setBounds(801, 203, 218, 134);
 		contentPane.add(panelFiltradosBeneficios);
 		panelFiltradosBeneficios.setLayout(null);
-		
-
-		
-		JLabel lbFiltradoPorDescripcion = new JLabel(labels.getString("listado.de.campañas.filtrado.por.descripcion"));
-		 
+		lbFiltradoPorDescripcion = new JLabel(labels.getString("listado.de.campañas.filtrado.por.descripcion"));
 		lbFiltradoPorDescripcion.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltradoPorDescripcion.setBounds(0, 8, 79, 14);
 		panelFiltradosBeneficios.add(lbFiltradoPorDescripcion);
@@ -363,8 +326,8 @@ public class ListadoDeCampañas extends JFrame {
 		tfDescripcion.setBounds(84, 5, 86, 20);
 		panelFiltradosBeneficios.add(tfDescripcion);
 		tfDescripcion.setColumns(10);
-		
-		JRadioButton rdbtnDescripcion = new JRadioButton("");
+
+		rdbtnDescripcion = new JRadioButton("");
 		rdbtnDescripcion.addActionListener((e)->{
 			rdbtnDescripcion.setSelected(false);
 			if(!this.tfDescripcion.getText().equals("")) {
@@ -441,12 +404,10 @@ public class ListadoDeCampañas extends JFrame {
 				try {
 					this.reloadGridBeneficio(api.obtenerBeneficios(predicate));
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),1);
-					
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);	
 				}
 			}	
 		});
-		
 		rdbtnPuntaje.setBounds(175, 57, 21, 21);
 		panelFiltradosBeneficios.add(rdbtnPuntaje);
 		
@@ -454,7 +415,6 @@ public class ListadoDeCampañas extends JFrame {
 		btnLimpiarFIltroBeneficios.addActionListener((e)->{
 
 			if(this.tableBeneficios.getSelectedRow()!= -1) {
-				//modeloBeneficio.setRowCount(0);
 				modeloBeneficio.setRowCount(0);
 				this.tfDescripcion.setText("");
 				for (Beneficio b : this.beneficiosActual) {
@@ -474,23 +434,13 @@ public class ListadoDeCampañas extends JFrame {
 		});
 		btnLimpiarFIltroBeneficios.setBounds(56, 100, 114, 23);
 		panelFiltradosBeneficios.add(btnLimpiarFIltroBeneficios);
-		
-		
-		
-		 JLabel lbFiltrarBeneficio = new JLabel(labels.getString("listado.de.campañas.filtrar.beneficios.por"));
+		JLabel lbFiltrarBeneficio = new JLabel(labels.getString("listado.de.campañas.filtrar.beneficios.por"));
 		 
 		lbFiltrarBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarBeneficio.setBounds(822, 179, 179, 14);
 		contentPane.add(lbFiltrarBeneficio);
-		
-		
-		
-		
-		
 
-		
-		 cerrarButton = new JButton(labels.getString("listado.de.campañas.boton.cerrar"));
-		 
+		cerrarButton = new JButton(labels.getString("listado.de.campañas.boton.cerrar"));
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -514,7 +464,7 @@ public class ListadoDeCampañas extends JFrame {
 		
 	}
 
-	private void reloadGrid(List<CampañaDTO> campañaDTO) {	
+	private void reloadGridCampaña(List<CampañaDTO> campañaDTO) {	
 		this.modeloCampaña.setRowCount(0);
 		this.modeloBeneficio.setRowCount(0);
 		for (CampañaDTO c : campañaDTO) {

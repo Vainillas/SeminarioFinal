@@ -2,6 +2,7 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,47 +15,29 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.api.PersistenceApi;
 import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
-import ar.edu.unrn.seminario.dto.UsuarioDTO;
-import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
-import java.awt.ScrollPane;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import javax.swing.JTable;
 import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
-import javax.swing.JToggleButton;
 import javax.swing.JTextField;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.BoxLayout;
-import java.awt.GridLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import java.awt.FlowLayout;
 import javax.swing.border.BevelBorder;
 import java.awt.Color;
 import javax.swing.border.SoftBevelBorder;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.MatteBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 
 public class ListadoDeOrdenesDeRetiro extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1274792556334834596L;
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel modelo;
@@ -347,6 +330,11 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 			rdbtnOrdenarPorCodigoOrden.setSelected(false);
 			Comparator <OrdenDeRetiroDTO> comparator = (OrdenDeRetiroDTO o1, OrdenDeRetiroDTO o2)->
 			(String.valueOf(o1.getCodigo()).compareToIgnoreCase(String.valueOf(o2.getCodigo())));
+			try {
+				this.reloadGrid(api.obtenerOrdenesDeRetiro(comparator));
+			} catch (AppException e1) {
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
+			}
 		});
 		rdbtnOrdenarPorCodigoOrden.setBounds(150, 57, 21, 21);
 		panel_ordenamientos.add(rdbtnOrdenarPorCodigoOrden);
@@ -377,21 +365,16 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 						this.reloadGrid(api.obtenerOrdenesDeRetiro());
 					} catch (AppException e1) {
 						JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
-					}
-					
-			}
-					
-				
-			
+					}		
+			}	
 			else {
-				JOptionPane.showMessageDialog(null,"Debe Seleccionar Un Pedido","error",0);
+				JOptionPane.showMessageDialog(null,labels.getString("listado.de.campañas.mensaje.error.debe.seleccionar.pedido"),labels.getString("mensaje.error.general"),0);
 			}
 		});
 		
 		JButton btnCancelarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.cancelar.orden"));
 		btnCancelarOrden.addActionListener((e)->{
 			if(!(table.getSelectedRow() == -1)) {
-
 				try {
 					api.cancelarOrdenDeRetiro((int)table.getValueAt(table.getSelectedRow(),1 ));
 					
@@ -399,7 +382,7 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 					this.reloadGrid(api.obtenerOrdenesDeRetiro());
 
 				} catch (AppException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"error",0);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
 				}
 			}
 			else {
@@ -429,24 +412,17 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
 			}
 		});
-		
-
-		
 	}
 	private void reloadGrid(List<OrdenDeRetiroDTO> ordenes) {
 		modelo.setRowCount(0);
-		// Agrega los usuarios en el model
-
-			for (OrdenDeRetiroDTO o : ordenes) {
-				modelo.addRow(new Object[] { 
-				 		o.getFechaOrden(),
-				 		o.getCodigo(),
-						o.getEstado().obtenerEstado(),
-						o.getPedidoAsociado().getCodigo(),
-						o.getRecolector().getDni(),
-					
-				});
-	}
-			
+		for (OrdenDeRetiroDTO o : ordenes) {
+			modelo.addRow(new Object[] { 
+				 	o.getFechaOrden(),
+				 	o.getCodigo(),
+					o.getEstado().obtenerEstado(),
+					o.getPedidoAsociado().getCodigo(),
+					o.getRecolector().getDni(),
+			});
+		}	
 	}
 }

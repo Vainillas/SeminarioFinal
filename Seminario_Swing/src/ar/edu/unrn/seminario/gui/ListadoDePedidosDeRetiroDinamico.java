@@ -287,13 +287,12 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		panel_ordenamientos.add(lb_ordenar_por_codigo_pedido);
 		
 		JRadioButton rdbtn_ordenar_por_codigo_pedido = new JRadioButton("");
-
 		rdbtn_ordenar_por_codigo_pedido.addActionListener((e)->{
 			rdbtn_ordenar_por_codigo_pedido.setSelected(false);
 			try {
 				
 				comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
-				(String.valueOf(p1.getCodigo()).compareToIgnoreCase(String.valueOf(p2.getCodigo())));
+				(String.valueOf(p1.getCodigo()).toLowerCase().compareToIgnoreCase(String.valueOf(p2.getCodigo()).toLowerCase()));
 				
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
 					reloadGrid(api.obtenerPedidosDeRetiroDeUsuario(comparator));

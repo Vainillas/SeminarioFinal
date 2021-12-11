@@ -54,8 +54,6 @@ public class IniciarSesion extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					
-			
 					PersistenceApi api = new PersistenceApi();
 					IniciarSesion frame = new IniciarSesion(api);
 					frame.setVisible(true);
@@ -68,9 +66,7 @@ public class IniciarSesion extends JFrame {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public IniciarSesion(IApi api) {
-		System.out.println("hola mundo");
 		ResourceBundle labels = ResourceBundle.getBundle("labels",new Locale("es"));
-		
 		setTitle(labels.getString("iniciar.sesion.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 316);
@@ -79,7 +75,6 @@ public class IniciarSesion extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		//ResourceBundle labels = ResourceBundle.getBundle("labels");
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(new Color(255, 255, 224));
 		panelDatos.setBorder(new BevelBorder(BevelBorder.RAISED, null, null, null, null));

@@ -1,12 +1,6 @@
 package ar.edu.unrn.seminario.api;
-
-import static ar.edu.unrn.seminario.utilities.Filtro.filtrar;
-
 import java.sql.Date;
 import java.util.ArrayList;
-
-
-
 import java.util.Comparator;
 import java.util.List;
 import ar.edu.unrn.seminario.Helper.DateHelper;
@@ -394,7 +388,6 @@ public class PersistenceApi implements IApi {
     				}
     			}
     		}
-    		
     	}
     	int i;
     	for(i=0;i<listaResiduos.size();i++) {
@@ -444,12 +437,7 @@ public class PersistenceApi implements IApi {
     				}
     			}
     		}
- 
-    	}
-    	//System.out.println("El tamaño de la lista de Residuos en comprobarCantidadResiduos es : " + listaResiduos.size());
-    	//System.out.println("El Tamaño de la Lista de Visitas en comprobarCantidadResiduos es de : " + listaVisitas.size());
-    	//System.out.println("Lista SumaVisitas de comprobarCantidadResiduos después del segundo for: "+ listaSumaVisitas);
-    	
+    	}	
     	
     	Boolean rtado = false;
     	int i;

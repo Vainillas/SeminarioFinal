@@ -105,7 +105,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		
 		
 		
-
+		btnOrdenarPorCodigo = new JButton(labels.getString("listado.de.viviendas.button.ordenar.por.codigo"));
 		scrollPane.setViewportView(table);
 		try {
 			if(api.obtenerRolUsuarioActivo().equals("ADMIN")) {
@@ -125,6 +125,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				this.txCodigo.setVisible(false);
 				this.lbCodigo.setVisible(false);
 				this.rdbtnCodigo.setVisible(false);
+				this.btnOrdenarPorCodigo.setVisible(false);
 				reloadGridDueño( api.obtenerViviendasDeUsuario());
 				btnLimpiarFiltro.setBounds(73, 70, 124, 23);
 			}
@@ -142,7 +143,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		
 		panelOrdenamiento = new JPanel();
 		panelOrdenamiento.setBorder(new BevelBorder(BevelBorder.RAISED, new Color(0, 0, 0), null, null, null));
-		panelOrdenamiento.setBounds(850, 5, 221, 161);
+		panelOrdenamiento.setBounds(850, 5, 221, 186);
 		contentPane.add(panelOrdenamiento);
 		panelOrdenamiento.setLayout(null);
 		
@@ -195,7 +196,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		});
 		panelOrdenamiento.add(btnOrdenarPorCodPostal);
 		
-		btnOrdenarPorCodigo = new JButton(labels.getString("listado.de.viviendas.button.ordenar.por.codigo"));
+		
 		btnOrdenarPorCodigo.setBounds(45, 91, 143, 23);
 		btnOrdenarPorCodigo.addActionListener((e)->{
 			comparator = (ViviendaDTO v1, ViviendaDTO v2)->
@@ -203,7 +204,6 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 					this.reloadGridDueño(api.obtenerViviendasDeUsuario(comparator));
-					//api.obtenerViviendasDeUsuario();
 				
 				}
 				else {
@@ -256,6 +256,10 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		lbOrdenarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbOrdenarPor.setBounds(46, 11, 141, 14);
 		panelOrdenamiento.add(lbOrdenarPor);
+		
+		JButton btnLimpiarOrdenamiento = new JButton(labels.getString( "listado.de.viviendas.limpiar.ordenamiento"));
+		btnLimpiarOrdenamiento.setBounds(15, 153, 193, 23);
+		panelOrdenamiento.add(btnLimpiarOrdenamiento);
 		
 		panelFiltrado = new JPanel();
 		panelFiltrado.setBounds(850, 202, 266, 222);
@@ -316,9 +320,6 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		});
 		rdbtn_barrio_calle.setBounds(228, 30, 25, 23);
 		panelFiltrado.add(rdbtn_barrio_calle);
-		
-
-		
 		lb_barrio_calle = new JLabel(labels.getString("listado.de.viviendas.label.calle.y.altura"));
 		lb_barrio_calle.setHorizontalAlignment(SwingConstants.CENTER);
 		lb_barrio_calle.setBounds(1, 30, 101, 14);
@@ -457,5 +458,4 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			
 			
 	}
-
 }

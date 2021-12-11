@@ -42,7 +42,6 @@ public class AltaUsuario extends JFrame {
 		} catch (AppException e3) {
 			JOptionPane.showMessageDialog(null,e3.getMessage(),"error",2);
 		}
-		//labels = ResourceBundle.getBundle("labels");
 		setTitle(labels.getString("alta.usuario.titulo"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -50,7 +49,7 @@ public class AltaUsuario extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(null);
 		setContentPane(contentPane);
-		JLabel usuarioLabel = new JLabel("Usuario");
+		JLabel usuarioLabel = new JLabel(labels.getString("alta.usuario.label.usuario"));
 		usuarioLabel.setBounds(43, 16, 76, 16);
 		contentPane.add(usuarioLabel);
 		JLabel contrasenaLabel = new JLabel(labels.getString("alta.usuario.label.password"));
