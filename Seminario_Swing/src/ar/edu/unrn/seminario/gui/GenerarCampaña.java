@@ -22,6 +22,7 @@ import ar.edu.unrn.seminario.exceptions.AppException;
 import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
@@ -60,7 +61,7 @@ public class GenerarCampaña extends JFrame {
 
 	public GenerarCampaña(IApi api, ResourceBundle labels) {
 		setTitle(labels.getString("generar.campaña.titulo"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1000, 349);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -88,7 +89,7 @@ public class GenerarCampaña extends JFrame {
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e) {
 			
-			JOptionPane.showMessageDialog(null, e.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
@@ -102,7 +103,7 @@ public class GenerarCampaña extends JFrame {
 		JScrollPane scrollPaneBeneficiosAsociados = new JScrollPane();
 		panelBeneficiosAsociados.add(scrollPaneBeneficiosAsociados, BorderLayout.CENTER);
 		
-		tableBeneficiosAsociados = new JTable();
+		tableBeneficiosAsociados = new NotEditJTable();
 		
 		tableBeneficiosAsociados.addMouseListener(new MouseAdapter() {
 			@Override
@@ -130,7 +131,7 @@ public class GenerarCampaña extends JFrame {
 		
 		JScrollPane scrollPaneBeneficioNoAsociado = new JScrollPane();
 		panelBeneficiosNoAsociados.add(scrollPaneBeneficioNoAsociado, BorderLayout.CENTER);
-		tableBeneficiosNoAsociados = new JTable();
+		tableBeneficiosNoAsociados = new NotEditJTable();
 		tableBeneficiosNoAsociados.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -182,7 +183,7 @@ public class GenerarCampaña extends JFrame {
 						setVisible(false);
 						dispose();
 					} catch (AppException | NotNullException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 
 						
@@ -190,7 +191,7 @@ public class GenerarCampaña extends JFrame {
 			
 			
 			else {
-				JOptionPane.showMessageDialog(null,labels.getString("generar.campaña.mensaje.error.seleccionar.beneficio"),"Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,labels.getString("generar.campaña.mensaje.error.seleccionar.beneficio"),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 				}
 		});
@@ -240,8 +241,8 @@ public class GenerarCampaña extends JFrame {
 						this.modeloBeneficiosNoAsociados.addRow(new Object[] {b.getDescripcion(),b.getPuntajeConsumible(),b.getCodigo()});
 					}
 					
-				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) { 
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			

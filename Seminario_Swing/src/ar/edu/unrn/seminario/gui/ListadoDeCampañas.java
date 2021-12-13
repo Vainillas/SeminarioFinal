@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -30,6 +31,7 @@ import ar.edu.unrn.seminario.exceptions.DataEmptyException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import java.awt.FlowLayout;
@@ -63,15 +65,14 @@ public class ListadoDeCampañas extends JFrame {
 	private JTextField tfFiltrarBeneficioPorCodigo;
 	private JTextField tfFiltrarBeneficioPorPuntaje;
 	private List<Beneficio> beneficiosActual = null;
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					PersistenceApi api = new PersistenceApi();
-					ListadoDeCampañas frame = new ListadoDeCampañas(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels");
+					ListadoDeCampañas frame = new ListadoDeCampañas(api, labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -80,17 +81,16 @@ public class ListadoDeCampañas extends JFrame {
 		});
 	}
 
-	public ListadoDeCampañas(IApi api) {
+	public ListadoDeCampañas(IApi api,ResourceBundle labels) {
 		this.api = api;
-		setTitle("Listar Campañas");
-		//setTitle(labels.getString("listado.de.campañas.titulo.listado"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle(labels.getString("listado.de.campañas.titulo"));
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1045, 409);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		btnVolver = new JButton("Volver a Menu Principal");
-		//btnVolver = new JButton(labels.getString("listado.de.campañas.boton.menu.principal"));
+		btnVolver = new JButton(labels.getString("listado.de.campañas.button.volver.a.menu.principal"));
+
 		btnVolver.setBounds(5, 342, 970, 23);
 		btnVolver.addActionListener((e)->{
 			setVisible(false);
@@ -107,7 +107,7 @@ public class ListadoDeCampañas extends JFrame {
 		scrollPaneBeneficios = new JScrollPane();
 		panelBeneficios.add(scrollPaneBeneficios, BorderLayout.CENTER);
 		
-		tableBeneficios = new JTable();
+		tableBeneficios = new NotEditJTable();
 		tableBeneficios.setCellSelectionEnabled(false);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		scrollPaneCampañas = new JScrollPane();
@@ -118,7 +118,7 @@ public class ListadoDeCampañas extends JFrame {
 		
 		scrollPaneCampañas.setBounds(0, 0, 342, 280);
 		panelCampañas.add(scrollPaneCampañas);
-		tableCampañas = new JTable();
+		tableCampañas = new NotEditJTable();
 		tableCampañas.setCellSelectionEnabled(false);
 		tableCampañas.setColumnSelectionAllowed(false);
 		tableCampañas.setRowSelectionAllowed(false);
@@ -155,7 +155,7 @@ public class ListadoDeCampañas extends JFrame {
 					}
 				
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 				catch(java.lang.ClassCastException e1) {
 					
@@ -165,23 +165,22 @@ public class ListadoDeCampañas extends JFrame {
 				
 			}
 		});
-		String [] titulosBeneficios = {"DESCRIPCION","CODIGO","PUNTAJE CONSUMIBLE "};
-		/*String [] titulosBeneficios = {labels.getString("listado.de.campañas.titulo.descripcion"),
-		 * labels.getString("listado.de.campañas.titulo.codigo"),
-		 * labels.getString("listado.de.campañas.titulo.puntaje.consumible")};
-		 * 
-		 */
-		String[] titulos = { "NOMBRE", "ESTADO","CODIGO"};
-		/*String[] titulos = { labels.getString("listado.de.campañas.titulo.nombre"),
-		 *  labels.getString("listado.de.campañas.titulo.estado"),
-		 *  labels.getString("listado.de.campañas.titulo.codigo")};
-		 * 
-		 */
+
+		String [] titulosBeneficios = {
+		labels.getString("listado.de.campañas.titulo.descripcion"),
+		  labels.getString("listado.de.campañas.titulo.codigo"),
+		  labels.getString("listado.de.campañas.titulo.puntaje.consumible")};
+
+		String[] titulos = { 
+		labels.getString("listado.de.campañas.titulo.nombre"),
+		   labels.getString("listado.de.campañas.titulo.estado"),
+		   labels.getString("listado.de.campañas.titulo.codigo")};
+		  
+		 
 		modeloCampaña = new DefaultTableModel(new Object[][] {}, titulos);
 		modeloBeneficio = new DefaultTableModel(new Object[][] {},titulosBeneficios);
 		
 		
-		// Obtiene la lista de usuarios a mostrar
 		List<CampañaDTO> campaña;
 		
 		try {
@@ -196,7 +195,7 @@ public class ListadoDeCampañas extends JFrame {
 
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 		}
 		
 
@@ -205,18 +204,12 @@ public class ListadoDeCampañas extends JFrame {
 		tableBeneficios.setModel(modeloBeneficio);
 		scrollPaneBeneficios.setViewportView(tableBeneficios);
 		
-		JLabel lbCampañas = new JLabel("campa\u00F1as");
-		/*
-		 * JLabel lbCampañas = new JLabel(labels.getString("listado.de.campañas.label.campañas"));
-		 */
+		JLabel lbCampañas = new JLabel(labels.getString("listado.de.campañas.label.campañas"));
 		lbCampañas.setHorizontalAlignment(SwingConstants.CENTER);
 		lbCampañas.setBounds(79, 35, 179, 14);
 		contentPane.add(lbCampañas);
 		
-		JLabel lbBeneficio = new JLabel("Beneficios De La campa\u00F1a Seleccionada");
-		/*
-		 * JLabel lbBeneficio = new JLabel(labels.getString("listado.de.campañas.label.beneficios.de.campaña"));
-		 */
+		JLabel lbBeneficio = new JLabel(labels.getString("listado.de.campañas.label.beneficios.de.campaña.seleccionada"));
 		lbBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		lbBeneficio.setBounds(453, 35, 243, 14);
 		contentPane.add(lbBeneficio);
@@ -227,10 +220,10 @@ public class ListadoDeCampañas extends JFrame {
 		contentPane.add(panelFiltradosCampaña);
 		panelFiltradosCampaña.setLayout(null);
 		
-		JLabel lbFiltrarPorNombre = new JLabel("Nombre :");
-		/*
-		 * JLabel lbFiltrarPorNombre = new JLabel(labels.getString("listado.de.campañas.filtrado.por.nombre"));
-		 */
+
+		
+		JLabel lbFiltrarPorNombre = new JLabel(labels.getString("listado.de.campañas.filtrado.por.nombre"));
+		 
 		lbFiltrarPorNombre.setBounds(16, 8, 54, 14);
 		panelFiltradosCampaña.add(lbFiltrarPorNombre);
 		
@@ -252,7 +245,7 @@ public class ListadoDeCampañas extends JFrame {
 				}
 				
 			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
@@ -262,10 +255,10 @@ public class ListadoDeCampañas extends JFrame {
 		rdbtnNombre.setBounds(170, 5, 21, 21);
 		panelFiltradosCampaña.add(rdbtnNombre);
 		
-		JLabel lblEstado = new JLabel("Estado:");
-		/*
-		 * JLabel lblEstado = new JLabel(labels.getString("listado.de.campañas.filtrado.por.estado"));
-		 */
+
+		
+		  JLabel lblEstado = new JLabel(labels.getString("listado.de.campañas.filtrado.por.estado"));
+		 
 		lblEstado.setBounds(19, 34, 51, 14);
 		panelFiltradosCampaña.add(lblEstado);
 		
@@ -282,7 +275,7 @@ public class ListadoDeCampañas extends JFrame {
 				try {
 				reloadGrid(api.obtenerCampañas(predicate));
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			
@@ -290,10 +283,10 @@ public class ListadoDeCampañas extends JFrame {
 		rdbtnEstado.setBounds(170, 31, 21, 21);
 		panelFiltradosCampaña.add(rdbtnEstado);
 		
-		JLabel lblCodigo = new JLabel("Codigo:");
-		/*
-		 * JLabel lblCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
-		 */
+
+		
+		  JLabel lblCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
+		 
 		lblCodigo.setBounds(19, 60, 51, 14);
 		panelFiltradosCampaña.add(lblCodigo);
 		
@@ -310,12 +303,10 @@ public class ListadoDeCampañas extends JFrame {
 					Predicate <CampañaDTO> predicate = (CampañaDTO c)->c.getCodigo() == Integer.parseInt(this.tfCodigo.getText());
 				reloadGrid(api.obtenerCampañas(predicate));
 				}catch (AppException | NotNullException | DataEmptyException | NotNumberException  e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}catch(NumberFormatException e1) {
-					JOptionPane.showMessageDialog(null, "Debe introducir un codigo numerico","error",JOptionPane.ERROR_MESSAGE);
-					/*
-					 * JOptionPane.showMessageDialog(null, labels.getString("listado.de.campañas.mensaje.error.numerico"),"error",JOptionPane.ERROR_MESSAGE);
-					 */
+					JOptionPane.showMessageDialog(null, labels.getString("listado.de.campañas.mensaje.error.numerico"),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+					
 				}
 		
 			}
@@ -323,10 +314,10 @@ public class ListadoDeCampañas extends JFrame {
 		rdbtnCodigoCampaña.setBounds(170, 57, 21, 21);
 		panelFiltradosCampaña.add(rdbtnCodigoCampaña);
 		
-		JButton btnLimpiarFiltroCampañas = new JButton("Limpiar Filtro");
-		/*
-		 * JButton btnLimpiarFiltroCampañas = new JButton(labels.getString(" listado.de.campañas.filtrado.limpiar.filtro"));
-		 */
+
+		
+		JButton btnLimpiarFiltroCampañas = new JButton(labels.getString(" listado.de.campañas.filtrado.limpiar.filtro"));
+		 
 		btnLimpiarFiltroCampañas.addActionListener((e)->{
 			
 				try {
@@ -337,7 +328,7 @@ public class ListadoDeCampañas extends JFrame {
 					
 				} 
 				catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 			
 			
@@ -346,10 +337,10 @@ public class ListadoDeCampañas extends JFrame {
 		btnLimpiarFiltroCampañas.setBounds(56, 85, 110, 23);
 		panelFiltradosCampaña.add(btnLimpiarFiltroCampañas);
 		
-		JLabel lbFiltrarPor = new JLabel("Filtrar Campa\u00F1a por:");
-		/*
-		 * 	JLabel lbFiltrarPor = new JLabel(labels.getString("listado.de.campañas.filtrar.campañas.por"));
-		 */
+
+		
+		JLabel lbFiltrarPor = new JLabel(labels.getString("listado.de.campañas.filtrar.campañas.por"));
+		 
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(836, 35, 122, 14);
 		contentPane.add(lbFiltrarPor);
@@ -360,10 +351,10 @@ public class ListadoDeCampañas extends JFrame {
 		contentPane.add(panelFiltradosBeneficios);
 		panelFiltradosBeneficios.setLayout(null);
 		
-		JLabel lbFiltradoPorDescripcion = new JLabel("Descripcion:");
-		/*
-		 *JLabel lbFiltradoPorDescripcion = new JLabel(labels.getString("listado.de.campañas.filtrado.por.descripcion"));
-		 */
+
+		
+		JLabel lbFiltradoPorDescripcion = new JLabel(labels.getString("listado.de.campañas.filtrado.por.descripcion"));
+		 
 		lbFiltradoPorDescripcion.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltradoPorDescripcion.setBounds(0, 8, 79, 14);
 		panelFiltradosBeneficios.add(lbFiltradoPorDescripcion);
@@ -385,15 +376,13 @@ public class ListadoDeCampañas extends JFrame {
 					try {
 						reloadGridBeneficio(api.obtenerBeneficios(predicado));
 					} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				
 				else {
-					JOptionPane.showMessageDialog(null, "Debe Seleccionar Una Campaña Antes De Filtrar Beneficios ","Error",JOptionPane.ERROR_MESSAGE);
-					/*
-					 * JOptionPane.showMessageDialog(null, labels.getString("listado.de.campañas.mensaje.error.seleccionar.campaña"),"Error",JOptionPane.ERROR_MESSAGE);
-					 */
+					 JOptionPane.showMessageDialog(null, labels.getString("listado.de.campañas.mensaje.error.seleccionar.campaña"),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+					 
 				}
 
 			}
@@ -401,10 +390,10 @@ public class ListadoDeCampañas extends JFrame {
 		rdbtnDescripcion.setBounds(175, 5, 21, 21);
 		panelFiltradosBeneficios.add(rdbtnDescripcion);
 		
-		JLabel lbFiltrarBeneficioPorCodigo = new JLabel("Codigo:");
-		/*
-		 * JLabel lbFiltrarBeneficioPorCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
-		 */
+
+		
+		  JLabel lbFiltrarBeneficioPorCodigo = new JLabel(labels.getString("listado.de.campañas.filtrado.por.codigo"));
+		 
 		lbFiltrarBeneficioPorCodigo.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltrarBeneficioPorCodigo.setBounds(10, 34, 63, 14);
 		panelFiltradosBeneficios.add(lbFiltrarBeneficioPorCodigo);
@@ -416,16 +405,23 @@ public class ListadoDeCampañas extends JFrame {
 		
 		JRadioButton rdbtnFiltrarBeneficioPorCodigo = new JRadioButton("");
 		rdbtnFiltrarBeneficioPorCodigo.addActionListener((e)->{
-			
-			
+			rdbtnFiltrarBeneficioPorCodigo.setSelected(false);
+			if(!this.tfFiltrarBeneficioPorCodigo.getText().equals("")) {
+				Predicate <BeneficioDTO>predicate = (BeneficioDTO c)->(String.valueOf(c.getCodigo())).contains((this.tfFiltrarBeneficioPorCodigo.getText()));
+				try {
+					this.reloadGridBeneficio(api.obtenerBeneficios(predicate));
+				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),1);
+				}
+			}
 		});
 		rdbtnFiltrarBeneficioPorCodigo.setBounds(175, 31, 21, 21);
 		panelFiltradosBeneficios.add(rdbtnFiltrarBeneficioPorCodigo);
 		
-		JLabel lbFiltrarPorPuntaje = new JLabel("Puntaje:");
-		/*
-		 * JLabel lbFiltrarPorPuntaje = new JLabel(labels.getString("listado.de.campañas.filtrado.beneficio.por.puntaje"));
-		 */
+		
+		
+		JLabel lbFiltrarPorPuntaje = new JLabel(labels.getString("listado.de.campañas.filtrado.beneficio.por.puntaje"));
+		 
 		lbFiltrarPorPuntaje.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltrarPorPuntaje.setBounds(10, 60, 63, 14);
 		panelFiltradosBeneficios.add(lbFiltrarPorPuntaje);
@@ -436,13 +432,23 @@ public class ListadoDeCampañas extends JFrame {
 		panelFiltradosBeneficios.add(tfFiltrarBeneficioPorPuntaje);
 		
 		JRadioButton rdbtnPuntaje = new JRadioButton("");
+		rdbtnPuntaje.addActionListener((e)->{
+			rdbtnPuntaje.setSelected(false);
+			Predicate <BeneficioDTO>predicate = (BeneficioDTO b)->
+			String.valueOf(b.getPuntajeConsumible()).contains(this.tfFiltrarBeneficioPorPuntaje.getText());
+			try {
+				this.reloadGridBeneficio(api.obtenerBeneficios(predicate));
+			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),1);
+				
+			}
+			
+		});
+		
 		rdbtnPuntaje.setBounds(175, 57, 21, 21);
 		panelFiltradosBeneficios.add(rdbtnPuntaje);
 		
-		JButton btnLimpiarFIltroBeneficios = new JButton("Limpiar Filtro");
-		/*
-		 * JButton btnLimpiarFIltroBeneficios = new JButton(labels.getString("listado.de.campañas.filtrado.limpiar.filtro"));
-		 */
+		JButton btnLimpiarFIltroBeneficios = new JButton(labels.getString("listado.de.campañas.button.limpiar.filtro"));
 		btnLimpiarFIltroBeneficios.addActionListener((e)->{
 
 				//modeloBeneficio.setRowCount(0);
@@ -462,10 +468,10 @@ public class ListadoDeCampañas extends JFrame {
 		btnLimpiarFIltroBeneficios.setBounds(56, 100, 114, 23);
 		panelFiltradosBeneficios.add(btnLimpiarFIltroBeneficios);
 		
-		JLabel lbFiltrarBeneficio = new JLabel("Filtrar Beneficio Por:");
-		/*
-		 * JLabel lbFiltrarBeneficio = new JLabel(labels.getString("listado.de.campañas.filtrar.beneficios.por"));
-		 */
+		
+		
+		 JLabel lbFiltrarBeneficio = new JLabel(labels.getString("listado.de.campañas.filtrar.beneficios.por"));
+		 
 		lbFiltrarBeneficio.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarBeneficio.setBounds(822, 179, 179, 14);
 		contentPane.add(lbFiltrarBeneficio);
@@ -475,11 +481,9 @@ public class ListadoDeCampañas extends JFrame {
 		
 		
 
-
-		cerrarButton = new JButton("Cerrar");
-		/*
-		 * cerrarButton = new JButton(labels.getString("listado.de.campañas.boton.cerrar"));
-		 */
+		
+		 cerrarButton = new JButton(labels.getString("listado.de.campañas.boton.cerrar"));
+		 
 		cerrarButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
@@ -490,17 +494,7 @@ public class ListadoDeCampañas extends JFrame {
 
 
 	}
-	/**private void reloadGridBeneficio(List<Beneficio> beneficio) {
-		this.modeloBeneficio.setRowCount(0);
-		for (Beneficio b : beneficio) {
-			this.modeloBeneficio.addRow(new Object[] {
-				b.getDescripcion(),
-				b.getCodigo(),
-				b.getPuntajeConsumible()
-			});
-		}
-		
-	}*/
+	
 	private void reloadGridBeneficio(List<BeneficioDTO> beneficio) {
 		this.modeloBeneficio.setRowCount(0);
 		for (BeneficioDTO b : beneficio) {

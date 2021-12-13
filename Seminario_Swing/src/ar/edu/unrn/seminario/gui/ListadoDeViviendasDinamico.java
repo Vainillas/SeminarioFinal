@@ -1,5 +1,6 @@
 package ar.edu.unrn.seminario.gui;
 import java.awt.BorderLayout;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -17,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
 import ar.edu.unrn.seminario.api.IApi;
 import ar.edu.unrn.seminario.dto.ViviendaDTO;
 import ar.edu.unrn.seminario.exceptions.AppException;
-import ar.edu.unrn.seminario.utilities.OrderingPredicate;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.SwingConstants;
@@ -27,9 +28,10 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 @SuppressWarnings("serial")
 public class ListadoDeViviendasDinamico extends JFrame {
+	private 
 	IApi api;
 	private JTable table;
-	DefaultTableModel modelo;
+	private DefaultTableModel modelo;
 
 	private JPanel contentPane;
 	private JPanel panel;
@@ -71,7 +73,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 	private JRadioButton rdbtnNombre_apellido = new JRadioButton();
 	public ListadoDeViviendasDinamico(IApi api, ResourceBundle labels){
 		this.api=api;
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1151, 523);
 		contentPane = new JPanel();
 		panel = new JPanel();
@@ -86,7 +88,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		setTitle(labels.getString("listado.de.viviendas.titulo"));
 		JScrollPane scrollPane = new JScrollPane();
 		panel.add(scrollPane);
-		table = new JTable();
+		table = new NotEditJTable();
 		String[] titulos = { 
 				labels.getString("listado.de.viviendas.titulos.vivienda.barrio"),
 				labels.getString("listado.de.viviendas.titulos.vivienda.calle"),
@@ -125,7 +127,6 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			}
 			if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 				modelo = new DefaultTableModel(new Object[][] {}, titulos2);	
-				System.out.println("entro a comunidad");
 				this.btnOrdenarPorNombreYApellido.setVisible(false);
 				this.lbNombre_Apellido.setVisible(false);
 				this.lbDni.setVisible(false);
@@ -140,7 +141,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				btnLimpiarFiltro.setBounds(73, 70, 124, 23);
 			}
 			}catch(AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		table.setModel(modelo);
 		btnSalir = new JButton(labels.getString("listado.de.viviendas.button.salir"));
@@ -174,7 +175,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				
 				
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		
@@ -196,7 +197,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 					reloadGridAdmin(api.obtenerViviendas(comparator));
 				}
 			} catch (AppException e1) {
-				JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			
 			
@@ -224,7 +225,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				
 			} catch (AppException e1) {
 				
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 			}
 
@@ -256,7 +257,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				
 			} catch (AppException e1) {
 				
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 			}
 			
@@ -277,34 +278,27 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		lbFiltrarPor.setHorizontalAlignment(SwingConstants.CENTER);
 		lbFiltrarPor.setBounds(87, 5, 124, 14);
 		panelFiltrado.add(lbFiltrarPor);
-
-		rdbtnNombre_apellido.setBounds(228, 131, 21, 14);
+		rdbtnNombre_apellido.setBounds(228, 150, 21, 14);
 		panelFiltrado.add(rdbtnNombre_apellido);
 		rdbtnNombre_apellido .addActionListener((e)->{
 			if(rdbtnNombre_apellido.isSelected()) {
-
+				Predicate <ViviendaDTO>predicate = (ViviendaDTO v)->
+				(v.getDueño().getNombre().toLowerCase() + " " +v.getDueño().getApellido()).toLowerCase().contains(this.txNombre_Apellido.getText().toLowerCase());
 				try {
 					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 						this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
-						//api.obtenerViviendasDeUsuario();
-					
 					}
 					else {
 						this.reloadGridAdmin(api.obtenerViviendas(predicate));
 					}
-					
-					
 				} catch (AppException e1) {
-					
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
-
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 					rdbtnNombre_apellido.setSelected(false);	
 		}
-			
 		});
 		tx_barrio_calle = new JTextField();
-		tx_barrio_calle.setBounds(108, 28, 114, 20);
+		tx_barrio_calle.setBounds(110, 30, 114, 20);
 		panelFiltrado.add(tx_barrio_calle);
 		tx_barrio_calle.setColumns(10);
 		
@@ -326,36 +320,36 @@ public class ListadoDeViviendasDinamico extends JFrame {
 
 						} catch (AppException e1) {
 							
-							JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 						}
 						rdbtn_barrio_calle.setSelected(false);			
 		}
 		});
-		rdbtn_barrio_calle.setBounds(228, 28, 25, 23);
+		rdbtn_barrio_calle.setBounds(228, 30, 25, 23);
 		panelFiltrado.add(rdbtn_barrio_calle);
 		
 
 		
 		lb_barrio_calle = new JLabel(labels.getString("listado.de.viviendas.label.calle.y.altura"));
 		lb_barrio_calle.setHorizontalAlignment(SwingConstants.CENTER);
-		lb_barrio_calle.setBounds(0, 34, 101, 14);
+		lb_barrio_calle.setBounds(1, 30, 101, 14);
 		panelFiltrado.add(lb_barrio_calle);
 		
 		lbNombre_Apellido.setText(labels.getString("listado.de.viviendas.label.nombre.y.apellido"));
 		lbNombre_Apellido.setHorizontalAlignment(SwingConstants.CENTER);
-		lbNombre_Apellido.setBounds(0, 134, 119, 14);
+		lbNombre_Apellido.setBounds(1, 150, 101, 14);
 		panelFiltrado.add(lbNombre_Apellido);		
-		txNombre_Apellido.setBounds(109, 131, 113, 20);
+		txNombre_Apellido.setBounds(110, 150, 113, 20);
 		panelFiltrado.add(txNombre_Apellido);
 		txNombre_Apellido.setColumns(10);
 		
 		lbDni.setText(labels.getString("listado.de.viviendas.label.dni"));
 		lbDni.setHorizontalAlignment(SwingConstants.CENTER);
-		lbDni.setBounds(10, 106, 77, 14);
+		lbDni.setBounds(1, 110, 101, 14);
 		panelFiltrado.add(lbDni);
 		
-		txDni.setBounds(110, 103, 114, 20);
+		txDni.setBounds(110, 110, 114, 20);
 		panelFiltrado.add(txDni);
 		txDni.setColumns(10);
 		
@@ -366,34 +360,28 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				 try {
 						if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 							this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
-							//api.obtenerViviendasDeUsuario();
-						
 						}
 						else {
 							this.reloadGridAdmin(api.obtenerViviendas(predicate));
-						}
-						
-						
+						}	
 					} catch (AppException e1) {
 						
-						JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 					}
 				rdbtnDni.setSelected(false);
 		}
 		});
-		rdbtnDni.setBounds(228, 102, 25, 23);
+		rdbtnDni.setBounds(228, 110, 25, 23);
 		panelFiltrado.add(rdbtnDni);
 		
 
-		rdbtnCodigo.addActionListener((E)->{
+		rdbtnCodigo.addActionListener((e)->{
 		if(rdbtnCodigo.isSelected()) {
 			Predicate <ViviendaDTO> predicate = (ViviendaDTO v)-> String.valueOf(v.getID()).contains(this.txCodigo.getText());
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 					this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
-					//api.obtenerViviendasDeUsuario();
-				
 				}
 				else {
 					this.reloadGridAdmin(api.obtenerViviendas(predicate));
@@ -402,23 +390,25 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				
 			} catch (AppException e1) {
 				
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 			}
+			
 		}
+		rdbtnCodigo.setSelected(false);
 		});
 		rdbtnCodigo.setBounds(228, 70, 25, 23);
 		panelFiltrado.add(rdbtnCodigo);
 		
 
 		txCodigo.setColumns(10);
-		txCodigo.setBounds(108, 70, 114, 20);
+		txCodigo.setBounds(110, 70, 114, 20);
 		panelFiltrado.add(txCodigo);
 		
 		//lbCodigo = new JLabel(labels.getString("listado.de.viviendas.label.codigo"));
 		lbCodigo.setText(  labels.getString("listado.de.viviendas.label.codigo"));
 		lbCodigo.setHorizontalAlignment(SwingConstants.CENTER);
-		lbCodigo.setBounds(0, 70, 101, 14);
+		lbCodigo.setBounds(1, 70, 101, 14);
 		panelFiltrado.add(lbCodigo);
 		
 
@@ -430,8 +420,6 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 					this.reloadGridDueño(api.obtenerViviendasDeUsuario());
-					//api.obtenerViviendasDeUsuario();
-				
 				}
 				else {
 					this.reloadGridAdmin(api.obtenerViviendas());
@@ -440,7 +428,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				
 			} catch (AppException e1) {
 				
-				JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 
 			}
 			

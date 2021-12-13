@@ -31,6 +31,8 @@ import ar.edu.unrn.seminario.exceptions.InsuficientPointsException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
 import ar.edu.unrn.seminario.modelo.Beneficio;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
+
 import java.awt.Color;
 import java.awt.Font;
 
@@ -54,7 +56,7 @@ public class CanjearPuntos extends JFrame {
 	public CanjearPuntos(IApi api,ResourceBundle labels) {
 		
 		setTitle(labels.getString("canjear.puntos.titulo"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1045, 409);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -76,7 +78,7 @@ public class CanjearPuntos extends JFrame {
 		scrollPaneBeneficios = new JScrollPane();
 		panelBeneficios.add(scrollPaneBeneficios, BorderLayout.CENTER);
 		
-		tableBeneficios = new JTable();
+		tableBeneficios = new NotEditJTable();
 		tableBeneficios.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -94,7 +96,7 @@ public class CanjearPuntos extends JFrame {
 		
 		scrollPaneCampañas.setBounds(0, 0, 342, 280);
 		panelCampañas.add(scrollPaneCampañas);
-		tableCampañas = new JTable();
+		tableCampañas = new NotEditJTable();
 
 		
 
@@ -120,7 +122,7 @@ public class CanjearPuntos extends JFrame {
 
 				}
 				} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-					JOptionPane.showMessageDialog(null, e1.getMessage(),"error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 				}
 				catch(java.lang.ClassCastException e1) {
 					
@@ -158,7 +160,7 @@ public class CanjearPuntos extends JFrame {
 
 			}
 		} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
-			JOptionPane.showMessageDialog(null, e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 		}
 		
 
@@ -200,7 +202,7 @@ public class CanjearPuntos extends JFrame {
 		JButton btnCanjearPuntos = new JButton(labels.getString("canjear.puntos.label.canjear.puntos"));
 		btnCanjearPuntos.addActionListener((e)->{
 			if(this.tableCampañas.isRowSelected(this.tableCampañas.getSelectedRow())) {
-			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow())) {
+			if(this.tableBeneficios.isRowSelected(this.tableBeneficios.getSelectedRow()) &&this.tableBeneficios.getSelectedRowCount() ==1) {
 				
 				try {
 					api.generarCanje(codBeneficio, codCampaña);
@@ -220,16 +222,15 @@ public class CanjearPuntos extends JFrame {
 
 					
 				} catch (AppException | NotNullException | InsuficientPointsException e1) {
-					JOptionPane.showMessageDialog(null,e1.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);	
 				}
-				
 			}
 			else {
-				JOptionPane.showMessageDialog(null,labels.getString("canjear.puntos.mensaje.de.error.beneficio"),"Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,labels.getString("canjear.puntos.mensaje.de.error.beneficio"),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 			}
 			else {
-				JOptionPane.showMessageDialog(null,labels.getString("canjear.puntos.mensaje.de.error.campaña"),"Error",JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(null,labels.getString("canjear.puntos.mensaje.de.error.campaña"),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		});
 		btnCanjearPuntos.setBounds(809, 97, 151, 23);
@@ -252,6 +253,7 @@ public class CanjearPuntos extends JFrame {
 
 
 	}
+	
 	private void reloadGridBeneficio(List<BeneficioDTO> beneficio) {
 		this.modeloBeneficio.setRowCount(0);
 		for (BeneficioDTO b : beneficio) {
@@ -262,7 +264,7 @@ public class CanjearPuntos extends JFrame {
 		}
 		
 	}
-
+	
 	private void reloadGrid(List<CampañaDTO> campañaDTO) {
 		
 		this.modeloCampaña.setRowCount(0);

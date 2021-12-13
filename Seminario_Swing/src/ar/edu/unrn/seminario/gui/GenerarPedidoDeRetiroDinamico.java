@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -74,6 +75,8 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 	private JLabel lbCantidadKg;
 	private ArrayList<String > residuosSeleccionados = new ArrayList<String>();
 	private ArrayList<String > kgSeleccionados = new ArrayList<String>();
+	private JComboBox comboBoxResiduosSeleccionados;
+	private JLabel lbResiduosSeleccionados;
 	public static void main(String [] args) {
 		PersistenceApi api = new PersistenceApi();
 		ResourceBundle labels = ResourceBundle.getBundle("labels", new Locale("es"));
@@ -84,7 +87,7 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 	public GenerarPedidoDeRetiroDinamico(IApi api, ResourceBundle labels) {
 
 		setTitle(labels.getString("pedido.retiro.titulo"));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 1076, 368);
 		contentPane = new JPanel();
 		contentPane.setBackground(SystemColor.info);
@@ -119,6 +122,7 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 		panelDatos.add(boxCargaPesada);
 		
 		JTextArea taObservacion = new JTextArea();
+		taObservacion.setLineWrap(true);
 		taObservacion.setBounds(10, 90, 295, 108);
 		panelDatos.add(taObservacion);
 		
@@ -209,11 +213,11 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 			if(!this.ftfKg.getText().equals("")) {
 				int res = JOptionPane.showConfirmDialog(null,("seguro que desea seleccionar "+ftfKg.getText()+" kg de "+ String.valueOf(comboBox.getSelectedItem()).toLowerCase())+"?","",JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
-					
+					this.comboBoxResiduosSeleccionados.addItem(comboBox.getSelectedItem() +" "+ this.ftfKg.getText() + " Kg");
 					this.residuosSeleccionados.add((String)comboBox.getSelectedItem());
 					this.kgSeleccionados.add(String.valueOf(ftfKg.getValue()));
 					comboBox.removeItem(comboBox.getSelectedItem());
-					
+					comboBoxResiduosSeleccionados.setVisible(true);
 				}
 					ftfKg.setValue(null);
 				if(comboBox.getItemCount() == 0) {
@@ -319,6 +323,19 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 				
 				table.setModel(modelo);
 				scrollPane.setViewportView(table);
+				
+				JPanel panelResiduosSeleccionados = new JPanel();
+				panelResiduosSeleccionados.setBounds(407, 222, 224, 96);
+				contentPane.add(panelResiduosSeleccionados);
+				
+				comboBoxResiduosSeleccionados = new JComboBox();
+				comboBoxResiduosSeleccionados.setVisible(false);
+				panelResiduosSeleccionados.add(comboBoxResiduosSeleccionados);
+				
+				lbResiduosSeleccionados = new JLabel("ResiduosSeleccionados");
+				lbResiduosSeleccionados.setHorizontalAlignment(SwingConstants.CENTER);
+				lbResiduosSeleccionados.setBounds(407, 197, 224, 14);
+				contentPane.add(lbResiduosSeleccionados);
 				
 		
 }
