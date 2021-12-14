@@ -339,7 +339,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.add(lbResiduosSeleccionados);
 		comboBoxResiduosSeleccionados = new JComboBox<String>();
 		comboBoxResiduosSeleccionados.setVisible(false);
-		comboBoxResiduosSeleccionados.setBounds(383, 135, 122, 20);
+		comboBoxResiduosSeleccionados.setBounds(379, 127, 122, 20);
 		panel_visita.add(comboBoxResiduosSeleccionados);
 		
 		lbCantidadMaxKg = new JLabel("");
@@ -349,15 +349,12 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_botones.setBounds(10, 350, 530, 55); 
 		contentPane.add(panel_botones);
-		
 		btn_cancelar = new JButton(labels.getString("registro.de.visita.label.cancelar"));
 		btn_cancelar.addActionListener((e)->{
 			setVisible(false);
 			dispose(); 
-
 		});
 		btn_limpiar = new JButton(labels.getString("registro.de.visita.label.limpiar"));
-
 		btn_limpiar.addActionListener((e)->{
 			this.comboBoxResiduosSeleccionados.removeAllItems();
 			this.ftfCantResiduosSeleccionados.setText(null);
