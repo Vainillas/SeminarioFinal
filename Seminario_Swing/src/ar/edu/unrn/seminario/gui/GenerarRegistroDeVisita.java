@@ -155,8 +155,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 		btnEnviarResiduos.addActionListener((e)->{
 			System.out.println(ftfCantResiduosSeleccionados.getText());
 			if(!this.ftfCantResiduosSeleccionados.getText().equals("")) {
-				
-			
 				int res = JOptionPane.showConfirmDialog(null, labels.getString("registro.de.visita.mensaje.confirmacion")+ this.ftfCantResiduosSeleccionados.getText() + " " +  labels.getString("registro.de.visita.mensaje.confirmacion2") + " "  +(String)this.comboBoxResiduosDinamico.getSelectedItem() + " ?",labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					this.comboBoxResiduosSeleccionados.addItem(this.comboBoxResiduosDinamico.getSelectedItem() + " " + this.ftfCantResiduosSeleccionados.getText()+ " kg");
@@ -313,12 +311,12 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		lbResiduosSeleccionados = new JLabel(labels.getString("registro.de.visita.label.residuos.seleccionados"));
 		lbResiduosSeleccionados.setVisible(false);
-		lbResiduosSeleccionados.setBounds(369, 127, 151, 14);
+		lbResiduosSeleccionados.setBounds(369, 97, 151, 14);
 		panel_visita.add(lbResiduosSeleccionados);
 		
 		comboBoxResiduosSeleccionados = new JComboBox<String>();
 		comboBoxResiduosSeleccionados.setVisible(false);
-		comboBoxResiduosSeleccionados.setBounds(383, 170, 122, 20);
+		comboBoxResiduosSeleccionados.setBounds(383, 135, 122, 20);
 		panel_visita.add(comboBoxResiduosSeleccionados);
 		
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
