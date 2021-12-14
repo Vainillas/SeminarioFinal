@@ -25,6 +25,7 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.JTextPane;
@@ -78,7 +79,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JPanel panel_visita = new JPanel();
 	private JTextPane tp_observacion;
 	private JLabel lb_observacion;
-	private JFormattedTextField ftfCantResiduosSeleccionados;
+	private JTextField ftfCantResiduosSeleccionados;
 	private JPanel panel_botones = new JPanel();;
 	private JButton btn_cancelar;
 	private JButton btn_registrar_visita;
@@ -94,7 +95,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JComboBox<String> comboBoxResiduosDinamico;
 	private JLabel lbResiduoSeleccionado;
 	private JComboBox<String> comboBoxResiduosSeleccionados;
-	private JLabel lblNewLabel;
+	private JLabel lbCantidadMaxKg;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -157,7 +158,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					
 				
 					if(r.getTipo().getNombre().equalsIgnoreCase((String)this.comboBoxResiduosDinamico.getSelectedItem())) {
-						this.lblNewLabel.setText("Cantidad Maxima KG: "+ String.valueOf( r.getCantidadKg()));
+						this.lbCantidadMaxKg.setText(labels.getString("registro.de.visita.label.cantidad.maxima")+ String.valueOf( r.getCantidadKg()));
 						
 					}
 				
@@ -172,8 +173,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		JButton btnEnviarResiduos = new JButton(labels.getString("registro.de.visita.label.enviar.residuos"));
 
 		btnEnviarResiduos.addActionListener((e)->{
-			System.out.println(ftfCantResiduosSeleccionados.getText());
 			if(!this.ftfCantResiduosSeleccionados.getText().equals("")) {
+				
 				int res = JOptionPane.showConfirmDialog(null, labels.getString("registro.de.visita.mensaje.confirmacion")+ this.ftfCantResiduosSeleccionados.getText() + " " +  labels.getString("registro.de.visita.mensaje.confirmacion2") + " "  +(String)this.comboBoxResiduosDinamico.getSelectedItem() + " ?",labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					this.comboBoxResiduosSeleccionados.addItem(this.comboBoxResiduosDinamico.getSelectedItem() + " " + this.ftfCantResiduosSeleccionados.getText()+ " kg");
@@ -185,6 +186,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 					if(comboBoxResiduosDinamico.getItemCount() == 0) {
 						ftfCantResiduosSeleccionados.setEnabled(false);
 						comboBoxResiduosDinamico.setEnabled(false);
+						this.tp_observacion.setEnabled(false);
 						btnEnviarResiduos.setEnabled(false);
 						this.lbResiduosSeleccionados.setVisible(false);
 						this.comboBoxResiduosSeleccionados.setVisible(false);
@@ -192,14 +194,15 @@ public class GenerarRegistroDeVisita extends JFrame {
 					
 					
 				}
+				ftfCantResiduosSeleccionados.setText(null);
 				}
 			else {
-				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.error.de.campo"),"Error",0);
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.error.de.campo"),labels.getString("mensaje.error.general"),0);
 			}
 			
 		});
 		
-		table = new JTable();
+		table = new NotEditJTable();
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				btnEnviarResiduos.setVisible(true);
@@ -319,9 +322,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lbResiduoSeleccionado.setBounds(32, 11, 96, 14);
 		panel_visita.add(lbResiduoSeleccionado);
 		
-		ftfCantResiduosSeleccionados = new JFormattedTextField(new Integer(0));
-		
-		ftfCantResiduosSeleccionados.setValue(null);
+		ftfCantResiduosSeleccionados = new JTextField(new Integer(0));
+		ftfCantResiduosSeleccionados.setText(null);
 		ftfCantResiduosSeleccionados.setBounds(198, 40, 135, 20);
 		ftfCantResiduosSeleccionados.setVisible(false);
 		panel_visita.add(ftfCantResiduosSeleccionados);
@@ -340,9 +342,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 		comboBoxResiduosSeleccionados.setBounds(383, 135, 122, 20);
 		panel_visita.add(comboBoxResiduosSeleccionados);
 		
-		lblNewLabel = new JLabel("");
-		lblNewLabel.setBounds(30, 71, 163, 14);
-		panel_visita.add(lblNewLabel);
+		lbCantidadMaxKg = new JLabel("");
+		lbCantidadMaxKg.setBounds(30, 71, 163, 14);
+		panel_visita.add(lbCantidadMaxKg);
 		
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_botones.setBounds(10, 350, 530, 55); 
@@ -355,31 +357,41 @@ public class GenerarRegistroDeVisita extends JFrame {
 
 		});
 		btn_limpiar = new JButton(labels.getString("registro.de.visita.label.limpiar"));
+
 		btn_limpiar.addActionListener((e)->{
-			
+			this.comboBoxResiduosSeleccionados.removeAllItems();
+			this.ftfCantResiduosSeleccionados.setText(null);
+			this.lbCantidadMaxKg.setText("");
+			this.tp_observacion.setText("");
 		});
 		panel_botones.add(btn_limpiar);
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
 			this.descripcion = this.tp_observacion.getText();	
-			try { 
-				this.descripcion = this.tp_observacion.getText();
-
-					api.registrarVisita(
-							residuosSeleccionados, 
-							cantResiduosRetirados,
-							this.descripcion,
-							codigoOrden);
-				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
-				setVisible(false);
-				dispose();
-			} catch ( AppException | NotNullException e1) {
-
-				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-				this.ftfCantResiduosSeleccionados.setText("");
-				this.comboBoxResiduosSeleccionados.removeAllItems();
-				
-			}	
+			if(this.comboBoxResiduosSeleccionados.getItemCount() != 0) {
+				try { 
+					
+					this.descripcion = this.tp_observacion.getText();
+						api.registrarVisita(
+								residuosSeleccionados, 
+								cantResiduosRetirados,
+								this.descripcion,
+								codigoOrden);
+					JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
+					setVisible(false);
+					dispose();
+					
+				} catch ( AppException | NotNullException e1) {
+	
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+					this.ftfCantResiduosSeleccionados.setText("");
+					this.comboBoxResiduosSeleccionados.removeAllItems();
+					
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.error.introducir.visita"),labels.getString("mensaje.error.general"),0);
+			}
 		});
 
 		panel_botones.add(btn_registrar_visita);
