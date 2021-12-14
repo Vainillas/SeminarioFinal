@@ -69,7 +69,7 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 	private JPanel panelViviendas;
 	private JTable table;
 	private JScrollPane scrollPane;
-	private JFormattedTextField ftfKg;
+	private JTextField ftfKg;
 	private JLabel lblNewLabel;
 	private JLabel lbTiposDeResiduos;
 	private JLabel lbCantidadKg;
@@ -197,8 +197,8 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 		
 		panelResiduos.add(comboBox);
 		
-		ftfKg = new JFormattedTextField(Integer.valueOf(0));
-		ftfKg.setValue(null);
+		ftfKg = new JTextField(Integer.valueOf(0));
+		ftfKg.setText(null);
 		ftfKg.setBounds(125, 96, 64, 21);
 		JButton btnEnviarKg = new JButton(labels.getString("pedido.retiro.button.enviar.kg")); 
 		btnEnviarKg.setBounds(199, 95, 89, 23);
@@ -211,11 +211,11 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 				if(res == 0) {
 					this.comboBoxResiduosSeleccionados.addItem(comboBox.getSelectedItem() +" "+ this.ftfKg.getText() + " Kg");
 					this.residuosSeleccionados.add((String)comboBox.getSelectedItem());
-					this.kgSeleccionados.add(String.valueOf(ftfKg.getValue()));
+					this.kgSeleccionados.add(String.valueOf(ftfKg.getText()));
 					comboBox.removeItem(comboBox.getSelectedItem());
 					comboBoxResiduosSeleccionados.setVisible(true);
 				}
-					ftfKg.setValue(null);
+					ftfKg.setText(null);
 				if(comboBox.getItemCount() == 0) {
 					btnEnviarKg.setEnabled(false);
 					ftfKg.setEnabled(false);
