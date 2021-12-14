@@ -25,6 +25,7 @@ import ar.edu.unrn.seminario.exceptions.StringNullException;
 
 import ar.edu.unrn.seminario.modelo.OrdenDeRetiro;
 import ar.edu.unrn.seminario.modelo.Residuo;
+import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
 import javax.swing.JTextPane;
@@ -47,6 +48,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JScrollPane;
 import javax.swing.Box;
@@ -76,9 +78,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JPanel panel_ordenes_de_retiro = new JPanel();
 	private JScrollPane scrollPane;
 	private JPanel panel_visita = new JPanel();
-	private JTextPane tp_observacion;
+	private JTextArea tp_observacion;
 	private JLabel lb_observacion;
-	private JFormattedTextField ftfCantResiduosSeleccionados;
+	private JTextField ftfCantResiduosSeleccionados;
 	private JPanel panel_botones = new JPanel();;
 	private JButton btn_cancelar;
 	private JButton btn_registrar_visita;
@@ -94,6 +96,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JComboBox<String> comboBoxResiduosDinamico;
 	private JLabel lbResiduoSeleccionado;
 	private JComboBox<String> comboBoxResiduosSeleccionados;
+	private JLabel lbCantidadMaxKg;
+	private JButton btnRemoverResiduo;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -147,38 +151,63 @@ public class GenerarRegistroDeVisita extends JFrame {
 		comboBoxResiduosDinamico  = new JComboBox<String>();
 		comboBoxResiduosDinamico.setVisible(false);
 		comboBoxResiduosDinamico.addActionListener((e)->{
-
+			PedidoDeRetiroDTO pedido = null;
+			codigoOrden =Integer.valueOf( (String)table.getValueAt(table.getSelectedRow(),1));
+			
+			try {
+				pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
+				for(ResiduoDTO r : api.devolverResiduosRestantes(codigoOrden)) {
+					
+				
+					if(r.getTipo().getNombre().equalsIgnoreCase((String)this.comboBoxResiduosDinamico.getSelectedItem())) {
+						this.lbCantidadMaxKg.setText(labels.getString("registro.de.visita.label.cantidad.maxima")+ String.valueOf( r.getCantidadKg()));
+						
+					}
+				
+					
+				}
+			} catch (AppException | NumberFormatException | DataEmptyException | NotNullException | StringNullException | DateNullException e1) {
+				// TODO Bloque catch generado automáticamente
+				e1.printStackTrace();
+			}
 		});
 		comboBoxResiduosDinamico.setBounds(32, 40, 96, 20);
 		JButton btnEnviarResiduos = new JButton(labels.getString("registro.de.visita.label.enviar.residuos"));
 
+
 		btnEnviarResiduos.addActionListener((e)->{
-			System.out.println(ftfCantResiduosSeleccionados.getText());
 			if(!this.ftfCantResiduosSeleccionados.getText().equals("")) {
+				
 				int res = JOptionPane.showConfirmDialog(null, labels.getString("registro.de.visita.mensaje.confirmacion")+ this.ftfCantResiduosSeleccionados.getText() + " " +  labels.getString("registro.de.visita.mensaje.confirmacion2") + " "  +(String)this.comboBoxResiduosDinamico.getSelectedItem() + " ?",labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
+					this.btnRemoverResiduo.setVisible(true);
 					this.comboBoxResiduosSeleccionados.addItem(this.comboBoxResiduosDinamico.getSelectedItem() + " " + this.ftfCantResiduosSeleccionados.getText()+ " kg");
+					comboBoxResiduosSeleccionados.setVisible(true);
+					this.lbResiduosSeleccionados.setVisible(true);
 					this.residuosSeleccionados.add((String)this.comboBoxResiduosDinamico.getSelectedItem());
 					this.cantResiduosRetirados.add(this.ftfCantResiduosSeleccionados.getText());
 					this.comboBoxResiduosDinamico.removeItem(this.comboBoxResiduosDinamico.getSelectedItem());
 					if(comboBoxResiduosDinamico.getItemCount() == 0) {
 						ftfCantResiduosSeleccionados.setEnabled(false);
 						comboBoxResiduosDinamico.setEnabled(false);
+						this.tp_observacion.setEnabled(false);
 						btnEnviarResiduos.setEnabled(false);
-						this.lbResiduosSeleccionados.setVisible(true);
-						this.comboBoxResiduosSeleccionados.setVisible(true);
+						this.lbResiduosSeleccionados.setVisible(false);
+						this.comboBoxResiduosSeleccionados.setVisible(false);
+						this.btnRemoverResiduo.setVisible(false);
 					}
 					
 					
 				}
+				ftfCantResiduosSeleccionados.setText(null);
 				}
 			else {
-				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.error.de.campo"),"Error",0);
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.error.de.campo"),labels.getString("mensaje.error.general"),0);
 			}
 			
 		});
 		
-		table = new JTable();
+		table = new NotEditJTable();
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
 				btnEnviarResiduos.setVisible(true);
@@ -190,7 +219,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 				int fila = table.getColumnCount();
 				try {
 				for (int i = 0; i < fila; i++) {
-					
 					ordenSeleccionada.add( (String) table.getValueAt(table.getSelectedRow(), i));
 					
 				}
@@ -200,8 +228,10 @@ public class GenerarRegistroDeVisita extends JFrame {
 					pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
 					for(ResiduoDTO r : api.devolverResiduosRestantes(codigoOrden)) {
 						comboBoxResiduosDinamico.addItem(r.getTipo().getNombre());
+						
 					}
-					System.out.println(comboBoxResiduosDinamico.getItemCount());
+					comboBoxResiduosSeleccionados.removeAllItems();
+					ftfCantResiduosSeleccionados.setText("");
 				}catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 						| DateNullException | AppException e) {
 					 JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
@@ -254,7 +284,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		panel_visita.setLayout(null);
 		contentPane.add(panel_visita);
 		
-		tp_observacion = new JTextPane();
+		tp_observacion = new JTextArea();
+		tp_observacion.setLineWrap(true);
 		tp_observacion.setBorder(new BevelBorder(BevelBorder.LOWERED, SystemColor.textInactiveText, SystemColor.textInactiveText, SystemColor.textInactiveText, SystemColor.textInactiveText));
 		tp_observacion.setBackground(SystemColor.info);
 		tp_observacion.setBounds(10, 152, 363, 147);
@@ -262,7 +293,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		
 		lb_observacion = new JLabel(labels.getString("registro.de.visita.label.observacion"));
 		lb_observacion.setHorizontalAlignment(SwingConstants.CENTER);
-		lb_observacion.setBounds(32, 127, 142, 14);
+		lb_observacion.setBounds(10, 127, 142, 14);
 		panel_visita.add(lb_observacion);
 		
 		lb_cantidad_residuos = new JLabel(labels.getString("registro.de.visita.label.cantidad.residuos"));
@@ -297,9 +328,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lbResiduoSeleccionado.setBounds(32, 11, 96, 14);
 		panel_visita.add(lbResiduoSeleccionado);
 		
-		ftfCantResiduosSeleccionados = new JFormattedTextField(new Integer(0));
-		
-		ftfCantResiduosSeleccionados.setValue(null);
+		ftfCantResiduosSeleccionados = new JTextField(new Integer(0));
+		ftfCantResiduosSeleccionados.setText(null);
 		ftfCantResiduosSeleccionados.setBounds(198, 40, 135, 20);
 		ftfCantResiduosSeleccionados.setVisible(false);
 		panel_visita.add(ftfCantResiduosSeleccionados);
@@ -313,45 +343,86 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lbResiduosSeleccionados.setVisible(false);
 		lbResiduosSeleccionados.setBounds(369, 97, 151, 14);
 		panel_visita.add(lbResiduosSeleccionados);
-		
 		comboBoxResiduosSeleccionados = new JComboBox<String>();
 		comboBoxResiduosSeleccionados.setVisible(false);
-		comboBoxResiduosSeleccionados.setBounds(383, 135, 122, 20);
+		comboBoxResiduosSeleccionados.setBounds(379, 127, 122, 20);
 		panel_visita.add(comboBoxResiduosSeleccionados);
+		
+		lbCantidadMaxKg = new JLabel("");
+		lbCantidadMaxKg.setBounds(30, 71, 163, 14);
+		panel_visita.add(lbCantidadMaxKg);
+		
+		btnRemoverResiduo = new JButton("remover");
+
+		btnRemoverResiduo.setVisible(false);
+		btnRemoverResiduo.addActionListener((e)->{
+			if(this.comboBoxResiduosSeleccionados.getItemCount() != 0) {
+				try {
+					this.codigoOrden = Integer.valueOf( (String)table.getValueAt(table.getSelectedRow(),5));
+				PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(this.codigoOrden);
+				
+				for(Residuo r : pedido.getListResiduos()) {
+					String resi = (String)this.comboBoxResiduosSeleccionados.getSelectedItem();
+					if(resi.contains(r.getTipo().getNombre())) {
+						this.comboBoxResiduosDinamico.addItem(r.getTipo().getNombre());
+					}
+				}
+				this.comboBoxResiduosSeleccionados.removeItemAt(this.comboBoxResiduosSeleccionados.getSelectedIndex());
+				}
+				catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
+						| DateNullException | AppException e1) {
+					 JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
+		});
+		btnRemoverResiduo.setBounds(412, 181, 89, 23);
+		panel_visita.add(btnRemoverResiduo);
 		
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panel_botones.setBounds(10, 350, 530, 55); 
 		contentPane.add(panel_botones);
-		
 		btn_cancelar = new JButton(labels.getString("registro.de.visita.label.cancelar"));
 		btn_cancelar.addActionListener((e)->{
 			setVisible(false);
 			dispose(); 
-
 		});
 		btn_limpiar = new JButton(labels.getString("registro.de.visita.label.limpiar"));
 		btn_limpiar.addActionListener((e)->{
-			
+			this.comboBoxResiduosSeleccionados.removeAllItems();
+			this.ftfCantResiduosSeleccionados.setText(null);
+			this.lbCantidadMaxKg.setText("");
+			this.tp_observacion.setText("");
 		});
 		panel_botones.add(btn_limpiar);
 		btn_registrar_visita = new JButton(labels.getString("registro.de.visita.label.registrar.visita"));
 		btn_registrar_visita.addActionListener((e)->{
 			this.descripcion = this.tp_observacion.getText();	
-			try { 
-				this.descripcion = this.tp_observacion.getText();
-
-					api.registrarVisita(
-							residuosSeleccionados, 
-							cantResiduosRetirados,
-							this.descripcion,
-							codigoOrden);
-				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
-				setVisible(false);
-				dispose();
-			} catch ( AppException | NotNullException e1) {
-
-				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-			}	
+			if(this.comboBoxResiduosSeleccionados.getItemCount() != 0) {
+				try { 
+					
+					this.descripcion = this.tp_observacion.getText();
+						api.registrarVisita(
+								residuosSeleccionados, 
+								cantResiduosRetirados,
+								this.descripcion,
+								codigoOrden);
+					JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
+					setVisible(false);
+					dispose();
+					
+				} catch ( AppException | NotNullException e1) {
+					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+					this.ftfCantResiduosSeleccionados.setText("");
+					this.comboBoxResiduosSeleccionados.removeAllItems();
+					setVisible(false);
+					dispose();
+					
+				}
+			}
+			else {
+				JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.error.introducir.visita"),labels.getString("mensaje.error.general"),0);
+			}
 		});
 
 		panel_botones.add(btn_registrar_visita);
