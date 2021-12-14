@@ -33,11 +33,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 	private JPanel panelAdministrador; ;
 	private JPanel panelPersonal;;
 	private JPanel panelDueño; ;
-	
-	
-	
-	
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -259,6 +255,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 		mbAdministrador.add(mnConfiguracionAdministrador);
 		
 		JMenuItem mntmSalirAdmin = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.salir.administrador")); 
+		mntmSalirAdmin.addActionListener((e)->{
+			setVisible(false);
+			dispose();
+		});
 		mnConfiguracionAdministrador.add(mntmSalirAdmin);
 		JMenuItem mntmPantallaEstandar = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.estandar"));
 		mntmPantallaEstandar.setVisible(false);
@@ -487,9 +487,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		}
-		
-			
-			
-	
+
 	}
 }

@@ -2,7 +2,8 @@ package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
 
-import java.awt.EventQueue;
+
+
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,18 +15,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import ar.edu.unrn.seminario.api.IApi;
-import ar.edu.unrn.seminario.api.PersistenceApi;
+
 import ar.edu.unrn.seminario.dto.DueñoDTO;
-import ar.edu.unrn.seminario.dto.OrdenDeRetiroDTO;
-import ar.edu.unrn.seminario.dto.RecolectorDTO;
+
 import ar.edu.unrn.seminario.exceptions.AppException;
-import ar.edu.unrn.seminario.exceptions.DataEmptyException;
-import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
+
 import ar.edu.unrn.seminario.exceptions.NotNumberException;
-import ar.edu.unrn.seminario.exceptions.StringNullException;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
-import java.awt.FlowLayout;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -35,11 +32,13 @@ import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JRadioButton;
 import javax.swing.border.BevelBorder;
-import java.awt.event.ActionListener;
 import ar.edu.unrn.seminario.utilities.NotEditJTable;
-import java.awt.event.ActionEvent;
 public class ListadoDeDueños extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2452447123893203415L;
 	private JPanel contentPane;
 	private JTable table;
 	private DefaultTableModel modelo;
@@ -75,37 +74,28 @@ public class ListadoDeDueños extends JFrame {
 				labels.getString("listado.de.dueños.titulos.nombre.completo"),
 				labels.getString("listado.de.dueños.titulos.dni"),
 				labels.getString("listado.de.dueños.titulos.correo.electronico"),
-				labels.getString("listado.de.dueños.titulos.username"),
-
-				
+				labels.getString("listado.de.dueños.titulos.username"),		
 		};
-		
 		modelo = new DefaultTableModel(new Object[][] {}, titulos);
 			try {
 				reloadGrid(api.obtenerDueños());
-				
-				
 			} catch (AppException | NotNumberException e) {
-				JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-				
+				JOptionPane.showMessageDialog(null, e.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);	
 			}
 		table.setModel(modelo);
 			
 		scrollPane.setViewportView(table);
-		
 		JButton btnVolverMenuPrincipal = new JButton(labels.getString("listado.de.dueños.button.volver.menu.principal")); 
 		btnVolverMenuPrincipal.addActionListener((e)->{
 			setVisible(false);
 			dispose();
 		});
 		panelListado.add(btnVolverMenuPrincipal, BorderLayout.SOUTH);
-		
 		panelFiltrado = new JPanel();
 		panelFiltrado.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelFiltrado.setBounds(10, 61, 258, 137);
 		contentPane.add(panelFiltrado);
 		panelFiltrado.setLayout(null);
-		
 		JLabel lbFiltrarPorNombreCompleto = new JLabel(labels.getString("listado.de.dueños.label.filtrar.ordenar.por.nombre.completo"));
 		lbFiltrarPorNombreCompleto.setHorizontalAlignment(SwingConstants.TRAILING);
 		lbFiltrarPorNombreCompleto.setBounds(0, 8, 120, 14);
@@ -115,16 +105,13 @@ public class ListadoDeDueños extends JFrame {
 		tfFiltrarPorNombreCompleto.setBounds(130, 5, 86, 20);
 		panelFiltrado.add(tfFiltrarPorNombreCompleto);
 		tfFiltrarPorNombreCompleto.setColumns(10);
-		
 		JRadioButton rdbtnNFiltrarPorNombreCompleto = new JRadioButton("");
-
 		rdbtnNFiltrarPorNombreCompleto.addActionListener((e)->{
 			rdbtnNFiltrarPorNombreCompleto.setSelected(false);
 			if(!tfFiltrarPorNombreCompleto.getText().equals("")) {
 				Predicate <DueñoDTO> predicate = (DueñoDTO d)->
 				d.getNombre().toLowerCase().contains(tfFiltrarPorNombreCompleto.getText().toLowerCase())
-				|| d.getApellido().toLowerCase().contains(tfFiltrarPorNombreCompleto.getText().toLowerCase());
-						
+				|| d.getApellido().toLowerCase().contains(tfFiltrarPorNombreCompleto.getText().toLowerCase());	
 				try {
 					reloadGrid(api.obtenerDueños(predicate));
 				} catch (AppException | NotNumberException e1) {
@@ -132,9 +119,6 @@ public class ListadoDeDueños extends JFrame {
 				
 				}
 			}
-			
-			
-			
 		});
 		rdbtnNFiltrarPorNombreCompleto.setBounds(220, 5, 21, 21);
 		panelFiltrado.add(rdbtnNFiltrarPorNombreCompleto);
@@ -162,8 +146,6 @@ public class ListadoDeDueños extends JFrame {
 				}
 			}
 		});
-		
-		
 		rdbtnFiltrarPorDni.setBounds(220, 31, 21, 21);
 		
 		panelFiltrado.add(rdbtnFiltrarPorDni);
@@ -191,7 +173,6 @@ public class ListadoDeDueños extends JFrame {
 			}
 			
 		});
-		
 		rdbtnFiltrarPorCorreoElectronico.setBounds(220, 57, 21, 21);
 		panelFiltrado.add(rdbtnFiltrarPorCorreoElectronico);
 		
@@ -228,14 +209,9 @@ public class ListadoDeDueños extends JFrame {
 			} catch (AppException | NotNumberException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
-			
-			
 		});
 		btnLimpiarFiltro.setBounds(66, 111, 150, 23);
-		
-		
 		panelFiltrado.add(btnLimpiarFiltro);
-		
 		panelOrdenamiento = new JPanel();
 		panelOrdenamiento.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
 		panelOrdenamiento.setBounds(21, 247, 175, 145);
@@ -258,9 +234,6 @@ public class ListadoDeDueños extends JFrame {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 						
 					}
-					
-			
-			
 		});
 		rdbtnOrdenarPorNombreCompleto.setBounds(140, 7, 21, 21);
 		panelOrdenamiento.add(rdbtnOrdenarPorNombreCompleto);
@@ -281,9 +254,6 @@ public class ListadoDeDueños extends JFrame {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 						
 					}
-					
-			
-			
 		});
 		rdbtnOrdenarPorUsername.setBounds(140, 82, 21, 21);
 		panelOrdenamiento.add(rdbtnOrdenarPorUsername);
@@ -304,9 +274,6 @@ public class ListadoDeDueños extends JFrame {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 						
 					}
-					
-			
-			
 		});
 		rdbtnOrdenarPorDni.setBounds(140, 32, 21, 21);
 		panelOrdenamiento.add(rdbtnOrdenarPorDni);
@@ -328,7 +295,6 @@ public class ListadoDeDueños extends JFrame {
 						reloadGrid(api.obtenerDueños(comparator));
 					} catch (AppException | NotNumberException e1) {
 						JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-						
 					}
 		});
 		rdbtnOrdenarPorCorreoElectronico.setBounds(140, 57, 21, 21);
@@ -359,12 +325,9 @@ public class ListadoDeDueños extends JFrame {
 	}
 	private void reloadGrid(List<DueñoDTO> dueños) {
 		modelo.setRowCount(0);
-		// Agrega los usuarios en el model
-
 			for (DueñoDTO d : dueños) {
 				modelo.addRow(new Object[] { 
 				 	d.getNombre() + " " +d.getApellido(),
-				 	
 				 	d.getDni(),
 				 	d.getCorreoElectronico(),
 				 	d.getUser().getUsuario()

@@ -95,11 +95,7 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 		contentPane.setLayout(null); 
 		setContentPane(contentPane);
 		
-		
-		
-		
-		
-		//ResourceBundle labels = ResourceBundle.getBundle("labels");
+
 		JPanel panelDatos = new JPanel();
 		panelDatos.setBackground(SystemColor.info);
 		panelDatos.setLayout(null);
@@ -233,17 +229,17 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 			
 		});
 		
-		lblNewLabel = new JLabel(labels.getString("pedido.retiro.label.residuos.2")); //$NON-NLS-1$
+		lblNewLabel = new JLabel(labels.getString("pedido.retiro.label.residuos.2")); 
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(6, 25, 254, 14);
 		panelResiduos.add(lblNewLabel);
 		
-		lbTiposDeResiduos = new JLabel(labels.getString("pedido.retiro.label.tipo.residuo")); //$NON-NLS-1$
+		lbTiposDeResiduos = new JLabel(labels.getString("pedido.retiro.label.tipo.residuo")); 
 		lbTiposDeResiduos.setHorizontalAlignment(SwingConstants.CENTER);
 		lbTiposDeResiduos.setBounds(0, 64, 116, 20);
 		panelResiduos.add(lbTiposDeResiduos);
 		
-		lbCantidadKg = new JLabel(labels.getString("pedido.retiro.label.kg")); //$NON-NLS-1$
+		lbCantidadKg = new JLabel(labels.getString("pedido.retiro.label.kg")); 
 		lbCantidadKg.setHorizontalAlignment(SwingConstants.CENTER);
 		lbCantidadKg.setBounds(103, 67, 111, 14);
 		panelResiduos.add(lbCantidadKg);
@@ -282,7 +278,6 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 					
 				}
 				
-				habilitarBotones(true);
 			}
 		});
 		table.setRowSelectionAllowed(true);//permitiendo seleccion de fila
@@ -332,15 +327,14 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 				comboBoxResiduosSeleccionados.setVisible(false);
 				panelResiduosSeleccionados.add(comboBoxResiduosSeleccionados);
 				
-				lbResiduosSeleccionados = new JLabel("ResiduosSeleccionados");
+				lbResiduosSeleccionados = new JLabel(labels.getString("pedido.retiro.label.residuos.seleccionados"));
 				lbResiduosSeleccionados.setHorizontalAlignment(SwingConstants.CENTER);
 				lbResiduosSeleccionados.setBounds(407, 197, 224, 14);
 				contentPane.add(lbResiduosSeleccionados);
 				
 		
 }
-	private void habilitarBotones(boolean b) {
-		//
 
-}
+
+
 }

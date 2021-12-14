@@ -67,15 +67,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 	private Comparator<PedidoDeRetiroDTO> comparator;
 	private List<PedidoDeRetiroDTO> listaPedidos;
 	private String rolUsuarioActivo;
-	/**
-	 * Launch the application.
-	 */
 
-
-	/**
-	 * Create the frame.
-	 * @param labels 
-	 */
 	public ListadoDePedidosDeRetiroDinamico(IApi api, ResourceBundle labels) {
 		
 		try {
@@ -295,13 +287,12 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		panel_ordenamientos.add(lb_ordenar_por_codigo_pedido);
 		
 		JRadioButton rdbtn_ordenar_por_codigo_pedido = new JRadioButton("");
-
 		rdbtn_ordenar_por_codigo_pedido.addActionListener((e)->{
 			rdbtn_ordenar_por_codigo_pedido.setSelected(false);
 			try {
 				
 				comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
-				(String.valueOf(p1.getCodigo()).compareToIgnoreCase(String.valueOf(p2.getCodigo())));
+				(String.valueOf(p1.getCodigo()).toLowerCase().compareToIgnoreCase(String.valueOf(p2.getCodigo()).toLowerCase()));
 				
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
 					reloadGrid(api.obtenerPedidosDeRetiroDeUsuario(comparator));
@@ -329,30 +320,32 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		rdbtn_ordenar_por_vivienda = new JRadioButton("");
 		rdbtn_ordenar_por_vivienda.addActionListener((e)->{
 			rdbtn_ordenar_por_vivienda.setSelected(false);
-			try {
+				try {
 				 comparator = (PedidoDeRetiroDTO p1, PedidoDeRetiroDTO p2)->
 						
 				
-						(p1.getVivienda().getDireccion().getBarrio().toLowerCase() + " "+  
+					(p1.getVivienda().getDireccion().getBarrio().toLowerCase() + " "+  
 						
-						p1.getVivienda().getDireccion().getCalle().toLowerCase()  +" "+  
-						p1.getVivienda().getDireccion().getAltura().toLowerCase()).
+					p1.getVivienda().getDireccion().getCalle().toLowerCase()  +" "+  
+					p1.getVivienda().getDireccion().getAltura().toLowerCase()).
 	compareToIgnoreCase(
-						(p2.getVivienda().getDireccion().getBarrio().toLowerCase() +" "+  
-						p2.getVivienda().getDireccion().getCalle().toLowerCase() +" "+  
-						p2.getVivienda().getDireccion().getAltura().toLowerCase()))	;
-				if(this.rolUsuarioActivo.equals("ADMIN")) {
-							this.listaPedidos = api.obtenerPedidosDeRetiro(comparator);
-						}
-				else {
-							this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(comparator);
-						}
-					reloadGrid (this.listaPedidos);
+					(p2.getVivienda().getDireccion().getBarrio().toLowerCase() +" "+  
+					p2.getVivienda().getDireccion().getCalle().toLowerCase() +" "+  
+					p2.getVivienda().getDireccion().getAltura().toLowerCase()))	;
+					if(this.rolUsuarioActivo.equals("ADMIN")) {
+						this.listaPedidos = api.obtenerPedidosDeRetiro(comparator);	
+					}
+					else {
+						this.listaPedidos = api.obtenerPedidosDeRetiroDeUsuario(comparator);
+					}
+				reloadGrid (this.listaPedidos);
 				
+				} catch (AppException | IncorrectEmailException | DataEmptyException | NotNullException
+						| StringNullException | DateNullException e1) {
+						JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
+				}
 				
-			} catch (Exception e1) {
-				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-			}
+			
 		});
 		
 		rdbtn_ordenar_por_vivienda.setBounds(120, 33, 21, 21);

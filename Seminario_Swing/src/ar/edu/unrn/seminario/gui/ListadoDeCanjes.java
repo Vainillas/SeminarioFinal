@@ -57,10 +57,6 @@ public class ListadoDeCanjes extends JFrame {
 	private JRadioButton rdbtnUsuarioAsociado;
 
 
-	/**
-	 * Create the frame.
-	 * @param labels 
-	 */
 	public ListadoDeCanjes(IApi api, ResourceBundle labels) {
 		this.setTitle(labels.getString("listado.de.canjes.titulo"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
@@ -99,13 +95,12 @@ public class ListadoDeCanjes extends JFrame {
 					this.titulos = titulos;
 					rolUsuarioActivo = "COMUNIDAD";
 					System.out.println("entro aca");
-					this.reloadGrid(api.obtenerCanjesPorUsuario());
+					this.reloadGridComunidad(api.obtenerCanjesPorUsuario());
 				}
 			} catch (AppException | NotNullException | DataEmptyException | NotNumberException e1) {
 				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 			}
 		JButton cerrarButton = new JButton(labels.getString("listado.de.canjes.boton.cerrar"));
-
 		cerrarButton.addActionListener((e)->{
 			setVisible(false);
 			dispose();
@@ -157,9 +152,8 @@ public class ListadoDeCanjes extends JFrame {
 				Predicate <CanjeDTO> predicate = (CanjeDTO c)->
 				c.getCampaña().getNombreCampaña().toLowerCase().contains(this.tfFiltrarPorNombreCampaña.getText().toLowerCase());
 				try {
-					
 					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+						this.reloadGridComunidad(api.obtenerCanjesDeUsuario(predicate));
 					}
 					else {
 						this.reloadGridAdministrador(api.obtenerCanjes(predicate));
@@ -224,7 +218,7 @@ public class ListadoDeCanjes extends JFrame {
 				String.valueOf( c.getCampaña().getCodigo()).contains(this.tfFiltrarPorCodigoCampaña.getText());
 				try {
 					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+						this.reloadGridComunidad(api.obtenerCanjesDeUsuario(predicate));
 					}
 					else {
 						this.reloadGridAdministrador(api.obtenerCanjes(predicate));
@@ -244,11 +238,10 @@ public class ListadoDeCanjes extends JFrame {
 			if(!this.tfFiltrarDescripcionBeneficio.getText().equals("")) {
 				Predicate <CanjeDTO> predicate = (CanjeDTO c)->
 				c.getBeneficioCanjeado().getDescripcion().toLowerCase().contains(this.tfFiltrarDescripcionBeneficio.getText().toLowerCase());
-				
 				try {
 					
 					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+						this.reloadGridComunidad(api.obtenerCanjesDeUsuario(predicate));
 						
 					}
 					else {
@@ -273,7 +266,7 @@ public class ListadoDeCanjes extends JFrame {
 				try {
 					
 					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+						this.reloadGridComunidad(api.obtenerCanjesDeUsuario(predicate));
 						
 					}
 					else {
@@ -299,7 +292,7 @@ public class ListadoDeCanjes extends JFrame {
 				try {
 					
 					if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
-						this.reloadGrid(api.obtenerCanjesDeUsuario(predicate));
+						this.reloadGridComunidad(api.obtenerCanjesDeUsuario(predicate));
 					}
 					else {
 						reloadGridAdministrador(api.obtenerCanjes(predicate));
@@ -321,7 +314,7 @@ public class ListadoDeCanjes extends JFrame {
 			try {
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
 					
-						reloadGrid(api.obtenerCanjesPorUsuario());
+					reloadGridComunidad(api.obtenerCanjesPorUsuario());
 					
 				}
 				else {
@@ -353,7 +346,7 @@ public class ListadoDeCanjes extends JFrame {
 				try {
 					Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->c1.getCampaña().getNombreCampaña().compareToIgnoreCase(c2.getCampaña().getNombreCampaña());
 					if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
-						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+						reloadGridComunidad(api.obtenerCanjesPorUsuario(comparator));
 					}
 					else {
 						reloadGridAdministrador(api.obtenerCanjes(comparator));
@@ -373,7 +366,7 @@ public class ListadoDeCanjes extends JFrame {
 				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
 				String.valueOf( c1.getCampaña().getCodigo()).compareToIgnoreCase(String.valueOf( c2.getCampaña().getCodigo()));
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
-						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+					reloadGridComunidad(api.obtenerCanjesPorUsuario(comparator));
 				}
 				else {
 				reloadGridAdministrador(api.obtenerCanjes(comparator));
@@ -392,7 +385,7 @@ public class ListadoDeCanjes extends JFrame {
 				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
 				 c1.getBeneficioCanjeado().getDescripcion().compareToIgnoreCase(c2.getBeneficioCanjeado().getDescripcion());
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
-						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+					reloadGridComunidad(api.obtenerCanjesPorUsuario(comparator));
 				}
 				else {
 					reloadGridAdministrador(api.obtenerCanjes(comparator));
@@ -411,7 +404,7 @@ public class ListadoDeCanjes extends JFrame {
 				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
 				String.valueOf(c1.getBeneficioCanjeado().getCodigo()).compareToIgnoreCase(String.valueOf(c2.getBeneficioCanjeado().getCodigo()));
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
-						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+					reloadGridComunidad(api.obtenerCanjesPorUsuario(comparator));
 				}
 				else {
 					reloadGridAdministrador(api.obtenerCanjes(comparator));
@@ -429,7 +422,7 @@ public class ListadoDeCanjes extends JFrame {
 				Comparator <CanjeDTO> comparator = (CanjeDTO c1, CanjeDTO c2)->
 				(c2.getDueñoCanjeador().getNombre() + " " + c2.getDueñoCanjeador().getApellido()).compareToIgnoreCase(c2.getDueñoCanjeador().getNombre() + " " + c2.getDueñoCanjeador().getApellido());
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
-						reloadGrid(api.obtenerCanjesPorUsuario(comparator));
+					reloadGridComunidad(api.obtenerCanjesPorUsuario(comparator));
 				}
 				else {
 					reloadGridAdministrador(api.obtenerCanjes(comparator));
@@ -448,7 +441,7 @@ public class ListadoDeCanjes extends JFrame {
 			try {
 				if(this.rolUsuarioActivo.equals("COMUNIDAD")) {
 					
-						reloadGrid(api.obtenerCanjesPorUsuario());
+					reloadGridComunidad(api.obtenerCanjesPorUsuario());
 				}
 				else {
 					reloadGridAdministrador(api.obtenerCanjes());
@@ -469,7 +462,7 @@ public class ListadoDeCanjes extends JFrame {
 		}
 	}
 	
-	private void reloadGrid(List <CanjeDTO> canje) {
+	private void reloadGridComunidad(List <CanjeDTO> canje) {
 		
 		modelo.setRowCount(0);
 
