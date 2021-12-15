@@ -192,8 +192,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 						this.lbResiduosSeleccionados.setVisible(false);
 						this.btnRemoverResiduo.setVisible(true);
 					}
-					
-					
 				}
 				ftfCantResiduosSeleccionados.setText(null);
 				}
@@ -356,6 +354,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		btnRemoverResiduo = new JButton(labels.getString("registro.de.visita.button.remover.residuo"));
 		btnRemoverResiduo.setVisible(false);
 		btnRemoverResiduo.addActionListener((e)->{
+			
 			btnEnviarResiduos.setEnabled(true);
 			if(this.comboBoxResiduosSeleccionados.getItemCount() != 0) {
 				try {
@@ -365,9 +364,17 @@ public class GenerarRegistroDeVisita extends JFrame {
 					String resi = (String)this.comboBoxResiduosSeleccionados.getSelectedItem();
 					if(resi.contains(r.getTipo().getNombre())) {
 						this.comboBoxResiduosDinamico.addItem(r.getTipo().getNombre());
-						
 					}
 				}
+				
+				this.residuosSeleccionados.clear();
+				this.cantResiduosRetirados.clear();
+				/*for(String s : this.cantResiduosRetirados) {
+					if(s.contains((String)comboBoxResiduosSeleccionados.getSelectedItem())) {
+						this.cantResiduosRetirados.remove(s);
+
+					}
+				}*/
 				this.comboBoxResiduosSeleccionados.removeItemAt(this.comboBoxResiduosSeleccionados.getSelectedIndex());
 				
 				}
