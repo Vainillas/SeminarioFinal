@@ -445,7 +445,7 @@ public class PersistenceApi implements IApi {
     	for(i=0;i<listaResiduos.size();i++) {
     		//System.out.println("Residuo Numero "+ i +"de la listaResiduos en sección Boolean de comprobarCantidadResiduos: "+ listaResiduos.get(i));
     		//System.out.println("Residuo Numero "+ i +"de la listaSumaVisitas en sección Boolean de comprobarCantidadResiduos: "+ listaSumaVisitas.get(i));
-    		if(listaResiduos.get(i).getCantidadKg() >= listaSumaVisitas.get(i).getCantidadKg()) {// quizas cambiar a != en otro momento
+    		if(listaResiduos.get(i).getCantidadKg() > listaSumaVisitas.get(i).getCantidadKg()) {// quizas cambiar a != en otro momento
     			//Si alguna cantidad de un residuo especifico en la lista de residuos del pedido
     			//es mayor o igual a la cantidad de ese mismo residuo en el total de la lista de visitas
     			// el resultado pasa a ser verdadero
@@ -456,6 +456,7 @@ public class PersistenceApi implements IApi {
     	//System.out.println("El valor del booleano en comprobarCantidadResiduos es de: "+ rtado);
     	return rtado;  
     }
+    
     public List<ResiduoDTO> devolverResiduosRestantes(int codOrden) throws AppException{
     	OrdenDeRetiro orden = this.ordenDeRetiroDao.find(codOrden);
     	ArrayList<Visita> visitas= orden.getVisitas();
