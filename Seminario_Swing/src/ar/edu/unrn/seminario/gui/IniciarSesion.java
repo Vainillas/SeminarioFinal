@@ -133,7 +133,6 @@ public class IniciarSesion extends JFrame {
 				catch(NotRegisterException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage() ,labels.getString("mensaje.error.general") ,0);
 				}
-			
 		});
 		buttonAceptar.setBounds(81, 18, 89, 23);
 		panelBotones.add(buttonAceptar);
@@ -169,7 +168,6 @@ public class IniciarSesion extends JFrame {
 		 	usuario.setVisible(true);
 		 	this.textPassword.setText("");
 		 	this.textUsuario.setText("");
-		 		
 		 		
 		 });
 		 

@@ -427,7 +427,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 		
 	}
 	private void reloadGrid(List<PedidoDeRetiroDTO> pedidoDeRetiroDTO) {
-	
+		
 		modelo.setRowCount(0);
 		for (PedidoDeRetiroDTO p : pedidoDeRetiroDTO) {
 			
@@ -435,6 +435,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 			if(!p.getMaquinaPesada()) {
 				maquinaria = "no";
 			}
+
 			modelo.addRow(new Object[] { 
 			 		p.getFechaDelPedido(),
 			 		p.getCodigo(),
@@ -442,6 +443,7 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 			 		p.getVivienda().getDireccion().getBarrio()+" "+p.getVivienda().getDireccion().getCalle()+" "+p.getVivienda().getDireccion().getAltura(),
 			 		p.getVivienda().getID(),
 			 		p.getObservacion(),
+			 		
 			});
 		}
 

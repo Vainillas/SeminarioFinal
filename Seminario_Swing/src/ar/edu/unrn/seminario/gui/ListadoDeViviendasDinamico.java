@@ -332,7 +332,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			if(rdbtn_barrio_calle.isSelected()) {
 				 predicate =
 						(ViviendaDTO v)->v.getDireccion().getBarrio().toLowerCase().contains(this.tx_barrio_calle.getText().toLowerCase())
-						||v.getDireccion().getCalle().toLowerCase().contains(this.tx_barrio_calle.getText().toLowerCase());
+						|| v.getDireccion().getCalle().toLowerCase().contains(this.tx_barrio_calle.getText().toLowerCase());
 						try {
 							if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 								this.reloadGridDueño(api.obtenerViviendasDeUsuario(predicate));
@@ -352,7 +352,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		});
 		rdbtn_barrio_calle.setBounds(228, 30, 25, 23);
 		panelFiltrado.add(rdbtn_barrio_calle);
-		lb_barrio_calle = new JLabel(labels.getString("listado.de.viviendas.label.calle.y.altura"));
+		lb_barrio_calle = new JLabel(labels.getString("listado.de.viviendas.label.barrio.calle"));
 		lb_barrio_calle.setHorizontalAlignment(SwingConstants.CENTER);
 		lb_barrio_calle.setBounds(1, 30, 101, 14);
 		panelFiltrado.add(lb_barrio_calle);

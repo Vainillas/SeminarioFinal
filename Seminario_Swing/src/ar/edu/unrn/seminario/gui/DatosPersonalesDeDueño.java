@@ -113,6 +113,10 @@ public class DatosPersonalesDeDueño extends JFrame {
 		panelBotones.setLayout(new BorderLayout(0, 0));
 		
 		btnMenuPrincipal = new JButton(labels.getString("datos.personales.de.dueño.button.ir.al.menu.principal"));
+		btnMenuPrincipal.addActionListener((e)->{
+			setVisible(false);
+			dispose();
+		});
 		panelBotones.add(btnMenuPrincipal);
 		
 		lbNombreDueño = new JLabel();

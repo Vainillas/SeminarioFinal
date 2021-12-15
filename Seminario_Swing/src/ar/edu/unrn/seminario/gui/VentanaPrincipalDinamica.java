@@ -29,9 +29,7 @@ import javax.swing.SwingConstants;
 public class VentanaPrincipalDinamica extends JFrame {
 	private static final long serialVersionUID = 4771947449650351645L;
 	private JPanel contentPane;
-	private JMenuItem mntmPantallaNormalPersonal;
 	private JPanel panelAdministrador; ;
-	private JPanel panelPersonal;;
 	private JPanel panelDueño; ;
 
 	public static void main(String[] args) {
@@ -51,13 +49,10 @@ public class VentanaPrincipalDinamica extends JFrame {
 	
 	public VentanaPrincipalDinamica(IApi api, ResourceBundle labels) {
 		String rol = api.obtenerRolUsuarioActivo();
-		//String rol = "ADMIN";
 		this.panelDueño = new JPanel();
 		panelDueño.setBounds(5, 5, 787, 512);
 		this.panelAdministrador = new JPanel();
 		panelAdministrador.setBounds(5, 5, 787, 512);
-		this.panelPersonal = new JPanel();
-		panelPersonal.setBounds(5, 5, 787, 512);
 		this.contentPane = new JPanel();
 		setTitle(labels.getString("ventana.principal.dinamica.titulo"));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -67,57 +62,6 @@ public class VentanaPrincipalDinamica extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.add(panelAdministrador);
-		contentPane.add(panelPersonal);
-		panelPersonal.setLayout(new BorderLayout(0, 0));
-		JMenuBar mbPersonal = new JMenuBar();
-		panelPersonal.add(mbPersonal, BorderLayout.NORTH);
-		
-		
-		JMenu mnOrdenesPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.ordenes"));
-		mbPersonal.add(mnOrdenesPersonal);
-		
-		JMenuItem mntmPerListarOrdenesDeRetiro = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.lista.ordenes"));
-		mntmPerListarOrdenesDeRetiro.addActionListener((e)->{
-			ListadoDeOrdenesDeRetiro listado = new ListadoDeOrdenesDeRetiro(api,labels);
-			listado.setVisible(true);
-		});
-		mnOrdenesPersonal.add(mntmPerListarOrdenesDeRetiro);
-		
-		
-		JMenu MnDatosPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.datos.personal"));
-		
-		mbPersonal.add(MnDatosPersonal);
-		
-		JMenuItem mntmPerDatosDelPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.viviendas.datos.personal"));
-		mntmPerDatosDelPersonal.addActionListener((e)->{
-			
-		});
-		MnDatosPersonal.add(mntmPerDatosDelPersonal);
-		
-		JMenu mnConfiguracionPersonal = new JMenu(labels.getString("ventana.principal.dinamica.menu.personal.configuracion"));
-		
-		mbPersonal.add(mnConfiguracionPersonal);
-		JMenuItem mntmPantallaCompletaPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.completa"));
-		mntmPantallaCompletaPersonal.addActionListener((e)->{
-			this.setExtendedState(JFrame.MAXIMIZED_BOTH);	
-			mntmPantallaNormalPersonal.setVisible(true);
-			mntmPantallaCompletaPersonal.setVisible(false);
-			
-		});
-		mnConfiguracionPersonal.add(mntmPantallaCompletaPersonal);
-		mntmPantallaNormalPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.pantalla.normal")); 
-		mntmPantallaNormalPersonal.addActionListener((e)->{
-			this.setExtendedState(JFrame.NORMAL);	
-			mntmPantallaNormalPersonal.setVisible(false);
-			mntmPantallaCompletaPersonal.setVisible(true);
-		});
-		
-		mnConfiguracionPersonal.add(mntmPantallaNormalPersonal);
-		mntmPantallaNormalPersonal.setVisible(false);
-		
-		JMenuItem mntmConfiguracionPersonal = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.personal.configuracion.personal")); 
-		
-		mnConfiguracionPersonal.add(mntmConfiguracionPersonal);
 		panelAdministrador.setLayout(new BorderLayout(0, 0));
 		JMenuBar mbAdministrador = new JMenuBar();
 		mbAdministrador.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 12));
@@ -457,14 +401,8 @@ public class VentanaPrincipalDinamica extends JFrame {
 			
 			
 		});
-
-		panelPersonal.setVisible(false);
 		panelAdministrador.setVisible(false);
 		panelDueño.setVisible(false);
-		
-		if(rol.equals("PERSONAL")) {
-			panelPersonal.setVisible(true);
-		}
 		if(rol.equals("ADMIN")) {
 			this.panelAdministrador.setVisible(true);
 		}

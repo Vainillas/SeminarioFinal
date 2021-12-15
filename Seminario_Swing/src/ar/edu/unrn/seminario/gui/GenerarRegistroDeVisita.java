@@ -97,6 +97,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private JComboBox<String> comboBoxResiduosSeleccionados;
 	private JLabel lbCantidadMaxKg;
 	private JButton btnRemoverResiduo;
+	private JButton btnEnviarResiduos;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -171,14 +172,13 @@ public class GenerarRegistroDeVisita extends JFrame {
 			}
 		});
 		comboBoxResiduosDinamico.setBounds(32, 40, 96, 20);
-		JButton btnEnviarResiduos = new JButton(labels.getString("registro.de.visita.label.enviar.residuos"));
-
-
+		btnEnviarResiduos = new JButton(labels.getString("registro.de.visita.label.enviar.residuos"));
 		btnEnviarResiduos.addActionListener((e)->{
 			if(!this.ftfCantResiduosSeleccionados.getText().equals("")) {
 				
 				int res = JOptionPane.showConfirmDialog(null, labels.getString("registro.de.visita.mensaje.confirmacion")+ this.ftfCantResiduosSeleccionados.getText() + " " +  labels.getString("registro.de.visita.mensaje.confirmacion2") + " "  +(String)this.comboBoxResiduosDinamico.getSelectedItem() + " ?",labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
+					this.setVisible(true);
 					this.btnRemoverResiduo.setVisible(true);
 					this.comboBoxResiduosSeleccionados.addItem(this.comboBoxResiduosDinamico.getSelectedItem() + " " + this.ftfCantResiduosSeleccionados.getText()+ " kg");
 					comboBoxResiduosSeleccionados.setVisible(true);
@@ -187,13 +187,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 					this.cantResiduosRetirados.add(this.ftfCantResiduosSeleccionados.getText());
 					this.comboBoxResiduosDinamico.removeItem(this.comboBoxResiduosDinamico.getSelectedItem());
 					if(comboBoxResiduosDinamico.getItemCount() == 0) {
-						ftfCantResiduosSeleccionados.setEnabled(false);
-						comboBoxResiduosDinamico.setEnabled(false);
-						this.tp_observacion.setEnabled(false);
 						btnEnviarResiduos.setEnabled(false);
 						this.lbResiduosSeleccionados.setVisible(false);
-						this.comboBoxResiduosSeleccionados.setVisible(false);
-						this.btnRemoverResiduo.setVisible(false);
+						this.btnRemoverResiduo.setVisible(true);
 					}
 					
 					
@@ -354,10 +350,10 @@ public class GenerarRegistroDeVisita extends JFrame {
 		lbCantidadMaxKg.setBounds(30, 71, 163, 14);
 		panel_visita.add(lbCantidadMaxKg);
 		
-		btnRemoverResiduo = new JButton("remover");
-
+		btnRemoverResiduo = new JButton(labels.getString("registro.de.visita.button.remover.residuo"));
 		btnRemoverResiduo.setVisible(false);
 		btnRemoverResiduo.addActionListener((e)->{
+			btnEnviarResiduos.setEnabled(true);
 			if(this.comboBoxResiduosSeleccionados.getItemCount() != 0) {
 				try {
 					this.codigoOrden = Integer.valueOf( (String)table.getValueAt(table.getSelectedRow(),5));
@@ -378,7 +374,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 			}
 			
 		});
-		btnRemoverResiduo.setBounds(412, 181, 89, 23);
+		btnRemoverResiduo.setBounds(383, 164, 137, 23);
 		panel_visita.add(btnRemoverResiduo);
 		
 		panel_botones.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
@@ -410,15 +406,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 								this.descripcion,
 								codigoOrden);
 					JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
-					setVisible(false);
-					dispose();
 					
 				} catch ( AppException | NotNullException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-					this.ftfCantResiduosSeleccionados.setText("");
-					this.comboBoxResiduosSeleccionados.removeAllItems();
-					setVisible(false);
-					dispose();
 					
 				}
 			}
