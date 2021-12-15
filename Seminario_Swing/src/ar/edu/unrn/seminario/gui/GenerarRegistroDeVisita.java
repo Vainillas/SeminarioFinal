@@ -397,7 +397,9 @@ public class GenerarRegistroDeVisita extends JFrame {
 			dispose(); 
 		});
 		btn_limpiar = new JButton(labels.getString("registro.de.visita.label.limpiar"));
+		btn_limpiar.setVisible(false);
 		btn_limpiar.addActionListener((e)->{
+			
 			this.comboBoxResiduosSeleccionados.removeAllItems();
 			this.ftfCantResiduosSeleccionados.setText(null);
 			this.lbCantidadMaxKg.setText("");
