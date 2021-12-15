@@ -89,7 +89,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 	private ArrayList<String> ordenSeleccionada = new ArrayList<String>();
 	private ArrayList<String> residuosSeleccionados = new ArrayList<String>();
 	private ArrayList<String> cantResiduosRetirados = new ArrayList<String>();
-
 	private JLabel lbResiduosSeleccionados;
 	private Integer codigoOrden;
 	private String descripcion;  

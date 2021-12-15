@@ -1,6 +1,7 @@
 package ar.edu.unrn.seminario.gui;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.util.Comparator;
 import java.util.List;
@@ -28,10 +29,8 @@ import ar.edu.unrn.seminario.exceptions.DateNullException;
 import ar.edu.unrn.seminario.exceptions.IncorrectEmailException;
 import ar.edu.unrn.seminario.exceptions.NotNullException;
 import ar.edu.unrn.seminario.exceptions.StringNullException;
-import ar.edu.unrn.seminario.modelo.PedidoDeRetiro;
 import ar.edu.unrn.seminario.utilities.NotEditJTable;
 import ar.edu.unrn.seminario.utilities.Predicate;
-import java.awt.event.ActionListener;
 
 public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 
@@ -42,7 +41,6 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 	private JTextField tf_filtrado_por_vivienda;
 	private JTextField tf_filtrado_por_codigo_vivienda;
 	private JPanel panel;
-	private JButton button;
 	private JPanel panel_filtrados;
 	private JLabel lb_filtrado_por_codigo_pedido;
 	private JRadioButton rdbtn_filtrado_por_codigo_pedido;
@@ -55,8 +53,6 @@ public class ListadoDePedidosDeRetiroDinamico extends JFrame {
 	private JLabel lbOrdenamiento;
 	private JPanel panel_botones;
 	private JButton btnSalir;
-	private ResourceBundle labels;
-	private JRadioButton rdbtnNewRadioButton;
 	private JLabel lb_ordenar_por_vivienda;
 	private JRadioButton rdbtn_ordenar_por_vivienda;
 	private JLabel lb_ordenar_por_codigo_vivienda;
