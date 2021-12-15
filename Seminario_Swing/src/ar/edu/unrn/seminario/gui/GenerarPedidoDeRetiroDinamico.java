@@ -79,7 +79,6 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 	private JComboBox <String>comboBoxResiduosSeleccionados;
 	private JLabel lbResiduosSeleccionados;
 	private JComboBox <String>comboBoxResiduos;
-	private JButton btnQuitarResiduo;
 	private JButton btnEnviarKg;
 	public static void main(String [] args) {
 		PersistenceApi api = new PersistenceApi();
@@ -217,7 +216,7 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 				int res = JOptionPane.showConfirmDialog(null,("seguro que desea seleccionar "+ftfKg.getText()+" kg de "+ String.valueOf(comboBoxResiduos.getSelectedItem()).toLowerCase())+"?","",JOptionPane.YES_NO_OPTION);
 				if(res == 0) {
 					
-					this.btnQuitarResiduo.setVisible(true);
+
 					this.comboBoxResiduosSeleccionados.addItem(comboBoxResiduos.getSelectedItem() +" "+ this.ftfKg.getText() + " Kg");
 					this.residuosSeleccionados.add((String)comboBoxResiduos.getSelectedItem());
 					
@@ -227,7 +226,6 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 				}
 					ftfKg.setText(null);
 				if(comboBoxResiduos.getItemCount() == 0) {
-					this.btnQuitarResiduo.setEnabled(false);
 					btnEnviarKg.setEnabled(false);
 					this.ftfKg.setEnabled(false);
 					this.comboBoxResiduos.setEnabled(false);
@@ -338,35 +336,6 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 				comboBoxResiduosSeleccionados = new JComboBox<String>();
 				comboBoxResiduosSeleccionados.setVisible(false);
 				panelResiduosSeleccionados.add(comboBoxResiduosSeleccionados);
-				
-				btnQuitarResiduo = new JButton(labels.getString("pedido.retiro.quitar.residuo"));
-
-				btnQuitarResiduo.setVisible(false);
-				btnQuitarResiduo.addActionListener((e)->{
-					this.btnEnviarKg.setEnabled(true);
-					String item = (String) this.comboBoxResiduosSeleccionados.getSelectedItem();
-					if(this.comboBoxResiduosSeleccionados.getItemCount()!= 0) {
-						this.comboBoxResiduosSeleccionados.removeItemAt(this.comboBoxResiduosSeleccionados.getSelectedIndex());
-						try {
-							int i = 0;
-							for(String nombres : api.obtenerNombresResiduos()) {
-								if(item.contains(nombres)) {
-									if(this.kgSeleccionados.size()!= 0) {
-										this.comboBoxResiduos.addItem(nombres);
-										this.residuosSeleccionados.remove(i);
-										this.kgSeleccionados.remove(i);
-									}
-									
-								}
-								i++;
-							}
-							
-						} catch (AppException e1) {
-							JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),0);
-						}
-				}
-				});
-				panelResiduosSeleccionados.add(btnQuitarResiduo);
 				
 				lbResiduosSeleccionados = new JLabel(labels.getString("pedido.retiro.label.residuos.seleccionados"));
 				lbResiduosSeleccionados.setHorizontalAlignment(SwingConstants.CENTER);

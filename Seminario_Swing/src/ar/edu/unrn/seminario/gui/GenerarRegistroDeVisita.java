@@ -406,7 +406,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 								this.descripcion,
 								codigoOrden);
 					JOptionPane.showMessageDialog(null,labels.getString("registro.de.visita.mensaje.de.visita.generada.con.exito"),labels.getString("registro.de.visita.mensaje.informativo"),JOptionPane.INFORMATION_MESSAGE);
-					
+					setVisible(false);
+					dispose();
 				} catch ( AppException | NotNullException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
 					
