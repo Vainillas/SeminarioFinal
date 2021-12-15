@@ -49,8 +49,8 @@ public class DatosPersonalesDeDueño extends JFrame {
 			public void run() {
 				try {
 					IApi api = new PersistenceApi();
-					
-					DatosPersonalesDeDueño frame = new DatosPersonalesDeDueño(api);
+					ResourceBundle labels = ResourceBundle.getBundle("labels");
+					DatosPersonalesDeDueño frame = new DatosPersonalesDeDueño(api, labels);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -62,9 +62,7 @@ public class DatosPersonalesDeDueño extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DatosPersonalesDeDueño(IApi api) {
-		ResourceBundle labels = ResourceBundle.getBundle("labels");
-		
+	public DatosPersonalesDeDueño(IApi api,ResourceBundle labels) {
 		setTitle(labels.getString("datos.personales.de.dueño.titulo"));
 		DueñoDTO d = null;
 		try {

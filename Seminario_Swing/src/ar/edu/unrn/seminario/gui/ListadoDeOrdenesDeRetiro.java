@@ -357,15 +357,18 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		JButton btnConcretarOrden = new JButton(labels.getString("listado.de.ordenes.de.retiro.label.concretar.orden"));
 		panel_botones.add(btnConcretarOrden);
 		btnConcretarOrden.addActionListener((e)->{
-			
+
 			if(!(table.getSelectedRow() == -1)) {
+				int res = JOptionPane.showConfirmDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.confirmacion.concretar.orden"));
+				if(res == 0) {
 					try {
 						api.concretarOrdenDeRetiro((int)table.getValueAt(table.getSelectedRow(),1 ));
 						JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.label.concretar.orden"));
 						this.reloadGrid(api.obtenerOrdenesDeRetiro());
 					} catch (AppException e1) {
 						JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
-					}		
+					}	
+				}
 			}	
 			else {
 				JOptionPane.showMessageDialog(null,labels.getString("listado.de.campañas.mensaje.error.debe.seleccionar.pedido"),labels.getString("mensaje.error.general"),0);
@@ -375,7 +378,10 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 		JButton btnCancelarOrden = new JButton(labels.getString("listado.de.pedidos.de.retiro.button.cancelar.orden"));
 		btnCancelarOrden.addActionListener((e)->{
 			if(!(table.getSelectedRow() == -1)) {
-				try {
+				int res = JOptionPane.showConfirmDialog(null,labels.getString("listado.de.ordenes.de.retiro.confirmacion.cancelar.orden"));
+				if(res == 0) {
+				
+						try {
 					api.cancelarOrdenDeRetiro((int)table.getValueAt(table.getSelectedRow(),1 ));
 					
 					JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.orden.cancelada"));
@@ -384,11 +390,11 @@ public class ListadoDeOrdenesDeRetiro extends JFrame {
 				} catch (AppException e1) {
 					JOptionPane.showMessageDialog(null,e1.getMessage(),labels.getString("mensaje.error.general"),0);
 				}
+				}
+				else {
+					JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.error"),labels.getString("mensaje.error.general"),0);
+				}
 			}
-			else {
-				JOptionPane.showMessageDialog(null,labels.getString("listado.de.ordenes.de.retiro.mensaje.error"),labels.getString("mensaje.error.general"),0);
-			}
-			
 			
 		});
 		panel_botones.add(btnCancelarOrden);

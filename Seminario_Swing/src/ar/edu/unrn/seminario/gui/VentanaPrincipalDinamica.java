@@ -357,7 +357,7 @@ public class VentanaPrincipalDinamica extends JFrame {
 		
 		JMenuItem mntmDatosDelDueño = new JMenuItem(labels.getString("ventana.principal.dinamica.menu.item.datos.del.dueño"));
 		mntmDatosDelDueño.addActionListener((e)->{
-			DatosPersonalesDeDueño datosPersonales = new DatosPersonalesDeDueño(api);
+			DatosPersonalesDeDueño datosPersonales = new DatosPersonalesDeDueño(api, labels);
 			datosPersonales.setVisible(true);
 		});
 		mnDatosDueño.add(mntmDatosDelDueño);

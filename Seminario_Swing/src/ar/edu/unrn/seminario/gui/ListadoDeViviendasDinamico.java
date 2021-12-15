@@ -71,6 +71,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 	private Predicate <ViviendaDTO> predicate;
 	private List<ViviendaDTO> viviendas = null;
 	private JRadioButton rdbtnNombre_apellido = new JRadioButton();
+	private JButton btnLimpiarFiltrado;
 	public ListadoDeViviendasDinamico(IApi api, ResourceBundle labels){
 		this.api=api;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -120,10 +121,13 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		btnOrdenarPorCodigo = new JButton(labels.getString("listado.de.viviendas.button.ordenar.por.codigo"));
 		scrollPane.setViewportView(table);
 		try {
+			Comparator <ViviendaDTO> comparator = (ViviendaDTO v1, ViviendaDTO v2)->
+			(String.valueOf( v1.getID()).compareToIgnoreCase(String.valueOf(v2.getID())));
+			
 			if(api.obtenerRolUsuarioActivo().equals("ADMIN")) {
 					modelo = new DefaultTableModel(new Object[][] {}, titulos);		
 					btnLimpiarFiltro.setBounds(73, 174, 124, 23);
-					reloadGridAdmin( api.obtenerViviendas());
+					reloadGridAdmin( api.obtenerViviendas(comparator));
 			}
 			if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 				modelo = new DefaultTableModel(new Object[][] {}, titulos2);	
@@ -138,7 +142,7 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				this.lbCodigo.setVisible(false);
 				this.rdbtnCodigo.setVisible(false);
 				this.btnOrdenarPorCodigo.setVisible(false);
-				reloadGridDueño( api.obtenerViviendasDeUsuario());
+				reloadGridDueño( api.obtenerViviendasDeUsuario(comparator));
 				btnLimpiarFiltro.setBounds(73, 70, 124, 23);
 			}
 			}catch(AppException e1) {
@@ -270,6 +274,22 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		panelOrdenamiento.add(lbOrdenarPor);
 		
 		JButton btnLimpiarOrdenamiento = new JButton(labels.getString( "listado.de.viviendas.limpiar.ordenamiento"));
+		btnLimpiarOrdenamiento.addActionListener((e)->{
+			try {
+				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
+					this.reloadGridDueño(api.obtenerViviendasDeUsuario());
+				}
+				else {
+					this.reloadGridAdmin(api.obtenerViviendas());
+				}
+				
+				
+			} catch (AppException e1) {
+				
+				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
+
+			}
+		});
 		btnLimpiarOrdenamiento.setBounds(15, 153, 193, 23);
 		panelOrdenamiento.add(btnLimpiarOrdenamiento);
 		
@@ -387,14 +407,10 @@ public class ListadoDeViviendasDinamico extends JFrame {
 				else {
 					this.reloadGridAdmin(api.obtenerViviendas(predicate));
 				}
-				
-				
 			} catch (AppException e1) {
 				
 				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-
 			}
-			
 		}
 		rdbtnCodigo.setSelected(false);
 		});
@@ -405,19 +421,13 @@ public class ListadoDeViviendasDinamico extends JFrame {
 		txCodigo.setColumns(10);
 		txCodigo.setBounds(110, 70, 114, 20);
 		panelFiltrado.add(txCodigo);
-		
-		//lbCodigo = new JLabel(labels.getString("listado.de.viviendas.label.codigo"));
 		lbCodigo.setText(  labels.getString("listado.de.viviendas.label.codigo"));
 		lbCodigo.setHorizontalAlignment(SwingConstants.CENTER);
 		lbCodigo.setBounds(1, 70, 101, 14);
 		panelFiltrado.add(lbCodigo);
-		
-
-		btnLimpiarFiltro = new JButton(labels.getString("listado.de.viviendas.button.limpiar"));
-
-		btnLimpiarFiltro.setText(labels.getString("listado.de.viviendas.button.filtrado.limpiar"));
-
-		btnLimpiarFiltro.addActionListener((e)->{
+				
+		btnLimpiarFiltrado = new JButton(labels.getString("listado.de.viviendas.button.limpiar.filtrado"));
+		btnLimpiarFiltrado.addActionListener((e)->{
 			try {
 				if(api.obtenerRolUsuarioActivo().equals("COMUNIDAD")) {
 					this.reloadGridDueño(api.obtenerViviendasDeUsuario());
@@ -430,12 +440,14 @@ public class ListadoDeViviendasDinamico extends JFrame {
 			} catch (AppException e1) {
 				
 				JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-
 			}
 			
 			
 		});
-				panelFiltrado.add(btnLimpiarFiltro);
+		
+		btnLimpiarFiltrado.setBounds(50, 188, 161, 23);
+		panelFiltrado.add(btnLimpiarFiltrado);
+		
 		
 	}
 	private void reloadGridAdmin(List<ViviendaDTO> viviendas){
