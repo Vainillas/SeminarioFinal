@@ -253,11 +253,11 @@ public class GenerarRegistroDeVisita extends JFrame {
 				List<OrdenDeRetiroDTO > ordenes = api.obtenerOrdenesDeRetiro();				
 
 				Predicate <OrdenDeRetiroDTO> predicate = (OrdenDeRetiroDTO o)->
-				!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado")
-				&& !o.getEstado().obtenerEstado().equalsIgnoreCase("cancelado");
-
+                !o.getEstado().obtenerEstado().equalsIgnoreCase("concretado")
+                && !o.getEstado().obtenerEstado().equalsIgnoreCase("cancelado");
+				ordenes = api.obtenerOrdenesDeRetiro(predicate);	
 				
-				ordenes = api.obtenerOrdenesDeRetiro(predicate);				
+				
 				for (OrdenDeRetiroDTO o : ordenes) {
 					modelo.addRow(new Object[] {
 							DateHelper.changeFormat(o.getFechaOrden()),
