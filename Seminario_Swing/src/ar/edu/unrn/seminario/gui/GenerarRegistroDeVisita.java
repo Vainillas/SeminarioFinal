@@ -153,6 +153,7 @@ public class GenerarRegistroDeVisita extends JFrame {
 		comboBoxResiduosDinamico.addActionListener((e)->{
 			PedidoDeRetiroDTO pedido = null;
 			codigoOrden =Integer.valueOf( (String)table.getValueAt(table.getSelectedRow(),1));
+
 			
 			try {
 				pedido = api.obtenerPedidoDeRetiro(Integer.parseInt(ordenSeleccionada.get(5)));
@@ -205,6 +206,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 		table = new NotEditJTable();
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent arg0) {
+				residuosSeleccionados.clear();
+				cantResiduosRetirados.clear();
 				btnEnviarResiduos.setVisible(true);
 				ftfCantResiduosSeleccionados.setVisible(true);
 				comboBoxResiduosDinamico.removeAllItems();
