@@ -254,7 +254,8 @@ public class GenerarRegistroDeVisita extends JFrame {
 				List<OrdenDeRetiroDTO > ordenes = api.obtenerOrdenesDeRetiro();				
 
 				Predicate <OrdenDeRetiroDTO> predicate = (OrdenDeRetiroDTO o)->
-				!o.getEstado().obtenerEstado().equalsIgnoreCase("concretado");
+                !o.getEstado().obtenerEstado().equalsIgnoreCase("concretado")
+                && !o.getEstado().obtenerEstado().equalsIgnoreCase("cancelado");
 				ordenes = api.obtenerOrdenesDeRetiro(predicate);	
 				
 				
