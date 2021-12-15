@@ -229,7 +229,6 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 					btnEnviarKg.setEnabled(false);
 					this.ftfKg.setEnabled(false);
 					this.comboBoxResiduos.setEnabled(false);
-					this.comboBoxResiduosSeleccionados.setEnabled(false);
 				}
 
 			}
@@ -282,13 +281,11 @@ public class GenerarPedidoDeRetiroDinamico extends JFrame {
 			public void mouseClicked(MouseEvent arg0) {
 
 				int fila = table.getColumnCount();
-				
+				btnEnviarKg.setVisible(true);
 				domicilioSeleccionado = new ArrayList<String>();
 				for (int i = 0; i < fila; i++) {
 					domicilioSeleccionado.add( (String) table.getValueAt(table.getSelectedRow(), i));
-					
 				}
-				
 			}
 		});
 		table.setRowSelectionAllowed(true);//permitiendo seleccion de fila

@@ -75,8 +75,6 @@ import ar.edu.unrn.seminario.modelo.Vivienda;
 import ar.edu.unrn.seminario.utilities.Filtro;
 import ar.edu.unrn.seminario.utilities.Predicate;
 
-
-
 public class PersistenceApi implements IApi {
 
 	private RolDao rolDao;

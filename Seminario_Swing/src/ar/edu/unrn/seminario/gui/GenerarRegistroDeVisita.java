@@ -410,7 +410,6 @@ public class GenerarRegistroDeVisita extends JFrame {
 					dispose();
 				} catch ( AppException | NotNullException e1) {
 					JOptionPane.showMessageDialog(null, e1.getMessage(),labels.getString("mensaje.error.general"),JOptionPane.ERROR_MESSAGE);
-					
 				}
 			}
 			else {
