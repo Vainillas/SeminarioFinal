@@ -361,14 +361,18 @@ public class GenerarRegistroDeVisita extends JFrame {
 				try {
 					this.codigoOrden = Integer.valueOf( (String)table.getValueAt(table.getSelectedRow(),5));
 				PedidoDeRetiroDTO pedido = api.obtenerPedidoDeRetiro(this.codigoOrden);
-				
+				int i = 0;
 				for(Residuo r : pedido.getListResiduos()) {
 					String resi = (String)this.comboBoxResiduosSeleccionados.getSelectedItem();
 					if(resi.contains(r.getTipo().getNombre())) {
 						this.comboBoxResiduosDinamico.addItem(r.getTipo().getNombre());
+						this.cantResiduosRetirados.remove(i);
+						
 					}
+					i++;
 				}
 				this.comboBoxResiduosSeleccionados.removeItemAt(this.comboBoxResiduosSeleccionados.getSelectedIndex());
+				
 				}
 				catch (NumberFormatException | DataEmptyException | NotNullException | StringNullException
 						| DateNullException | AppException e1) {
